@@ -26,7 +26,8 @@ jobs:
           password: ${{ secrets.DEPLOY_USER_PASSWORD }}
           port: ${{ secrets.DEPLOY_HOST_PORT }}
           script: |
-            cd ${{ env.DEPLOY_PATH }} || mkdir ${{ env.DEPLOY_PATH }}
+            mkdir -p ${{ env.DEPLOY_PATH }}
+            cd ${{ env.DEPLOY_PATH }}
             [[ -d ${{ github.event.repository.name }} ]] && rm -r ${{ github.event.repository.name }}
             git clone git@github.com:${{ github.github.repository }}.git
             cd ${{ github.event.repository.name }}
