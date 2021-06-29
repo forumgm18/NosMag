@@ -1,0 +1,37 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру - Главная';
+  - var description = 'НосМаг.ру - Главная';
+  - var pageClass = 'main-page';
+  -
+    var mainSlider = [
+          {href: "#", src: "main-slide2-1.jpg"},
+          {href: "#", src: "main-slide2-2.jpg"}
+        ];
+  - var mainSliderPath = "assets/img/main-slider/"
+
+
+block content
+  main.container
+    section.main-slider-section
+      .main-slider
+        +main-slider-items(mainSliderPath, mainSlider)
+        +main-slider-items(mainSliderPath, mainSlider)
+
+    section.main-sale
+      p Качественные мужские носки в кейсах, носки для женщин, детские носки, подарочные наборы.<br>Мужские трусы и домашняя одежда
+      h1.main-page-title Наши товары по акции
+      .product-list
+        +product-list(prodImgPath, prodArr, 3, true )
+
+    section.main-baner
+      a(href="#")
+        img(src="assets/img/main-baner.png" alt="")
+
+    section.main-recom
+      h1.main-page-title Возможно, Вам понравится
+      .product-list
+        +product-list(prodImgPath, prodArr, 3, true)
+
+

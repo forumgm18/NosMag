@@ -1,0 +1,105 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру - Каталог-Раздел - Детально';
+  - var description = 'НосМаг.ру - Каталог-Раздел - Детально';
+  - var pageClass = 'basket-page';
+
+
+block content
+  section.container.page-title-section
+    h1.page-title.mtb-05
+      span Оформление заказа
+
+  main
+    .basket-content
+      div
+        .basket-item
+          .basket-item-img
+            a.img-box(href="#")
+              img(src=`${prodImgPath}prod-item-1.png` alt="")
+          .basket-column
+            .basket-item-info
+              .basket-item-title Набор «На любой случай жизни», 10 пар носков по 2 пары в упаковке из 10, разноцветные
+              .basket-item-params
+                 div #[span.label Артикул:] 1337228
+                 div #[span.label Цвет:] разноцветные
+                 div #[span.label Размер:] 38-40
+              .basket-item-sale Скидка 50%
+              .basket-item-price-sale Экономия 1 200 &#8381;
+            .basket-subcolumn
+              .basket-item-counter
+                +quantity-block
+                a.basket-trash(href="#" data-basket-del-item)
+                  svg.icon <use xlink:href="#icon-trash"></use>
+              .basket-item-price-block
+                .basket-item-price-old 2 400 &#8381;
+                .basket-item-price  1 200 &#8381;
+                .basket-item-price-sale Экономия 1 200 &#8381;
+
+
+
+        .basket-item
+          .basket-item-img
+            a.img-box(href="#")
+              img(src=`${prodImgPath}prod-item-2.png` alt="")
+          .basket-column
+            .basket-item-info
+              .basket-item-title Набор «На любой случай жизни», 10 пар носков по 2 пары в упаковке из 10, черные
+              .basket-item-params
+                 div #[span.label Артикул:] 1337228
+                 div #[span.label Цвет:] черный
+                 div #[span.label Размер:] 41-42
+              .basket-item-sale Скидка 50%
+            .basket-subcolumn
+              .basket-item-counter
+                +quantity-block
+                a.basket-trash(href="#" data-basket-del-item)
+                  svg.icon <use xlink:href="#icon-trash"></use>
+
+              .basket-item-price-block
+                .basket-item-price-old 2 400 &#8381;
+                .basket-item-price  1 200 &#8381;
+                .basket-item-price-sale Экономия 1 200 &#8381;
+
+
+      include ../includes/modules/order-page2
+    .basket-total
+      //.basket-total-items В корзине #[span 2 товара]
+      .basket-total-info
+        div
+          span.bold Доставка
+          span
+            a(href="#") Пункт выдачи
+          //.basket-total-info-text Ежедневно с 10:00 до 21:00<br>г.Москва, улица Московская, д.10
+      .basket-total-info
+        div
+          span.bold Дата
+          span 29-31 марта
+      .basket-total-info
+        div
+          span.bold Оплата
+          span Картой
+      .basket-total-promo
+        .form-item
+          input(type="text" placeholder="Введите промокод")
+
+      .basket-total-info
+        div
+          span.big.bold Итого
+          span.big 2 400 &#8381;
+        div
+          span.light Товары 2шт.
+          span.light 4 800 &#8381;
+        div
+        div
+          span.light Экономия
+          span.light -2 400 &#8381;
+        div
+          span.light Доставка
+          span.light бесплатно
+
+      a.btn(href="#") ОФОРМИТЬ ЗАКАЗ
+
+
+

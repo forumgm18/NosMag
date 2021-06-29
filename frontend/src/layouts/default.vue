@@ -1,0 +1,72 @@
+<template lang="pug">
+  .site-boby(data-site-body)
+    icons
+    app-header(v-if="!loading")
+    nuxt
+    app-footer
+</template>
+
+<script>
+import nsmConf from '~/static/site-settings/nos-mag-config.json'
+
+import Icons from '~/components/common/icons'
+import AppHeader from '~/components/header/app-header/app-header'
+import AppFooter from '~/components/footer/app-footer/app-footer'
+
+// import TabSize from '~/components/modals/tab-size'
+// import BasketAddModal from '~~/components/modals/basket-add-modal'
+
+
+export default {
+  components: {
+    Icons,
+    AppHeader,
+    AppFooter,
+    // BasketAddModal, TabSize
+  },
+
+  data: () => ({
+    // slogan: '',
+    // headerPhone: '',
+    loading: true
+  }),
+
+  fetch: async function () {
+    this.loading = true
+    await this.$store.dispatch('settings/fetch')
+    await this.$store.dispatch('menu/fetch')
+    this.loading = false
+  },
+  computed: {
+    meta() {
+      return [
+        // { charset: 'utf-8' },
+        // { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1 shrink-to-fit=no' },
+        { hid: 'description', name: 'description', content: 'Главная' }
+      ]
+    },
+    // headerSettings() {return this.$store.getters['settings/headerSettings']},
+    users() {      return this.$store.getters['users/users']    }
+
+  },
+  head () {
+    // const canonical = `https://mysite.com${this.$route.path
+    const canonical = `${nsmConf.baseUrl}${this.$route.path
+      .toLowerCase()
+      .replace(/\/$/, '')}`
+    return {
+      title: nsmConf.title,
+      meta: [...this.meta],
+      script: [
+        // { src: 'https://markknol.github.io/console-log-viewer/console-log-viewer.js' }
+      ],
+      link: [{ rel: 'canonical', href: canonical }]
+    }
+  }
+
+}
+</script>
+
+<style>
+
+</style>

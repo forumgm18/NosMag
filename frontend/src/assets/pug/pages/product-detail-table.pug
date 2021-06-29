@@ -1,0 +1,163 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру - Каталог-Раздел - Детально';
+  - var description = 'НосМаг.ру - Каталог-Раздел - Детально';
+  - var pageClass = 'has-filter';
+  -
+    var productSlider = [
+      {name: "color1", href: "#", src: "prod-1.png"},
+      {name: "color2", href: "#", src: "prod-2.png"},
+      {name: "color3", href: "#", src: "prod-3.png"},
+      {name: "color4", href: "#", src: "prod-4.png"},
+      {name: "color5", href: "#", src: "prod-5.png"},
+      {name: "color6", href: "#", src: "prod-6.png"},
+      {name: "color7", href: "#", src: "prod-7.png"}
+    ];
+    var saleTable = [
+          { count: "До 9 пар", price: "89", sale: "" },
+          { count: "10-29 пар", price: "71", sale: "-20%" },
+          { count: "30-59 пар", price: "66", sale: "-25%" },
+          { count: "60-99 пар", price: "62", sale: "-30%" },
+          { count: "100+ пар", price: "53", sale: "-40%" }
+        ];
+    var filterColor = [
+      {type: "checkbox", name: "color1", color: "#FF0000"},
+      {type: "checkbox", name: "color2", color: "#42FF00"},
+      {type: "checkbox", name: "color3", color: "#0085FF"},
+      {type: "checkbox", name: "color4", color: "#00FFB2"},
+      {type: "checkbox", name: "color5", color: "#8F00FF"},
+      {type: "checkbox", name: "color6", color: "#FF00C7"},
+      {type: "checkbox", name: "color7", color: "#FFF500"},
+      {type: "checkbox", name: "color8", color: "#FF6B00"},
+      {type: "checkbox", name: "color9", color: "#000"},
+      {type: "checkbox", name: "color10", color: "#fff"}
+    ];
+
+  - var productSliderPath = "assets/img/product/";
+
+
+block content
+  section.container.base-bgr-color
+    ul.breadcrumbs
+      li.breadcrumbs-item
+        a(href="#") Каталог
+      li.breadcrumbs-item
+        a(href="#") Мужчинам
+      li.breadcrumbs-item
+        a(href="#") Носки
+      li.breadcrumbs-item Брэнд
+    h1.page-title.mb-0
+      a.btn.btn-back(href="#")
+        svg.icon <use href="#icon-arrow-back"></use>
+      span Носки НОСМАГСТЕР
+  main
+    style(type='text/css').
+      .reviews {
+        background-color: #fff;
+        margin-top: 24px;
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      .reviews-title {width: 100%;}
+      .reviews-footer { width: 100%;}
+
+      .review-item {
+        width: 49%;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .review-answer{margin-top: auto}
+      @media (max-width: 992px) {
+        .review-item { width: 100%; }
+      }
+
+    .container.product-detail
+      .product-left
+        .product-title-info
+          span.vendor-code #[span.label Артикул] 3221337
+          span.label Купили 120 раз
+        .product-slider-block
+          .product-slider
+            #product-slider-controls.product-slider-controls
+              button
+                svg.icon.icon-left <use href="#icon-left"></use>
+              button
+                svg.icon.icon-right <use href="#icon-right"></use>
+            #product-slider
+              +product-slider-items(productSliderPath, productSlider, "product-slider-item")
+          #product-slider-thumbnails.product-slider-thumb
+            +product-slider-items(productSliderPath, productSlider, "product-slider-thumb-item")
+
+
+        .product-info
+          .product-info-title
+            h2 О товаре
+            a.developer-link(href="#")
+              svg.icon.icon-logo <use href="#icon-logo"></use>
+          .product-info-total
+            .product-info-total-row
+              span Производитель
+              span НОСМАГ
+            .product-info-total-row
+              span Страна
+              span Россия
+            .product-info-total-row
+              span Шов на мыске
+              span Есть
+          .product-info-descr
+            .product-info-descr-text НОСМАГСТЕР — приятный подарок, сюрприз, который порадует друга или коллегу не меньше, чем любимая еда. Один вид этого сочного ролла может привести в восторг. Подарок-розыгрыш упакован в яркую картонную упаковку, которая открывается при отрывании бумажной ленты. Подсмотреть что внутри не получится. Поэтому можно подать розыгрыш максимально эффектно. Мы готовы раскрыть завесу тайны. Внутри — пара хлопковых носков от крупной российской фабрики VIRTUOSO. Они украшены принтом в виде знаменитых блюд сетей быстрого питания и выглядят также аппетитно и притягательно, как и упаковка. НОСМАГСТЕР — приятный сюрприз для любителей вкусно поесть. Это отличный способ безобидно разыграть окружающих, ведь в итоге вместо обиды, разыгрываемый получит пару стильных носков!
+            .product-info-descr_show-more(data-info-descr-open)
+              svg.icon <use href="#icon-arrow-down"></use>
+              span Развернуть описание
+              span Скрыть описание
+
+
+      .product-right
+        .product-sale-block.open
+          span Цена снижается от общего количества пар носков в корзине: мужских, женских детских
+          +sale-table2(saleTable)
+
+        .product-price-block(style="display: none;")
+          .product-price.has-sale1 371 &#8381;
+          .product-price-sale
+            //span.sale 371 &#8381;
+            span.old 1390 &#8381;
+            span ( скидка -80% )
+        .product-params
+          .product-params-row
+            span Состав
+            span 90% хлопок, 7% полиамид, 3% лайкра
+          .product-params-row
+            span Цвет
+            span Чёрный
+        .product-other-color-block
+          //.product-other-color_title Или выберите другой цвет:
+          .product-other-color
+            +product-other-color-items(productSliderPath, productSlider, "product-other-color-item")
+
+        .product-quantity
+          .product-quantity-title
+            span
+              a(href="#tab-size" data-modal) Таблица размеров
+          .product-quantity-row
+            div
+              span 23 (36-38)
+              +quantity-block
+            span (осталось 20 пар)
+          .product-quantity-row
+            div
+              span 27 (41-43)
+              +quantity-block
+            span (осталось 15 пар)
+          .product-quantity-row
+            div
+              span 29 (43-45)
+              +quantity-block
+            span (осталось 5 пар)
+        a.btn.btn-secondary(href="#") В КОРЗИНУ
+    include ../includes/modules/reviews
+

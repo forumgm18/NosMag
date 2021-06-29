@@ -1,0 +1,84 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру';
+  - var description = 'НосМаг.ру';
+  - var pageClass = '';
+
+block content
+  section.lk-menu
+    .lk-menu-main
+      a.btn
+        svg.icon <use xlink:href="#icon-user"></use>
+        span Персональные данные
+
+      a.btn
+        svg.icon <use xlink:href="#icon-truck"></use>
+        span Заказы
+
+      a.btn.btn-active
+        svg.icon <use xlink:href="#icon-percent"></use>
+        span Ваша скидка 20%
+
+      a.btn
+        svg.icon <use xlink:href="#icon-basket"></use>
+        span Корзина
+
+  section.container.page-title-section
+    h1.page-title.mtb-05
+      a.btn.btn-back(href="#")
+        svg.icon <use xlink:href="#icon-arrow-back"></use>
+      span Накопительная скидка
+
+
+  main
+    .lk-content.container
+      .lk-sales
+        .lk-sales-block
+          .progressbar-container
+            .progressbar
+              .progressbar-indicator
+              .progressbar-scale
+                .progressbar-scale-item
+                  span 0%
+                  span.division
+                  span 0 &#8381;
+                .progressbar-scale-item
+                  span 10%
+                  span.division
+                  span 2 500 &#8381;
+                .progressbar-scale-item
+                  span 20%
+                  span.division
+                  span 5 000 &#8381;
+                .progressbar-scale-item
+                  span 25%
+                  span.division
+                  span 7 500 &#8381;
+                .progressbar-scale-item
+                  span 30%
+                  span.division
+                  span 10 000 &#8381;
+                .progressbar-scale-item
+                  span 40%
+                  span.division
+                  span 20 000 &#8381;
+
+        .lk-sales-text-block
+          .lk-sales-img
+            img(src="assets/img/sale.png" alt="")
+          .lk-sales-text
+            p Вы приобрели товары в нашем интернет-магазине на сумму #[span.total 4 512 ₽]
+            p За это мы увеличили размер вашей накопительной скидки до #[span.danger 10%]
+            p Приобретите товаров ещё на #[span.total 5 000 ₽] и получите следующий уровень скидки в #[span.danger 20%]
+            p.danger Спасибо, что выбираете нас!
+
+
+
+
+
+
+
+
+
+

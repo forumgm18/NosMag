@@ -1,0 +1,44 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру - Тестовое задание';
+  - var description = 'НосМаг.ру - Тестовое задание';
+  - var pageClass = '';
+
+block content
+  main.order-page
+    section.container
+      ul.breadcrumbs
+        li.breadcrumbs-item
+          a(href="#") Корзина
+    section.container.page-title-section
+      h1.page-title Оформление заказа
+
+    section.container.order-page-section
+      .order-total-block
+        a(href="#") Вернуться в корзину
+        .order-total
+          .order-total-item
+            span.order-total-label Товаров на
+            span.order-total-num(data-order-sum) 999 460 &#8381;
+          .order-total-item
+            span.order-total-label Доставка
+            span.order-total-num(data-order-delivery) 10 500 &#8381;
+          .order-total-item
+            span.order-total-label Итого:
+            span.order-total-num(data-order-sum) 1 000 410 &#8381;
+
+    section
+      form
+        include ../includes/modules/order-page2
+        .container
+          .form-item
+            button.btn(type="submit") ОПЛАТИТЬ ЗАКАЗ
+
+
+
+
+
+
+
+

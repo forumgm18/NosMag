@@ -1,0 +1,168 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру - Каталог-Раздел - Детально';
+  - var description = 'НосМаг.ру - Каталог-Раздел - Детально';
+  - var pageClass = 'has-filter';
+  -
+    var filterMaterial = [
+      {type: "checkbox", name :"name1", text: "Хлопок"},
+      {type: "checkbox", name :"name2", text: "Лен"},
+      {type: "checkbox", name :"name3", text: "Шерсть"},
+      {type: "checkbox", name :"name4", text: "Акрил"},
+      {type: "checkbox", name :"name5", text: "Бамбук"},
+      {type: "checkbox", name :"name6", text: "Кашемир"},
+      {type: "checkbox", name :"name7", text: "Лайкра"},
+      {type: "checkbox", name :"name8", text: "Бамбук"},
+      {type: "checkbox", name :"name9", text: "Кашемир"},
+      {type: "checkbox", name :"name10", text: "Лайкра"}
+    ]
+
+    var filterRazmer = [
+      {type: "checkbox", name :"razmer1", text: "18-20"},
+      {type: "checkbox", name :"razmer2", text: "20-22"},
+      {type: "checkbox", name :"razmer3", text: "22-24"},
+      {type: "checkbox", name :"razmer4", text: "24-26"}
+    ]
+
+    var filterDevelopment = [
+      {type: "checkbox", name :"devel1", text: "Anais"},
+      {type: "checkbox", name :"devel2", text: "Askoni"},
+      {type: "checkbox", name :"devel3", text: "Atlant"},
+      {type: "checkbox", name :"devel4", text: "Bas Belau"},
+      {type: "checkbox", name :"devel5", text: "Blackspade"},
+      {type: "checkbox", name :"devel6", text: "Charmante"},
+      {type: "checkbox", name :"devel7", text: "Anais"},
+      {type: "checkbox", name :"devel8", text: "Askoni"},
+      {type: "checkbox", name :"devel9", text: "Atlant"},
+      {type: "checkbox", name :"devel10", text: "Bas Belau"},
+      {type: "checkbox", name :"devel11", text: "Blackspade"},
+      {type: "checkbox", name :"devel12", text: "Charmante"}
+    ]
+
+    var filterSeazon = [
+      {type: "checkbox", name: "leto", text: "Лето"},
+      {type: "checkbox", name: "zima", text: "Зима"},
+      {type: "checkbox", name: "vesna", text: "Весна"},
+      {type: "checkbox", name: "osen", text: "Осень"}
+    ]
+
+    var filterColor = [
+      {type: "checkbox", name: "color1", color: "#FF0000"},
+      {type: "checkbox", name: "color2", color: "#42FF00"},
+      {type: "checkbox", name: "color3", color: "#0085FF"},
+      {type: "checkbox", name: "color4", color: "#00FFB2"},
+      {type: "checkbox", name: "color5", color: "#8F00FF"},
+      {type: "checkbox", name: "color6", color: "#FF00C7"},
+      {type: "checkbox", name: "color7", color: "#FFF500"},
+      {type: "checkbox", name: "color8", color: "#FF6B00"},
+      {type: "checkbox", name: "color9", color: "#000"},
+      {type: "checkbox", name: "color10", color: "#fff"}
+    ]
+
+
+block content
+  section.container.base-bgr-color
+    ul.breadcrumbs
+      li.breadcrumbs-item
+        a(href="#") Каталог
+      li.breadcrumbs-item Наборы носков
+    h1.page-title
+      a.btn.btn-back(href="#")
+        svg.icon <use xlink:href="#icon-arrow-back"></use>
+      span Наборы носков
+      a.btn.btn-filter(href="#" data-filter-btn data-body-class="filter-opened")
+        svg.icon <use xlink:href="#icon-filter"></use>
+  main
+    .container
+      .catalog-detail
+        .catalog-filter(data-filter-panel data-body-class="filter-opened")
+          .filter-section.open
+            .filter-section_title Материал
+            .filter-item_list
+              each item in filterMaterial
+                +catalog-filter-item(item.type, item.name, item.text)
+
+          .filter-section.open
+            .filter-section_title Размер
+            .filter-item_list
+              each item in filterRazmer
+                +catalog-filter-item(item.type, item.name, item.text)
+
+          .filter-section.open
+            .filter-section_title Производитель
+            .filter-item_list
+              each item in filterDevelopment
+                +catalog-filter-item(item.type, item.name, item.text)
+
+          .filter-section.open
+            .filter-section_title Сезон
+            .filter-item_list
+              each item in filterSeazon
+                +catalog-filter-item(item.type, item.name, item.text)
+
+          .filter-section
+            .filter-section_title Узор
+            .filter-item_list
+              each item in filterSeazon
+                +catalog-filter-item(item.type, item.name, item.text)
+
+          .filter-section
+            .filter-section_title Вид шва
+            .filter-item_list
+              each item in filterSeazon
+                +catalog-filter-item(item.type, item.name, item.text)
+
+          .filter-section
+            .filter-section_title Цвет
+            .filter-item_list-color
+              each item in filterColor
+                +catalog-filter-item-color(item.type, item.name, item.color)
+
+          .filter-section.open
+            .filter-section_title Цена
+            .filter-item_list.filter-item_list-price
+              .filter-price-range
+                input(type="text" name="minPrice" placeholder="От")
+                input(type="text" name="maxPrice" placeholder="До")
+              .filter-price-range_slider
+                .range_slider-track
+                .range_slider-subtrack(data-min-price)
+                  span
+                  span
+                  span
+                .range_slider-subtrack(data-max-price)
+                  span
+                  span
+                  span
+
+
+
+          .filter-section
+            .filter-btn-block
+              a.btn.btn-transparent(href="#" data-close-filter data-close-selector="data-filter-panel") Закрыть
+              a.btn.btn-danger(href="#" data-clear-filter data-filter-selector="data-filter-panel") Сбросить
+        .catalog-content
+          .catalog-sort
+            .catalog-sort-label Сортировать по:
+            +sort-item-direction("catalog-sort-item", "sortDirection", "рейтингу")
+            +sort-item-direction("catalog-sort-item", "sortPrice", "цене")
+
+
+
+
+          .product-list
+            +product-list(prodImgPath, prodArr, 3)
+
+          .pagination
+            a.pagination-link.prev(href="#")
+              svg.icon <use xlink:href="#icon-arrow-left"></use>
+
+            a.pagination-link(href="#") 1
+            a.pagination-link(href="#") 2
+            a.pagination-link(href="#") 3
+            a.pagination-link(href="#") 4
+            div ...
+            a.pagination-link(href="#") 26
+            a.pagination-link.next(href="#")
+              svg.icon <use xlink:href="#icon-arrow-right"></use>

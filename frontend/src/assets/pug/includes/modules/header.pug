@@ -1,0 +1,99 @@
+-
+  var clientInfo = {
+      id: "client-info",
+      name: "clientName",
+      title: "Информация для клиентов",
+      class: "header-select",
+      triangleClass: "triangle",
+      values: [
+        {optionValue: "v1", text: "О Компании"},
+        {optionValue: "v2", text: "Как заказать"},
+        {optionValue: "v3", text: "Доставка и оплата"},
+        {optionValue: "v4", text: "Качество и гарантии"},
+        {optionValue: "v5", text: "Накопительная скидка до 40%"},
+        {optionValue: "v6", text: "Оптовикам"},
+        {optionValue: "v7", text: "Партнерская программа"},
+        {optionValue: "v8", text: "Реквизиты"},
+        {optionValue: "v9", text: "Полезное / подсказки"},
+      ]
+    }
+  var selectTown = {
+      id: "selectTown",
+      name: "selectTown",
+      title: "Выберите город",
+      class: "header-select",
+      triangleClass: "triangle",
+      values: [
+        {optionValue: "Комсомольск-на-амуре", text: "Комсомольск-на-амуре"},
+        {optionValue: "Москва", text: "Москва"},
+        {optionValue: "Санкт-Петербург", text: "Санкт-Петербург"},
+        {optionValue: "Ижевск", text: "Ижевск"},
+        {optionValue: "Казань", text: "Казань"},
+      ]
+    }
+
+
+
+header.container
+  .header-row.top
+    +select(clientInfo)
+    .header-phone
+      span Тел.:
+      a(href="tel:88001008937") 8-800-100-89-37
+    +select(selectTown)
+  .header-row.mobile-top
+    +burger(1)
+
+    a.logo-link(href="/")
+      svg.icon.icon-logo <use href="#icon-logo"></use>
+    .header-slogan    Больше пар,<br>больше скидка! Скидки до 40%
+
+    .header-search(data-search-form)
+      div(data-close data-close-selector="data-search-form")
+      a.btn.btn-search(href="#" data-search-mobile)
+        svg.icon.icon-loupe <use href="#icon-search"></use>
+      .form-search-panel
+        form
+          .form-line
+            button.btn.btn-search(type="submit" data-btn-search)
+              svg.icon.icon-loupe <use href="#icon-search"></use>
+            .form-item
+              input(type="text" placeholder="Я ищу" data-header-search-input)
+        .form-search-result(data-search-result)
+          .form-search-result-content
+            .form-search-result-item
+              a(href="#") Набор «На любой случай жизни», 10 пар #[span.warning носк]ов по 2 пары в упаковке из 10
+              span.price 1000 &#8381;
+            .form-search-result-item
+              a(href="#") Набор носочков «Лучшие носки», 8 пар #[span.warning носк]ов по 2 пары в упаковке
+              span.price.sale 700 &#8381;
+            .form-search-result-item
+              a(href="#") #[span.warning Носк]и детские «Разноцветные #[span.warning носк]и», 10 пар #[span.warning носк]ов по 2 в упаковке
+              span.price От 1000 &#8381; до 2000 &#8381;
+            .form-search-result-item
+              a.more-result(href="#") Смотреть все результаты
+
+
+    .login-block( data-login-form-mobile)
+      div(data-close data-close-selector="data-login-form-mobile")
+      a.mobile-login(href="#" data-login data-close-selector="data-login-form-mobile")
+        svg.icon.icon-user <use href="#icon-user"></use>
+      +login-form
+
+
+    .header-basket-block
+      .btn.btn-basket
+        .basket
+          svg.icon.icon-basket <use href="#icon-basket"></use>
+          span.basket-count(data-chart-count) 22
+        span Моя корзина
+
+
+  .header-row.menu-row
+    include menu
+    .login-block( data-login-form)
+      div(data-close data-close-selector="data-login-form")
+      a.enter-link(href="#user-auth" data-login data-close-selector="data-login-form") Войти / Зарегистрироваться
+      +login-form
+
+

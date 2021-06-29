@@ -1,0 +1,54 @@
+-
+  var reviewList = [
+    { name: "Иван Иванович",
+      date: "31.03.2021",
+      rating: 4,
+      text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi autem consectetur culpa dolore dolores dolorum ducimus eaque est eum ex fuga id laborum modi molestias mollitia non numquam possimus quibusdam, ratione rem sapiente sequi temporibus. A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!",
+      answer: "A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!"
+    },
+    { name: "Марья Петровна",
+      date: "01.03.2021",
+      rating: 3,
+      text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi autem consectetur culpa dolore dolores dolorum ducimus eaque est eum ex fuga id laborum modi molestias mollitia non numquam possimus quibusdam, ratione rem sapiente sequi temporibus. A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!",
+      answer: "A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!"
+    },
+    { name: "Макс",
+      date: "12.02.2020",
+      rating: 5,
+      text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi autem consectetur culpa dolore dolores dolorum ducimus eaque est eum ex fuga id laborum modi molestias mollitia non numquam possimus quibusdam, ratione rem sapiente sequi temporibus. A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi autem consectetur culpa dolore dolores dolorum ducimus eaque est eum ex fuga id laborum modi molestias mollitia non numquam possimus quibusdam, ratione rem sapiente sequi temporibus. A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!",
+      answer: "A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!"
+    },
+    {
+      name: "Виолетта",
+      date: "13.05.2019",
+      rating: 1,
+      text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi autem consectetur culpa dolore dolores dolorum ducimus eaque est eum ex fuga id laborum modi molestias mollitia non numquam possimus quibusdam, ratione rem sapiente sequi temporibus. A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!",
+      answer: "A aperiam aspernatur, dolores enim exercitationem, explicabo nemo odit reprehenderit sit tempora ullam unde voluptatum!"
+    }
+
+  ]
+.reviews
+  .reviews-title
+    span Отзывы
+    span.rating.average
+      span.average-point
+        span 4
+        span /5
+      span.stars(data-rating="4")
+        svg.icon.icon-star <use href="#icon-star"></use>
+        svg.icon.icon-star <use href="#icon-star"></use>
+        svg.icon.icon-star <use href="#icon-star"></use>
+        svg.icon.icon-star <use href="#icon-star"></use>
+        svg.icon.icon-star <use href="#icon-star"></use>
+      span.average-total 30
+  each val in reviewList
+    +review-item(val)
+  .reviews-footer
+    a(href="#") Показать все отзывы
+    a(href="#") Написать отзыв
+
+
+
+
+
+

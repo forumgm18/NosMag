@@ -1,0 +1,319 @@
+mixin stars(rating)
+  span.stars(data-rating=rating)
+    svg.icon.icon-star <use href="#icon-star"></use>
+    svg.icon.icon-star <use href="#icon-star"></use>
+    svg.icon.icon-star <use href="#icon-star"></use>
+    svg.icon.icon-star <use href="#icon-star"></use>
+    svg.icon.icon-star <use href="#icon-star"></use>
+
+mixin svg(id, cls)
+  if cls
+    svg.icon(class=`icon-${cls}`) <use href="#icon-#{id}"></use>
+  else
+    svg.icon(class=`icon-${id}`) <use href="#icon-#{id}"></use>
+
+
+mixin product-list(prodImgPath, arr, count, sizeDisable)
+  - for (var i = 0; i < count; i++)
+      each ar in arr
+        +product-item(prodImgPath, ar, sizeDisable)
+
+
+mixin product-item-img-list(path, srcArr, href)
+  .product-item_img
+    .product-item-hover-block
+      each v in srcArr
+        .product-img-hover
+          a(href=href)
+            img(src=path + v alt="")
+
+
+
+mixin product-item(path, val, sizeDisable)
+  .product-item
+    .product-item-base
+      +product-item-img-list(path, val.srcArr, val.href)
+      .product-item_info
+        .product-item_price-block
+          .product-item_price-actual #{val.price} &#8381;
+          .product-item_price-old #{val.oldPrice} &#8381;
+          .product-item_price-sale=val.sale
+        .product-item_descr=val.descr
+    .product-item-btn-panel
+      if sizeDisable
+        .product-item-size(style="display:none" )
+          .product-item-size-title Размеры в наличии
+          -for (var i = 40; i <= 45; i++)
+            a(href="#")=i
+
+      else
+        .product-item-size
+          .product-item-size-title Размеры в наличии
+          -for (var i = 40; i <= 45; i++)
+            a(href="#")=i
+      .btn.btn-secondary В КОРЗИНУ
+
+mixin product-slider-items(path, val, cls)
+  each v in val
+    div(class=cls)
+      div.img-box
+        img(src=path + v.src alt="")
+
+mixin main-slider-items2(path, val)
+  each v in val
+    .main-slider-item
+      a(href=v.href)
+        img(src=path + v.src alt="")
+mixin main-slider-items(path, val)
+  each v in val
+    .main-slider-item(style=`background-image: url(${path + v.src})`)
+      .main-slider-item_content
+        .main-slider-item_content-title Страшно низкие цены
+        .main-slider-item_content-text Распродажа на Хэллоуин! <br> -25% и -50%
+        a.btn.btn-white(href=v.href) Подробнее
+
+mixin burger(type)
+  if (type === 1)
+    .burger(data-burger)
+      span
+  else
+    .burger(data-burger)
+      span.burger-line
+      span.burger-line
+      span.burger-line
+
+mixin menu-list(arr)
+  ul.submenu
+    each val in arr
+      li.submenu-item
+        a.submenu-link(href=val.href)=val.text
+
+mixin select(val)
+  .select(class=val.class)
+    .select-value
+      input(type="text" name=val.name data-select-id=val.id value=val.values[0].optionValue hidden)
+      .select-title(data-select-value)=val.title
+      div.select-arrow(class=val.triangleClass)
+    .select-list
+      each v in val.values
+        .select-list-item(data-option-value=v.optionValue)=v.text
+
+mixin login-form
+  form.login-form
+    .form-item
+      input(type="text" name="username" placeholder="Ваше имя" required)
+      .form-item-error Не верно заполнено поле
+    .form-item
+      input(type="password" name="password" placeholder="Пароль" required)
+      .form-item-error Не верно заполнено поле
+    button.btn(type="submit") Войти
+
+mixin radio-svg(text, txtCls, name, val, chk)
+  label.radio
+    input(type="radio" name=name value=val checked=chk)
+    span.radio-item
+    span.radio-text
+      svg.icon(class=`icon-${txtCls}`) "<use xlink:href="#icon-#{txtCls}"></use>"
+      span=text
+
+mixin radio(text, txtCls, name, val, chk)
+  label.radio
+    input(type="radio" name=name value=val checked=chk)
+    span.radio-item
+    span.radio-text
+      if txtCls
+        span(class=txtCls)
+      span=text
+
+mixin checkbox(text, txtCls, name, val, chk)
+  label.checkbox
+    input(type="checkbox" name=name value=val checked=chk)
+    span.checkbox-item
+    span.checkbox-text
+      if txtCls
+        span(class=txtCls)=text
+      else
+        span=text
+
+mixin checkbox2(text, name, val, chk)
+  label.checkbox(data-checked=chk)
+    input(type="checkbox" name=name value=val hidden checked=chk)
+    span.checkbox_text-block
+      span.checkbox_icon
+      span.checkbox_text=text
+
+mixin catalog-section-item(path, val)
+  .catalog-section-item
+    .catalog-section-item_img
+      a(href=val.href)
+        img(src=path+val.src alt="")
+    a.catalog-section-item_title(href=val.href)=val.title
+
+mixin sort-item-direction(cls, name, ascText)
+  label(class=cls)
+    input(type="checkbox" name=name hidden)
+    span.sort-direction
+      span=ascText
+      svg.icon <use xlink:href="#icon-arrow-left"></use>
+
+mixin catalog-filter-item-old(type, name, text)
+  .filter-item
+    label
+      input(type=type name=name hidden)
+      span.filter-item_text
+        svg.icon.uncheck <use xlink:href="#icon-#{type}"></use>
+        svg.icon.check <use xlink:href="#icon-#{type}-selected"></use>
+        span=text
+mixin catalog-filter-item_v2(type, name, text)
+  .filter-item
+    label
+      input(type=type name=name hidden)
+      span.filter-item_text
+        span(class=`${type}-icon`)
+        span=text
+mixin catalog-filter-item(type, name, text)
+  .filter-item
+    +checkbox2(text, name)
+
+mixin catalog-filter-item-color(type, name, color)
+  .filter-item
+    label
+      input(type=type name=name hidden)
+      span.filter-item_color
+        span.border(style=`color: ${color}`)
+          span.bgr(style=`background-color: ${color}`)
+
+mixin sale-table(val)
+  .product-sale-tab
+    .product-sale-tab_row
+      span Пары:
+      span Цена:
+      span Скидка:
+
+    each v in val
+      .product-sale-tab_row
+        span=v.count
+        span #{v.price} &#8381;
+        span=v.sale
+
+mixin sale-table2(val)
+  .product-sale-tab
+    .product-sale-tab_row
+      span Пары:
+      span.dot
+      span Цена:
+      span.dot
+      span Скидка:
+
+    each v in val
+      .product-sale-tab_row
+        span=v.count
+        span.dot
+        span #{v.price} &#8381;
+        span.dot
+        span=v.sale
+
+mixin quantity-block()
+  .form-quantity
+    .quantity-minus
+      svg.icon <use xlink:href="#icon-minus-square"></use>
+    input(type="text" value="1")
+    .quantity-plus
+      svg.icon <use xlink:href="#icon-plus-square"></use>
+
+
+mixin product-other-color-items(path, val, cls)
+  each v in val
+    label(class=cls)
+      input(type="checkbox" name=v.name hidden)
+      span.img-box
+        img(src=path + v.src alt="")
+
+mixin size-table-rows(val)
+  each row in val
+    .size-table-row
+      each item in row
+        span=item
+
+mixin size-table-rows2(val)
+  each row in val
+    tr
+      each item in row
+        td=item
+
+mixin payment-type()
+  label.radio
+    input(type="radio" name="orderPayment" value="Prepayment")
+    span.radio-item
+    span.radio-text
+      span Предоплата заказа
+      span.prepayment
+        span
+          svg.icon.icon-visa <use href="#icon-visa"></use>
+        span
+          svg.icon.icon-mastercard <use href="#icon-mastercard"></use>
+        span
+          svg.icon.icon-ymoney <use href="#icon-ymoney"></use>
+
+  +radio("Оплата при получении", "", "orderPayment", "uponReceipt", "")
+
+mixin payment-type2()
+  .payment-type-block
+    .payment-navs
+      .payment-nav.active(data-payment-tab-id="prepayment")
+        input(type="radio" name="orderPayment" value="Prepayment" hidden)
+        span Предоплата заказа
+      .payment-nav(data-payment-tab-id="upon-receipt")
+        input(type="radio" name="orderPayment" value="uponReceipt" hidden)
+        span Оплата при получении
+
+  .payment-tabs
+    .payment-tab.active(id="prepayment")
+      label.payment-option
+        input(type="radio" name="paymentOption" value="card" hidden data-payment-option)
+        span
+          svg.icon.icon-visa <use href="#icon-visa"></use>
+        span
+          svg.icon.icon-mastercard <use href="#icon-mastercard"></use>
+        span Пластиковой картой
+      label.payment-option
+        input(type="radio" name="paymentOption" value="ymoney" hidden data-payment-option)
+        span
+          svg.icon.icon-ymoney <use href="#icon-ymoney"></use>
+        span Ю-Money
+
+    .payment-tab(id="upon-receipt")
+
+mixin review-item(val)
+  .review-item
+    .review-item-title
+      .review-user
+        .review-user-avatar
+          +svg("user")
+        .review-user-info
+          .review-user-name=val.name
+          .review-user-date=val.date
+
+      .review-rating
+        +stars(val.rating)
+    .review-text=val.text
+    .review-answer
+      .review-answer-title
+        +svg("logo")
+        span Ответ Представителя бренда
+      .review-answer-text=val.answer
+    .review-footer
+      span Оценка полезна?
+      span
+        span.rating-useful.up
+          +svg("review", "review-up")
+          span 0
+        span.rating-useful.down
+          +svg("review", "review-down")
+          span 0
+
+
+
+
+
+

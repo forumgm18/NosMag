@@ -1,0 +1,63 @@
+.delivery-nav
+  .delivery-nav-item.active(data-nav-id="postamat" data-default-tc="sdek")
+    div
+      .delivery-nav-item-title
+        span В пункт выдачи
+      .delivery-nav-item-body
+        +radio-svg("", "sdek", "deliveryCompany", "sdek")
+        +radio-svg("Почта России", "rupost", "deliveryCompany", "pr")
+        +radio("самовывоз со склада магазина", "", "deliveryCompany", "sklad")
+        //+radio("DPD", "dpd", "deliveryCompany", "dpd", "")
+    .delivery-tab(data-tab-id="postamat")
+      .delivery-description(data-description="sdek")
+        h3.description-title Доставка в пункт выдачи СДЭК
+        .description-text Срок доставки 2-3 дня.<br>Цена 350 руб.
+        a(href="#order-map" data-modal) Выберите пункт выдачи
+        .description-text Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque facere libero minima quod voluptas? Animi, asperiores atque et illo labore nisi quae quas repellat saepe tempore. A aut dolorem quisquam.
+      .delivery-description(data-description="pr")
+        h3.description-title Доставка Почтой России
+        .description-text Срок доставки 2-3 недели.<br>Цена от 500 руб.
+
+      //.delivery-description(data-description="dpd")
+      //  h3.description-title Доставка в пункт выдачи DPD
+      //  .description-text Срок доставки 2-3 дня.<br>Цена 450 руб.
+
+
+
+  .delivery-nav-item(data-nav-id="courier" data-default-tc="sdek")
+    div
+      .delivery-nav-item-title
+        span Курьером
+        +checkbox2("День в день", "day2day","vch", "")
+        //+checkbox("День в день", "","day2day","vch", "")
+      .delivery-nav-item-body
+        +radio-svg("", "sdek", "deliveryCompany", "sdek")
+        //+radio("DPD", "dpd", "deliveryCompany", "dpd", "")
+        +radio-svg("", "dostavista", "deliveryCompany", "dostavista")
+        +radio-svg("", "ya-go", "deliveryCompany", "yago")
+
+    .delivery-tab.active(data-tab-id="courier")
+      .delivery-description.active(data-description="sdek")
+        h3.description-title Курьерская доставка СДЭК
+        .description-text Срок доставки 2-3 дня.<br>Цена 350 руб.
+        a(href="#order-map" data-modal) Выберите адрес доставки
+      //.delivery-description(data-description="dpd")
+      //  h3.description-title Курьерская доставка DPD
+      //  .description-text Срок доставки 3-4 дня.<br>Цена 450 руб.
+      .delivery-description(data-description="dostavista")
+        h3.description-title Курьерская доставка Достависта
+        .description-text Срок доставки 1-2 дня.<br>Цена 550 руб.
+        a(href="#order-map" data-modal) Выберите адрес доставки
+
+  //.delivery-nav-item(data-nav-id="pochta" data-default-tc="pochta")
+  //  div
+  //    .delivery-nav-item-title
+  //      span Почта россии
+  //    .order-delivery-card-body
+  //  .delivery-tab.active(data-tab-id="pochta")
+  //    .delivery-description(data-description="pochta")
+  //      h3.description-title Доставка Почтой России
+  //      .description-text Срок доставки 2-3 недели.<br>Цена от 500 руб.
+
+
+

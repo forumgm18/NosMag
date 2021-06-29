@@ -1,0 +1,35 @@
+name: NosMag Deploy
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: "NosMag"
+  DEPLOY_PATH: ~/projects
+  GIT_REPO: git@github.com:forumgm18/NosMag.git
+
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.DEPLOY_USER_NAME }}
+          password: ${{ secrets.DEPLOY_USER_PASSWORD }}
+          port: ${{ secrets.DEPLOY_HOST_PORT }}
+          script: |
+            cd ${{ DEPLOY_PATH }}
+            git clone git@github.com:${{ github.github.repository }}
+            cd ${{ github.repository.name }}
+            docker-compose

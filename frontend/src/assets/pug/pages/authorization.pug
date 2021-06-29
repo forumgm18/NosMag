@@ -1,0 +1,36 @@
+extends ../layout/main-layout
+
+block variables
+  - var title = 'НосМаг.ру';
+  - var description = 'НосМаг.ру';
+  - var pageClass = '';
+
+block content
+  section.container.page-title-section
+    h1.page-title.mtb-05
+      span Авторизация
+
+
+  main
+    .auth.container
+      .form-item
+        input(type="text" placeholder="Введите ваш номер телефона")
+      p Для безопасности мы используем одноразвый код, необходимо авторизоваться.
+      a.btn.btn-shadow(href="#") ПОЛУЧИТЬ КОД
+
+    .auth.container
+      .form-item
+        input(type="text" placeholder="Введите ваш номер телефона" value="8 (800) 555-35-35")
+      .form-item
+        input(type="text" placeholder="Введите код из СМС")
+      a.btn.btn-shadow(href="#") АВТОРИЗОВАТЬСЯ
+
+
+
+
+
+
+
+
+
+

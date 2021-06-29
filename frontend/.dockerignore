@@ -1,0 +1,6 @@
+# Исключаем из добавления в образ
+.nuxt
+./**/*/.nuxt
+node_modules
+./**/*/node_modules
+# yarn.lock

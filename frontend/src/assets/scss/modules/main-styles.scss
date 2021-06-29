@@ -1,0 +1,169 @@
+:root{
+  --base-color1 : #{$base-color1};
+  --base-color2 : #{$base-color2};
+  --base-color3 : #{$base-color3};
+  --base-color4 : #{$base-color4};
+  --base-color5 : #{$base-color5};
+  --base-color6 : #{$base-color6};
+  --footer-bgr-color : #{$base-color1};
+  --page-bgr-primary: #fff;
+  --page-bgr-secondary: #e2e2e2;
+  --page-bgr-tmp: #a7a7a7;
+  --bgr-close: #{$substrate-bgr};
+  --text-color-default: #{$text-color};
+  --text-color-light: #{$text-color-light};
+  --menu-info-mobile: #{$base-color4 };
+  //============================
+  --burger-bgr-color: transparent;
+  --burger-bgr-show: transparent;
+  --burger-color : #{$base-color1};
+
+  //--warning-color : #{$warning-color};
+  //--danger-color : #{$danger-color};
+  //
+  //--text-color-light: #{$text-color-light};
+  //--filter-checkbox-color: #{lighten($text-color-light,10%)};
+  //--border-radius: 16px;
+  //--box-shadow-default: 0px 4px 4px rgba(85, 85, 85, 0.1);
+  //--sale: #{$sale-color};
+  //--sp-tab-border-color : #f4f4f4;
+  //
+  //--triangle : #cecece;
+  //--link-color: #{$base-color1};
+  //--submenu-border: #dedede;
+  //--submenu-bgr: #fff;
+  //--submenu-item-hover: #f4f4f4;
+  //--btn-color: hsl(198, 100%, 36%);
+  //--btn-hover-color: hsl(198, 100%, 26%);
+  //--btn-chart-color: hsl(21, 100%, 74%);
+  //--btn-chart-hover-color: hsl(21, 100%, 64%);
+  //--border-color-default: #dedede;
+  //
+  //--btn-danger-hover-color: #{darken($danger-color, 25%)};
+  //
+  //
+  ////--page-bgr-secondary: #8b8b8b;
+  //
+  //--form-error: #{$warning-color};
+  //--form-text: rgba(10, 10, 10, 1);
+  //--form-placeholder: rgba(100, 100, 100, .5);
+  //--form-border-radius: 5px;
+  //
+  //--footer-address-color: #fff;//#aaa;
+  //--star: #FF9F0A;
+  //--star-gray : #{$text-color-light};
+  --menu-max-width: 720px;
+  //--p : 24px;
+  //@include media-max-width2(1200) { --p: 16px;}
+  --p: 16px;
+
+
+  @include media-min-width2($sm) { --p: 24px;}
+
+//  box-shadow: 0 0 0 2px #fff,0 0 0 4px var(--base-color1); // Окантовка выбранного слайда
+
+
+}
+html {
+  line-height: $mainLineHeight;
+  font-size: $mainFontSize;
+  //color: $mainFontColor;
+  color: var(--text-color-default);
+  height: 100%;
+  @include media-max-width2($xl) {
+    font-size: 16px;
+  }
+  @include media-max-width2($lg) {
+    font-size: 15px;
+  }
+  @include media-max-width2($xsm) {
+    font-size: 14px;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $mainFont;
+  font-size: $mainFontSize;
+  font-weight: $mainFontWeight;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  //background-color: var(--page-bgr-secondary);
+
+  //scrollbar-color: var(--page-bgr-secondary) red;
+  //scrollbar-width: calc(var(--border-radius) / 2);
+
+
+  //&::-webkit-scrollbar {
+  //  width: calc(var(--border-radius) / 2);               /* ширина scrollbar */
+  //}
+  //&::-webkit-scrollbar-track {
+  //  background: var(--page-bgr-secondary);        /* цвет дорожки */
+  //}
+  //&::-webkit-scrollbar-thumb {
+  //  background-color: var(--base-color2);    /* цвет плашки */
+  //  //border-radius: calc(var(--border-radius) / 2);       /* закругления плашки */
+  //  //border: 3px solid var(--base-color1);  /* padding вокруг плашки */
+  //}
+
+
+}
+.site-boby {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  //max-width: #{$desktopWidth};
+  max-width: #{$xl} + 'px';
+}
+main {
+  min-width: 100px;
+  @include media-max-width2($sm) {
+    margin-top: 95px;
+  }
+}
+.container {
+  max-width: #{$desktopWidth};
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--p);
+
+  @include media-max-width2($lg) { max-width: #{$smDesktopWidth};}
+  @include media-max-width2($md) { max-width: #{$tableWidth};}
+  @include media-max-width2($sm) { max-width: #{$smTableWidth};}
+
+
+
+}
+p {color: var(--text-color-default)}
+.bgr-secondary { background-color: var(--page-bgr-secondary);}
+.bgr-tmp { background-color: var(--page-bgr-tmp);}
+.db {display: block!important;}
+.fg {flex-grow: 1!important;}
+.vue-scrollbar__scrollbar-vertical {
+  width: 8px;
+  border-radius: 10px;
+  /*background: rgba(196, 196, 196, .5);*/
+  background: transparent;
+  &:hover{
+    background: transparent;
+  }
+  .scrollbar {
+    width: 8px;
+    border-radius: 10px;
+    background: rgba(196, 196, 196, 1);
+  }
+}
+.bgr-close {
+  background-color: var(--bgr-close);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+
+}
