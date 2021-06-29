@@ -1,0 +1,25 @@
+name: NosMag Deploy
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: "NosMag"
+  DEPLOY_PATH: ~/projects
+  GIT_REPO: git@github.com:forumgm18/NosMag.git
+
+
+jobs:
+  build:
+  - name: Dump github context
+    run:   echo "$GITHUB_CONTEXT"
+    shell: bash
+    env:
+      GITHUB_CONTEXT: ${{ toJson(github) }}
