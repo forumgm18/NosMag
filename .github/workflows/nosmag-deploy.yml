@@ -10,11 +10,8 @@ on:
     branches: [ main ]
 
 env:
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: "NosMag"
+  # Папка на сервере
   DEPLOY_PATH: ~/projects
-  GIT_REPO: git@github.com:forumgm18/NosMag.git
-
 
 jobs:
   build:
@@ -30,6 +27,9 @@ jobs:
           port: ${{ secrets.DEPLOY_HOST_PORT }}
           script: |
             cd ${{ DEPLOY_PATH }}
-            git clone git@github.com:${{ github.github.repository }}
-            cd ${{ github.repository.name }}
-            docker-compose
+            git clone git@github.com:${{ github.github.repository }}.git
+            cd ${{ github.event.repository.name }}
+            docker-compose build
+            docker-compose down
+            docker-compose up -d
+
