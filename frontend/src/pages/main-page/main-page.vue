@@ -10,7 +10,7 @@
           :focusOnSelect="true"
         )
           .main-slider-item
-            div.main-slider-content Рекламный баннер 10
+            div.main-slider-content Рекламный баннер 100
           .main-slider-item
             div.main-slider-content Рекламный баннер 2
           .main-slider-item
