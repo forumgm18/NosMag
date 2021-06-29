@@ -25,11 +25,12 @@ jobs:
           username: ${{ secrets.DEPLOY_USER_NAME }}
           password: ${{ secrets.DEPLOY_USER_PASSWORD }}
           port: ${{ secrets.DEPLOY_HOST_PORT }}
-          script: |
-            cd ${{ DEPLOY_PATH }}
-            git clone git@github.com:${{ github.github.repository }}.git
-            cd ${{ github.event.repository.name }}
-            docker-compose build
-            docker-compose down
-            docker-compose up -d
+          script:
+            |
+              cd ${{ DEPLOY_PATH }}
+              git clone git@github.com:${{ github.github.repository }}.git
+              cd ${{ github.event.repository.name }}
+              docker-compose build
+              docker-compose down
+              docker-compose up -d
 
