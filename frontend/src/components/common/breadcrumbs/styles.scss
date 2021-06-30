@@ -1,0 +1,25 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 1em;
+  &-item {
+    color: var(--text-color-light);
+    font-size: inherit;
+    font-weight: 500;
+    margin-bottom: .5em;
+    a {
+      cursor: pointer;
+      color: inherit;
+      transition: .3s;
+        &:after {
+          content: '/';
+          color: var(--text-color-light);
+          padding: 0 .3em;
+        }
+    }
+    &:hover {
+      a {color: var(--text-color-default)}
+    }
+  }
+}

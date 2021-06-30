@@ -1,0 +1,43 @@
+.sublinks {
+  &-menu{
+    display: block;
+    margin-left: calc(-1*var(--p));
+    &-item{
+      display: block;
+      line-height: 1;
+      font-size: 20px;
+      margin-bottom: .65em;
+        a {
+          display: block;
+          font-size: inherit;
+          line-height: 1.5em;
+          width: 100%;
+          padding-left: var(--p);
+          padding-right: var(--p);
+          color: var(--text-color-default);
+          cursor: pointer;
+          transition: .3s;
+            &:hover {
+              &:not(.active){background-color: var(--text-block-hover);}
+
+            }
+        }
+        .active {
+          background-color: var(--base-color2);
+          margin-bottom: 1.3em;
+          color: #fff;
+
+        }
+
+        &.lv-2 {
+          padding-left: 2.5em;
+          margin-bottom: .5em;
+
+          a {
+              color: var(--text-color-light);
+            }
+        }
+    }
+  }
+
+}

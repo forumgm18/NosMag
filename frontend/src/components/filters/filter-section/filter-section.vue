@@ -3,7 +3,7 @@
     .filter-section_title
       slot
     .filter-item_list
-      filter-checkbox-item(
+      checkbox.filter-item(
         v-for="item in items"
         :key="item.id"
         v-model="selectItems"
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import FilterCheckboxItem from '~/components/filters/filter-checkbox-item'
+import Checkbox from '~/components/common/forms/checkbox/checkbox'
 export default {
   name: 'FilterSection',
-  components: { FilterCheckboxItem },
+  components: { Checkbox },
   props: {
     id: {},
     items: { type: Array },

@@ -1,7 +1,13 @@
 <template lang="pug">
   main.clarifying-page
+    section.container
+      breadcrumbs(:items="BreadcrumbsItems")
+      h1.page-title(v-if="sublinks_menu") {{sublinks_menu.header}}
     section.container.content-section
-      sidebar.sidebar-left
+      sidebar.sidebar-left(v-if="sublinks_menu")
+        sublinks-menu(:items="sublinks_menu.items")
+
+
       .main-content
         .main-tile(v-if="links")
           nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="lnk.link")
@@ -19,10 +25,23 @@
 </template>
 
 <script>
+import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
+import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
 export default {
   name: 'clarifying-selection-page',
+  components: {SublinksMenu, Breadcrumbs},
+  data: () => ({
+    sublinks_menu: null,
+    BreadcrumbsItems: [
+      {name: 'Главная', alias: '/'},
+      {name: 'Раздел', alias: '/razdel'},
+      {name: 'Носки', alias: ''},
+    ],
+
+  }),
   computed: {
     content: s => s.$store.getters['getContentData'],
+
     // showcase() { return this.content.showcase},
     links() { return this.content.hasOwnProperty('sublinks') ? this.content.sublinks : undefined},
 
@@ -31,42 +50,15 @@ export default {
     //   set: function(v) {return }
     // }
   },
+  async mounted () {
+    this.sublinks_menu = await this.content.sublinks_menu
+  }
 
 }
 </script>
 
 <style lang="scss">
 @import '~/pages/main-page/main-page';
-.content-section {
-  border: 1px solid red;
-  display: flex;
-  align-items: flex-start;
-}
-.main-content {
-  max-width: 1170px;
-  flex-grow: 1;
-  margin-left: auto;
-}
-.sidebar{
-  &-left {
-    border: 1px solid green;
-    flex-shrink: 0;
-    flex-basis: 25%;
-    /*width: 380px;*/
-
-  }
-}
-.clarifying-page .main-tile {
-  --col: 2;
-  --m: 60px;
-  &-item {
-    max-width: 500px;
-    &-img {
-      &:before {
-        padding-bottom: 100%;
-      }
-    }
-  }
-}
+@import 'styles';
 
 </style>

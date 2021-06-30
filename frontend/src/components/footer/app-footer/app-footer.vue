@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 
 export default {
   name: 'app-footer',
@@ -72,7 +72,8 @@ export default {
     fColShow3: false,
   }),
   computed: {
-    ...mapState('settings', ['footer']),
+    // ...mapState('settings', ['footer']),
+    footer: s => s.$store.getters['footer'],
     fmCol1() { return this.footer.columns[0] },
     fmCol2() { return this.footer.columns[1] },
   },

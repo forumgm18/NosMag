@@ -1,5 +1,5 @@
 <template lang="pug">
-  main
+  main.main-page
     section.main-top-section
       .container
         vue-slick-carousel.main-slider(
@@ -178,12 +178,8 @@ export default {
     content: s => s.$store.getters['getContentData'],
     showcase() { return this.content.showcase},
     links() { return this.content.hasOwnProperty('links') ? this.content.links : undefined},
-
-    // showcase: {
-    //   get: function() { return this.content.showcase},
-    //   set: function(v) {return }
-    // }
   },
+
   mounted() {
     if (process.browser) {
       const rootSection = document.querySelector('[data-root-section]')

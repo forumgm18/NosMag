@@ -1,12 +1,7 @@
 <template lang="pug">
-  .filter-item
-    label.checkbox(data-checked="value")
-      input(
-        hidden
-        type="checkbox"
-        :value="val"
-        v-model="model"
-        )
+  //checkbox.filter-item(v-model="model" :value="val")
+    //label.checkbox(data-checked="value")
+      input( hidden   type="checkbox"  :value="val"  v-model="model" )
       span.checkbox_text-block
         span.checkbox_icon
         span.checkbox_text
@@ -14,9 +9,11 @@
 </template>
 
 <script>
+import Checkbox from '~components/commom/forms/checkbox/checkbox'
 export default {
   name: 'FilterCheckboxItem',
   props: [ 'value', 'val' ],
+  components: {Checkbox},
   computed: {
     model: {
       get() {

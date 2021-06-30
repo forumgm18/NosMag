@@ -155,10 +155,10 @@ export default {
   //   return { bodyAttrs: { class: this.menuOpen ? 'menu-open' : '' } }
   // },
   computed: {
-    // ...mapGetters(['info4Users', 'selectCity', 'siteConfig', 'headerPhone']),
     // ...mapGetters('settings', ['phone', 'city']),
-    ...mapState('settings', ['header']),
-
+    // ...mapState('settings', ['header']),
+    // ...mapState(['header']),
+    header: s => s.$store.getters['header'],
     // phone() { return this.header.phone },
     // city() { return this.header.city },
     // ...mapGetters('menu', ['menuItems']),

@@ -1,12 +1,16 @@
 <template lang="pug">
-  main.has-filter
-    section.container.base-bgr-color
-      h1.page-title.mb-0
-        //btn-go-back
-        span {{title}}
-    section.container
-      .catalog-detail
-        section.catalog-filter
+  main.container
+    section
+      breadcrumbs(:items="BreadcrumbsItems")
+    section
+      h1.page-title  {{title}}
+    section.container.content-section
+      sidebar.sidebar-left
+        sublinks-menu(v-if="sublinks_menu" :items="sublinks_menu.items")
+
+
+      section.main-content
+        section.razdel-filter
           filter-section(
             v-for="fs in $store.state.content.data.filters"
             :key="fs.id"
@@ -17,15 +21,15 @@
 
 
         loading(v-if="loading")
-        section.catalog-content(v-else)
-          .catalog-sort(v-if="products.length")
-            .catalog-sort-label Сортировать по:
-            label.catalog-sort-item
+        section.razdel-content(v-else)
+          .razdel-sort(v-if="products.length")
+            .razdel-sort-label Сортировать по:
+            label.razdel-sort-item
               input(type="checkbox" name="sortByRating" hidden)
               span.sort-direction
                 span рейтингу
                 svg.icon <use href="#icon-arrow-left"></use>
-            label.catalog-sort-item
+            label.razdel-sort-item
               input(type="checkbox" name="sortByPrice" hidden)
               span.sort-direction
                 span цене
@@ -51,27 +55,36 @@
 </template>
 
 <script>
+import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
+// import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
 import ProductList from '~/components/products/product-list'
-import FilterSection from '~/components/filters/filter-section'
+import FilterSection from '~/components/filters/filter-section/filter-section'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'CatalogDetail',
+  name: 'Razdel',
   components: {
+    Breadcrumbs,
+    // SublinksMenu,
     ProductList,
     FilterSection
     // Paginate
   },
   props: ['title'],
   data: () => ({
+    BreadcrumbsItems: [
+      {name: 'Главная', alias: '/'},
+      {name: 'Раздел', alias: '/razdel'},
+      {name: 'Носки', alias: ''},
+    ],
     loading: true,
     selectedFilters: []
   }),
   computed: {
-    ...mapGetters('catalog',['products', 'page', 'pageCount']),
+    ...mapGetters('razdel',['products', 'page', 'pageCount']),
     currentPage: {
       get: function() { return this.page},
-      set: function(value) { this.$store.commit('catalog/setPage', value) }
+      set: function(value) { this.$store.commit('razdel/setPage', value) }
     },
   },
   created() {
@@ -79,7 +92,7 @@ export default {
     this.pageChangeHandler(1)
   },
   methods: {
-    ...mapActions('catalog',['fetchContent']),
+    ...mapActions('razdel',['fetchContent']),
     async pageChangeHandler(page) {
       this.loading = true
       await this.fetchContent()

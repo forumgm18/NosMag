@@ -1,0 +1,18 @@
+.clarifying {
+  &-page {
+    padding-top: 100px;
+    .main-tile {
+      --col: 2;
+      --m: 60px;
+      &-item {
+        max-width: 500px;
+        &-img {
+          &:before {
+            padding-bottom: 100%;
+          }
+        }
+      }
+    }
+
+  }
+}

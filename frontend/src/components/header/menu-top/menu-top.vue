@@ -86,7 +86,8 @@ export default {
   }),
   computed: {
     ...mapState('menu', ['menuItems']),
-    ...mapState('settings', ['header']),
+    //...mapState('settings', ['header']),
+    header: s => s.$store.getters['header'],
   },
   methods: {
     menuClose() {

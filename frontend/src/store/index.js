@@ -1,12 +1,9 @@
-import siteConfig from '~/static/site-settings/nos-mag-config.json'
 import tabSizes from '~/static/site-settings/size-table-data.json'
 import Vue from 'vue'
 
 export const state = () => ({
-  siteConfig: siteConfig,
   tabSizes: tabSizes,
-  content: null
-
+  content: null,
 
 })
 
@@ -23,7 +20,11 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ dispatch }) {
+  async nuxtServerInit({ dispatch }, {route}) {
+    // const path = route.path.split('/')
+    // const alias = path[path.length - 1]
+    // await dispatch('fetchContent', alias)
+
     // await dispatch('token/setNewToken')
     // await dispatch('menu/fetch')
   },
@@ -57,9 +58,16 @@ export const actions = {
 }
 
 export const getters = {
-  siteConfig: s => s.siteConfig,
+  // siteConfig: s => s.siteConfig,
   tabSizes: s => s.tabSizes,
   getContent: s => s.content,
   getContentData: s => s.content.data,
-  getPageType: s => s.content.type
+  getPageType: s => s.content.type,
+
+  header: s => s.content.header,
+  footer: s => s.content.footer,
+  city: s => s.content.header.city,
+  phone: s => s.content.header.phone,
+
+
 }
