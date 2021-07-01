@@ -1,22 +1,27 @@
 <template lang="pug">
   .filter-section(:class="{open : sectionOpen}" @click="openToggle")
     .filter-section_title
-      slot
+      span.text
+        slot
+      span.filter-arrow
     .filter-item_list
-      checkbox.filter-item(
-        v-for="item in items"
-        :key="item.id"
-        v-model="selectItems"
-        :val="item.id"
-        ) {{item.name}}
+      scroll-bar.filter-item_list-scroll
+        .filter-item_list-scroll-body
+          checkbox.filter-item(
+            v-for="item in items"
+            :key="item.id"
+            v-model="selectItems"
+            :val="item.id"
+            ) {{item.name}}
 
 </template>
 
 <script>
 import Checkbox from '~/components/common/forms/checkbox/checkbox'
+import ScrollBar from 'vue2-scrollbar'
 export default {
   name: 'FilterSection',
-  components: { Checkbox },
+  components: { Checkbox, ScrollBar },
   props: {
     id: {},
     items: { type: Array },
@@ -32,7 +37,7 @@ export default {
     selectItems: []
   }),
   mounted() {
-    this.sectionOpen = this.isOpen
+    //this.sectionOpen = this.isOpen
   },
   methods: {
     openToggle() { this.sectionOpen = !this.sectionOpen }
@@ -60,6 +65,6 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+@import 'styles';
 </style>

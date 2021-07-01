@@ -22,8 +22,11 @@ export const actions = {
 
 export const getters = {
   // settings: s => s.settings,
-  headerSettings: s => s.header,
-  footerSettings: s => s.footer,
+  // headerSettings: s => s.header,
+  // footerSettings: s => s.footer,
+  header: s => s.header,
+  footer: s => s.footer,
+
   city: s => s.header.city,
   phone: s => s.header.phone,
   // info4Users: s => s.header.info,

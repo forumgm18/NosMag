@@ -12,10 +12,10 @@ export const mutations = {
     state.content = content
   },
 
-  setQuantity(state, val) {
-    // state.content.data.sizes[val.id].count = val.value
-    Vue.set(state.content.data.sizes, val.id, val.value)
-  }
+  // setQuantity(state, val) {
+  //   // state.content.data.sizes[val.id].count = val.value
+  //   Vue.set(state.content.data.sizes, val.id, val.value)
+  // }
 
 }
 
@@ -47,14 +47,14 @@ export const actions = {
 
     commit('setContent', content)
   },
-  setQuantity({state, commit }, val ) {
-    const s = state.content.data.sizes[val.id]
-    let value = parseInt(val.value.count,10)
-    if (value < 0) value = s.count
-    if (value > s.ostatok) value = s.ostatok
-    val.value.count = value
-    commit('setQuantity', val)
-  },
+  // setQuantity({state, commit }, val ) {
+  //   const s = state.content.data.sizes[val.id]
+  //   let value = parseInt(val.value.count,10)
+  //   if (value < 0) value = s.count
+  //   if (value > s.ostatok) value = s.ostatok
+  //   val.value.count = value
+  //   commit('setQuantity', val)
+  // },
 }
 
 export const getters = {
@@ -63,11 +63,5 @@ export const getters = {
   getContent: s => s.content,
   getContentData: s => s.content.data,
   getPageType: s => s.content.type,
-
-  header: s => s.content.header,
-  footer: s => s.content.footer,
-  city: s => s.content.header.city,
-  phone: s => s.content.header.phone,
-
 
 }

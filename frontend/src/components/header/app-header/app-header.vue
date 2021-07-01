@@ -70,7 +70,7 @@
               span.tablet телефон
             .header-phone
               a.header-phone-link(:href="header.phone.link") {{header.phone.name}}
-              .header-phone-label {{header.phone.info}}
+            //  .header-phone-label {{header.phone.info}}
 
           nuxt-link.header-login(:to="`/${header.auth.alias}`")
             svg.icon.icon-user <use href="#icon-user"/>
@@ -131,11 +131,13 @@ import topBasket from '~/components/header/basket/top-basket'
 
 import menuFunc from '~/utils/main-scripts'
 
+// import {isEmpty} from 'lodash'
+
 // import burger from '~/components/header/burger'
 // import LoginForm from '~/components/header/login-form'
 // import HeaderSearch from '~/components/header/header-search'
 // import customSelect from '~/components/custom-select'
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'appHeader',
@@ -156,14 +158,15 @@ export default {
   // },
   computed: {
     // ...mapGetters('settings', ['phone', 'city']),
-    // ...mapState('settings', ['header']),
+    ...mapState('settings', ['header']),
     // ...mapState(['header']),
-    header: s => s.$store.getters['header'],
+    // header: s => s.$store.getters['header'],
     // phone() { return this.header.phone },
     // city() { return this.header.city },
     // ...mapGetters('menu', ['menuItems']),
     // slogan: th => th.siteConfig.mainSlogan,
     // menuItems: s => s.$store.getters['menu/menuItems'],
+    // headerNotEmpty() { return !isEmpty(this.header) },
   },
   methods: {
     // citySelect (item) { console.log(item) },

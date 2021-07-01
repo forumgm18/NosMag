@@ -3,7 +3,7 @@
     icons
     app-header(v-if="!loading")
     nuxt
-    app-footer
+    app-footer(v-if="!loading")
 </template>
 
 <script>
@@ -33,16 +33,14 @@ export default {
 
   fetch: async function () {
     this.loading = true
-    // await this.$store.dispatch('settings/fetch')
+    //await this.$store.dispatch('settings/fetch')
     await this.$store.dispatch('menu/fetch')
 
-    const path = this.$route.path.split('/')
-    const alias = path[path.length - 1]
-    // await this.$store.dispatch('settings/fetch')
+    // const path = this.$route.path.split('/')
+    // const alias = path[path.length - 1]
+     await this.$store.dispatch('settings/fetch')
     // await this.$store.dispatch('menu/fetch')
-    await this.$store.dispatch('fetchContent', alias)
-
-
+    // await this.$store.dispatch('fetchContent', alias)
 
     this.loading = false
   },

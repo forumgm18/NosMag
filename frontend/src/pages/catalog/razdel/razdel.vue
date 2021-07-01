@@ -10,14 +10,16 @@
 
 
       section.main-content
-        section.razdel-filter
-          filter-section(
-            v-for="fs in $store.state.content.data.filters"
-            :key="fs.id"
-            :id="fs.id"
-            :items="fs.values"
-            v-on:input="changeFilter"
-            ) {{fs.name}}
+        section.razdel-filter(:class="{collapse: filterCollapse}")
+          .razdel-filter-collapse(:class="{collapse: filterCollapse}")
+            filter-section(
+              v-for="fs in $store.state.content.data.filters"
+              :key="fs.id"
+              :id="fs.id"
+              :items="fs.values"
+              v-on:input="changeFilter"
+              ) {{fs.name}}
+          .razdel-filter-collapse-btn(:class="{collapse: filterCollapse}" @click="filterCollapseToggle")
 
 
         loading(v-if="loading")
@@ -78,6 +80,7 @@ export default {
       {name: 'Носки', alias: ''},
     ],
     loading: true,
+    filterCollapse: true,
     selectedFilters: []
   }),
   computed: {
@@ -98,6 +101,7 @@ export default {
       await this.fetchContent()
       this.loading = false
     },
+    filterCollapseToggle() {this.filterCollapse = !this.filterCollapse},
     changeFilter(v) {
       console.log('changeFilter v: ',v)
       const cur = this.selectedFilters.find(item => item.id === v.id)
@@ -114,6 +118,8 @@ export default {
 </script>
 
 <style lang="scss" >
+@import '~/components/products/product';
+@import 'styles';
 .pagination {
   margin-top: 2em;
   .active {

@@ -55,7 +55,7 @@ export default {
       .toLowerCase()
       .replace(/\/$/, '')}`
     return {
-      //title: this.content.title || 'nosmag-new!',
+      title: this.content.title || 'nosmag-new!',
       meta: [...this.meta],
       link: [{ rel: 'canonical', href: canonical }]
     }
