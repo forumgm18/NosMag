@@ -12,11 +12,20 @@
       &.open {
         overflow: visible;
 
+
+        .filter-arrow {
+          transform: rotate(180deg);
+
+        }
+
+        .filter-item_list {display: block}
+      }
+
+      &.is-selected {
         .filter-section_title {
           color: #fff;
           background-color: var(--text-color-default);
         }
-
         .filter-arrow {
           &:before, &:after { width: 1.4em;}
           &:before {
@@ -29,6 +38,7 @@
           }
 
         }
+
       }
 
       &_title{
@@ -61,6 +71,7 @@
     margin-left: auto;
     position: relative;
     color: inherit;
+    transition: .3s;
     &:before, &:after {
       content: '';
       color: inherit;
@@ -89,6 +100,7 @@
     &:not(:last-child){margin-bottom: 1.16em;}
     .checkbox_text {    min-width: 50px;}
     &_list {
+      display: none;
       background-color: #fff;
       border-radius: 5px;
       border: 1px solid var(--text-color-default);
@@ -98,7 +110,8 @@
       left: 0;
       z-index: 10;
       height: 300px;
-      min-width: 100%;
+      //min-width: 100%;
+      width: fit-content;
 
         &-scroll {
           height: 100%;

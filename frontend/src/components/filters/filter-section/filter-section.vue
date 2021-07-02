@@ -1,10 +1,14 @@
 <template lang="pug">
-  .filter-section(:class="{open : sectionOpen}" @click="openToggle")
+  .filter-section(
+    :class="{open : sectionOpen, 'is-selected': selectItems.length}"
+    @click="openToggle"
+    data-filter-section
+    )
     .filter-section_title
       span.text
         slot
-      span.filter-arrow
-    .filter-item_list
+      span.filter-arrow(@click="clearSelection" )
+    .filter-item_list(data-filter-item-list)
       scroll-bar.filter-item_list-scroll
         .filter-item_list-scroll-body
           checkbox.filter-item(
@@ -40,8 +44,50 @@ export default {
     //this.sectionOpen = this.isOpen
   },
   methods: {
-    openToggle() { this.sectionOpen = !this.sectionOpen }
+    openToggle(event) {
+      this.sectionOpen = !this.sectionOpen
+      const parent = event.target.closest('[data-filter-section]')
+      this.showFilterList(parent)
+    },
+
+    showFilterList(parent) {
+      if (!parent) return
+      const parentBox = parent.getBoundingClientRect()
+      const left = parentBox.x
+      const top = parentBox.y + parentBox.height
+      const filterList = parent.querySelector('[data-filter-item-list]')
+      if (!filterList) return
+      filterList.style.position = 'fixed'
+      filterList.style.left = `${left}px`
+      filterList.style.top = `${top}px`
+
+    },
+    winScroll () {
+      const openedFilters = document.querySelectorAll('[data-filter-section].open')
+      openedFilters && openedFilters.forEach(el => this.showFilterList(el))
+    },
+    clearSelection(e) {
+      console.log('e', e)
+      if(this.selectItems.length)  {
+        // e.preventDefault()
+        e.stopPropagation()
+        this.selectItems = []
+        this.sectionOpen = false
+
+      }
+    }
+
   },
+
+  beforeMount () {
+    if (process.client) window.addEventListener('scroll', this.winScroll)
+  },
+  beforeDestroy() {
+    if (process.client) window.removeEventListener('scroll', this.winScroll)
+  },
+
+
+
   watch: {
     selectItems() {
       this.$emit('input', {id: this.id, values: this.selectItems})

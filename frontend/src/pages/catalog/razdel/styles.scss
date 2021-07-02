@@ -11,7 +11,7 @@
       flex-grow: 1;
       transition: max-height .3s;
       max-height: 100vh;
-      //overflow: hidden;
+      overflow: hidden;
       &.collapse {
         max-height: 48px;
       }
