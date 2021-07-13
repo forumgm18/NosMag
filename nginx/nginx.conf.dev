@@ -1,3 +1,7 @@
+#upstream api_host {
+#  server nosmag.ru;
+#}
+
 server {
   listen *:80;
 
@@ -11,6 +15,17 @@ server {
     proxy_set_header Connection "upgrade";
   }
 
+#  location /api {
+#    proxy_pass https://api_host;
+#    rewrite ^/api/(.*) /$1 break;
+
+#    rewrite ^/(.*) /$1 break;
+#    proxy_pass https://nosmag.ru;
+#    proxy_set_header   Host             nosmag.ru;
+#    proxy_set_header   X-Real-IP        $remote_addr;
+#    proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+
+#  }
 #  location /api {
 #    proxy_pass http://api:3001;
 #    rewrite ^/api/(.*) /$1 break;

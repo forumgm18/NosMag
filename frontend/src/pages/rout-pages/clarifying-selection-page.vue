@@ -1,7 +1,7 @@
 <template lang="pug">
   main.clarifying-page
     section.container
-      breadcrumbs(:items="BreadcrumbsItems")
+      breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
       h1.page-title(v-if="sublinks_menu") {{sublinks_menu.header}}
     section.container.content-section
       sidebar.sidebar-left(v-if="sublinks_menu")
@@ -41,6 +41,7 @@ export default {
   }),
   computed: {
     content: s => s.$store.getters['getContentData'],
+    breadcrumbs() {return this.content.breadcrumbs || null},
 
     // showcase() { return this.content.showcase},
     links() { return this.content.hasOwnProperty('sublinks') ? this.content.sublinks : undefined},

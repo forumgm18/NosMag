@@ -20,19 +20,26 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, {route}) {
-    // const path = route.path.split('/')
-    // const alias = path[path.length - 1]
-    // await dispatch('fetchContent', alias)
+  // async nuxtServerInit({ dispatch }, {route}) {
+  //   // const path = route.path.split('/')
+  //   // const alias = path[path.length - 1]
+  //   // await dispatch('fetchContent', alias)
+  //
+  //   // await dispatch('token/setNewToken')
+  //   // await dispatch('menu/fetch')
+  // },
 
-    // await dispatch('token/setNewToken')
-    // await dispatch('menu/fetch')
-  },
   async fetchContent({ state, commit, rootState }, alias) {
-    const c = await this.$axios.$get('https://nosmag.ru/api/get_content', {
+    console.log('process.env', process.env)
+    // console.log('apiUrl', process.env.apiUrl)
+    // const apiUrl = process.env.apiUrl
+    // const c = await this.$axios.$get('https://nosmag.ru/api/get_content', {
+    // const c = await this.$axios.$get(`${apiUrl}/get_content`, {
+    const c = await this.$axios.$get(`/get_content`, {
       params: {
         alias: alias,
         session_id: rootState.token.session_id
+        // session_id: 'dlfijdlgjldfgji'
       }
     })
     // Преобразуем строковые числа в числа

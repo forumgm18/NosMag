@@ -62,7 +62,7 @@ export default {
   },
 
   async mounted() {
-    await this.checkToken()
+    // await this.checkToken()
     console.log('pageType: ', this.pageType)
     console.log('content: ', this.content)
   },

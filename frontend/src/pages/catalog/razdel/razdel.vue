@@ -1,7 +1,7 @@
 <template lang="pug">
   main.container
     section
-      breadcrumbs(:items="BreadcrumbsItems")
+      breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
     section
       h1.page-title  {{title}}
     section.container.content-section
@@ -12,32 +12,48 @@
       section.main-content
         section.razdel-filter(:class="{collapse: filterCollapse}")
           .razdel-filter-collapse(:class="{collapse: filterCollapse}")
-            filter-section(
-              v-for="fs in $store.state.content.data.filters"
+            vnm-select.is-sort(
+              :options="sortmodes"
+              :settings="sortmodesSettings"
+              title="Сортировать по"
+              v-on:input="changeSort"
+              )
+              template(#option="{opt}")
+                span.check
+                span {{opt.name}}
+
+            vnm-select(
+              v-for="fs in filters"
               :key="fs.id"
               :id="fs.id"
-              :items="fs.values"
+              :settings="filterSettings"
+              :options="fs.values"
+              :title="fs.name"
               v-on:input="changeFilter"
-              ) {{fs.name}}
+              )
+              template(#option="{opt}")
+                span.check.border
+                span.vnm-option_item-color(
+                  v-if="opt.code && opt.code === 'multicolor'"
+                  :style="`background: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet)`"
+                  )
+                span.vnm-option_item-color.is-border(
+                  v-else-if="opt.code && opt.code === 'bw'"
+                  :style="`background: linear-gradient(to right, #000 0%, #000 50%, #fff 50%, #fff 100%)`"
+                  )
+                span.vnm-option_item-color(
+                  v-else-if="opt.code"
+                  :style="`background-color: ${opt.code}`"
+                  )
+                span.vnm-option_item-text {{opt.name}}
+
           .razdel-filter-collapse-btn(:class="{collapse: filterCollapse}" @click="filterCollapseToggle")
 
 
-        loading(v-if="loading")
-        section.razdel-content(v-else)
-          .razdel-sort(v-if="products.length")
-            .razdel-sort-label Сортировать по:
-            label.razdel-sort-item
-              input(type="checkbox" name="sortByRating" hidden)
-              span.sort-direction
-                span рейтингу
-                svg.icon <use href="#icon-arrow-left"></use>
-            label.razdel-sort-item
-              input(type="checkbox" name="sortByPrice" hidden)
-              span.sort-direction
-                span цене
-                svg.icon <use href="#icon-arrow-left"></use>
 
-          product-list(:items="products" :is-btn="true" :is-sizes="true")
+        section.razdel-content
+          loading.static(v-if="loading")
+          product-list(v-else :items="products" :is-btn="true" :is-sizes="true")
           client-only
             paginate(
               v-if="pageCount > 1"
@@ -60,8 +76,12 @@
 import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
 // import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
 import ProductList from '~/components/products/product-list'
-import FilterSection from '~/components/filters/filter-section/filter-section'
+import FilterSelect from '~/components/filters/filter-select/filter-select'
+import SortSelect from '~/components/sorts/sort-select/sort-select'
+import VnmSelect from '~/components/common/forms/vnm-select/vnm-select'
 import { mapActions, mapGetters } from 'vuex'
+
+
 
 export default {
   name: 'Razdel',
@@ -69,7 +89,9 @@ export default {
     Breadcrumbs,
     // SublinksMenu,
     ProductList,
-    FilterSection
+    FilterSelect,
+    SortSelect,
+    VnmSelect,
     // Paginate
   },
   props: ['title'],
@@ -81,10 +103,21 @@ export default {
     ],
     loading: true,
     filterCollapse: true,
-    selectedFilters: []
+    selectedFilters: [],
+    sortBy: null,
+    filterSettings: {
+      multiple: true,
+      titleCount: true
+    },
+    sortmodesSettings: {
+      titleCount: false
+    }
   }),
   computed: {
     ...mapGetters('razdel',['products', 'page', 'pageCount']),
+    ...mapGetters('settings',['sortmodes']),
+    filters() { return this.$store.state.content.data.filters},
+    breadcrumbs() {return this.$store.state.content.data.breadcrumbs || null},
     currentPage: {
       get: function() { return this.page},
       set: function(value) { this.$store.commit('razdel/setPage', value) }
@@ -112,7 +145,24 @@ export default {
       }
 
 
-    }
+    },
+    changeSort(v) {
+      console.log('changeSort v: ',v)
+      this.sortBy = v.values.id
+      // const cur = this.selectedFilters.find(item => item.id === v.id)
+      // if (cur) {
+      //   cur.values = v.values
+      // } else {
+      //   this.selectedFilters.push(v)
+      // }
+    },
+
+
+
+
+
+
+
   }
 }
 </script>

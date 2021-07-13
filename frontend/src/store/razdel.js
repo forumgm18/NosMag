@@ -27,7 +27,8 @@ export const actions = {
       data = items.slice(offsetMin, offsetMax) // для текущей страницы копируем часть массива данных
 
     } else { // данных нет в $store. Запрашиваем новые.
-      const c = await this.$axios.$get('https://nosmag.ru/api/get_content', {
+      // const c = await this.$axios.$get('https://nosmag.ru/api/get_content', {
+      const c = await this.$axios.$get('/get_content', {
         params: {
           alias: rootState.content.data.alias,
           limit: state.pageSize,

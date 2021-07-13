@@ -14,7 +14,8 @@ export const actions = {
     // const showcase = await this.$axios.$post('https://nosmag.ru/api/get_showcase', {
     //   type: 'recommend', session_id: 'sdkfsdfjk'
     // })
-    const showcase = await this.$axios.$get('https://nosmag.ru/api/get_showcase', {
+    // const showcase = await this.$axios.$get('https://nosmag.ru/api/get_showcase', {
+    const showcase = await this.$axios.$get('/api/get_showcase', {
       params: {type: 'recommend', session_id: 'sdkfsdfjk'}
     })
     commit('setShowCase', showcase.items)

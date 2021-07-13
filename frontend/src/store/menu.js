@@ -10,7 +10,9 @@ export const mutations = {
 
 export const actions = {
   async fetch ({ commit }) {
-    const menu = await this.$axios.$get('https://nosmag.ru/api/get_menu')
+    // const menu = await this.$axios.$get('https://nosmag.ru/api/get_menu')
+    // const menu = await this.$axios.$get('/api/get_menu')
+    const menu = await this.$axios.$get('/get_menu')
     commit('setMenu', menu.items)
   }
 }

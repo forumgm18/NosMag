@@ -5,6 +5,11 @@ const isDev = process.env.NODE_ENV !== 'production'
 export default {
   // srcDir: 'src/',
   // Global page headers: https://go.nuxtjs.dev/config-head
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    apiUrl: process.env.API_URL || '???',
+    _AXIOS_BASE_URL_: process.env.API_URL || 'http://localhost:3000/api'
+  },
   head: {
     title: 'nosmag-site',
     htmlAttrs: {
@@ -39,6 +44,7 @@ export default {
   plugins: [
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/paginate.js', mode: 'client' },
+    // { src: '~/plugins/popper.js', mode: 'client' },
     // { src: '~~/plugins/vuebar.js', mode: 'client' },
     // { src: '~~/plugins/vue-awesome-swiper.js', mode: 'client' },
     '~/plugins/loading.js',
@@ -46,6 +52,7 @@ export default {
     '~/plugins/generate.uuid.js',
     '~/plugins/filters.js',
     '~/plugins/v-mask.js',
+    // '~/plugins/v-select.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

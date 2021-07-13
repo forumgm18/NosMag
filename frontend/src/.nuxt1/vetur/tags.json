@@ -1,0 +1,98 @@
+{
+  "CustomSelect": {
+    "description": "Auto imported from components/custom-select.vue"
+  },
+  "CommonBtnGoBack": {
+    "description": "Auto imported from components/common/btn-go-back.vue"
+  },
+  "CommonBuyBtn": {
+    "description": "Auto imported from components/common/buy-btn.vue"
+  },
+  "CommonIcons": {
+    "description": "Auto imported from components/common/icons.vue"
+  },
+  "CommonLoading": {
+    "description": "Auto imported from components/common/loading.vue"
+  },
+  "CommonQuantitySize": {
+    "description": "Auto imported from components/common/quantity-size.vue"
+  },
+  "CommonQuantity": {
+    "description": "Auto imported from components/common/quantity.vue"
+  },
+  "CommonSlickSliderProduct": {
+    "description": "Auto imported from components/common/slick-slider-product.vue"
+  },
+  "CommonStars": {
+    "description": "Auto imported from components/common/stars.vue"
+  },
+  "ModalsBasketAddModal": {
+    "description": "Auto imported from components/modals/basket-add-modal.vue"
+  },
+  "ModalsTabSize": {
+    "description": "Auto imported from components/modals/tab-size.vue"
+  },
+  "ProductsProductItem": {
+    "description": "Auto imported from components/products/product-item.vue"
+  },
+  "ProductsProductList": {
+    "description": "Auto imported from components/products/product-list.vue"
+  },
+  "ReviewsReviewItem": {
+    "description": "Auto imported from components/reviews/review-item.vue"
+  },
+  "Reviews": {
+    "description": "Auto imported from components/reviews/reviews.vue"
+  },
+  "CommonBreadcrumbs": {
+    "description": "Auto imported from components/common/breadcrumbs/breadcrumbs.vue"
+  },
+  "CommonSublinksMenu": {
+    "description": "Auto imported from components/common/sublinks-menu/sublinks-menu.vue"
+  },
+  "CommonPopup": {
+    "description": "Auto imported from components/common/popup/popup.vue"
+  },
+  "CommonTooltip": {
+    "description": "Auto imported from components/common/tooltip/tooltip.vue"
+  },
+  "FiltersFilterSelect": {
+    "description": "Auto imported from components/filters/filter-select/filter-select.vue"
+  },
+  "FooterAppFooter": {
+    "description": "Auto imported from components/footer/app-footer/app-footer.vue"
+  },
+  "HeaderAppHeader": {
+    "description": "Auto imported from components/header/app-header/app-header.vue"
+  },
+  "HeaderBasketTopBasket": {
+    "description": "Auto imported from components/header/basket/top-basket.vue"
+  },
+  "HeaderBurger": {
+    "description": "Auto imported from components/header/burger/burger.vue"
+  },
+  "HeaderSearch": {
+    "description": "Auto imported from components/header/header-search/header-search.vue"
+  },
+  "HeaderLoginForm": {
+    "description": "Auto imported from components/header/login-form/login-form.vue"
+  },
+  "HeaderMenuTop": {
+    "description": "Auto imported from components/header/menu-top/menu-top.vue"
+  },
+  "SortsSortSelect": {
+    "description": "Auto imported from components/sorts/sort-select/sort-select.vue"
+  },
+  "CommonFormsCheckbox": {
+    "description": "Auto imported from components/common/forms/checkbox/checkbox.vue"
+  },
+  "CommonFormsPopupInputForm": {
+    "description": "Auto imported from components/common/forms/popup-input-form/popup-input-form.vue"
+  },
+  "CommonFormsRadioCheckbox": {
+    "description": "Auto imported from components/common/forms/radio-checkbox/radio-checkbox.vue"
+  },
+  "CommonFormsVnmSelect": {
+    "description": "Auto imported from components/common/forms/vnm-select/vnm-select.vue"
+  }
+}

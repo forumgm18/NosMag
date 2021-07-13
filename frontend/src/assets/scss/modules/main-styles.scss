@@ -14,6 +14,7 @@
   --text-color-light: #{$text-color-light};
   --menu-info-mobile: #{$base-color4 };
   --text-block-hover: #{$base-color5 };
+  --filter-border-color: #{$filter-border-color };
   //============================
   --burger-bgr-color: transparent;
   --burger-bgr-show: transparent;
@@ -187,6 +188,55 @@ p {color: var(--text-color-default)}
   }
 }
 
+.check {
+  display: block;
+  //background: #fff;
+  color: inherit;
+  //border: 1px solid currentColor;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  font-size: 1.3333em;
+
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  margin-right: .5em;
+  position: relative;
+  cursor: pointer;
+
+  &:before, &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    //height: 0.0625em;
+    height: 0.125em;
+    background-color: var(--base-color2);
+    opacity: 0;
+  }
+  &:before {
+    top: 50%;
+    width: .54em;
+    transform: rotate(45deg);
+  }
+  &:after {
+    top: 33%;
+    left: 40%;
+    width: .9em;
+    transform: rotate(-45deg);
+
+  }
+
+}
+.border {
+  border: 1px solid currentColor;
+}
+
+.selected {
+  .check {
+    opacity: 1;
+    &:before, &:after {opacity: 1;}
+  }
+}
 
 
 .bgr-secondary { background-color: var(--page-bgr-secondary);}
