@@ -20,7 +20,7 @@
               )
               template(#option="{opt}")
                 span.check
-                span {{opt.name}}
+                span.vnm-option_item-text {{opt.name}}
 
             vnm-select(
               v-for="fs in filters"

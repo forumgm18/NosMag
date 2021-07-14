@@ -31,6 +31,7 @@ export default {
     // pageType: ''
   }),
   fetch: async function () {
+    console.log('process.env', process.env)
     this.loading = true
     await this.checkToken()
     const path = this.$route.path.split('/')

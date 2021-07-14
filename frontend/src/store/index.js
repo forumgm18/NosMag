@@ -39,7 +39,6 @@ export const actions = {
       params: {
         alias: alias,
         session_id: rootState.token.session_id
-        // session_id: 'dlfijdlgjldfgji'
       }
     })
     // Преобразуем строковые числа в числа

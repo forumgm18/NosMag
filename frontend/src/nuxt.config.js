@@ -5,11 +5,11 @@ const isDev = process.env.NODE_ENV !== 'production'
 export default {
   // srcDir: 'src/',
   // Global page headers: https://go.nuxtjs.dev/config-head
-  env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-    apiUrl: process.env.API_URL || '???',
-    _AXIOS_BASE_URL_: process.env.API_URL || 'http://localhost:3000/api'
-  },
+  // env: {
+  //   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+  //   apiUrl: process.env.API_URL || '???',
+  //   _AXIOS_BASE_URL_: process.env.API_URL || 'http://localhost:3000/api'
+  // },
   head: {
     title: 'nosmag-site',
     htmlAttrs: {
@@ -101,7 +101,10 @@ export default {
     timeout: 5000,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    prefix: `${process.env.API_PREFIX}/`,
+    https: process.env.API_PROTOCOL === 'https',
+  },
   // render: {
   //   // http2: {
   //   //     push: true,
