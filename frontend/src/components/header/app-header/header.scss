@@ -220,7 +220,8 @@ header {
 
   }
   &-logo {
-    font-size: 46px;
+    //font-size: 46px;
+    font-size: 52px;
     @include media-max-width2(1200) {font-size: 40px;}
     @include media-max-width2($sm) {font-size: 2em;}
       .icon-logo {font-size: inherit;}

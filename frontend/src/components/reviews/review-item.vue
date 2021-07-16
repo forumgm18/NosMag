@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import stars from '~/components/common/stars'
+import stars from '~/components/common/stars/stars'
 export default {
   name: 'reviews-item',
   components: { stars },

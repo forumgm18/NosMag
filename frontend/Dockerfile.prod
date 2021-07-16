@@ -11,6 +11,7 @@ COPY ./yarn.lock .
 # Копируем файлы проекта
 COPY ./src .
 # Устанавливаем рабочую среду и билдим проект
-RUN yarn install --prod && yarn run build
+#RUN yarn install --prod && yarn run build
+RUN yarn install && yarn run build
 # Стартуем проект
 #ENTRYPOINT ["yarn", "run", "start"]

@@ -29,9 +29,21 @@ export default {
     prefetchLinks: false,
   },
   // Customize the progress-bar color
-  // loading: { color: 'blue' },
+  // loading: {
+  //   // color: 'blue',
+  //   continuous: true,
+  // },
   // loading: '~/components/common/loading.vue',
+  // loadingIndicator: {
+  //   name: 'circle',
+  //   color: '#3B8070',
+  //   background: 'white'
+  // },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
+
+
+
   css: ['./assets/scss/global-styles.scss'],
   styleResources: {
     // your settings here

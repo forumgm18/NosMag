@@ -37,8 +37,10 @@ export const actions = {
         }
       })
       // Преобразуем "строковые числа" в числа
-      const content = JSON.parse(JSON.stringify(c), (key, value) => (value === (+value).toString()) ? +value : value)
-      data = content.data.items
+      if (c) {
+        const content = JSON.parse(JSON.stringify(c), (key, value) => (value === (+value).toString()) ? +value : value)
+        data = content.data.items
+      }
     }
     commit('setContent', { data, pageSize })
   },

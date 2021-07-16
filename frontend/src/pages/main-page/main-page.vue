@@ -48,7 +48,7 @@
         :focusOnSelect="true"
       )
 
-        product-item(
+        product-card(
           v-for="prod of showcase"
           :key="prod.id"
           :product="prod"
@@ -109,8 +109,8 @@
 </template>
 
 <script>
-// import ProductList from '~/components/products/product-list'
-import ProductItem from '~/components/products/product-item'
+// import ProductList from '~/components/products/product-list/product-list'
+import ProductCard from '~/components/products/product-card/product-card'
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 // optional style for arrows & dots
@@ -118,7 +118,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
   components: { VueSlickCarousel,
-    ProductItem,
+    ProductCard,
     // ProductList
   },
   // props: ['showcase'],
@@ -190,23 +190,22 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/components/products/product';
 @import 'main-page';
-.product-item {
-  /*border: 1px solid red;*/
-  /*padding: 16px;*/
-  &:hover {
-    box-shadow: none;
-    border-radius: 0;
-    .product-item-base {
-      box-shadow: 0px 4px 16px rgb(85, 85, 85, .25);
-      border-radius: var(--border-radius);
-    }
+/*.product-card {*/
+/*  !*border: 1px solid red;*!*/
+/*  !*padding: 16px;*!*/
+/*  &:hover {*/
+/*    box-shadow: none;*/
+/*    border-radius: 0;*/
+/*    .product-item-base {*/
+/*      box-shadow: 0px 4px 16px rgb(85, 85, 85, .25);*/
+/*      border-radius: var(--border-radius);*/
+/*    }*/
 
-  }
-  &-base {
-    padding: 10px;
-  }
-  &-btn-panel {display: none}
-}
+/*  }*/
+/*  &-base {*/
+/*    padding: 10px;*/
+/*  }*/
+/*  &-btn-panel {display: none}*/
+/*}*/
 </style>

@@ -1,6 +1,11 @@
 .clarifying {
   &-page {
     //padding-top: 100px;
+    .main-content {
+      max-width: 1170px;
+      margin-left: auto;
+    }
+
     .main-tile {
       --col: 2;
       --m: 60px;

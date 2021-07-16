@@ -46,7 +46,7 @@ export default {
         multiple: false
       }
     },
-    options: { type: Array }, // массив элементов select
+    options: [Array, Object], // массив элементов select
     title: { type: String },  //
     id: {},                   // id фильтра (если есть)
     isSelectedColor: {

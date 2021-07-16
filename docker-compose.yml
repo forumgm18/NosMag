@@ -17,7 +17,7 @@ services:
       - API_PREFIX=/api
       - API_HOST=nosmag.ru
       - API_PORT=443
-      - NODE_ENV:production
+#      - NODE_ENV:production
     networks:
       - nosmag-network
 

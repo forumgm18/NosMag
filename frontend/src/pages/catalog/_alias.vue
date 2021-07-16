@@ -134,7 +134,7 @@ import breadcrumbs from '~/components/common/breadcrumbs'
 // import SwiperProduct from '~/components/common/swiper-product'
 import TinySliderProduct from '~/components/common/tiny-slider-product'
 import quantity from '~/components/common/quantity'
-import stars from '~/components/common/stars'
+import stars from '~/components/common/stars/stars'
 import ReviewItem from '~/components/reviews/review-item'
 import sale from '~/utils/sale'
 

@@ -124,7 +124,7 @@
 <script>
 import breadcrumbs from '~/components/common/breadcrumbs'
 import QuantitySize from '~/components/common/quantity-size'
-import stars from '~/components/common/stars'
+import stars from '~/components/common/stars/stars'
 import Reviews from '~/components/reviews/reviews'
 import vueCustomScrollbar from 'vue-custom-scrollbar'
 import 'vue-custom-scrollbar/dist/vueScrollbar.css'

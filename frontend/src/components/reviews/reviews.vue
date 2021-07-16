@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import stars from '~/components/common/stars'
+import stars from '~/components/common/stars/stars'
 import ReviewItem from '~/components/reviews/review-item'
 
 export default {

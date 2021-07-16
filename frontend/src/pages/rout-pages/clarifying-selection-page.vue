@@ -4,11 +4,11 @@
       breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
       h1.page-title(v-if="sublinks_menu") {{sublinks_menu.header}}
     section.container.content-section
-      sidebar.sidebar-left(v-if="sublinks_menu")
+      aside.sidebar-left(v-if="sublinks_menu")
         sublinks-menu(:items="sublinks_menu.items")
 
 
-      .main-content
+      article.main-content
         .main-tile(v-if="links")
           nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="lnk.link")
             .main-tile-item-img
@@ -31,7 +31,7 @@ export default {
   name: 'clarifying-selection-page',
   components: {SublinksMenu, Breadcrumbs},
   data: () => ({
-    sublinks_menu: null,
+    // sublinks_menu: null,
     BreadcrumbsItems: [
       {name: 'Главная', alias: '/'},
       {name: 'Раздел', alias: '/razdel'},
@@ -42,6 +42,7 @@ export default {
   computed: {
     content: s => s.$store.getters['getContentData'],
     breadcrumbs() {return this.content.breadcrumbs || null},
+    sublinks_menu() {return this.$store.state.content.data.sublinks_menu || null},
 
     // showcase() { return this.content.showcase},
     links() { return this.content.hasOwnProperty('sublinks') ? this.content.sublinks : undefined},
@@ -52,7 +53,7 @@ export default {
     // }
   },
   async mounted () {
-    this.sublinks_menu = await this.content.sublinks_menu
+    // this.sublinks_menu = await this.content.sublinks_menu
   }
 
 }

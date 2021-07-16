@@ -15,6 +15,9 @@
   --menu-info-mobile: #{$base-color4 };
   --text-block-hover: #{$base-color5 };
   --filter-border-color: #{$filter-border-color };
+  --price-sale: #{$price-sale};
+  --product-tag-bgr: #{$product-tag-bgr};
+
   //============================
   --burger-bgr-color: transparent;
   --burger-bgr-show: transparent;
@@ -65,6 +68,9 @@
 //  box-shadow: 0 0 0 2px #fff,0 0 0 4px var(--base-color1); // Окантовка выбранного слайда
 
 
+}
+*{
+  //border: 1px solid red;
 }
 html {
   line-height: $mainLineHeight;
@@ -146,11 +152,12 @@ main {
   /*border: 1px solid red;*/
   display: flex;
   align-items: flex-start;
+  @include media-max-width2(768) {display: block}
 }
 .main-content {
-  max-width: 1170px;
+  //max-width: 1170px;
   flex-grow: 1;
-  margin-left: auto;
+  //margin-left: auto;
 }
 
 p {color: var(--text-color-default)}
@@ -177,7 +184,9 @@ p {color: var(--text-color-default)}
   }
 
 }
-
+.price-sale {
+  color: var(--price-sale)!important;
+}
 .sidebar{
   &-left {
     //border: 1px solid green;

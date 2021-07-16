@@ -4,12 +4,13 @@
       breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
     section
       h1.page-title  {{title}}
-    section.container.content-section
-      sidebar.sidebar-left
+    section.content-section
+      //aside.sidebar-left(v-if="sublinks_menu")
+      aside.sidebar-left
         sublinks-menu(v-if="sublinks_menu" :items="sublinks_menu.items")
 
 
-      section.main-content
+      article.main-content
         section.razdel-filter(:class="{collapse: filterCollapse}")
           .razdel-filter-collapse(:class="{collapse: filterCollapse}")
             vnm-select.is-sort(
@@ -30,6 +31,7 @@
               :options="fs.values"
               :title="fs.name"
               v-on:input="changeFilter"
+              v-if="fs.type!='price'"
               )
               template(#option="{opt}")
                 span.check.border
@@ -75,7 +77,7 @@
 <script>
 import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
 // import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
-import ProductList from '~/components/products/product-list'
+import ProductList from '~/components/products/product-list/product-list'
 import FilterSelect from '~/components/filters/filter-select/filter-select'
 import SortSelect from '~/components/sorts/sort-select/sort-select'
 import VnmSelect from '~/components/common/forms/vnm-select/vnm-select'
@@ -116,8 +118,9 @@ export default {
   computed: {
     ...mapGetters('razdel',['products', 'page', 'pageCount']),
     ...mapGetters('settings',['sortmodes']),
-    filters() { return this.$store.state.content.data.filters},
+    filters() { return this.$store.state.content.data.filters || null},
     breadcrumbs() {return this.$store.state.content.data.breadcrumbs || null},
+    sublinks_menu() {return this.$store.state.content.data.sublinks_menu || null},
     currentPage: {
       get: function() { return this.page},
       set: function(value) { this.$store.commit('razdel/setPage', value) }
@@ -157,19 +160,23 @@ export default {
       // }
     },
 
-
-
-
-
-
-
   }
 }
 </script>
 
 <style lang="scss" >
-@import '~/components/products/product';
+/*@import '~/components/products/product';*/
 @import 'styles';
+
+.product-list {
+  --col: 4;
+  --m: 9px;
+  @include media-max-width2(1700) {--col: 3;}
+  @include media-max-width2(991) {--col: 2;}
+}
+
+
+
 .pagination {
   margin-top: 2em;
   .active {

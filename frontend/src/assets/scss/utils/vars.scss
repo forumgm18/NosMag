@@ -8,6 +8,7 @@ $base-color6            : #fff;
 $blackout               : rgba(104, 139, 205, 0.1);
 $substrate-bgr          : rgba(104, 139, 205, 0.2);
 $filter-border-color    : #9f9f9f;
+$product-tag-bgr        : rgba(50, 111, 202, 0.5);
 
 // Burger
 $burgerW: 20px;
@@ -50,11 +51,11 @@ $smPhoneWidth       : 100vw;
 //$default-color          : #ffffff;
 $text-color              : $base-color3; //#555555;
 $text-color-light        : $base-color4; //#cccccc;
+$price-sale              : $base-color2;
 //$logo-text-color         : #5a5a5a;
 //$warning-color           : $base-color2; //#FB4545;
 ////$success-color           : #26de81;
 //$danger-color            : #FB4545;
-//$sale-color              : #FB4545;
 //$light-color             : #999999;
 //$purple-color            : #8854d0;
 //

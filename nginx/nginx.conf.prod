@@ -1,8 +1,8 @@
 server {
   listen *:80;
 
-#  server_name nosmag-new.ru;
-  server_name 78.24.223.226;
+  server_name nosmag-new.local;
+#  server_name 78.24.223.226;
 
   location / {
     proxy_pass http://frontend:3000;
