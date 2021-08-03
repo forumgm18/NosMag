@@ -1,12 +1,27 @@
 .sublinks {
   &-menu{
     display: block;
-    margin-left: calc(-1*var(--p));
+    //margin-left: calc(-1*var(--p));
+      @include media-max-width2($md - 1) {
+        display: flex;
+        align-items: center;
+        margin-left: 0;
+        width: fit-content;
+      }
     &-item{
       display: block;
       line-height: 1;
       font-size: 20px;
       margin-bottom: .65em;
+        @include media-max-width2($lg) {font-size: 18px;}
+        @include media-max-width2($md) {
+          //margin-right: 1em;
+          margin-right: 0;
+          margin-bottom: 1em;
+          display: flex;
+          align-items: center;
+        }
+        @include media-max-width2($sm) {font-size: 12px;}
         a {
           display: block;
           font-size: inherit;
@@ -15,8 +30,10 @@
           padding-left: var(--p);
           padding-right: var(--p);
           color: var(--text-color-default);
+          white-space: nowrap;
           cursor: pointer;
           transition: .3s;
+
             &:hover {
               &:not(.active){background-color: var(--text-block-hover);}
 
@@ -26,12 +43,18 @@
           background-color: var(--base-color2);
           margin-bottom: 1.3em;
           color: #fff;
+            @include media-max-width2($md) {  margin-bottom: 0;}
 
         }
 
         &.lv-2 {
           padding-left: 2.5em;
           margin-bottom: .5em;
+            @include media-max-width2($lg) { padding-left: 0;}
+            @include media-max-width2($md) {
+              margin-bottom: 0;
+              padding-left: 0;
+            }
 
           a {
               color: var(--text-color-light);

@@ -1,4 +1,4 @@
-//@use "sass:math";
+@use 'sass:math';
 // px to rem
 @function rem($pixels, $context: $mainFontSize) {
   @if (unitless($pixels)) {
@@ -12,10 +12,10 @@
 // size to one line
 @mixin icon-size($height, $width: $height) {
   font-size:$height+px;
-  min-width:($width/$height)+em;
-  //min-width:(math.div($width, $height))+em;
-  width:($width/$height)+em;
-  //width:(math.div($width, $height))+em;
+  //min-width:($width/$height)+em;
+  //width:($width/$height)+em;
+  min-width:(math.div($width, $height))+em;
+  width:(math.div($width, $height))+em;
 }
 @mixin size($width,$height: $width) {
   width: $width;

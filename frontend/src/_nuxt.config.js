@@ -1,8 +1,15 @@
 const imageminMozjpeg = require('imagemin-mozjpeg')
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 const isDev = process.env.NODE_ENV !== 'production'
+// const srcPath = 'src/'
 export default {
+  // srcDir: 'src/',
   // Global page headers: https://go.nuxtjs.dev/config-head
+  // env: {
+  //   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+  //   apiUrl: process.env.API_URL || '???',
+  //   _AXIOS_BASE_URL_: process.env.API_URL || 'http://localhost:3000/api'
+  // },
   head: {
     title: 'nosmag-site',
     htmlAttrs: {
@@ -22,9 +29,21 @@ export default {
     prefetchLinks: false,
   },
   // Customize the progress-bar color
-  // loading: { color: 'blue' },
+  // loading: {
+  //   // color: 'blue',
+  //   continuous: true,
+  // },
   // loading: '~/components/common/loading.vue',
+  // loadingIndicator: {
+  //   name: 'circle',
+  //   color: '#3B8070',
+  //   background: 'white'
+  // },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
+
+
+
   css: ['./assets/scss/global-styles.scss'],
   styleResources: {
     // your settings here
@@ -35,15 +54,17 @@ export default {
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~~/plugins/vue-modal.js', mode: 'client' },
-    { src: '~~/plugins/paginate.js', mode: 'client' },
+    { src: '~/plugins/vue-modal.js', mode: 'client' },
+    { src: '~/plugins/paginate.js', mode: 'client' },
+    // { src: '~/plugins/popper.js', mode: 'client' },
     // { src: '~~/plugins/vuebar.js', mode: 'client' },
     // { src: '~~/plugins/vue-awesome-swiper.js', mode: 'client' },
-    '~~/plugins/loading.js',
-    '~~/plugins/btn-go-back.js',
-    '~~/plugins/generate.uuid.js',
-    '~~/plugins/filters.js',
-    '~~/plugins/v-mask.js',
+    '~/plugins/loading.js',
+    '~/plugins/btn-go-back.js',
+    '~/plugins/-generate.uuid.js',
+    '~/plugins/filters.js',
+    '~/plugins/v-mask.js',
+    // '~/plugins/v-select.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -92,7 +113,10 @@ export default {
     timeout: 5000,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    prefix: `${process.env.API_PREFIX}/`,
+    https: process.env.API_PROTOCOL === 'https',
+  },
   // render: {
   //   // http2: {
   //   //     push: true,
@@ -174,80 +198,77 @@ export default {
 
       order: 'cssnanoLast',
     },
-    // extend(config, ctx) {
-    //   const ORIGINAL_TEST = '/\\.(png|jpe?g|icons|webp)$/i'
-    //   const vueSvgLoader = [
-    //     {
-    //       loader: 'vue-icons-loader',
-    //       options: {
-    //         svgo: false,
-    //       },
-    //     },
-    //   ]
-    //   const imageMinPlugin = new ImageminPlugin({
-    //     pngquant: {
-    //       quality: '5-30',
-    //       speed: 7,
-    //       strip: true,
-    //     },
-    //     jpegtran: {
-    //       progressive: true,
-    //     },
-    //     gifsicle: {
-    //       interlaced: true,
-    //     },
-    //     plugins: [
-    //       imageminMozjpeg({
-    //         quality: 70,
-    //         progressive: true,
-    //       }),
-    //     ],
-    //   })
-    //   if (!ctx.isDev) config.plugins.push(imageMinPlugin)
-    //
-    //   config.module.rules.forEach((rule) => {
-    //     if (rule.test.toString() === ORIGINAL_TEST) {
-    //       rule.test = /\.(png|jpe?g|webp)$/i
-    //       rule.use = [
-    //         {
-    //           loader: 'url-loader',
-    //           options: {
-    //             limit: 1000,
-    //             name: ctx.isDev
-    //               ? '[path][name].[ext]'
-    //               : 'img/[contenthash:7].[ext]',
-    //           },
-    //         },
-    //       ]
-    //     }
-    //   })
-    //   //  Create the custom SVG rule
-    //   // const svgRule = {
-    //   //   test: /\.svg$/,
-    //   //   // use: ['babel-loader', 'vue-icons-loader', 'url-loader']
-    //   //   oneOf: [
-    //   //     {
-    //   //       resourceQuery: /inline/,
-    //   //       use: vueSvgLoader,
-    //   //     },
-    //   //     {
-    //   //       resourceQuery: /data/,
-    //   //       loader: 'url-loader',
-    //   //     },
-    //   //     {
-    //   //       resourceQuery: /raw/,
-    //   //       loader: 'raw-loader',
-    //   //     },
-    //   //     {
-    //   //       loader: 'file-loader', // By default, always use file-loader
-    //   //     },
-    //   //   ],
-    //   // }
-    //
-    //   // config.module.rules.push(svgRule) // Actually add the rule
-    // },
-    extend(config, { loaders }){
-      loaders.scss.additionalData = '@use "sass:math";'
+    extend(config, ctx) {
+      const ORIGINAL_TEST = '/\\.(png|jpe?g|icons|webp)$/i'
+      const vueSvgLoader = [
+        {
+          loader: 'vue-icons-loader',
+          options: {
+            svgo: false,
+          },
+        },
+      ]
+      const imageMinPlugin = new ImageminPlugin({
+        pngquant: {
+          quality: '5-30',
+          speed: 7,
+          strip: true,
+        },
+        jpegtran: {
+          progressive: true,
+        },
+        gifsicle: {
+          interlaced: true,
+        },
+        plugins: [
+          imageminMozjpeg({
+            quality: 70,
+            progressive: true,
+          }),
+        ],
+      })
+      if (!ctx.isDev) config.plugins.push(imageMinPlugin)
+
+      config.module.rules.forEach((rule) => {
+        if (rule.test.toString() === ORIGINAL_TEST) {
+          rule.test = /\.(png|jpe?g|webp)$/i
+          rule.use = [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 1000,
+                name: ctx.isDev
+                  ? '[path][name].[ext]'
+                  : 'img/[contenthash:7].[ext]',
+              },
+            },
+          ]
+        }
+      })
+      //  Create the custom SVG rule
+      const svgRule = {
+        test: /\.svg$/,
+        // use: ['babel-loader', 'vue-icons-loader', 'url-loader']
+        oneOf: [
+          {
+            resourceQuery: /inline/,
+            use: vueSvgLoader,
+          },
+          {
+            resourceQuery: /data/,
+            loader: 'url-loader',
+          },
+          {
+            resourceQuery: /raw/,
+            loader: 'raw-loader',
+          },
+          {
+            loader: 'file-loader', // By default, always use file-loader
+          },
+        ],
+      }
+
+      config.module.rules.push(svgRule) // Actually add the rule
     },
   },
 }

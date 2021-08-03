@@ -1,4 +1,4 @@
-version: '3'
+version: '3.9'
 
 services:
   frontend:
@@ -17,3 +17,4 @@ services:
   nginx:
     volumes:
       - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/log:/var/log/nginx

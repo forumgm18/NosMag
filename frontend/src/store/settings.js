@@ -18,10 +18,12 @@ export const mutations = {
 
 export const actions = {
   async fetch ({ commit }) {
+    // console.log('settings process.env', process.env)
     // const settings = await this.$axios.$get('https://nosmag.ru/api/get_settings')
+    // const settings = await this.$axios.$get('http://nosmag-new.local/api/get_settings')
     // const settings = await this.$axios.$get('/api/get_settings')
     const settings = await this.$axios.$get('/get_settings')
-    console.log('settings: ', settings)
+    // console.log('settings: ', settings)
     commit('setSettings', settings)
   }
 }

@@ -21,9 +21,11 @@
               div.menu-link
                 span {{itm.name}}
                 .menu-arrow-next
+                  svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
           ul.menu.menu-info(@mouseenter="itemMouseLeave")
             li.menu-item(v-for="(lnk, j ) in  header.info.links")
-              nuxt-link.menu-link(:to="lnk.alias" @click.native="menuClose")
+              //nuxt-link.menu-link(:to="`${translit(itm.name)}${lnk.alias}`" @click.native="menuClose")
+              nuxt-link.menu-link(:to="`!${lnk.alias}`" @click.native="menuClose")
                 span {{lnk.name}}
             li.menu-item.menu-phone
               a.menu-link(:href="header.phone.link" @click="menuClose") {{header.phone.name}}
@@ -40,6 +42,7 @@
               li.submenu-item.title.go-back(@click.prevent="goBack(2)")
                 span {{item.name}}
                 .menu-arrow-next.go-back
+                  svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
 
               li.submenu-item(
                 v-for="(subitem, j) in item.items"
@@ -48,12 +51,13 @@
               )
                 nuxt-link.submenu-link.title(
                   v-if="subitem.items === undefined"
-                  :to="subitem.link"
+                  :to="`${translit(item.name)}${subitem.link}`"
                   @click.native="menuClose"
                   ) {{subitem.name}}
                 .submenu-link.title(v-else @click.prevent="subitemClick")
                   span {{subitem.name}}
                   .menu-arrow-next
+                    svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
                 ul.submenu.lv-3(
                   v-if="subitem.items != undefined"
                   :class="{open: lv3Open === `lv3-${j}`}"
@@ -61,9 +65,10 @@
                   li.submenu-item.title.go-back(@click.prevent="goBack(3)")
                     span {{subitem.name}}
                     .menu-arrow-next.go-back
+                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
 
                   li.submenu-item(v-for="(l, k) in subitem.items")
-                    nuxt-link.submenu-link(:to="`/${l.link}`" @click.native="menuClose") {{l.name}}
+                    nuxt-link.submenu-link(:to="`${translit(item.name)}${l.link}`" @click.native="menuClose") {{l.name}}
 
 </template>
 
@@ -90,6 +95,14 @@ export default {
     // header: s => s.$store.getters['header'],
   },
   methods: {
+    translit(v){
+      const catalog = '/catalog/'
+      if (v.toUpperCase().includes('НАБОР')) return catalog + 'sets/'
+      if (v.toUpperCase().includes('МУЖЧ')) return catalog + 'mens/'
+      if (v.toUpperCase().includes('ЖЕН')) return catalog + 'womans/'
+      if (v.toUpperCase().includes('ДЕТ')) return catalog + 'childrens/'
+      return ''
+    },
     menuClose() {
       menuFunc.menuState(false)
       document.body.classList.remove('submenu-open')

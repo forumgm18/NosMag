@@ -1,8 +1,8 @@
-import tabSizes from '~/static/site-settings/size-table-data.json'
-import Vue from 'vue'
+// import tabSizes from '~/static/site-settings/size-table-data.json'
+// import Vue from 'vue'
 
 export const state = () => ({
-  tabSizes: tabSizes,
+  // tabSizes: tabSizes,
   content: null,
 
 })
@@ -20,17 +20,20 @@ export const mutations = {
 }
 
 export const actions = {
-  // async nuxtServerInit({ dispatch }, {route}) {
-  //   // const path = route.path.split('/')
-  //   // const alias = path[path.length - 1]
-  //   // await dispatch('fetchContent', alias)
-  //
-  //   // await dispatch('token/setNewToken')
-  //   // await dispatch('menu/fetch')
-  // },
+  async nuxtServerInit({ dispatch }, {params}) {
+    // console.log('route:', route)
+    // const path = route.path.split('/')
+    // const alias = path[path.length - 1]
+    await dispatch('fetchContent', params.alias)
+
+    // await dispatch('token/setNewToken')
+    await dispatch('menu/fetch')
+    await dispatch('settings/fetch')
+
+  },
 
   async fetchContent({ state, commit, rootState }, alias) {
-    console.log('process.env', process.env)
+    // console.log('process.env', process.env)
     // console.log('apiUrl', process.env.apiUrl)
     // const apiUrl = process.env.apiUrl
     // const c = await this.$axios.$get('https://nosmag.ru/api/get_content', {
@@ -68,6 +71,8 @@ export const getters = {
   tabSizes: s => s.tabSizes,
   getContent: s => s.content,
   getContentData: s => s.content.data,
+  getBreadcrumbs: s => {
+    return  s.content.data.hasOwnProperty('breadcrumbs') ? s.content.data.breadcrumbs : null},
   getPageType: s => s.content.type,
 
 }

@@ -15,7 +15,8 @@
     font-size: 11px;
     height: 7em;
     width: 4em;
-    &.static { margin: 0 auto;}
+    &.center { margin: 0 auto;}
+    /*&.static { margin: 0 auto;}*/
   }
   .loader,
   .loader:before,

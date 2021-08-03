@@ -1,5 +1,5 @@
 <template lang="pug">
-  client-only
+    //client-only
     ul.sublinks-menu
       li.sublinks-menu-item(v-for="(it, i) in items" )
         nuxt-link(:class="{ active: it.active === 1 }" :to="it.link") {{it.name}}

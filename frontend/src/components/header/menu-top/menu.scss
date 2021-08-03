@@ -167,34 +167,37 @@
     //display: none;
     display: block;
     position: relative;
-    width: 10px;
-    height: 10px;
+    //width: 10px;
+    //height: 10px;
     margin-right: .5em;
     transition: .3s;
+    font-size: .5em;
       //@include media-max-width2(768) {display: block}
 
-
-    &:before, &:after {
-      content: '';
-      display: block;
-      background-color: currentColor;
-      width: 10px;
-      height: 2px;
-      position: absolute;
-      //top: 4px;
-
-    }
-    &:before{
-      //background-color: red;
-      transform: rotate(20deg);
-      top: 2px;
-    }
-    &:after {
-      //background-color: blue;
-      transform: rotate(-20deg);
-      bottom: 2px;
-
-    }
+    //.icon {
+    //  font-size: .7em;
+    //}
+    //&:before, &:after {
+    //  //content: '';
+    //  display: block;
+    //  background-color: currentColor;
+    //  width: 10px;
+    //  height: 2px;
+    //  position: absolute;
+    //  //top: 4px;
+    //
+    //}
+    //&:before{
+    //  //background-color: red;
+    //  transform: rotate(20deg);
+    //  top: 2px;
+    //}
+    //&:after {
+    //  //background-color: blue;
+    //  transform: rotate(-20deg);
+    //  bottom: 2px;
+    //
+    //}
     &.go-back {
       transform: rotate(180deg);
     }

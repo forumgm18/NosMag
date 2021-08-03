@@ -7,6 +7,7 @@
       <div class="err404-title">404</div>
       <p>Проверьте правильность написания адреса или перейдите в каталог</p>
       <nuxt-link class="btn btn-secondary" to="/">В КАТАЛОГ</nuxt-link>
+
     </div>
   </div>
 </template>

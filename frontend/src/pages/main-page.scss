@@ -181,7 +181,7 @@
           @include media-max-width2($md - 1) {
             position: absolute;
             //bottom: 1em;
-            bottom: 0;
+            bottom: .33em;
             left: 50%;
             transform: translateX(-50%);
             text-transform: capitalize;

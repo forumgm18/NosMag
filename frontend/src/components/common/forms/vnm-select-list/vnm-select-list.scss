@@ -1,0 +1,19 @@
+.vnm-select-list {
+  height: 100%;
+    &_item{
+      display: block;
+    }
+  &_scroll {
+    height: 100%;
+    padding-right: 1.1em;
+
+    .vue-scrollbar__scrollbar-vertical {
+      width: 4px;
+    }
+
+    .scrollbar {
+      width: 4px;
+    }
+  }
+
+}

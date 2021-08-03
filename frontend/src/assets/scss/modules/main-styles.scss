@@ -10,6 +10,7 @@
   --page-bgr-secondary: #e2e2e2;
   --page-bgr-tmp: #a7a7a7;
   --bgr-close: #{$substrate-bgr};
+  --bgr-filter-close: #{$filter-close-bgr};
   --text-color-default: #{$text-color};
   --text-color-light: #{$text-color-light};
   --menu-info-mobile: #{$base-color4 };
@@ -152,7 +153,7 @@ main {
   /*border: 1px solid red;*/
   display: flex;
   align-items: flex-start;
-  @include media-max-width2(768) {display: block}
+  @include media-max-width2($md - 1) {display: block}
 }
 .main-content {
   //max-width: 1170px;
@@ -192,8 +193,30 @@ p {color: var(--text-color-default)}
     //border: 1px solid green;
     flex-shrink: 0;
     flex-basis: 25%;
+    min-width: 200px;
     /*width: 380px;*/
+    margin-left: calc(-1*var(--p));
+    padding-left: var(--p);
+    @include media-max-width2($lg) {--p: 14px}
+    @include media-max-width2(767) {
+      flex-basis: auto;
+      padding-left: 0;
+      //margin-left: 0;
+      width: calc(100vw - ((100vw - 100%)/2 ));
+      //overflow-y: auto;
+      height: 30px;
+      overflow: hidden;
+      margin-right: calc(-1*((100vw - 100%)/2 ));
+      margin-bottom: 14px;
+    }
 
+  }
+
+  &-scroll {
+    @include media-max-width2(767) {
+      width: 100%;
+      overflow-y: auto;
+    }
   }
 }
 
@@ -228,8 +251,8 @@ p {color: var(--text-color-default)}
     transform: rotate(45deg);
   }
   &:after {
-    top: 33%;
-    left: 40%;
+    top: 30%;
+    left: 32%;
     width: .9em;
     transform: rotate(-45deg);
 
@@ -252,8 +275,7 @@ p {color: var(--text-color-default)}
 .bgr-tmp { background-color: var(--page-bgr-tmp);}
 .db {display: block!important;}
 .fg {flex-grow: 1!important;}
-.vue-scrollbar__scrollbar-vertical {
-  width: 8px;
+.vue-scrollbar__scrollbar-vertical,.vue-scrollbar__scrollbar-horizontal  {
   border-radius: 10px;
   /*background: rgba(196, 196, 196, .5);*/
   background: transparent;
@@ -261,13 +283,41 @@ p {color: var(--text-color-default)}
     background: transparent;
   }
   .scrollbar {
-    width: 8px;
     border-radius: 10px;
     background: rgba(196, 196, 196, 1);
   }
 }
+.vue-scrollbar__scrollbar-vertical {
+  width: 8px;
+  .scrollbar {
+    width: 8px;
+  }
+}
+
+
+.vue-scrollbar__scrollbar-horizontal {
+  height: 8px;
+  .scrollbar {
+    height: 8px;
+    border-radius: 10px;
+    background: rgba(196, 196, 196, 1);
+  }
+}
+
+
+
 .bgr-close {
   background-color: var(--bgr-close);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+
+}
+.bgr-filter-close {
+  background-color: var(--bgr-filter-close);
   position: fixed;
   top: 0;
   left: 0;

@@ -28,19 +28,23 @@ export default {
   data: () => ({
     // slogan: '',
     // headerPhone: '',
-    loading: true
+    // loading: true
+    loading: false
   }),
 
-  fetch: async function () {
+  fetch: async function ({store, params}) {
     this.loading = true
-    //await this.$store.dispatch('settings/fetch')
-    await this.$store.dispatch('menu/fetch')
+    await this.checkToken()
+    console.log('default params:', params)
 
-    // const path = this.$route.path.split('/')
-    // const alias = path[path.length - 1]
-     await this.$store.dispatch('settings/fetch')
+    // //await this.$store.dispatch('settings/fetch')
     // await this.$store.dispatch('menu/fetch')
-    // await this.$store.dispatch('fetchContent', alias)
+    //
+    // // const path = this.$route.path.split('/')
+    // // const alias = path[path.length - 1]
+    //  await this.$store.dispatch('settings/fetch')
+    // // await this.$store.dispatch('menu/fetch')
+    // await store.dispatch('fetchContent', params.alias)
 
     this.loading = false
   },
@@ -53,7 +57,24 @@ export default {
       ]
     },
     // headerSettings() {return this.$store.getters['settings/headerSettings']},
-    users() {      return this.$store.getters['users/users']    }
+    // users() {      return this.$store.getters['users/users']    }
+
+  },
+  methods: {
+    async checkToken() {
+      let token = this.$storage.getLocalStorage('token')
+      console.log('token: ', token)
+      if (token && token.session_id.length > 0) {
+        console.log('token (if)')
+        token.sessionDate = new Date()
+        await this.$store.commit('token/setToken', token)
+      } else {
+        console.log('token (else)')
+        token = await this.$store.dispatch('token/setNewToken')
+        this.$storage.setLocalStorage('token', this.token)
+      }
+
+    }
 
   },
   // head () {

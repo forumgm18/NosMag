@@ -1,11 +1,19 @@
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
 server {
-  listen *:80;
+  listen 80;
 
   server_name nosmag-new.local;
 #  server_name 78.24.223.226;
 
   location / {
     proxy_pass http://frontend:3000;
+    # Needed for sockets
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+
   }
 
 #  location /api {

@@ -9,6 +9,7 @@ Vue.use(Router)
 export function createRouter() {
   return new Router({
     mode: 'history',
+    // mode: 'abstract',
     routes: [
       {
         path: '*',

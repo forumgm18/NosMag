@@ -4,7 +4,6 @@
     @click="openToggle"
     data-filter-vnm-select
     )
-
     .vnm-select_title
       .vnm-select_title-text
         slot(name="title") {{title}}
@@ -12,19 +11,22 @@
       .vnm-select_arrow(@click="clearSelection" )
     .vnm-select_list-close(@click.stop="vnmClose")
     .vnm-select_list(data-vnm-select-item-list @click.stop="" :class="{'set-max-height' : options.length > 9}")
-      scroll-bar.vnm-select_list-scroll
+      scroll-bar.vnm-select_list-scroll(v-if="contentType==='list'")
         .vnm-select_list-scroll-body
           .vnm-option_item(
-            v-for="opt in options"
-            :key="opt.id"
+            v-for="opt1 in options"
+            :key="opt1.id"
             v-model="selectItems"
-            :val="opt.id"
+            :val="opt1.id"
             @click="optionClick"
-            :data-option-item="opt.id"
-            :class="{selected: selectItems.includes(opt.id.toString())}"
+            :data-option-item="opt1.id"
+            :class="{selected: selectItems.includes(opt1.id.toString())}"
             )
-            slot(name="option" v-bind:opt="opt") {{opt.name}}
+            slot(name="option" v-bind:opt="opt1") {{opt1.name}}
+            //slot(name="option") {{opt.name}}
 
+      .filter-price-block(v-else)
+        slot(name="price" v-bind:pr="options")
 
 </template>
 
@@ -47,8 +49,12 @@ export default {
       }
     },
     options: [Array, Object], // массив элементов select
-    title: { type: String },  //
+    title: String,  //
     id: {},                   // id фильтра (если есть)
+    contentType: {
+      type: String,
+      default: 'list'
+    },
     isSelectedColor: {
       type: String,
       required: false,
@@ -57,13 +63,23 @@ export default {
   },
   data: () => ({
     selectOpen: false,
-    selectItems: []
+    selectItems: [],
+    // prices:{
+    //   active_min: 0,
+    //   active_max:0
+    // }
   }),
   mounted() {
     //this.vnm-selectOpen = this.isOpen
-    this.options.forEach(el => {
-      if (el.active) this.selectItems.push(el.id.toString())
-    })
+    if (this.contentType === 'list') {
+      this.options.forEach(el => {
+        if (el.active) this.selectItems.push(el.id.toString())
+      })
+    }
+    // if (this.contentType === 'price') {
+    //   this.prices.active_min = this.options.active_min
+    //   this.prices.active_max = this.options.active_max
+    // }
 
   },
   methods: {
@@ -87,10 +103,6 @@ export default {
       filterList.style.left = `${left}px`
       filterList.style.top = `${top}px`
 
-    },
-    winScroll() {
-      const openedFilters = document.querySelectorAll('[data-filter-vnm-select].open')
-      openedFilters && openedFilters.forEach(el => this.showFilterList(el))
     },
     clearSelection(e) {
       console.log('e', e)
@@ -119,10 +131,11 @@ export default {
       } else { // если режим одиночного выбора
         this.selectItems.includes(v) ? this.selectItems = [] : this.selectItems = [v]
       }
-
     },
-
-    // isOptionSelected(v) {return this.selectItems.includes(v.toString())}
+    winScroll() {
+      const openedFilters = document.querySelectorAll('[data-filter-vnm-select].open')
+      openedFilters && openedFilters.forEach(el => this.showFilterList(el))
+    },
 
   },
   beforeMount () {
@@ -137,23 +150,11 @@ export default {
   watch: {
     selectItems() {
       this.$emit('input', {id: this.id, values: this.selectItems})
+    },
+    prices() {
+      this.$emit('input', {id: this.id, values: this.prices})
     }
   },
-
-  computed: {
-    // selectItems1: {
-    //   get() {
-    //     return this.value
-    //   },
-    //   set(val) {
-    //     // debugger
-    //     this.selectItems.push(val)
-    //     this.$emit('input', this.selectItems)
-    //   },
-    // },
-
-  },
-
 
 }
 </script>
