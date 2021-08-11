@@ -1,7 +1,14 @@
 .vnm-select-list {
   height: 100%;
+    &.set-max-height {
+        height: 19em;
+    }
+
+
     &_item{
-      display: block;
+      display: flex;
+      align-items: center;
+      padding: 0.5em 0;
     }
   &_scroll {
     height: 100%;

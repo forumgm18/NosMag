@@ -1,5 +1,5 @@
 <template lang="pug">
-  //checkbox.filter-item(v-model="model" :value="val")
+  //vnm-checkbox.filter-item(v-model="model" :value="val")
     //label.checkbox(data-checked="value")
       input( hidden   type="checkbox"  :value="val"  v-model="model" )
       span.checkbox_text-block
@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import Checkbox from '~components/commom/forms/checkbox/checkbox'
+import vnmCheckbox from "~/components/common/forms/vnm-checkbox/vnm-checkbox"
 export default {
   name: 'FilterCheckboxItem',
   props: [ 'value', 'val' ],
-  components: {Checkbox},
+  components: {vnmCheckbox},
   computed: {
     model: {
       get() {

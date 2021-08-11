@@ -22,4 +22,26 @@
   &-icon {
     cursor: pointer;
   }
+  &-mobile-filter{
+    border-width: 1px;
+    height: 24px;
+    min-height: unset;
+    font-weight: normal;
+    font-size: 10px;
+    line-height: 1;
+  }
+  &-base2-transparent {
+    background-color: transparent;
+    border-color: var(--base-color2);
+    color: var(--text-color-default);
+    &:hover {
+      text-decoration: none;
+      //background-color: var(--btn-hover-color);
+      background-color: var(--base-color2);
+      // color: var(--text-color-default);
+      color: #fff;
+
+    }
+
+  }
 }

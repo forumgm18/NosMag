@@ -10,7 +10,7 @@
       span.sort-arrow(@click="clearSelection" )
     .sort-item_list-close(@click.stop="sortClose")
     .sort-item_list(data-sort-item-list @click.stop="")
-      checkbox.sort-item(
+      check-box.sort-item(
         v-for="item in items"
         :key="item.id"
         v-model="selectItems"
@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import Checkbox from '~/components/common/forms/checkbox/checkbox'
-import RadioCheckbox from '~/components/common/forms/radio-checkbox/radio-checkbox'
+import checkBox from '~/components/common/forms/check-box/check-box'
+import radioBox from '~/components/common/forms/radio-box/radio-box'
 export default {
   name: 'SortSelect',
-  components: { Checkbox, RadioCheckbox },
+  components: { checkBox, radioBox },
   props: {
     id: {},
     items: { type: Array },

@@ -41,6 +41,7 @@
     section.main-popular.container
       h2.main-section-title Популярное
       vue-slick-carousel.main-popular-slider(
+        v-if="showcase"
         id="main-popular-slider"
         v-bind="settingsPopularSlider"
         ref="c1"

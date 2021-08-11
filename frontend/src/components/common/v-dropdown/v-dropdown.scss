@@ -1,5 +1,5 @@
-.filter {
-  &-select {
+.dropdown {
+  
     //--m: 6px;
     //--col: 7;
     position: relative;
@@ -16,15 +16,16 @@
 
     &.is-sort {
       //border-color: var(--base-color2);
-      .filter-select_title {
+      .dropdown_title {
         background-color: var(--base-color2);
         color: #fff;
         border: 1px solid var(--base-color2);
       }
-      .filter-select_list { border-color: var(--base-color2)}
+      .dropdown_list { border-color: var(--base-color2)}
+      .radiobox_icon {border-color: transparent;}
     }
     &.is-price {
-      .filter-select_list {
+      .dropdown_list {
         padding: 0;
         border-color: transparent;
         background-color: transparent;
@@ -34,32 +35,32 @@
 
     &.open {
       overflow: visible;
-      .filter-select_arrow {
+      .dropdown_arrow {
         @include media-min-width2($md) {transform: rotate(180deg);}
 
       }
-      .filter-select_list {
+      .dropdown_list {
         display: block
       }
-      .filter-select_list-close {
+      .dropdown_list-close {
         display: block
       }
     }
 
     &.is-selected {
       //border: transparent;
-      .filter-select_title {
+      .dropdown_title {
         color: #fff;
         background-color: var(--text-color-default);
 
 
       }
-      &.is-sort .filter-select_title {
+      &.is-sort .dropdown_title {
         background-color: var(--base-color2);
         border-color: var(--base-color2);
       }
 
-      .filter-select_arrow {
+      .dropdown_arrow {
         flex-shrink: 0;
         &:before, &:after {
           width: 1.2em;
@@ -109,7 +110,7 @@
       }
       &-count {
         flex-shrink: 0;
-        //margin-left: .5em;
+        margin-left: .5em;
       }
     }
 
@@ -203,7 +204,7 @@
       }
     }
 
-  }
+  
 
   &-option_item {
     //background-color: red;
@@ -237,7 +238,7 @@
       border: 1px solid transparent;
       margin-right: .37em;
       &.is-border {
-        border-color: var(--filter-border-color);
+        border-color: var(--filter-border-color)!important;
       }
       //}
     }

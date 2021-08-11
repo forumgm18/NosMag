@@ -1,37 +1,59 @@
 <template lang="pug">
   .desktop-filter
     .desktop-filter-collapse(:class="{collapse: filterCollapse}")
-      //vnm-select-list(:options="filters[0].values" :id="filters[0].id" v-model="selectList")
-      filter-select.is-sort(
-        :options="sortmodes"
-        :settings="sortmodesSettings"
-        contentType="list"
-        title="Сортировать по"
-        v-on:input="changeSort"
-      )
-        template(#option="{opt}")
-          span.check
-          span.filter-option_item-text {{opt.name}}
+      slot(name="sort")
 
-      filter-select(
-        v-for="fs in filters"
-        :key="fs.id"
-        :id="fs.id"
-        :contentType="selectContentType(fs.type)"
-        :settings="filterSettings"
-        :options="fs.values"
-        :title="fs.name"
-        :class="{'is-price' : selectContentType(fs.type)==='price'}"
-        v-on:input="changeFilter"
+      v-dropdown(
+        v-for="f in filters"
+        :key="f.id"
+        :id="f.id"
+        :title="f.name"
+        :multiple="true"
+        :is-selected="modelLength(f.id)"
+        :class="{'is-price' : selectContentType(f.type)===$options.FILTER_PRICE}"
+        @clear-all="clearAll(f.id, selectContentType(f.type))"
       )
-        template(v-slot:option="{opt}" v-if="selectContentType(fs.type)==='list'")
-          span.check.border
-          span.filter-option_item-color(v-if="opt.code && (opt.code === 'multicolor' || opt.code === 'bw')"
-            :class="{'is-border': opt.border,  multicolor: opt.code === 'multicolor', 'black-white is-border' : opt.code === 'bw'}")
-          span.filter-option_item-color( v-else-if="opt.code" :class="{'is-border': opt.border}" :style="`background-color: ${opt.code}`" )
-          span.filter-option_item-text {{opt.name}}
+        template(#title) 
+          span.text {{f.name}}
+          span.dropdown_title-count(v-if="modelLength(f.id)") {{modelLength(f.id)}}
 
-        template(v-slot:price="{pr}" v-else-if="selectContentType(fs.type)==='price'")
+        template(#content v-if="selectContentType(f.type)===$options.FILTER_LIST")
+          vnm-select-list(
+            :id="f.id"
+            :multiple="true"
+            item-type='checkbox'
+            :options="f.values" 
+            v-model="model[`${f.id}`]" 
+            )
+            template(#optText="{opt}" ) 
+              span.filter-option_item-color(v-if="opt.code && (opt.code === 'multicolor' || opt.code === 'bw')"
+                :class="{'is-border': opt.border,  multicolor: opt.code === 'multicolor', 'black-white is-border' : opt.code === 'bw'}")
+              span.filter-option_item-color( v-else-if="opt.code" :class="{'is-border': opt.border}" :style="`background-color: ${opt.code}`" )
+              span.filter-option_item-text {{opt.name}}
+
+        template(#content v-else)
+          .filter-price-block
+            input-number.price-filter(
+              :has-label="true"
+              :min="f.values.min"
+              :max="f.values.max"
+              :step="$options.PRICE_STEP"
+              v-model="model[`${f.id}`].active_min"
+              :val="f.values.min"
+              label="от"
+              border-color="currentColor"
+              style="margin-right: 10px;"
+              )
+            input-number.price-filter(
+              label="до"
+              :has-label="true"
+              :min="f.values.min"
+              :max="f.values.max"
+              :step="$options.PRICE_STEP"
+              :val="f.values.max"
+              v-model="model[`${f.id}`].active_max"
+              border-color="currentColor"
+            )
 
     .desktop-filter-collapse-btn(:class="{collapse: filterCollapse}" @click="filterCollapseToggle")
       svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
@@ -42,78 +64,78 @@
 </template>
 
 <script>
-  import FilterSelect from '~/components/filters/filter-select/filter-select'
   import InputNumber from '~/components/common/forms/input-number/input-number'
   import vnmSelectList from '~/components/common/forms/vnm-select-list/vnm-select-list'
-  export default {
+  import vDropdown from '~/components/common/v-dropdown/v-dropdown'
+
+export default {
     name: 'desktop-filter',
-    props: ['filters', 'sortmodes'],
+    props: {
+      filters: {
+        type: [Array, Object],
+        required: true
+      },
+      value: {
+        type: [Array, Object]
+      }
+    },
+
     components: {
-      FilterSelect,
       InputNumber,
-      vnmSelectList
+      vnmSelectList,
+      vDropdown,
     },
     data: () => ({
-      // loading: true,
-      // loading: false,
-      selectList:[],
       filterCollapse: true,
-      selectedFilters: [],
-      sortBy: null,
-      isFilterOpen: false,
-      filterSettings: {
-        multiple: true,
-        titleCount: true
-      },
-      sortmodesSettings: {
-        titleCount: false
-      },
     }),
+    FILTER_LIST: 'list',
+    FILTER_PRICE: 'price',
+    FILTER_COLOR: 'color',
+    PRICE_STEP: 100,
+    created(){
+      // Подготавливаем объект выбранных фильтров и делаем его реактивным
+      this.filters.forEach(el => {
+        if (el.type!=this.$options.FILTER_PRICE) {
+          this.$set(this.model, el.id, [])
+        } else {
+          this.$set(this.model, el.id, {active_min : el.values.min, active_max : el.values.max})
+        }
+      });
+    },
 
+    computed: {
+      model: {
+        get() {
+          return this.value;
+        },
+        set(val) {
+          this.$emit('change', val);
+        },
+      },
+    },
     methods: {
+      modelLength(id){
+        const modelItem = this.model[`${id}`]
+        if (modelItem && modelItem instanceof Array ) return modelItem.length
+        return 0
+      },
+      clearAll(id, type){
+        if (type != this.$options.FILTER_PRICE) {
+          this.model[id]=[]
+        } else {
+          const pf = this.filters.find(el => el.type === type )
+          this.model[id]={
+            active_min: pt.values.min,
+            active_max: pt.values.max
+            }
+        }
+      },
       selectContentType(v) {
-        if (v === 'list' || v === 'color') return 'list'
-        if (v === 'price') return 'price'
+        if (v === this.$options.FILTER_LIST || v === this.$options.FILTER_COLOR) return this.$options.FILTER_LIST
+        if (v === this.$options.FILTER_PRICE) return this.$options.FILTER_PRICE
         return 'block'
       },
       filterCollapseToggle() {this.filterCollapse = !this.filterCollapse},
-      changeFilter(v) {
-        console.log('desktop-filter changeFilter v: ',v)
-        const cur = this.selectedFilters.find(item => item.id === v.id)
-        if (cur) {
-          if (v.contentType === 'price'){
-            cur.values = v.values
-            return
-          }
-          if (v.values.length){
-            cur.values = v.values
-          } else {
-            this.selectedFilters.splice(this.selectedFilters.findIndex(item => item.id === v.id), 1)
-          }
-
-        } else {
-           this.selectedFilters.push(v)
-        }
-      },
-      changeFilterPrice(v){
-        console.log('desktop-filter changeFilterPrice: ', v)
-        // debugger
-        const cur = this.selectedFilters.find(item => item.id === v.id)
-        if (cur) {
-          if (v.name === "price-ot") cur.values.active_min = v.val
-          if (v.name === "price-do") cur.values.active_max = v.val
-        } else {
-          const arrV = {id: v.id, values:{active_min:null, active_max:null}}
-          if (v.name === "price-ot") arrV.values.active_min = v.val
-          if (v.name === "price-do") arrV.values.active_max = v.val
-          this.selectedFilters.push(arrV)
-        }
-      },
-      changeSort(v) {
-        console.log('desktop-filter changeSort v: ',v)
-        this.sortBy = v.values.id
-      },
-
     }
 
     }

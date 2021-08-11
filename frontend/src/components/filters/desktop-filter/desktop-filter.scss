@@ -4,6 +4,8 @@
   position: relative;
   width: 100%;
 
+    @include media-max-width2($md - 1) {display: none;}
+
   &-collapse {
     --m: 6px;
     --col: 7;

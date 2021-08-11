@@ -69,17 +69,6 @@ export default {
     },
   },
   methods: {
-    // beforeinput(e){
-    //   console.log('beforeinput: ', e)
-    //
-    //   const symbols = '-0123456789'
-    //   const data = e.data.split()
-    //   let err = true  // предполагаем что вводим правильный символ(ы)
-    //   data.forEach(d => {
-    //     if (err) err = symbols.includes(d) || !e.target.value.includes(d)
-    //   })
-    //   if (!err) e.preventDefault()
-    // },
     input(e) {
       console.log('input:', e)
       let v = parseInt(e.target.value, 10)

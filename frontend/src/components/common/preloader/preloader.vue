@@ -4,7 +4,7 @@
 </template>
 <script>
   export default {
-    name: 'Preloader',
+    name: 'v-loading',
   }
 
 </script>
