@@ -30,10 +30,11 @@
     border: 1px solid transparent;
 
     flex-grow: 1;
-    width: 0%;
+    width: 1%;
     font-size: inherit;
     line-height: inherit;
-    color: var(--base-color4);
+    // color: var(--base-color4);
+    color: var(--text-color-default);
     text-align: center;
     margin-left: .2em;
     margin-right: .2em;
