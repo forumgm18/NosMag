@@ -13,15 +13,19 @@ services:
 
     ports:
       - "3000:3000"
+
     environment:
       - NUXT_HOST=${NUXT_HOST}
       - NUXT_PORT=3000
-      - API_PROTOCOL=${AXIOS_API_PROTOCOL}
+      # - API_PROTOCOL=${AXIOS_API_PROTOCOL}
       - API_PREFIX=${AXIOS_API_PREFIX}
-      - API_HOST=${AXIOS_API_HOST}
-      - API_PORT=${AXIOS_API_PORT}
-#      - NODE_ENV:production
-      - NODE_ENV:development
+      # - API_HOST=${AXIOS_API_HOST}
+      # - API_PORT=${AXIOS_API_PORT}
+      - BROWSER_BASE_URL=${BROWSER_BASE_URL}
+      - SERVER_BASE_URL=${SERVER_BASE_URL}
+      - NODE_ENV:production
+      # - NODE_ENV:development
+
     networks:
       - nosmag-network
 

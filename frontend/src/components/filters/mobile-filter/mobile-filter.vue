@@ -1,5 +1,5 @@
 <template lang="pug">
-  .mobile-filters
+  .mobile-filters(v-if="filters")
     .mobile-filter.open(:class="{'subfilter-open': selectedFilterId}")
       .mobile-filter_close(@click="closeAllFilters")
       .mobile-filter_modal
@@ -64,6 +64,7 @@
               span.link(@click="clearAllFilterItems(f.id)") {{$options.RESET_TEXT}}
             .mobile-list
               vnm-select-list(
+                v-if="f.values"
                 :id="f.id"
                 :multiple="true"
                 item-type='checkbox'
@@ -174,9 +175,12 @@
         
       },
       printSelectedItems(id) {
+        if (!this.filters) return ''
         const pf = this.filters.find(el => el.type===this.$options.FILTER_PRICE)
         const arr = this.model[id]
-        if (id === pf.id ) {
+        // console.log('pf: ', pf)
+        // console.log('arr: ', arr)
+        if (pf && id === pf.id ) {
           return `от ${arr.active_min}руб. до ${arr.active_max}руб.`
         }
 

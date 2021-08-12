@@ -1,5 +1,9 @@
 <template lang="pug">
-.vnm-select-list(ref="fsList" @click.stop :class="{'set-max-height' : options.length > 9}")
+.vnm-select-list(
+  
+  ref="fsList" 
+  @click.stop 
+  )
   //- .vnm-select-list
   scroll-bar.vnm-select-list_scroll
     .vnm-select-list_scroll-body(v-if="itemType==='checkbox'")
@@ -9,7 +13,7 @@
         v-model="model"
         :value="opt"
         
-        )
+      )
         slot(name="optText" :opt="opt" ) {{opt.name}}
     .vnm-select-list_scroll-body(v-else)    
       radio-box.vnm-select-list_item(
@@ -17,7 +21,7 @@
         :key="opt.id"
         v-model="model"
         :value="opt"
-        )
+      )
         slot(name="optText" :opt="opt" ) {{opt.name}}
 
 </template>
@@ -35,7 +39,8 @@
     // },
     props: {
       options: {
-        type: [Array, Object]
+        type: [Array, Object],
+        required: true
       },
       value: {
         type: [Array, Object]

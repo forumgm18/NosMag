@@ -1,5 +1,5 @@
 <template lang="pug">
-  .desktop-filter
+  .desktop-filter(v-if="filters")
     .desktop-filter-collapse(:class="{collapse: filterCollapse}")
       slot(name="sort")
 
@@ -17,12 +17,14 @@
           span.text {{f.name}}
           span.dropdown_title-count(v-if="modelLength(f.id)") {{modelLength(f.id)}}
 
-        template(#content v-if="selectContentType(f.type)===$options.FILTER_LIST")
+        template( #content )
           vnm-select-list(
+            v-if="selectContentType(f.type)===$options.FILTER_LIST && f.values"
             :id="f.id"
             :multiple="true"
             item-type='checkbox'
             :options="f.values" 
+            :class="{'set-max-height' : f.values.length > 9}"
             v-model="model[`${f.id}`]" 
             )
             template(#optText="{opt}" ) 
@@ -31,8 +33,8 @@
               span.filter-option_item-color( v-else-if="opt.code" :class="{'is-border': opt.border}" :style="`background-color: ${opt.code}`" )
               span.filter-option_item-text {{opt.name}}
 
-        template(#content v-else)
-          .filter-price-block
+              
+          .filter-price-block(v-if="selectContentType(f.type)===$options.FILTER_PRICE")
             input-number.price-filter(
               :has-label="true"
               :min="f.values.min"

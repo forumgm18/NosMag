@@ -8,6 +8,7 @@ server {
   listen 80;
 
   server_name nosmag-new.local;
+  # server_name 127.0.0.1;
 
   location / {
     proxy_pass http://frontend:3000;
@@ -21,18 +22,18 @@ server {
 
   }
 
-#   location /api {
-# #    proxy_pass https://api_host;
-# #    rewrite ^/api/(.*) /$1 break;
+  location /api {
+#    proxy_pass https://api_host;
+#    rewrite ^/api/(.*) /$1 break;
 
-# #    rewrite ^/(.*) /$1 break;
-#     proxy_pass https://nosmag.ru/api;
-#     proxy_set_header   Host             $host;
-# #    proxy_set_header   Host             nosmag.ru;
-#     proxy_set_header   X-Real-IP        $remote_addr;
-#     proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+#    rewrite ^/(.*) /$1 break;
+    proxy_pass https://nosmag.ru/api;
+    proxy_set_header   Host             $host;
+#    proxy_set_header   Host             nosmag.ru;
+    proxy_set_header   X-Real-IP        $remote_addr;
+    proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
 
-#   }
+  }
 #  location /api {
 #    proxy_pass http://api:3001;
 #    rewrite ^/api/(.*) /$1 break;

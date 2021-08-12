@@ -4,10 +4,13 @@
       v-breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
     section
       h1.page-title {{title}}
-    //-loading.center(v-if="loading")
-    //-section.content-section(v-else)
-    section.content-section
-      v-loading(v-if="loading")
+    loading.center(v-if="loading")
+    section.content-section.product-page(v-else)
+      .product-page-
+
+
+      
+
 
   
 </template>
@@ -23,15 +26,9 @@ export default {
   data: () => ({
     loading: false,
   }),
-  fetch: async function ({store, params}) {
-    console.log('catalog/_razdel/product/_alias params', params)
-    this.loading = true
-    // console.log('this.loading do', this.loading)
+  asyncData: async function ({store, params}) {
+    // console.log('catalog/_razdel/product/_alias params', params)
     await store.dispatch('fetchContent', params.alias)
-    this.loading = false
-    // console.log('this.loading posle', this.loading)
-
-    
   },
   computed: {
     // ...mapGetters('razdel',['products', 'page', 'pageCount']),

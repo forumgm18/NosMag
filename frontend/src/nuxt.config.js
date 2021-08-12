@@ -10,6 +10,34 @@ export default {
   //   apiUrl: process.env.API_URL || '???',
   //   _AXIOS_BASE_URL_: process.env.API_URL || 'http://localhost:3000/api'
   // },
+  publicRuntimeConfig: {
+    // baseURL: process.env.NODE_ENV === 'production' ? '78.24.223.226' : 'http://nosmag-new.local',
+    baseURL: process.env.BROWSER_BASE_URL,
+    // axiosApiHost: 'nosmag.ru',
+    // axiosApiPrefix: '/api',
+    // axiosApiProtocol: 'https',
+    // axiosApiPort: 443,
+
+  //   axios: {
+  //     prefix: `${process.env.API_PREFIX}/`,
+  //     https: process.env.API_PROTOCOL === 'https',
+  //     baseURL: `${process.env.API_PROTOCOL || 'https'}://${process.env.API_HOST}${process.env.API_PREFIX}`,
+  //     browserBaseURL: `${process.env.API_PROTOCOL || 'https'}://${process.env.API_HOST}${process.env.API_PREFIX}`,
+  // },
+    axios: {
+      // prefix: `${process.env.API_PREFIX}/`,
+      // https: process.env.API_PROTOCOL === 'https',
+      // baseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX
+      // browserBaseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX,
+      browserBaseURL: process.env.BROWSER_BASE_URL + process.env.API_PREFIX,
+      baseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX
+
+  },
+
+  },
+  privateRuntimeConfig: {
+    // apiSecret: process.env.API_SECRET
+  },
   head: {
     title: 'nosmag-site',
     htmlAttrs: {
@@ -114,13 +142,6 @@ export default {
     timeout: 5000,
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    prefix: `${process.env.API_PREFIX}/`,
-    https: process.env.API_PROTOCOL === 'https',
-    baseURL: `${process.env.API_PROTOCOL || 'https'}://${process.env.API_HOST}${process.env.API_PREFIX}`,
-    browserBaseURL: `${process.env.API_PROTOCOL || 'https'}://${process.env.API_HOST}${process.env.API_PREFIX}`,
-
-  },
 
   build: {
     optimizeCss: false,

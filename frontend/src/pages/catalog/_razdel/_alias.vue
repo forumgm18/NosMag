@@ -108,11 +108,13 @@ export default {
     isFilterOpen: false,
     isSortOpen: false,
   }),
-  fetch: async function ({store, params}) {
+  
+  asyncData: async function ({store, params}) {
+  // fetch: async function ({store, params}) {
     // console.log('catalog/_razdel/_alias params', params)
-    this.loading = true
+    // this.loading = true
     await store.dispatch('fetchContent', params.alias)
-    this.loading = false
+    // this.loading = false
     
   },
   computed: {
