@@ -175,17 +175,17 @@ export default {
     },
     loading: true
   }),
-  fetch: async function ({store, params}) {
-    console.log('process.env', process.env)
-    console.log('index params:', params)
+  asyncData: async function ({store, params}) {
+    // console.log('process.env', process.env)
+    // console.log('index params:', params)
 
-    this.loading = true
+    // this.loading = true
     // await this.checkToken()
     // const path = this.$route.path.split('/')
     // const alias = path[path.length - 1]
     // await this.$store.dispatch('fetchContent', alias)
     await store.dispatch('fetchContent', params.alias || '')
-    this.loading = false
+    // this.loading = false
   },
 
   computed: {
