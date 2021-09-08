@@ -5,22 +5,20 @@
       .number-block
         .number-arrow.down(@click="arrowDown")
           svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>
-        input.number-input(
-          type="text"
-          ref="input"
-          :class="{modified: isModified}"
-          :size="inputSize()"
-          :style="inputStyle()"
-
-          :value="value"
-          @input="input"
-
-          @keydown="keyDown"
-          @keyup.up="arrowUp"
-          @keyup.down="arrowDown"
-
-
-          )
+        .number-input-block  
+          input.number-input(
+            type="text"
+            ref="input"
+            :class="{modified: isModified}"
+            :size="inputSize"
+            :style="inputStyle"
+            :value="locValue"
+            @input="inputValue"
+            @keydown="keyDown"
+            @keyup.up="arrowUp"
+            @keyup.down="arrowDown"
+            )
+          span(v-if="appendText.length") {{appendText}}
         .number-arrow.up(@click="arrowUp")
           svg.icon.icon-number-arrow <use href="#icon-number-arrow"/>
 
@@ -48,48 +46,60 @@ export default {
     min: { type: Number, default: -Infinity },
     max: { type: Number, default: Infinity },
     step: {type: Number, default: 1 },
+    appendText:{type: String, default: '', required: false}
 
   },
-  data: () => ({
-    // value: null,
+  data: function () {
+    return {
+      isModified: false,
+      locValue: this.value
+    }
+  },
 
-    isModified: false
-  }),
-  mounted() {
-    // this.value = this.val || this.min || 0
+  // mounted() { },
+  updated() {
+    if (this.$refs.input) this.$refs.input.style.width = this.getInputWidth()
   },
   computed: {
-    locValue: {
-      set: function(v) {
-        this.value = v;
-      },
-      get: function() {
-        return this.value;
-      }
+    inputStyle() {
+      let style = this.inputBorderColor ? `border-color: ${inputBorderColor};` : ''
+      if (this.inputTextUnderline) style = style + 'text-decoration: underline;'
+      // style = style + 'width:' + this.getInputWidth() + ';'
+      return style
     },
+    inputSize() {
+      // if (this.max === Infinity) return 20
+      // return this.max.toString().length
+      return this.locValue.toString().length
+    }
+
   },
   methods: {
-    input(e) {
-      console.log('input:', e)
-      let v = parseInt(e.target.value, 10)
-      if (v.toString() != e.target.value) {
-        e.target.value = parseInt(v, 10)
-        v = parseInt(e.target.value, 10)
-      }
+    getInputWidth() { // Вычисляет ширину input`а
+      if(!process.browser ) return 'initial'
+      if(!this.$refs.input ) return 'initial'
+      const mirror = document.createElement('div') // Создаем новый временный элемент
+      mirror.textContent = this.locValue           // Добавляем в него текст из input`а 
+      // Применяем стили input`а к созданному блоку
+      const inputStyles = getComputedStyle(this.$refs.input)
+      mirror.style.font = inputStyles.font
+      mirror.style.padding = inputStyles.padding
+      mirror.style.border = inputStyles.border
+      mirror.style.width = 'fit-content'
+      document.body.append(mirror)
+      // Получаем его длину
+      const w = mirror.offsetWidth
+      mirror.remove() // удаляем временный элемент
+      return w + 'px'
+    },
 
-      if (this.min > v ) v = this.min
-      if (this.max < v ) v = this.max
-      e.target.value = parseInt(v, 10)
-
-      this.$emit('input', v)
-
+    inputValue(evt) {
+      this.locValue = evt.target.value ? parseInt(evt.target.value) : this.min
     },
     keyDown(event) {
-      // console.log('event.keyCode:', event.keyCode, 'keyDown:', event)
-      if (event.keyCode == 38 || event.keyCode == 40) { // запрещаем курсору "прыгать" при надании стрелок up - down
+      if (event.keyCode == 38 || event.keyCode == 40) { // запрещаем курсору "прыгать" при нажатии стрелок up - down
         event.stopPropagation();
         event.preventDefault();
-        // return false;
       }
       // Разрешаем: backspace, delete, tab и escape
       if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
@@ -97,60 +107,35 @@ export default {
         (event.keyCode == 65 && event.ctrlKey === true) ||
         // Разрешаем: home, end, влево, вправо
         (event.keyCode >= 35 && event.keyCode <= 39)
-      //  || event.key == '-'
       ) {
-
-        // console.log('key-good:', event.key)
-
-        // Ничего не делаем
+        // Ничего не делаем если нажата разрешенная кнопка на клаве
         return
       } else {
         // Запрещаем все, кроме цифр на основной клавиатуре, а так же Num-клавиатуре
         if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
-          // console.log('key-bad:', event.key)
-
           event.preventDefault()
         }
       }
     },
     arrowUp() {
-      let v = parseInt(this.$refs.input.value, 10)
-      v =  (this.max > v + this.step) ? v + this.step : this.max
-      this.$refs.input.value = v
-      this.$emit('input', v)
-
+      this.locValue = parseInt(this.locValue, 10) + this.step
     },
     arrowDown(e) {
-      let v = parseInt(this.$refs.input.value, 10)
-      v =  (this.min < v - this.step) ? v - this.step : this.min
-      this.$refs.input.value = v
-      this.$emit('input', v)
+      this.locValue = parseInt(this.locValue, 10) - this.step
     },
 
-    inputStyle() {
-      let style = this.inputBorderColor ? `border-color: ${inputBorderColor};` : ''
-      if (this.inputTextUnderline) style = style + 'text-decoration: underline;'
-      return style
-    },
-    inputSize() {
-      if (this.max === Infinity) return 20
-      return this.max.toString().length
-    }
   },
   watch: {
-    // value() {
-    //   this.isModified = this.locValue !== this.val
-    //   // this.isModified = this.value !== this.val
-    //   // const ret={id: this.id, name: this.name || '', val: this.value, isModified: this.isModified}
-    //   const ret={id: this.id, name: this.name || '', val: this.locValue, isModified: this.isModified}
-    //   console.log('$emit input', ret)
-    //   // this.$emit('input:number', ret)
-    //   this.$emit('input', this.locValue)
-    // }
+    locValue: function(val, oldVal) {
+      val = parseInt(val, 10)
+      if (val <= this.min) this.locValue = parseInt(this.min)
+      if (val >= this.max) this.locValue = parseInt(this.max)
+      if (val <= this.max && val >= this.min) this.$emit('input', val, oldVal)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  @import "style";
+  @import "input-number";
 </style>

@@ -1,8 +1,10 @@
 .breadcrumbs {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   font-size: 20px;
   margin-bottom: 1em;
+  margin-top: 100px;
   &-item {
     color: var(--text-color-light);
     font-size: inherit;

@@ -83,6 +83,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/vue-modal.js', mode: 'client' },
+    { src: '~/plugins/v-mask.js', mode: 'client' },
     // { src: '~/plugins/paginate.js', mode: 'client' },
     // { src: '~/plugins/popper.js', mode: 'client' },
     // { src: '~~/plugins/vuebar.js', mode: 'client' },
@@ -92,7 +93,7 @@ export default {
     // '~/plugins/-generate.uuid.js',
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
-    '~/plugins/v-mask.js',
+    // '~/plugins/v-mask.js',
     // '~/plugins/v-select.js',
   ],
 
@@ -121,18 +122,13 @@ export default {
     'cookie-universal-nuxt',
     '@nuxtjs/style-resources',
     // '@nuxtjs/router',
-    '@nuxtjs/universal-storage',
-    // ['nuxt-vuex-localstorage', {
-    //   mode: 'debug',
-    //   localStorage:['catalog'],
-    //   // sessionStorage: ['token']
-    // }]
+    // '@nuxtjs/universal-storage',
   ],
-  storage: {
-    localStorage: { prefix: '' },
-    // initialState,  // Object {}
-    // ignoreExceptions //
-  },
+  // storage: {
+  //   localStorage: { prefix: '' },
+  //   // initialState,  // Object {}
+  //   // ignoreExceptions //
+  // },
   webfontloader: {
     events: false,
     google: {

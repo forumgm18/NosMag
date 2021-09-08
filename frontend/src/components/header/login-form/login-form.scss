@@ -1,0 +1,82 @@
+.header-login{
+  position: relative;
+  &-btn {cursor: pointer;}
+
+}
+.login {
+  color: var(--text-color-default);
+  .popup-body {
+    min-width: 247px;
+    padding: 1.5em;
+    right: 0;
+  }
+  &-description {
+    font-size: 10px;
+    text-align: center;
+    margin-bottom: 2.5em;
+  }
+  &-form {
+    &-title {
+      display: flex;
+      align-items: baseline;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 1.25;
+      color: var(--text-color-light);
+      text-transform: uppercase;
+      margin-bottom: 1.7em;
+      span {
+        font: inherit;
+        &:not(:last-child) {margin-right: 0.45em;}
+      }
+      .text {
+        cursor: pointer;
+          &.active {color: var(--base-color1);}
+      }
+    }
+    &-label{
+      font-size: 12px;
+      margin-bottom: 0.5em;
+    }
+    &_fogot-password {
+      width: fit-content;
+      margin: 0 auto;
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 1;
+      text-align: center;
+      text-decoration-line: underline;
+      color: var(--text-color-light);
+      margin-bottom: 2.5em;
+
+    }
+    .input-field {font-size: 12px;}
+    .btn {
+      width: 100%;
+    }
+  }
+  &-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 1em;
+
+    &-text {
+      color: var(--text-color-light);
+      font-size: 12px;
+      width: fit-content;
+      cursor: pointer;
+      transition: .3s;
+      &:first-child {
+        margin-right: 1em;
+        max-width: 80px;
+      }
+      &:last-child {
+        text-align: right;
+        max-width: 65px;
+      }
+      &.active {color: var(--text-color-default);}
+    }
+  }
+}

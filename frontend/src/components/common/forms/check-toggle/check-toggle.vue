@@ -1,16 +1,18 @@
 <template lang="pug">
-.checkbox
-  label.checkbox-label
+  label.check-toggle(
+    :style="{ '--off-color': offColor, '--on-color': onColor}"
+  )
     input(ref="chbx" hidden type="checkbox"  :value="value" v-model="proxyChecked")
-    span.checkbox_text-block
-      span.checkbox_icon
-      span.checkbox_text
+    span.check-toggle_body
+      slot(name="checkToggleIcon")
+        span.check-toggle_icon
+      span.check-toggle_text
         slot
 </template>
 
 <script>
 export default {
-  name: 'check-box',
+  name: 'check-toggle',
   model: {
     prop: "checked",
     event: "change"
@@ -21,7 +23,16 @@ export default {
     checked: {
       type: [Boolean, Array],
       default: false
-    }
+    },
+    offColor: {
+      type: String,
+      default:'var(--base-color4)'
+    },
+    onColor: {
+      type: String,
+      default:'var(--base-color1)'
+    },
+
   },
   computed: {
     proxyChecked: {
@@ -37,5 +48,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'check-box';
+@import 'check-toggle';
 </style>

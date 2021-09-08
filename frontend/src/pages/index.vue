@@ -123,58 +123,60 @@ export default {
     // ProductList
   },
   // props: ['showcase'],
-  data: () => ({
-    // content: null
-    settingsTopSlider: {
-      dots: true,
-      dotsClass: "slick-dots main-slider-dots",
-      arrows: true,
-      edgeFriction: 0.35,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      // focusOnSelect: true,
-    },
-    settingsPopularSlider: {
-      dots: false,
-      // dotsClass: "slick-dots main-slider-dots",
-      arrows: true,
-      edgeFriction: 0.35,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 6,
-      slidesToScroll: 1,
-      // focusOnSelect: true,
-      responsive: [
-        {
-          breakpoint: 1200,
-          settings: {
-            slidesToShow: 4,
+  data: function () {
+    return {
+      // content: null
+      settingsTopSlider: {
+        dots: true,
+        dotsClass: "slick-dots main-slider-dots",
+        arrows: true,
+        edgeFriction: 0.35,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        // focusOnSelect: true,
+      },
+      settingsPopularSlider: {
+        dots: false,
+        // dotsClass: "slick-dots main-slider-dots",
+        arrows: true,
+        edgeFriction: 0.35,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 6,
+        slidesToScroll: 1,
+        // focusOnSelect: true,
+        responsive: [
+          {
+            breakpoint: 1200,
+            settings: {
+              slidesToShow: 4,
+            }
+          },
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2,
+            }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+            }
           }
-        },
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-          }
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-          }
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-          }
-        }
-      ]
-    },
-    loading: true
-  }),
+        ]
+      },
+      loading: true
+    }
+  },
   asyncData: async function ({store, params}) {
     // console.log('process.env', process.env)
     // console.log('index params:', params)

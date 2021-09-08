@@ -1,6 +1,6 @@
 <template lang="pug">
 main.container
-  section
+  //- section
     breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
   section
     h1.page-title {{title}}
@@ -73,7 +73,7 @@ main.container
 
 <script>
 import Loading from '~/components/common/preloader/preloader'
-import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
+// import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
 // import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
 import ProductList from '~/components/products/product-list/product-list'
 import MobileFilter from '~/components/filters/mobile-filter/mobile-filter'
@@ -89,7 +89,7 @@ export default {
   name: 'Razdel',
   components: {
     Loading,
-    Breadcrumbs,
+    // Breadcrumbs,
     // SublinksMenu,
     ProductList,
     MobileFilter,
@@ -98,16 +98,17 @@ export default {
     vnmSelectList,
     // Paginate
   },
-  data: () => ({
-    selectedFilters: {},
-    
-    // loading: true,
-    loading: false,
-    filterCollapse: true,
-    sortBy: null,
-    isFilterOpen: false,
-    isSortOpen: false,
-  }),
+  data: function () {
+    return {
+      selectedFilters: {},
+      // loading: true,
+      loading: false,
+      filterCollapse: true,
+      sortBy: null,
+      isFilterOpen: false,
+      isSortOpen: false,
+      }
+  },
   
   asyncData: async function ({store, params}) {
   // fetch: async function ({store, params}) {

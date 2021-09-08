@@ -1,6 +1,9 @@
 .btn {
+  --btn-text-color: #fff;
+  --btn-bgr-color: var(--base-color1); 
+  --btn-border-color: var(--base-color1); 
   color: #fff;
-  background-color: var(--base-color1);
+  background-color: var(--btn-bgr-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,13 +13,26 @@
   cursor: pointer;
   min-height: 45px;
   border-radius: 5px;
-  border: 2px solid var(--base-color1);
+  border: 2px solid var(--btn-border-color);
 
   &:hover {
     text-decoration: none;
     //background-color: var(--btn-hover-color);
     background-color: transparent;
-    color: var(--base-color1);
+    // color: var(--base-color1);
+    color: var(--btn-bgr-color);
+
+  }
+
+  &.btn-2 {
+    --btn-text-color: #fff;
+    --btn-bgr-color: var(--base-color2); 
+    --btn-border-color: var(--base-color2); 
+  }
+  &.btn-3 {
+    --btn-text-color: #fff;
+    --btn-bgr-color: var(--base-color4); 
+    --btn-border-color: var(--base-color4); 
 
   }
   &-icon {

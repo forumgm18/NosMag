@@ -1,6 +1,6 @@
 <template lang="pug">
   main.container.clarifying-page
-    section
+    //- section
       breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
       h1.page-title(v-if="sublinks_menu") {{sublinks_menu.header}}
     //loading.center(v-if="loading")
@@ -30,20 +30,21 @@
 <script>
 import Loading from '~/components/common/preloader/preloader'
 import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
-import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
+// import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
 import ScrollBar from 'vue2-scrollbar'
 export default {
   name: 'clarifying-selection-page',
-  components: {Loading, ScrollBar, SublinksMenu, Breadcrumbs},
-  data: () => ({
-    // sublinks_menu: null,
-    BreadcrumbsItems: [
-      {name: 'Главная', alias: '/'},
-      {name: 'Раздел', alias: '/razdel'},
-      {name: 'Носки', alias: ''},
-    ],
-    loading: true
-  }),
+  components: {
+    Loading, 
+    ScrollBar, 
+    SublinksMenu, 
+    // Breadcrumbs
+    },
+  data: function () {
+    return {
+      loading: true,
+    }
+  },
   fetch: async function ({store, params}) {
     console.log('catalog/_alias params', params)
     // console.log('process.env', process.env)

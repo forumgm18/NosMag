@@ -1,7 +1,8 @@
 .number {
   display: flex;
   align-items: center;
-  padding: .857em 1em;
+  // padding: .857em 1em;
+  padding: .65em 1em;
   border-radius: 5px;
   border: 1px solid transparent;
   font-size: 14px;
@@ -15,6 +16,7 @@
   &-block {
     display: flex;
     align-items: center;
+    width: 100%;
     //width: fit-content;
     //  svg{border: 1px solid green;}
   }
@@ -26,21 +28,41 @@
     margin-right: 1.4em;
   }
   &-input {
-    //border: 1px solid red;
+    // border: 1px solid red;
     border: 1px solid transparent;
 
-    flex-grow: 1;
+    // flex-grow: 1;
     width: 1%;
     font-size: inherit;
     line-height: inherit;
     // color: var(--base-color4);
     color: var(--text-color-default);
-    text-align: center;
-    margin-left: .2em;
-    margin-right: .2em;
+    // text-align: center;
+    text-align: right;
+    padding: 0;
+    // margin-left: .2em;
+    // margin-right: .2em;
+    
 
       &.modified {color: inherit;}
 
+      &-block {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        flex-grow: 1;
+        margin-left: .2em;
+        margin-right: .2em;
+        width: 100%;
+
+          span {
+            flex-shrink: 0;
+            padding-left: .25em;
+
+          }
+
+
+      }
   }
   &-arrow {
     //border: 1px solid green;

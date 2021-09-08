@@ -1,13 +1,12 @@
-.checkbox {
+.check-toggle {
+  --off-color: var(--base-color4);
+  --on-color: var(--base-color1);
   font-size: 12px;
   color: var(--text-color-default);
   transition: .3s;
   cursor: pointer;
     &:hover {color: var(--text-color-light);}
-  &-label {
-    cursor: inherit;
-  }
-  &_text-block {
+  &_body {
     display: flex;
     align-items: center;
     font-size: inherit;
@@ -23,48 +22,43 @@
   &_icon {
     display: block;
     //background: #fff;
-    color: inherit;
+    color: var(--off-color);
     border: 1px solid currentColor;
-    border-radius: 5px;
-    font-size: 1.3333em;
+    background-color: var(--base-color5);
+    border: 1px solid var(--base-color4);
 
-    width: 1em;
+    border-radius: .5em;
+    font-size: 1.1667em;
+
+    width: 2.14em;
     height: 1em;
     flex-shrink: 0;
     margin-right: .5em;
     position: relative;
 
-    &:before, &:after {
+    &:before {
       content: '';
       position: absolute;
       display: block;
-      //height: 0.0625em;
-      height: 0.125em;
-      background-color: var(--base-color2);
-      opacity: 0;
-      transition: .1s;
+      color: inherit;
+      background-color: currentColor;
+      
+      top: -1px;
+      left: 0;    
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      transition: .3s;
     }
-    &:before {
-      top: 50%;
-      width: .54em;
-      transform: rotate(45deg);
-    }
-    &:after {
-      top: 33%;
-      //left: 40%;
-      left: 34%;
-      width: .9em;
-      transform: rotate(-45deg);
-
-    }
-
-
   }
 
   input[type="checkbox"]:checked {
-    & + .checkbox_text-block {
-      .checkbox_icon {
-        &:before, &:after {opacity: 1}
+    & + .check-toggle_body {
+      .check-toggle_icon {
+        color: var(--on-color);
+        &:before {
+          transform: translateX(100%);
+        }
       }
     }
   }

@@ -1,31 +1,16 @@
-// import tabSizes from '~/static/site-settings/size-table-data.json'
-// import Vue from 'vue'
-
 export const state = () => ({
-  // tabSizes: tabSizes,
   content: null,
-
 })
 
 export const mutations = {
   setContent (state, content) {
     state.content = content
   },
-
-  // setQuantity(state, val) {
-  //   // state.content.data.sizes[val.id].count = val.value
-  //   Vue.set(state.content.data.sizes, val.id, val.value)
-  // }
-
 }
 
 export const actions = {
   async nuxtServerInit({ dispatch }, {params}) {
-    // console.log('route:', route)
-    // const path = route.path.split('/')
-    // const alias = path[path.length - 1]
     await dispatch('fetchContent', params.alias)
-
     // await dispatch('token/setNewToken')
     await dispatch('menu/fetch')
     await dispatch('settings/fetch')
@@ -33,17 +18,13 @@ export const actions = {
   },
 
   async fetchContent({ state, commit, rootState }, alias) {
-    // console.log('process.env', process.env)
-    // console.log('apiUrl', process.env.apiUrl)
-    // const apiUrl = process.env.apiUrl
-    // const c = await this.$axios.$get('https://nosmag.ru/api/get_content', {
-    // const c = await this.$axios.$get(`${apiUrl}/get_content`, {
     const c = await this.$axios.$get(`/get_content`, {
       params: {
         alias: alias,
         session_id: rootState.token.session_id
       }
     })
+    console.log('c',c)
     // Преобразуем строковые числа в числа
     const content = JSON.parse(JSON.stringify(c),function (key, value) {
       if (value === (+value).toString()) return +value
@@ -56,22 +37,14 @@ export const actions = {
 
     commit('setContent', content)
   },
-  // setQuantity({state, commit }, val ) {
-  //   const s = state.content.data.sizes[val.id]
-  //   let value = parseInt(val.value.count,10)
-  //   if (value < 0) value = s.count
-  //   if (value > s.ostatok) value = s.ostatok
-  //   val.value.count = value
-  //   commit('setQuantity', val)
-  // },
 }
 
 export const getters = {
   // siteConfig: s => s.siteConfig,
-  tabSizes: s => s.tabSizes,
   getContent: s => s.content,
   getContentData: s => s.content.data,
   getBreadcrumbs: s => {
+    if (!s || !s.content || !s.content.data) return null
     return  s.content.data.hasOwnProperty('breadcrumbs') ? s.content.data.breadcrumbs : null},
   getPageType: s => s.content.type,
 

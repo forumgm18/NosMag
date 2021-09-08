@@ -2,7 +2,7 @@
   header(data-header)
     .header
       .container
-        //.header-block
+        //-.header-block
 
         .header-row.bottom
           .header-menu-block
@@ -11,7 +11,7 @@
           nuxt-link.header-logo(to="/")
             svg.icon.icon-logo <use href="#icon-logo"/>
 
-          //nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
+          //-nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
             svg.icon.icon-location <use href="#icon-location"/>
             span(v-if="header.city.name" ) {{header.city.name}}
             span(v-else) ваш город
@@ -37,7 +37,7 @@
                 svg.icon.icon-learn-more <use href="#icon-learn-more"/>
                 span.desktop {{header.info.header}}
                 span.tablet {{header.info.header_m}}
-              popup.popup-down(v-model="topInfoPopup" v-on:close-popup="closeTopInfoPopup")
+              app-popup.popup-down(v-model="topInfoPopup" v-on:close-popup="closeTopInfoPopup")
                 nuxt-link.header-info-link(
                   v-for="(lnk, l) in header.info.links"
                   :to="`/${lnk.alias}`"
@@ -52,7 +52,7 @@
 
           .header-phone-block
 
-            popup.header-feedback-popup.popup-down(v-model="feedbackPopup" v-on:close-popup="closeFeedbackPopup")
+            app-popup.header-feedback-popup.popup-down(v-model="feedbackPopup" v-on:close-popup="closeFeedbackPopup")
               popup-input-form(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
                 template( v-slot:default)
                   p Не нашли нужной информации?
@@ -70,11 +70,12 @@
               span.tablet телефон
             .header-phone
               a.header-phone-link(:href="header.phone.link") {{header.phone.name}}
-            //  .header-phone-label {{header.phone.info}}
+            //-  .header-phone-label {{header.phone.info}}
 
-          nuxt-link.header-login(:to="`/${header.auth.alias}`")
+          //- nuxt-link.header-login(:to="`/${header.auth.alias}`")
             svg.icon.icon-user <use href="#icon-user"/>
             span {{header.auth.name}}
+          login-form(:title="header.auth.name")  
           top-basket(:cart="header.cart")
 
 
@@ -90,7 +91,7 @@
         .header-link.learn-more( @click.prevent="showBottomInfoPopup")
           svg.icon.icon-learn-more <use href="#icon-learn-more"/>
           span {{header.info.header}}
-        popup.popup-up(v-model="bottomInfoPopup" v-on:close-popup="closeBottomInfoPopup")
+        app-popup.popup-up(v-model="bottomInfoPopup" v-on:close-popup="closeBottomInfoPopup")
           nuxt-link.header-info-link(
             v-for="(lnk, l) in header.info.links"
             :to="`/${lnk.alias}`"
@@ -102,7 +103,10 @@
         .header-link.header-feedback( @click.prevent="showFeedbackPopup")
           svg.icon.icon-phone <use href="#icon-phone"/>
           span обратный звонок
-        popup.header-feedback-popup.popup-up.call-phone(v-model="feedbackPopup" v-on:close-popup="closeFeedbackPopup")
+        app-popup.header-feedback-popup.popup-up.call-phone(
+          v-model="feedbackPopup" 
+          v-on:close-popup="closeFeedbackPopup"
+        )
           a.popup-phone-link(:href="header.phone.link")
             svg.icon.icon-phone <use href="#icon-phone"/>
             span {{`Вызов ${header.phone.name}`}}
@@ -125,7 +129,7 @@
 
 <script>
 import menuTop from '~/components/header/menu-top/menu-top'
-import popup from '~/components/common/popup/popup'
+import appPopup from '~/components/common/popup/app-popup'
 import popupInputForm from '~/components/common/forms/popup-input-form/popup-input-form'
 import topBasket from '~/components/header/basket/top-basket'
 
@@ -134,7 +138,7 @@ import menuFunc from '~/utils/main-scripts'
 // import {isEmpty} from 'lodash'
 
 // import burger from '~/components/header/burger'
-// import LoginForm from '~/components/header/login-form'
+import loginForm from '~/components/header/login-form/login-form'
 // import HeaderSearch from '~/components/header/header-search'
 // import customSelect from '~/components/custom-select'
 import { mapState } from 'vuex'
@@ -142,9 +146,10 @@ import { mapState } from 'vuex'
 export default {
   name: 'appHeader',
   components: {
-    menuTop, popup, topBasket,
+    menuTop, appPopup, topBasket,
     popupInputForm,
-    //customSelect, burger, HeaderSearch, LoginForm
+    //customSelect, burger, HeaderSearch, 
+    loginForm
   },
   data: () => ({
     inputPhone:'',

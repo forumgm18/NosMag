@@ -1,7 +1,7 @@
 <template lang="pug">
   .popup(:class="{show: value}")
-    .bgr-close.popup-close(@click.prevent="closePopup")
-    .popup-body
+    .bgr-close.popup-close(@click.stop.prevent="closePopup")
+    .popup-body(@click.stop)
       slot
 </template>
 
@@ -13,11 +13,16 @@
       closePopup() {
         // this.value = false
         this.$emit('close-popup', false)
-      }
+      },
+      // handleKeydown(e) {
+      //   if (this.isOpen && e.key === "Escape") {
+      //   this.closePopup();
+      //   }
+      // },
     }
   }
 </script>
 
 <style lang="scss">
-@import "popup";
+@import "app-popup";
 </style>

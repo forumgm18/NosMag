@@ -23,6 +23,7 @@ export const actions = {
     }
     // console.log('tkn: ', tkn)
     commit('setToken', tkn)
+    return tkn
   },
   // login ({ commit }) {
   //   commit('setToken', { session_id: generateUUID(), ttl: 60*60*24*30 })

@@ -118,6 +118,10 @@ body {
 
 
 }
+input, textarea {
+  font-family: $mainFont;
+  font-size: $mainFontSize;
+}
 .site-boby {
   //border: 1px solid red;
   display: flex;
@@ -129,7 +133,7 @@ body {
   max-width: #{$xl} + 'px';
 }
 main {
-  margin-top: 100px;
+  // margin-top: 100px;
   //min-width: 100px;
   //@include media-max-width2($sm) {  margin-top: 95px; }
   &.main-page { margin-top: 0;}
@@ -325,4 +329,19 @@ p {color: var(--text-color-default)}
   height: 100vh;
   z-index: 2;
 
+}
+@keyframes anime-base2-to-base4-click {
+    0% {
+        color: var(--base-color2);
+    }
+    50% {
+        color: var(--base-color2);
+    }
+    100% {
+        color: var(--base-color4);
+    }
+}
+
+.base2-to-base4 {
+  animation: anime-base2-to-base4-click .3s linear; 
 }
