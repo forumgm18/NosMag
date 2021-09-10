@@ -57,6 +57,7 @@ export default {
   }),
   mounted() {
     // this.value = this.val || this.min || 0
+    // this.locValue = this.value
   },
   computed: {
     locValue: {

@@ -8,40 +8,38 @@
         .product-page-row
           .product-slider-block.thumbs
             .product-additional
-            .thumbs
-              vue-slick-carousel(
-                v-bind="settingsProductSliderThumbs"
-                ref="productSliderThumbs"
-                :asNavFor="$refs.productSlider",
-              )
-                .thumbs-item(
-                  v-for="(itm, ind ) in content.images"
-                  :key="`thumbs-${ind}`"
-                ) 
-                  .thumbs-item_content
-                    .img-box
-                      img(:src="itm")
+            .thumbs-layout
+              .thumbs-body
 
-                template( v-slot:prevArrow)
-                  button.thumbs-arrow.prev
-                    svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-                template( v-slot:nextArrow)
-                  button.thumbs-arrow.next
-                    svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+                vue-slick-carousel(
+                  v-bind="settingsProductSliderThumbs"
+                  ref="productSliderThumbs"
+                  :asNavFor="$refs.productSlider",
+                  :key="thumbsSliderKey"
+                )
+                  .thumbs-item(
+                    v-for="(itm, ind ) in content.images"
+                    :key="`thumbs-${ind}`"
+                  ) 
+                    .thumbs-item_content
+                      .img-box
+                        img(:src="itm")
+
+                  template( v-slot:prevArrow)
+                    button.thumbs-arrow.prev
+                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+                  template( v-slot:nextArrow)
+                    button.thumbs-arrow.next
+                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
 
 
           .product-slider-block
             .product-additional
-              .product-tags
-                .product-tag(v-if="sale")
-                  span Sale
-                  svg.icon.icon-percent <use href="#icon-percent"/>
-                .product-tag(v-if="content.new")
-                  span New
-                  svg.icon.icon-arrow-new <use href="#icon-arrow-new"/>
-                .product-tag(v-if="content.hit")
-                  span Hit
-                  svg.icon.icon-fire <use href="#icon-fire"/>
+              .product-tags(v-if="labels && labels.length")
+                .product-tag(v-for="(tag, index) in labels" :key="index") 
+                  span {{tag.name}}
+                  svg.icon( :class="tag.icon" ) 
+                    use(:href="`#${tag.icon}`")
               .product-rating-block
                 nuxt-link.product-feedbacks(to="#feedbacks") {{feedBack}} 
 
@@ -54,6 +52,7 @@
                 v-bind="settingsProductSlider"
                 ref="productSlider"
                 :asNavFor="$refs.productSliderThumbs"
+                :key="productSliderKey"
               )
                 .product-slider-item(
                   v-for="(item, index ) in content.images"
@@ -65,21 +64,14 @@
 
 
 
-        .product-page-row
+        .product-page-row(v-if="info_table && info_table.length")
           .product-slider-block.thumbs
           .product-info-block
-            .product-info-row
-              .product-info-label Артикул:
-              .product-info-text {{content.art}}
-            .product-info-row
-              .product-info-label Комплектация:
-              .product-info-text Что тут выводим?
-            .product-info-row
-              .product-info-label Производитель:
-              .product-info-text {{content.category.brand}}
-            .product-info-row
-              .product-info-label Описание:
-              .product-info-text {{content.description}}
+            .product-info-row(
+              v-for="(item, index) in info_table" :key="index"
+            )
+              .product-info-label {{item.name}}:
+              .product-info-text {{item.value}}
 
       
       .product-page-column.right
@@ -123,16 +115,16 @@
             template(#nextArrow)
               button.other-slider-arrow
                 svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-        //- .product-sizes-table(v-if="sizes")
+        .product-sizes-table(v-if="sizes" ref="sizesTableNode" )
           .product-sizes-item(
             v-for="(item, index) in sizes" :key="index"
-            :class="{'in-stock' : item.ostatok > 0 }"
-            :title="`${$options.SHOE_SIZE} ${item.name.slice(4, item.name.length - 1)}`"
-            @click="selectSize(item)"
-          ) {{item.name.slice(0,2)}}
+            :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
+            :title="tabSizesDetail(item, 1, 'all')"
+            @click="selectSize(item, item.active && item.ostatok > 0)"
+            ) {{tabSizesDetail(item, 0, 'value')}}
 
         
-        .product-quantity-block
+        .product-quantity-block(v-if="selectedSize")
           .product-quantity-label {{$options.QUANTITY_LABEL}}
           .product-quantity
             input-number(
@@ -141,19 +133,18 @@
               :min="1"
               :max="selectedSize.ostatok"
               :step="1"
-              :val="selectedSize.count"
-              v-model="selectedSize.count"
+              :val="selectedSizeCount"
+              v-model="selectedSizeCount"
               border-color="currentColor"
             )  
             .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
         
         .product-order-block
-          div
-            .product-delivery-info
-              .product-delivery-label 
-                span.label {{$options.DELIVERY_LABEL}}
-                span.text Хрен знает когда
-              .btn() {{$options.ADD_TO_BASKET_TEXT}}
+          .product-delivery-info
+            .product-delivery-label 
+              span.label {{$options.DELIVERY_LABEL}}
+              span.text Хрен знает когда
+            .btn() {{$options.ADD_TO_BASKET_TEXT}}
           div
             .product-delivery-info-text
               svg.icon.icon-delivery <use href="#icon-delivery"/>
@@ -173,14 +164,22 @@
               .title {{$options.FEEDBACK_TITLE_TEXT}}
               v-stars(:rating="content.stars || 0" )
               .product-feedbacks(
+                v-if="feedbacks.length > 0"
                 @click="feedbackAllShow"  
                 :class="{'base2-to-base4': feedbackAll}"  
               ) {{feedBack}} 
               .product-feedbacks(
-                  :class="{selected: feedbackOnlyWithFoto}"
-                  @click="feedbackOnlyWithFotoShow"
-                ) {{$options.ONLY_WITH_FOTO}}
-            .feedbacks-block
+                v-if="feedbacks.length > 0"
+                :class="{selected: feedbackOnlyWithFoto}"
+                @click="feedbackOnlyWithFotoShow"
+              ) {{$options.ONLY_WITH_FOTO}}
+            .feedbacks-block.no-feedback(v-if="feedbacks.length===0")
+              .feedback-item.title {{$options.FEEDBACK_NO_TITLE}}
+              .feedback-item.text {{$options.FEEDBACK_NO_TEXT}}
+              .feedback-item 
+                .btn.btn-3 {{$options.FEEDBACK_NO_BTN}}
+
+            .feedbacks-block(v-else)
               .feedback-item(v-for="(f, l) in feedbackVisible" :key="f.id")
                 .feedback-user-avatar
                   svg.icon.icon-user-avatar-default <use href="#icon-user-avatar-default"/>
@@ -235,13 +234,24 @@ export default {
 
         responsive: [
           {
-            breakpoint: 768,
+            breakpoint: 767,
             settings: {
               slidesToShow: 2,
               slidesToScroll: 1,
               infinite: true,
               dots: true,
               variableWidth: true,
+              dotsClass: "slick-dots product-slider-dots",
+            }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              infinite: true,
+              dots: true,
+              variableWidth: false,
               dotsClass: "slick-dots product-slider-dots",
             }
           }
@@ -283,7 +293,9 @@ export default {
       feedbackAll: false,
       quantity: 1,           // Количество выбранных товаров текущего вида 
       selectedSize: null,
-
+      selectedSizeCount: 1,
+      productSliderKey: 'p1',
+      thumbsSliderKey: 't1'
     }
   },
   SHOE_SIZE: 'Размер обуви:',
@@ -295,6 +307,9 @@ export default {
   QUANTITY_LABEL: 'Количество:',
   FEEDBACK_TITLE_TEXT: 'Отзывы:',
   FEEDBACK_SHOW_MORE: 'Показать больше отзывов',
+  FEEDBACK_NO_TITLE: 'У товара пока ещё нет отзывов',
+  FEEDBACK_NO_TEXT: 'Станьте первым, кто поможет определиться другим покупателям с выбором',
+  FEEDBACK_NO_BTN: 'Написать отзыв',
   ONLY_WITH_FOTO: 'только с фото',
   RUB: 'руб.',
   OTHTER_SLIDER_SHOW_ITEMS_DEFAULT: {count: 7, width: 107},
@@ -323,6 +338,8 @@ export default {
     content() { return this.$store.getters['getContentData'] || null},
     feedbacks() { return this.$store.state.content.data.feedbacks || null},
     sizes() { return this.$store.state.content.data.sizes || null},
+    info_table() { return this.$store.state.content.data.info_table || null},
+    labels() { return this.$store.state.content.data.labels || null},
     // products() { return this.$store.state.content.data.items || null},
     // filters() { return this.$store.state.content.data.filters || null},
     // breadcrumbs() {return this.$store.getters['getBreadcrumbs']},
@@ -353,11 +370,19 @@ export default {
     },
 
   },
-  beforeMount() {
-    // debugger
+  beforeMount () {
+    if (process.client) window.addEventListener('resize', this.sizesTableStyle)
+  },
+  beforeDestroy() {
+    if (process.client) window.removeEventListener('resize', this.sizesTableStyle)
   },
   mounted(){
-    this.$nextTick(this.$forceUpdate)
+    this.$nextTick( this.$forceUpdate )
+    this.sizesTableStyle()
+    // setTimeout( () => {
+    //   this.productSliderKey = 'p-' + this.$generateUUID
+    //   this.thumbsSliderKey = 't-' + this.$generateUUID
+    // }, 1000)  
     // this.$refs.otherBlock.style.maxWidth = this.getOtherSliderWidth
     if (this.content.sameart.length <= this.otherSliderItemsShow){
       // debugger
@@ -367,7 +392,12 @@ export default {
      this.$refs.prOtherSlider.$el.classList.remove('hide')
      }
     if (this.feedbacks && this.feedbacks.length) this.feedbackVisible = this.feedbacks.slice(0, this.feedbackCount)
-    if (this.sizes && this.sizes.length) this.selectedSize = Object.assign({}, this.sizes[0])
+    // if (this.sizes && this.sizes.length) this.selectedSize = Object.assign({}, this.sizes[0])
+    if (this.sizes && this.sizes.length) {
+      let i = 0
+      while (i < this.sizes.length && !this.sizes[i].active && !this.sizes[i].ostatok) i++;
+      if (i < this.sizes.length) this.selectSize(this.sizes[i], true)
+    }
     
 
   },
@@ -388,9 +418,60 @@ export default {
       setTimeout(() => this.feedbackAll = false, 500);
       this.showMoreFeedback()
     },
-    selectSize(v) {
-      this.selectedSize = v
+    selectSize(v, toggle) {
+      if (toggle) {
+        this.selectedSizeCount = v.count || 1
+        this.selectedSize = v
+      }
     },
+    tabSizesDetail(item, ind, field) {
+      // field - Имя поля или 'all' если нужно вернуть все поля
+      let res = ''
+      // debugger
+      if (item.table && item.table.length >= ind + 1) {
+        let tabItem = item.table[ind]
+        if (field === 'all') {
+          res = Object.keys(tabItem).reduce((s, current) => s + tabItem[current] + ' ', '')
+        } else {
+          res = tabItem[field]
+        }
+      } else {
+        res = item.name
+      }
+      return res
+    },
+    sizesTableStyle() {
+      // Вычисляет макс. ширину "Таблицы размеров" чтобы элементы разместились в 2 ряда 
+      if (this.$refs.sizesTableNode) {
+        const tabItems = this.$refs.sizesTableNode.children
+        let w1 = 0, w2 = 0
+        // if (tabItems && window.innerWidth > 576) {
+        if (tabItems && document.body.clientWidth > 767) {
+          const l = Math.ceil(tabItems.length /2)
+          let style, margin, i
+          for (i = 0; i < l; i++ ) {
+            style = window.getComputedStyle(tabItems[i])
+            margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
+            w1 += tabItems[i].offsetWidth + margin
+          }
+          // w1 += 10
+          for (let j = i; j < tabItems.length; j++ ) {
+            style = window.getComputedStyle(tabItems[j])
+            margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
+            w2 += tabItems[j].offsetWidth + margin
+          }
+          // w2 += 10
+          // debugger
+          this.$refs.sizesTableNode.style.width = `${Math.max(w1,w2) + 5}px`
+          // return `width:${Math.max(w1,w2)}px`
+        } else {
+          this.$refs.sizesTableNode.style.width = 'initial'
+          // return ''
+        }
+      }
+
+    },
+
   }
 
 

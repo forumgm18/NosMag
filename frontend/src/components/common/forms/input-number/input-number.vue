@@ -56,8 +56,11 @@ export default {
     }
   },
 
-  // mounted() { },
+  mounted() { 
+    this.locValue = this.value
+  },
   updated() {
+    // debugger
     if (this.$refs.input) this.$refs.input.style.width = this.getInputWidth()
   },
   computed: {
@@ -68,8 +71,6 @@ export default {
       return style
     },
     inputSize() {
-      // if (this.max === Infinity) return 20
-      // return this.max.toString().length
       return this.locValue.toString().length
     }
 
@@ -78,14 +79,32 @@ export default {
     getInputWidth() { // Вычисляет ширину input`а
       if(!process.browser ) return 'initial'
       if(!this.$refs.input ) return 'initial'
+      
       const mirror = document.createElement('div') // Создаем новый временный элемент
       mirror.textContent = this.locValue           // Добавляем в него текст из input`а 
       // Применяем стили input`а к созданному блоку
-      const inputStyles = getComputedStyle(this.$refs.input)
-      mirror.style.font = inputStyles.font
-      mirror.style.padding = inputStyles.padding
-      mirror.style.border = inputStyles.border
-      mirror.style.width = 'fit-content'
+      // Комбинированные свойства не работают в ФФ
+      const inputStyles = window.getComputedStyle(this.$refs.input)
+      mirror.style.fontFamily = inputStyles.getPropertyValue("font-family")
+      mirror.style.fontWeight = inputStyles.getPropertyValue("font-weight")
+      mirror.style.fontSize = inputStyles.getPropertyValue("font-size")
+      mirror.style.fontStyle = inputStyles.getPropertyValue("font-style")
+      mirror.style.paddingLeft = inputStyles.getPropertyValue("padding-left")
+      mirror.style.paddingRight = inputStyles.getPropertyValue("padding-right")
+      mirror.style.borderLeftWidth = inputStyles.getPropertyValue("border-left-width")
+      mirror.style.borderRightWidth = inputStyles.getPropertyValue("border-right-width")
+      mirror.style.borderLeftStyle = inputStyles.getPropertyValue("border-left-style")
+      mirror.style.borderRightStyle = inputStyles.getPropertyValue("border-right-style")
+      mirror.style.borderLeftColor = 'transparent'
+      mirror.style.borderRightColor = 'transparent'
+      mirror.style.boxSizing = inputStyles.getPropertyValue("box-sizing")
+      mirror.style.width = "fit-content"
+      mirror.style.width = "min-content" // для ФФ
+      
+      mirror.style.position = "absolute" 
+      mirror.style.left = "-9999px" 
+
+
       document.body.append(mirror)
       // Получаем его длину
       const w = mirror.offsetWidth
@@ -126,11 +145,17 @@ export default {
 
   },
   watch: {
+    value: function(val, oldVal) {
+      this.locValue = parseInt(val, 10)
+    },
     locValue: function(val, oldVal) {
       val = parseInt(val, 10)
       if (val <= this.min) this.locValue = parseInt(this.min)
       if (val >= this.max) this.locValue = parseInt(this.max)
-      if (val <= this.max && val >= this.min) this.$emit('input', val, oldVal)
+      if (val <= this.max && val >= this.min) {
+        // this.locValue = val
+        this.$emit('input', val, oldVal)
+      }
     }
   }
 }
