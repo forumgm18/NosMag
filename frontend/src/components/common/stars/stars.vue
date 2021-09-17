@@ -15,7 +15,7 @@ export default {
 <style lang="scss" scoped>
   .stars {
     .icon-star {
-      /*cursor: pointer;*/
+      cursor: pointer;
       color: var(--text-color-light);
       &.active {
         color: var(--base-color2);

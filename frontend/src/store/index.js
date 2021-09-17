@@ -9,9 +9,21 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, {params}) {
-    await dispatch('fetchContent', params.alias)
-    // await dispatch('token/setNewToken')
+  // async nuxtServerInit({ dispatch }, {params}) {
+  //   // await dispatch('fetchContent', params.alias)
+  //   // await dispatch('token/setNewToken')
+  //   await dispatch('menu/fetch')
+  //   await dispatch('settings/fetch')
+
+  // },
+  async nuxtServerInit({ commit, state, dispatch }, { app, store, route, req, res, error, redirect }) {
+    const sid = 'session_id'
+    let sidv = app.$cookiz.get(sid)
+    // console.log('session_id: ', sidv)
+    if (sidv === undefined || sidv === null || sidv === 'undefined' || sidv === 'null') sidv = app.$generateUUID
+    commit('token/setSID', sidv)
+    app.$cookiz.set(sid, sidv, { maxAge: 365 * 24 * 60 * 60 })
+
     await dispatch('menu/fetch')
     await dispatch('settings/fetch')
 

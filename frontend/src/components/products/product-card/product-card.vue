@@ -20,7 +20,7 @@
             .product-tag(v-if="product.hit")
               span Hit
               svg.icon.icon-fire <use href="#icon-fire"/>
-          .btn-quick-view Быстрый просмотр
+          .btn-quick-view {{$options.BTN_QUICK_VIEW_TEXT}}
       .product-card_info
         .product-card_info-top
           .product-card_price-block(itemprop = "offers" itemscope itemtype = "https://schema.org/Offer" )
@@ -35,7 +35,7 @@
               span {{currency}}
           .btn-add2basket
             svg.icon.icon-btn-plus.plus <use href="#icon-btn-plus"/>
-            span.text В корзину
+            span.text {{$options.BTN_ADD2BASKET_TEXT}}
             svg.icon.icon-basket <use href="#icon-basket"></use>
 
         nuxt-link.product-card_descr(:to="`/catalog/${product.alias}`" itemprop="url")
@@ -75,6 +75,9 @@ export default {
     sale: 0,
     mocCatalogLink: '/catalog/razdel/sub_razdel/'
   }),
+  BTN_QUICK_VIEW_TEXT: 'Быстрый просмотр',
+  BTN_ADD2BASKET_TEXT: 'В корзину',
+
   mounted() {
     // console.log(this.product)
     // this.sale = sale(this.product.price, this.product.oldprice)

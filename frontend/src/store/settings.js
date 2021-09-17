@@ -13,28 +13,32 @@ export const mutations = {
     state.header = val.header
     state.footer = val.footer
     state.status = val.status
-  }
+  },
+  setNewCity (state, val) {
+    state.header.city = val
+  },
 }
 
 export const actions = {
-  async fetch ({ commit }) {
-    // console.log('settings process.env', process.env)
-    // const settings = await this.$axios.$get('https://nosmag.ru/api/get_settings')
-    // const settings = await this.$axios.$get('http://nosmag-new.local/api/get_settings')
-    // const settings = await this.$axios.$get('/api/get_settings')
-    const settings = await this.$axios.$get('/get_settings')
-    // console.log('settings: ', settings)
+  async fetch ({ commit, rootState }) {
+    console.log('settings/fetch', rootState.token.session_id)
+    const settings = await this.$axios.$get('/get_settings', {
+      params: {
+        session_id: rootState.token.session_id
+      }
+
+    })
     commit('setSettings', settings)
-  }
+  },
 }
 
 export const getters = {
   // settings: s => s.settings,
-  // headerSettings: s => s.header,
-  // footerSettings: s => s.footer,
+  // settings: s => s.settings.filters.sortmodes,
   header: s => s.header,
   footer: s => s.footer,
   sortmodes: s => s.sortmodes,
+  // sortmodes: s => s => s.settings.filters.sortmodes,
 
   city: s => s.header.city,
   phone: s => s.header.phone,

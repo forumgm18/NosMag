@@ -5,6 +5,7 @@
   --base-color4 : #{$base-color4};
   --base-color5 : #{$base-color5};
   --base-color6 : #{$base-color6};
+  --base-color7 : #{$base-color7};
   --footer-bgr-color : #{$base-color1};
   --page-bgr-primary: #fff;
   --page-bgr-secondary: #e2e2e2;
@@ -131,6 +132,15 @@ input, textarea {
   padding: 0;
   //max-width: #{$desktopWidth};
   max-width: #{$xl} + 'px';
+  
+  position: relative;
+  padding-top: 200px;
+  
+  @include media-max-width2($xlg) {padding-top: 250px;}
+  @include media-max-width2($lg) {padding-top: 200px;}
+  @include media-max-width2($md) {padding-top: 160px;}
+  @include media-max-width2($sm) {padding-top: 130px;}
+
 }
 main {
   // margin-top: 100px;
@@ -186,6 +196,7 @@ p {color: var(--text-color-default)}
     //object-fit: cover;
     object-fit: contain;
     object-position: center;
+    vertical-align: initial;
   }
 
 }

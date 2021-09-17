@@ -3,7 +3,7 @@
   label.radiobox-label
     input(:class="{notchecked: !isChecked }" hidden type="radio" :checked="isChecked" :value="value" @change="updateInput")
     span.radiobox_text-block
-      span.radiobox_icon
+      span(v-if="showIcon").radiobox_icon
       span.radiobox_text
         slot
 </template>
@@ -20,6 +20,7 @@ export default {
     // value: { type: String },
      value: {},
     modelValue: { default: '' },
+    showIcon: {type:Boolean, default: true}
     // trueValue: { default: true },
     // falseValue: { default: false },
   },

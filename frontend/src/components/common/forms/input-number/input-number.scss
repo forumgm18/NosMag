@@ -11,6 +11,10 @@
   width: fit-content;
   //background-color: transparent;
   background-color: #fff;
+  min-height: 34px;
+    @include media-max-width2($lg) { font-size: 12px; }
+    @include media-max-width2($xsm) { font-size: 8px; }
+
   &.price-filter {padding: .65em .5em;}
 
 

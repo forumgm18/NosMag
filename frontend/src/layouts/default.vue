@@ -23,7 +23,11 @@ export default {
     AppHeader,
     AppFooter,
   },
+  // asyncData: async function ({store, params}) {
+  //   await this.checkToken()
+  //   await store.dispatch('settings/fetch')
 
+  // },
   data: () => ({
     loading: false
   }),
@@ -36,21 +40,28 @@ export default {
     },
   },
   methods: {
-    async checkToken() {
-      let token = localStorage.getItem('token')
-      if (token && token.hasOwnProperty('session_id.length') && token.session_id.length > 0) {
-        token.sessionDate = new Date()
-        await this.$store.commit('token/setToken', token)
-      } else {
-        token = await this.$store.dispatch('token/setNewToken')
-        localStorage.setItem('token', JSON.stringify(token))
-      }
+    // async checkToken() {
+    //   if (process.browser) {
+    //     let token = localStorage.getItem('token')
+    //     if (token) token = JSON.parse(token)
+    //     console.log('token', token)
 
-    }
+    //     if (token && token.hasOwnProperty('session_id') && token.session_id.length > 0) {
+    //       console.log('token old')
+    //       token.sessionDate = new Date()
+    //       await this.$store.commit('token/setToken', token)
+    //     } else {
+    //       console.log('token new')
+    //       token = await this.$store.dispatch('token/setNewToken')
+    //       localStorage.setItem('token', JSON.stringify(token))
+    //     }
+    //   }
+
+    // }
 
   },
   async mounted() {
-    await this.checkToken()
+    // await this.checkToken()
   }
 }
 </script>

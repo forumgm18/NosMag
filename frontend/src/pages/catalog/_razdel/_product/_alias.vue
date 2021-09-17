@@ -10,7 +10,6 @@
             .product-additional
             .thumbs-layout
               .thumbs-body
-
                 vue-slick-carousel(
                   v-bind="settingsProductSliderThumbs"
                   ref="productSliderThumbs"
@@ -64,12 +63,10 @@
 
 
 
-        .product-page-row(v-if="info_table && info_table.length")
+        .product-page-row.show-desktop(v-if="info_table && info_table.length")
           .product-slider-block.thumbs
           .product-info-block
-            .product-info-row(
-              v-for="(item, index) in info_table" :key="index"
-            )
+            .product-info-row( v-for="(item, index) in info_table" :key="index" )
               .product-info-label {{item.name}}:
               .product-info-text {{item.value}}
 
@@ -115,13 +112,16 @@
             template(#nextArrow)
               button.other-slider-arrow
                 svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-        .product-sizes-table(v-if="sizes" ref="sizesTableNode" )
-          .product-sizes-item(
-            v-for="(item, index) in sizes" :key="index"
-            :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
-            :title="tabSizesDetail(item, 1, 'all')"
-            @click="selectSize(item, item.active && item.ostatok > 0)"
-            ) {{tabSizesDetail(item, 0, 'value')}}
+
+        .product-sizes-table-block(v-if="sizes")
+          .product-sizes-table-title {{$options.TABLE_SIZES_TEXT}}
+          .product-sizes-table(ref="sizesTableNode")
+            .product-sizes-item(
+              v-for="(item, index) in sizes" :key="index"
+              :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
+              :title="tabSizesDetail(item, 1, 'all')"
+              @click="selectSize(item, item.active && item.ostatok > 0)"
+              ) {{tabSizesDetail(item, 0, 'value')}}
 
         
         .product-quantity-block(v-if="selectedSize")
@@ -153,8 +153,13 @@
               svg.icon.icon-return-arrows <use href="#icon-return-arrows"/>
               span {{$options.RETURN_TEXT}}
 
+        .product-info-block.show-mobile(v-if="info_table && info_table.length")
+          .product-info-row( v-for="(item, index) in info_table" :key="index" )
+            .product-info-label {{item.name}}:
+            .product-info-text {{item.value}}
 
 
+    
     section.feedbacks(id="feedbacks")  
       .product-page-column.slider
         .product-page-row
@@ -275,8 +280,8 @@ export default {
       settingsProductOtherSlider: {
         dots: false,
         arrows: true,
-        // infinite: true,
-        infinite: false,
+        infinite: true,
+        // infinite: false,
         // vertical: false,
         // speed: 500,
         variableWidth: true,
@@ -284,6 +289,33 @@ export default {
         slidesToScroll: 1,
         // centerMode: true,
         // centerPadding: '0',
+        responsive: [
+          {
+            breakpoint: 1600,
+            settings: {
+              slidesToShow: 6,
+            }
+          },
+          {
+            breakpoint: 1300,
+            settings: {
+              slidesToShow: 5,
+            }
+          },
+          {
+            breakpoint: 1100,
+            settings: {
+              slidesToShow: 4,
+            }
+          },
+          {
+            breakpoint: 767,
+            settings: {
+              slidesToShow: 7,
+            }
+          },
+        ]
+
 
       },
       feedbackVisible:null, // Массив видимых отзывов
@@ -299,6 +331,7 @@ export default {
     }
   },
   SHOE_SIZE: 'Размер обуви:',
+  TABLE_SIZES_TEXT: 'Таблица размеров',
   ADD_TO_BASKET_TEXT: 'Добавить в корзину',
   DELIVERY_LABEL: 'Доставка: ',
   DELIVERY_TEXT: 'Стоимость доставки зависит от суммы покупки',

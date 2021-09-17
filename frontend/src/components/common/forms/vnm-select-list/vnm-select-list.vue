@@ -21,7 +21,9 @@
         :key="opt.id"
         v-model="model"
         :value="opt"
+        :show-icon="showIcon"
       )
+        
         slot(name="optText" :opt="opt" ) {{opt.name}}
 
 </template>
@@ -56,7 +58,8 @@
       selectAll: {
         type: Boolean,
         default: false  
-      }
+      },
+      showIcon: {type:Boolean, default: true}
 
       // id: {}
     },

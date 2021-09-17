@@ -1,0 +1,55 @@
+.tooltip {
+  position: relative;
+  cursor: pointer;
+  width: min-content;
+  width: fit-content;
+  flex-shrink: 0;
+  // min-width: 280px;
+
+    &:hover {
+      .tooltip-body {display: block;}
+    }
+    &.right {
+      .tooltip-body {right: 0;left: initial;}
+    }
+  &-anchor {
+    font-size: 15px;
+    width: min-content;
+    width: fit-content;
+    svg {
+      font-size: inherit;
+      color: inherit;
+    }
+  }
+  &-close {}
+  &-body {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    z-index: 1;
+    // width: 100%;
+    width: 280px;
+    background: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 24px;
+
+  }
+  &-title {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--text-color-default);
+    margin-bottom: 1.5em;
+    white-space: normal;
+  }
+  &-text {
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: normal;
+
+      p {margin-bottom: 1em;}
+  }
+  &-footer {}
+}

@@ -1,5 +1,5 @@
 <template lang="pug">
-  header(data-header)
+  header(v-if="header" data-header)
     .header
       .container
         //-.header-block
@@ -45,10 +45,12 @@
                 ) {{lnk.name}}
 
 
-            nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
+            //- nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
               svg.icon.icon-location <use href="#icon-location"/>
               span(v-if="header.city.name" ) {{header.city.name}}
               span(v-else) ваш город
+            
+            city-select(v-model="header.city")  
 
           .header-phone-block
 
@@ -139,6 +141,7 @@ import menuFunc from '~/utils/main-scripts'
 
 // import burger from '~/components/header/burger'
 import loginForm from '~/components/header/login-form/login-form'
+import citySelect from '~/components/common/city-select/city-select'
 // import HeaderSearch from '~/components/header/header-search'
 // import customSelect from '~/components/custom-select'
 import { mapState } from 'vuex'
@@ -149,7 +152,8 @@ export default {
     menuTop, appPopup, topBasket,
     popupInputForm,
     //customSelect, burger, HeaderSearch, 
-    loginForm
+    loginForm,
+    citySelect
   },
   data: () => ({
     inputPhone:'',

@@ -1,5 +1,5 @@
 <template lang="pug">
-  footer
+  footer(v-if="footer")
     .container
       .footer-row
         .footer-logo-block

@@ -1,6 +1,7 @@
 .cart{
   &-page{
     margin-top: 70px;
+    margin-bottom: 70px;
   }
   &-content {
     display: flex;
@@ -157,11 +158,18 @@
       white-space: nowrap;
     }
     &-delivery {
-      font-weight: 900;
-      font-size: 30px;
-      line-height: 1;
-      cursor: pointer;
-      white-space: nowrap;
+      // font-weight: 900;
+      font-size: 14px;
+      line-height: 1.1;
+      text-align: center;
+      max-width: 330px;
+      color: var(--text-color-default);
+      padding: 1.43em;
+      margin-top: 2.4em;
+      margin-bottom: 1.3em;
+      border: 1px solid currentColor;
+      border-radius: 5px;
+      
     }
     .btn {
       max-width: 330px;

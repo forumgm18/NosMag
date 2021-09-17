@@ -101,6 +101,7 @@
         //max-width: calc(100% - 0.7143em);
         display: flex;
         align-items: center;
+        flex-grow: 1;
         .text {
           white-space: nowrap;
           text-overflow: ellipsis;
