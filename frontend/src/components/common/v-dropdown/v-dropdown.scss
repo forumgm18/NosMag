@@ -102,11 +102,14 @@
         display: flex;
         align-items: center;
         flex-grow: 1;
+
         .text {
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
           flex-grow: 1;
+          max-width: min-content;
+          max-width: fit-content;
         }
       }
       &-count {

@@ -9,18 +9,10 @@
               .a
                 img(:src="img" :alt="product.comment" loading="lazy" itemprop = "image")
           svg.icon.icon-non-img(v-else) <use href="#icon-non-img"/>
-
-          .product-tag-block
-            .product-tag(v-if="sale && !product.price_min")
-              span Sale
-              svg.icon.icon-percent <use href="#icon-percent"/>
-            .product-tag(v-if="product.new")
-              span New
-              svg.icon.icon-arrow-new <use href="#icon-arrow-new"/>
-            .product-tag(v-if="product.hit")
-              span Hit
-              svg.icon.icon-fire <use href="#icon-fire"/>
-          .btn-quick-view {{$options.BTN_QUICK_VIEW_TEXT}}
+          product-tags(:tags="labels")
+          .btn-quick-view(
+            @click.stop.prevent="quickViewShow(true)"
+            ) {{$options.BTN_QUICK_VIEW_TEXT}}
       .product-card_info
         .product-card_info-top
           .product-card_price-block(itemprop = "offers" itemscope itemtype = "https://schema.org/Offer" )
@@ -38,18 +30,27 @@
             span.text {{$options.BTN_ADD2BASKET_TEXT}}
             svg.icon.icon-basket <use href="#icon-basket"></use>
 
-        nuxt-link.product-card_descr(:to="`/catalog/${product.alias}`" itemprop="url")
+        nuxt-link.product-card_descr(:to="`${mocCatalogLink}${product.alias}`" itemprop="url")
           v-clamp(autoresize :max-lines="2" itemprop = "name") {{ product.name }}
-        stars(:rating="product.rating_stars || 0" )
+        v-stars(:rating="product.rating_stars || 0" )
+    quick-view(
+      v-if="isQuickView" 
+      :product="product"
+      :catalog-link="mocCatalogLink"
+      @close-quick-view="quickViewShow"
+      )
+          
 </template>
 
 <script>
 import VClamp from 'vue-clamp'
-import stars from '~/components/common/stars/stars'
+import vStars from '~/components/common/stars/stars'
+import productTags from '~/components/products/product-tags/product-tags'
+import quickView from '~/components/products/quick-view/quick-view'
 // import sale from '~/utils/sale'
 export default {
   name: 'ProductCard',
-  components: { VClamp, stars },
+  components: { VClamp, vStars, quickView, productTags },
   props: {
     product: {
       type: Object,
@@ -71,13 +72,20 @@ export default {
       default: 'руб.'
     },
     },
-  data: () => ({
-    sale: 0,
-    mocCatalogLink: '/catalog/razdel/sub_razdel/'
-  }),
+  data: function () {
+    return {
+      isQuickView: false,
+      sale: 0,
+      mocCatalogLink: '/catalog/razdel/sub_razdel/'
+    }  
+  },
   BTN_QUICK_VIEW_TEXT: 'Быстрый просмотр',
   BTN_ADD2BASKET_TEXT: 'В корзину',
-
+  computed: {
+    labels() { return this.product.labels || null},
+    info_table() { return this.product.info_table || null},
+    sizes() { return this.product.sizes || null},
+  },
   mounted() {
     // console.log(this.product)
     // this.sale = sale(this.product.price, this.product.oldprice)
@@ -88,11 +96,12 @@ export default {
     showModal() {
       this.$modal.show('basket-add-modal', { addedProduct: this.product.id })
     },
+    quickViewShow(v) { this.isQuickView = v },
   },
 }
 </script>
 
 <style lang="scss">
-@import 'style';
+@import 'product-card';
 
 </style>

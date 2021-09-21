@@ -34,17 +34,10 @@
 
           .product-slider-block
             .product-additional
-              .product-tags(v-if="labels && labels.length")
-                .product-tag(v-for="(tag, index) in labels" :key="index") 
-                  span {{tag.name}}
-                  svg.icon( :class="tag.icon" ) 
-                    use(:href="`#${tag.icon}`")
+              product-tags(:tags="labels" :pos-absolute='false')
               .product-rating-block
                 nuxt-link.product-feedbacks(to="#feedbacks") {{feedBack}} 
-
-
                 v-stars(:rating="content.stars || 0" )
-              
 
             .product-slider
               vue-slick-carousel(
@@ -75,7 +68,7 @@
         h1.product-title {{title}}
         .product-page-price-block
           .actual {{content.price}} {{$options.RUB}}
-          .old {{content.oldprice}} {{$options.RUB}}
+          .old {{content.oldprice}} {{$options.RUB_OLD}}
         .product-info-block.right
           .product-info-row(
             v-for="(p, i) in content.params"
@@ -112,16 +105,12 @@
             template(#nextArrow)
               button.other-slider-arrow
                 svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+        product-tab-sizes(
+          :sizes="sizes"
+          :selected-size="selectedSize"
+          @select-size="selectSize"
 
-        .product-sizes-table-block(v-if="sizes")
-          .product-sizes-table-title {{$options.TABLE_SIZES_TEXT}}
-          .product-sizes-table(ref="sizesTableNode")
-            .product-sizes-item(
-              v-for="(item, index) in sizes" :key="index"
-              :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
-              :title="tabSizesDetail(item, 1, 'all')"
-              @click="selectSize(item, item.active && item.ostatok > 0)"
-              ) {{tabSizesDetail(item, 0, 'value')}}
+          )
 
         
         .product-quantity-block(v-if="selectedSize")
@@ -214,6 +203,8 @@ import vLoading from '~/components/common/preloader/preloader'
 import vStars from '~/components/common/stars/stars'
 import VueSlickCarousel from 'vue-slick-carousel'
 import inputNumber from '~/components/common/forms/input-number/input-number'
+import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
+import productTags from '~/components/products/product-tags/product-tags'
 
 export default {
   components:{
@@ -222,6 +213,9 @@ export default {
     vStars,
     VueSlickCarousel,
     inputNumber,
+    productTabSizes,
+    productTags,
+
   },
   data: function () {
     return {
@@ -331,7 +325,7 @@ export default {
     }
   },
   SHOE_SIZE: 'Размер обуви:',
-  TABLE_SIZES_TEXT: 'Таблица размеров',
+  // TABLE_SIZES_TEXT: 'Таблица размеров',
   ADD_TO_BASKET_TEXT: 'Добавить в корзину',
   DELIVERY_LABEL: 'Доставка: ',
   DELIVERY_TEXT: 'Стоимость доставки зависит от суммы покупки',
@@ -345,6 +339,7 @@ export default {
   FEEDBACK_NO_BTN: 'Написать отзыв',
   ONLY_WITH_FOTO: 'только с фото',
   RUB: 'руб.',
+  RUB_OLD: 'р.',
   OTHTER_SLIDER_SHOW_ITEMS_DEFAULT: {count: 7, width: 107},
   OTHTER_SLIDER_SHOW_ITEMS: {
     1200: {count: 5, width: 107},
@@ -365,17 +360,12 @@ export default {
       }
     },
     sale() { return this.$sale(this.content.price, this.content.oldprice) || 0},
-    // ...mapGetters('razdel',['products', 'page', 'pageCount']),
-    // ...mapGetters('settings',['sortmodes']),
     title() {return this.$store.state.content.data.name || ''},
     content() { return this.$store.getters['getContentData'] || null},
     feedbacks() { return this.$store.state.content.data.feedbacks || null},
     sizes() { return this.$store.state.content.data.sizes || null},
     info_table() { return this.$store.state.content.data.info_table || null},
     labels() { return this.$store.state.content.data.labels || null},
-    // products() { return this.$store.state.content.data.items || null},
-    // filters() { return this.$store.state.content.data.filters || null},
-    // breadcrumbs() {return this.$store.getters['getBreadcrumbs']},
     otherSliderItemsShowSettings() {
       if (!process.browser) return 1
       const innerW = window.innerWidth
@@ -403,20 +393,9 @@ export default {
     },
 
   },
-  beforeMount () {
-    if (process.client) window.addEventListener('resize', this.sizesTableStyle)
-  },
-  beforeDestroy() {
-    if (process.client) window.removeEventListener('resize', this.sizesTableStyle)
-  },
   mounted(){
     this.$nextTick( this.$forceUpdate )
-    this.sizesTableStyle()
-    // setTimeout( () => {
-    //   this.productSliderKey = 'p-' + this.$generateUUID
-    //   this.thumbsSliderKey = 't-' + this.$generateUUID
-    // }, 1000)  
-    // this.$refs.otherBlock.style.maxWidth = this.getOtherSliderWidth
+
     if (this.content.sameart.length <= this.otherSliderItemsShow){
       // debugger
      this.$refs.prOtherSlider.$el.classList.add('hide')
@@ -426,12 +405,14 @@ export default {
      }
     if (this.feedbacks && this.feedbacks.length) this.feedbackVisible = this.feedbacks.slice(0, this.feedbackCount)
     // if (this.sizes && this.sizes.length) this.selectedSize = Object.assign({}, this.sizes[0])
-    if (this.sizes && this.sizes.length) {
-      let i = 0
-      while (i < this.sizes.length && !this.sizes[i].active && !this.sizes[i].ostatok) i++;
-      if (i < this.sizes.length) this.selectSize(this.sizes[i], true)
-    }
-    
+    // if (this.sizes && this.sizes.length) {
+    //   let i = 0
+    //   while (i < this.sizes.length && !this.sizes[i].active && !this.sizes[i].ostatok) i++;
+    //   if (i < this.sizes.length) this.selectSize(this.sizes[i], true)
+    // }
+    const currentSize = this.sizes.find(sz => sz.active && sz.ostatok)
+    if (currentSize) this.selectSize({value: currentSize, toggle:true})
+
 
   },
   methods : {
@@ -451,58 +432,11 @@ export default {
       setTimeout(() => this.feedbackAll = false, 500);
       this.showMoreFeedback()
     },
-    selectSize(v, toggle) {
-      if (toggle) {
-        this.selectedSizeCount = v.count || 1
-        this.selectedSize = v
+    selectSize(v) {
+      if (v.toggle) {
+        this.selectedSizeCount = v.value.count || 1
+        this.selectedSize = v.value
       }
-    },
-    tabSizesDetail(item, ind, field) {
-      // field - Имя поля или 'all' если нужно вернуть все поля
-      let res = ''
-      // debugger
-      if (item.table && item.table.length >= ind + 1) {
-        let tabItem = item.table[ind]
-        if (field === 'all') {
-          res = Object.keys(tabItem).reduce((s, current) => s + tabItem[current] + ' ', '')
-        } else {
-          res = tabItem[field]
-        }
-      } else {
-        res = item.name
-      }
-      return res
-    },
-    sizesTableStyle() {
-      // Вычисляет макс. ширину "Таблицы размеров" чтобы элементы разместились в 2 ряда 
-      if (this.$refs.sizesTableNode) {
-        const tabItems = this.$refs.sizesTableNode.children
-        let w1 = 0, w2 = 0
-        // if (tabItems && window.innerWidth > 576) {
-        if (tabItems && document.body.clientWidth > 767) {
-          const l = Math.ceil(tabItems.length /2)
-          let style, margin, i
-          for (i = 0; i < l; i++ ) {
-            style = window.getComputedStyle(tabItems[i])
-            margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
-            w1 += tabItems[i].offsetWidth + margin
-          }
-          // w1 += 10
-          for (let j = i; j < tabItems.length; j++ ) {
-            style = window.getComputedStyle(tabItems[j])
-            margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
-            w2 += tabItems[j].offsetWidth + margin
-          }
-          // w2 += 10
-          // debugger
-          this.$refs.sizesTableNode.style.width = `${Math.max(w1,w2) + 5}px`
-          // return `width:${Math.max(w1,w2)}px`
-        } else {
-          this.$refs.sizesTableNode.style.width = 'initial'
-          // return ''
-        }
-      }
-
     },
 
   }

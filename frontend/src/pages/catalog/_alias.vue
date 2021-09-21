@@ -3,8 +3,8 @@
     //- section
       breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
       h1.page-title(v-if="sublinks_menu") {{sublinks_menu.header}}
-    //loading.center(v-if="loading")
-    //section.container.content-section(v-else)
+    //-loading.center(v-if="loading")
+    //-section.container.content-section(v-else)
     section.content-section
       aside.sidebar-left(v-if="sublinks_menu")
         .sidebar-scroll

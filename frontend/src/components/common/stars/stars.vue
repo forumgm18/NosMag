@@ -14,7 +14,11 @@ export default {
 
 <style lang="scss" scoped>
   .stars {
+    display: inline-flex;
+    align-items: center;  
+    line-height: 1;
     .icon-star {
+      line-height: inherit;
       cursor: pointer;
       color: var(--text-color-light);
       &.active {
