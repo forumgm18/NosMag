@@ -22,7 +22,7 @@
   --filter-border-color: #{$filter-border-color };
   --price-sale: #{$price-sale};
   --product-tag-bgr: #{$product-tag-bgr};
-
+  --box-shadow-modal: 0px 2px 5px rgba(0, 0, 0, 0.1);
   //============================
   --burger-bgr-color: transparent;
   --burger-bgr-show: transparent;
@@ -306,24 +306,32 @@ p {color: var(--text-color-default)}
   }
 }
 .vue-scrollbar__scrollbar-vertical {
-  width: 8px;
+  --vue-scrollbar-width: 8px;
+  // width: 8px;
+  width: var(--vue-scrollbar-width)!important;
   .scrollbar {
-    width: 8px;
+    // width: 8px;
+    width: var(--vue-scrollbar-width)!important;
+
   }
 }
 
 
 .vue-scrollbar__scrollbar-horizontal {
-  height: 8px;
+  --vue-scrollbar-height: 8px;
+  // height: 8px;
+  height: var(--vue-scrollbar-height)!important;
   .scrollbar {
-    height: 8px;
-    border-radius: 10px;
+    // height: 8px;
+    height: var(--vue-scrollbar-height)!important;
+    // border-radius: 10px;
+    border-radius: var(--vue-scrollbar-height)!important;
     background: rgba(196, 196, 196, 1);
   }
 }
 
 
-
+.vm--overlay{background: var(--bgr-close)!important;}
 .bgr-close {
   background-color: var(--bgr-close);
   position: fixed;

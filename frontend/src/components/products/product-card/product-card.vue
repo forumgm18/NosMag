@@ -25,7 +25,7 @@
               meta(itemprop="priceCurrency" content="RUB")
               span(itemprop="price") {{ product.price }}
               span {{currency}}
-          .btn-add2basket
+          .btn-add2basket(@click="showModal")
             svg.icon.icon-btn-plus.plus <use href="#icon-btn-plus"/>
             span.text {{$options.BTN_ADD2BASKET_TEXT}}
             svg.icon.icon-basket <use href="#icon-basket"></use>
@@ -39,6 +39,32 @@
       :catalog-link="mocCatalogLink"
       @close-quick-view="quickViewShow"
       )
+    //- app-popup.popup-up(v-model="addToCartPopup" v-on:close-popup="closeAddToCartPopup")
+    //- modal(
+      :name="`select-size-modal-${product.id}`"
+      height="auto"
+      width="250px"
+      classes="psz-popup"
+      v-if="sizes && selectedSize"
+      )
+      .psz-popup-title
+        span.text Выберите размер
+        span.psz-popup-close(@click="$modal.hide(`select-size-modal-${product.id}`)")
+          svg.icon.icon-close <use href="#icon-close"/>
+      .psz-table-content-title(v-if="selectedSize")
+        .psz-item.title
+          .col {{selectedSize.table[0].name}}
+          .col(v-if="selectedSize.table[1]") {{selectedSize.table[1].name}}
+      .psz-table-content(v-if="sizes" ref="pszTc")
+        .psz-item(
+          v-for="(item, index) in sizes" :key="index"
+          :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
+          @click="selectSize(item, item.active && item.ostatok > 0)"
+          v-if="item.table && item.table.length"
+          ) 
+          .col {{item.table[0].value}}
+          .col(v-if="item.table[1]") {{item.table[1].value}}
+      .btn(@click="addToCart") {{$options.BTN_ADD2BASKET_TEXT_2}}
           
 </template>
 
@@ -47,10 +73,11 @@ import VClamp from 'vue-clamp'
 import vStars from '~/components/common/stars/stars'
 import productTags from '~/components/products/product-tags/product-tags'
 import quickView from '~/components/products/quick-view/quick-view'
-// import sale from '~/utils/sale'
+import appPopup from '~/components/common/popup/app-popup'
+
 export default {
   name: 'ProductCard',
-  components: { VClamp, vStars, quickView, productTags },
+  components: { VClamp, vStars, quickView, productTags, appPopup },
   props: {
     product: {
       type: Object,
@@ -76,11 +103,15 @@ export default {
     return {
       isQuickView: false,
       sale: 0,
-      mocCatalogLink: '/catalog/razdel/sub_razdel/'
+      mocCatalogLink: '/catalog/razdel/sub_razdel/',
+      selectedSize: null,
+      selectedSizeCount: 1,
+      addToCartPopup: false
     }  
   },
   BTN_QUICK_VIEW_TEXT: 'Быстрый просмотр',
   BTN_ADD2BASKET_TEXT: 'В корзину',
+  BTN_ADD2BASKET_TEXT_2: 'Добавить в корзину',
   computed: {
     labels() { return this.product.labels || null},
     info_table() { return this.product.info_table || null},
@@ -91,17 +122,66 @@ export default {
     // this.sale = sale(this.product.price, this.product.oldprice)
     // debugger
     this.sale = this.$sale(this.product.price, this.product.oldprice)
+    this.selectedSize = this.sizes.find(s => s.active) 
   },
   methods: {
     showModal() {
-      this.$modal.show('basket-add-modal', { addedProduct: this.product.id })
+      this.$modal.show(`select-size-modal-${this.product.id}`, )
     },
     quickViewShow(v) { this.isQuickView = v },
+    addToCart() {
+      const val = []
+      val.push({scode: this.selectedSize.scode, q: 1 })
+      // val.push({scode: this.selectedSize.scode, q: 1 })
+      console.log('val: ', val)
+      this.$store.dispatch('cart/addToCart', val)
+      this.$modal.hide(`select-size-modal-${this.product.id}`, )
+      // this.closeAddToCartPopup(false)
+    },
+    selectSize(v, toggle) {
+      // debugger
+      if (toggle) {
+        this.selectedSizeCount = 1
+        this.selectedSize = v
+      }
+    },
+    // showAddToCartPopup() { this.addToCartPopup = true },
+    // closeAddToCartPopup(val) { this.addToCartPopup = val }
   },
 }
 </script>
 
 <style lang="scss">
 @import 'product-card';
+.psz-popup {
+  font-size: 14px;
+
+  // border: 1px solid #A7A7A7;
+  border-radius: 5px; 
+  padding: 10px 16px; 
+  box-shadow: var(--box-shadow-modal);
+
+  &-title {
+    font-size: .8571em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .5em;
+    .text {
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-right: 0.5em;
+    }
+  }
+  &-close{
+    cursor: pointer;
+  }
+  .psz-table-content {
+    font-size: 1em;
+    padding: 1.4em 0;
+    
+  }
+  .btn {font-size: 1em;}
+}
 
 </style>

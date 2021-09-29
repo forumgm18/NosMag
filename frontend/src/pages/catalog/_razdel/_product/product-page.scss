@@ -114,10 +114,11 @@
   }
   &-slider{
           // border: 1px solid purple;
+    overflow: hidden;      
 
-        @include media-max-width2($md - 1) { width: calc(100vw - var(--p)); }
-        @include media-max-width2($xsm) { width: 100%; }
-        .slick-track {display: flex!important;}
+      @include media-max-width2($md - 1) { width: calc(100vw - var(--p)); }
+      @include media-max-width2($xsm) { width: 100%; }
+      .slick-track {display: flex!important;}
 
     &-block{
       // border: 1px solid greenyellow;
@@ -154,7 +155,7 @@
             @include media-max-width2($xsm) {padding-right: 0;}
 
         &-content {
-          border: 1px solid purple;
+          // border: 1px solid purple;
           padding-bottom: 100%;
           position: relative;
           min-width: var(--slide-width);

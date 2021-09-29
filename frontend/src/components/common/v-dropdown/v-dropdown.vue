@@ -54,6 +54,8 @@
           const rootNode = `[data-root-id=fs-${this.id}]`
           if(e.target.closest(rootNode)) return
         }
+        // debugger
+        console.log(`[data-root-id=fs-${this.id}]`)
         this.selectOpen = false
       },
       openToggle() {

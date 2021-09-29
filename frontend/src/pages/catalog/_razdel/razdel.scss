@@ -1,4 +1,7 @@
 .razdel{
+  &-page{
+    padding-bottom: 100px;
+  }
   &-filter {
     display: flex;
     align-items: flex-start;
@@ -187,9 +190,17 @@
 
 
 .pagination {
-  margin-top: 2em;
-  .active {
-    .pagination-link { background-color: var(--base-color2);}
+  margin-top: 70px;
+  &-descr {
+    width: min-content;
+    width: fit-content;
+    margin: 0 auto;
+    margin-bottom: 50px;
+  }
+  .btn {
+    max-width: 200px;
+    margin: 0 auto;
+
   }
 }
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-main.container
+main.container.razdel-page
   //- section
     breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
   section
@@ -58,17 +58,19 @@ main.container
 
       section.razdel-content
         //-loading.center(v-if="loading")
-        product-list( 
+        //- product-list( 
           v-if="products" 
           :items="products" 
           :is-btn="true" 
           :is-sizes="true"
-        )
+          )
         //-client-only
           paginate(
             v-if="pageCount > 1"
             v-model="currentPage"              :page-count="pageCount"              :click-handler="pageChangeHandler"              :prev-text="`<icons class='icon'><use href='#icon-arrow-left'></use></icons>`"              :next-text="`<icons class='icon'><use href='#icon-arrow-right'></use></icons>`"              :container-class="'pagination'"              :page-link-class="'pagination-link'"              :prev-link-class="'pagination-link prev'"              :next-link-class="'pagination-link next'"              :hide-prev-next="true"              )
-
+      section.pagination
+        .pagination-descr {{$options.PAGINATE_TEXT}} {{itemsTotal}}
+        .btn.btn-4(@click="showMore") {{$options.SHOW_MORE_BTN}}
 </template>
 
 <script>
@@ -109,12 +111,20 @@ export default {
       isSortOpen: false,
       }
   },
-  
-  asyncData: async function ({store, params}) {
+  PAGINATE_TEXT: 'Отображается 8 из ',
+  SHOW_MORE_BTN: 'Показать далее',
+  asyncData: async function ({store, params}, {error}) {
+  // asyncData: async function ({store, params}) {
   // fetch: async function ({store, params}) {
     // console.log('catalog/_razdel/_alias params', params)
     // this.loading = true
     await store.dispatch('fetchContent', params.alias)
+    // console.log('this.$store.state.content', store.state.content)
+    // let ctnType = store.state.content.type
+    // if (ctnType === '404' || ctnType === 404) {
+    //   debugger
+    //   error({ statusCode: 404 })
+    // }
     // this.loading = false
     
   },
@@ -122,11 +132,13 @@ export default {
     // ...mapGetters('razdel',['products', 'page', 'pageCount']),
     ...mapGetters('settings',['sortmodes']),
     title() {return this.$store.state.content.data.name || ''},
+    // title() {return 'dfgdg'},
     products() { return this.$store.state.content.data.items || null},
     filters() { return this.$store.state.content.data.filters || null},
     // breadcrumbs() {return this.$store.state.content.data.breadcrumbs || null},
     breadcrumbs() {return this.$store.getters['getBreadcrumbs']},
     sublinks_menu() {return this.$store.state.content.data.sublinks_menu || null},
+    itemsTotal() {return this.$store.state.content.data.items_total_q || null},
     currentPage: {
       get: function() { return this.page},
       set: function(value) { this.$store.commit('razdel/setPage', value) }
@@ -158,7 +170,8 @@ export default {
     },
     sortOpen() {
       this.isSortOpen = !this.isSortOpen
-    }
+    },
+    showMore () {},
   }
 }
 </script>

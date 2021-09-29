@@ -311,7 +311,7 @@
     },  
   fetch: async function(){
     // console.log('cities/getCities')
-    await this.$store.dispatch('cities/getCities')
+    await this.$store.dispatch('cart/getCart')
   },
 
     data: function () {
@@ -334,6 +334,7 @@
     },
   computed: {
     cities() {  return this.$store.state.cities.cities || null },
+    cart() {  return this.$store.state.cities.cities || null },
   },
   // mounted(){
   //   this.filteredCities = this.cities

@@ -18,7 +18,7 @@ export const actions = {
   // },
   async nuxtServerInit({ commit, state, dispatch }, { app, store, route, req, res, error, redirect }) {
     const sid = 'session_id'
-    let sidv = app.$cookiz.get(sid)
+    let sidv = app.$cookiz.get(sid, {path: '/'})
     // console.log('session_id: ', sidv)
     if (sidv === undefined || sidv === null || sidv === 'undefined' || sidv === 'null') sidv = app.$generateUUID
     commit('token/setSID', sidv)
@@ -37,6 +37,7 @@ export const actions = {
       }
     })
     console.log('c',c)
+
     // Преобразуем строковые числа в числа
     const content = JSON.parse(JSON.stringify(c),function (key, value) {
       if (value === (+value).toString()) return +value

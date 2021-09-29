@@ -5,7 +5,7 @@
       .quick-view-title {{product.name}}
       .quick-view-info
         .quick-view-info-item(
-          v-for="(item, index) in info_table" 
+          v-for="(item, index) in params" 
           :key="index"
           :class="{ art: index === 0 }"
           )  
@@ -66,7 +66,7 @@
 
           product-tab-sizes(
             :sizes="product.sizes"
-            :quisk-view="true"
+            :in-fixed-block="true"
             :selected-size="selectedSize"
             @select-size="selectSize"
             )
@@ -91,7 +91,7 @@
                 span.label {{$options.DELIVERY_LABEL}}
                 span.text {{product.delivery.info}}
               .btn() {{$options.ADD_TO_BASKET_TEXT}}
-              nuxt-link.btn.btn-4(:to="`${catalogLink}${product.alias}`") {{$options.MORE_INFO_TEXT}}
+              nuxt-link.btn.btn-4(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
 
 
 
@@ -172,7 +172,7 @@ export default {
         // infinite: false,
         vertical: true,
         // speed: 500,
-        slidesToShow: 4,
+        slidesToShow: 3,
         slidesToScroll: 1,
         focusOnSelect: true,
       },
@@ -190,7 +190,8 @@ export default {
 
   computed: {
     labels() { return this.product.labels || null},
-    info_table() { return this.product.info_table || null},
+    // info_table() { return this.product.info_table || null},
+    params() { return this.product.params || null},
     sizes() { return this.product.sizes || null},
   },
   mounted(){
@@ -203,7 +204,10 @@ export default {
       const currentSize = this.sizes.find(sz => sz.active && sz.ostatok)
       if (currentSize) this.selectSize({value: currentSize, toggle:true})
     }
-
+  
+  },
+  beforeDestroy() {
+    this.$refs.quickView.remove()  
   },
   methods: {
     close() {

@@ -213,10 +213,5 @@
 
 <style lang="scss">
   @import "mobile-filter";
-  .vue-scrollbar__scrollbar-vertical {
-    width: 2px;
-    .scrollbar {
-      width: 2px;
-    }
-  }
+  .vue-scrollbar__scrollbar-vertical {  --vue-scrollbar-width: 2px; }
 </style>

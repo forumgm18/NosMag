@@ -1,19 +1,39 @@
 <template lang="pug">
-  .product-sizes-table-block(v-if="sizes" :class="{ 'in-quisk-view' : quiskView }")
-    .product-sizes-table-title {{tabTitle}}
-    .product-sizes-table(ref="sizesTableNode" )
-      .product-sizes-item(
-        v-for="(item, index) in sizes" :key="index"
-        :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
-        :title="tabSizesDetail(item, 1, 'all')"
-        @click="selectSize(item, item.active && item.ostatok > 0)"
-        ) {{tabSizesDetail(item, 0, 'value')}}
+  .psz-table-block(v-if="sizes && selectedSize" )
+    .psz-table-title {{tabTitle}}
+    drop-down.psz-table(
+      ref="sizesTableNode" 
+      scrollbar-classes="psz-table-scroll",
+      :select-open="pszOpen"
+      :in-fixed-block="inFixedBlock"
+      @dropdown-open="dropdownOpen"
+      )
+      template(v-if="selectedSize"  #dropdown-title)
+        span {{selectedSize.name}}
+        
+      template(#dropdown-list-title)
+        .psz-table-content-title
+          .psz-item.title
+            .col {{selectedSize.table[0].name}}
+            .col {{selectedSize.table[1].name}}
+      
+      template(#dropdown-content)
+        .psz-table-content(ref="pszTc")
+          .psz-item(
+            v-for="(item, index) in sizes" :key="index"
+            :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
+            @click="selectSize(item, item.active && item.ostatok > 0)"
+            ) 
+            .col {{item.table[0].value}}
+            .col {{item.table[1].value}}
 
 </template>
 
 <script>
+  import dropDown from '@/components/common/drop-down/drop-down'
   export default {
     name: 'product-tab-sizes',
+    components : {dropDown},
     props: {
       sizes: {
         type: [Array, Object],
@@ -27,26 +47,25 @@
         type: Object,
         default: null
       },
-      quiskView: {
+      inFixedBlock: {
         type: Boolean,
         default: false
       },
 
     },
-    beforeMount () {
-      if (process.client) window.addEventListener('resize', this.sizesTableStyle)
-    },
-    beforeDestroy() {
-      if (process.client) window.removeEventListener('resize', this.sizesTableStyle)
-    },
+  data: function () {
+    return {
+      pszOpen: false
+    }  
+  },
 
     mounted() {
       this.$nextTick( this.$forceUpdate )
-      this.sizesTableStyle()
     },
     methods: {
       selectSize(v, toggle) {
         this.$emit('select-size',{value: v, toggle})
+        this.pszOpen = false
       },
 
       tabSizesDetail(item, ind, field) {
@@ -65,44 +84,14 @@
         }
         return res
       },
-      sizesTableStyle() {
-      // Вычисляет макс. ширину "Таблицы размеров" чтобы элементы разместились в 2 ряда 
-      if (this.$refs.sizesTableNode) {
-        const tabItems = this.$refs.sizesTableNode.children
-        let w1 = 0, w2 = 0
-        // if (tabItems && window.innerWidth > 576) {
-        if (tabItems && document.body.clientWidth > 767) {
-          const l = Math.ceil(tabItems.length /2)
-          // const l = Math.max(Math.ceil(tabItems.length /2), 4)
-          let style, margin, i
-          for (i = 0; i < l; i++ ) {
-            style = window.getComputedStyle(tabItems[i])
-            margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
-            w1 += tabItems[i].offsetWidth + margin
-          }
-          // w1 += 10
-          for (let j = i; j < tabItems.length; j++ ) {
-            style = window.getComputedStyle(tabItems[j])
-            margin = parseFloat(style.marginLeft) + parseFloat(style.marginRight)
-            w2 += tabItems[j].offsetWidth + margin
-          }
-          // w2 += 10
-          // debugger
-          this.$refs.sizesTableNode.style.width = `${Math.max(w1,w2) + 5}px`
-          // return `width:${Math.max(w1,w2)}px`
-        } else {
-          this.$refs.sizesTableNode.style.width = 'initial'
-          // return ''
-        }
+      dropdownOpen(v) {
+        this.pszOpen = v
       }
-
-    },
-
     },
     
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 @import 'product-tab-sizes'
 </style>  

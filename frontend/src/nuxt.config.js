@@ -134,7 +134,8 @@ export default {
     events: false,
     google: {
       // families: ['PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap'],
-      families: ['Roboto:wght@400;500;700&display=swap'],
+      // families: ['Roboto:wght@400;500;700&display=swap'],
+      families: ['Roboto:wght@400;500;600;700;800;900&display=swap'],
     },
     timeout: 5000,
   },
