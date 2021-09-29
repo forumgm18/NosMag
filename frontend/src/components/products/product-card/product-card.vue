@@ -40,7 +40,7 @@
       @close-quick-view="quickViewShow"
       )
     //- app-popup.popup-up(v-model="addToCartPopup" v-on:close-popup="closeAddToCartPopup")
-    //- modal(
+    modal(
       :name="`select-size-modal-${product.id}`"
       height="auto"
       width="250px"

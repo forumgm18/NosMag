@@ -33,6 +33,9 @@ export function declensionEndings(value, words) {
   if(num == 1) return words[0]; 
   return words[2];
 }
+export function contentError(value) {  
+    return value === '404' || value === 404
+}
 
 
 export default {

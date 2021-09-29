@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import {declensionEndings} from '@/utils/main-scripts'
+import {contentError} from '@/utils/main-scripts'
 
 export default ({ app }, inject) => {
   inject('generateUUID', uuidv4())
@@ -7,5 +8,6 @@ export default ({ app }, inject) => {
   inject('sale', (price, oldprice) => { return Math.floor((1 - parseInt(price, 10) / parseInt(oldprice, 10)) * 100)})
   inject('compareNumeric', (a, b) => { return a - b })
   inject('numFeedbacks', (value) => { return declensionEndings( value,['отзыв','отзыва','отзывов'] )})
+  inject('contentError', (value) => { return contentError(value)})
 
 }

@@ -89,10 +89,12 @@
         const parentBox = this.$refs.fs.getBoundingClientRect()
         const left = parentBox.x
         const top = parentBox.y + parentBox.height
+        const width = parentBox.width
         // debugger
         this.$refs.fsList.style.position = 'fixed'
         this.$refs.fsList.style.left = `${left}px`
         this.$refs.fsList.style.top = `${top}px`
+        this.$refs.fsList.style.minWidth = `${width}px`
       },
       setScrollBarContainerHeight() {
         // вычисляем стили для dropdownList

@@ -58,7 +58,7 @@ main.container.razdel-page
 
       section.razdel-content
         //-loading.center(v-if="loading")
-        //- product-list( 
+        product-list( 
           v-if="products" 
           :items="products" 
           :is-btn="true" 
@@ -113,17 +113,15 @@ export default {
   },
   PAGINATE_TEXT: 'Отображается 8 из ',
   SHOW_MORE_BTN: 'Показать далее',
-  asyncData: async function ({store, params}, {error}) {
-  // asyncData: async function ({store, params}) {
+  asyncData: async function ({app, store, params, error}) {
   // fetch: async function ({store, params}) {
     // console.log('catalog/_razdel/_alias params', params)
     // this.loading = true
     await store.dispatch('fetchContent', params.alias)
-    // console.log('this.$store.state.content', store.state.content)
     // let ctnType = store.state.content.type
+    if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
     // if (ctnType === '404' || ctnType === 404) {
-    //   debugger
-    //   error({ statusCode: 404 })
+    //   error({ statusCode: 404, message: '' })
     // }
     // this.loading = false
     

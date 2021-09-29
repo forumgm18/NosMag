@@ -12,10 +12,10 @@
         span {{selectedSize.name}}
         
       template(#dropdown-list-title)
-        .psz-table-content-title
+        .psz-table-content-title(v-if="selectedSize.table[0]")
           .psz-item.title
             .col {{selectedSize.table[0].name}}
-            .col {{selectedSize.table[1].name}}
+            .col(v-if="selectedSize.table[1]") {{selectedSize.table[1].name}}
       
       template(#dropdown-content)
         .psz-table-content(ref="pszTc")
@@ -24,8 +24,8 @@
             :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
             @click="selectSize(item, item.active && item.ostatok > 0)"
             ) 
-            .col {{item.table[0].value}}
-            .col {{item.table[1].value}}
+            .col(v-if="item.table[0]") {{item.table[0].value}}
+            .col(v-if="item.table[1]") {{item.table[1].value}}
 
 </template>
 
@@ -68,22 +68,22 @@
         this.pszOpen = false
       },
 
-      tabSizesDetail(item, ind, field) {
-        // field - Имя поля или 'all' если нужно вернуть все поля
-        let res = ''
-        // debugger
-        if (item.table && item.table.length >= ind + 1) {
-          let tabItem = item.table[ind]
-          if (field === 'all') {
-            res = Object.keys(tabItem).reduce((s, current) => s + tabItem[current] + ' ', '')
-          } else {
-            res = tabItem[field]
-          }
-        } else {
-          res = item.name
-        }
-        return res
-      },
+      // tabSizesDetail(item, ind, field) {
+      //   // field - Имя поля или 'all' если нужно вернуть все поля
+      //   let res = ''
+      //   // debugger
+      //   if (item.table && item.table.length >= ind + 1) {
+      //     let tabItem = item.table[ind]
+      //     if (field === 'all') {
+      //       res = Object.keys(tabItem).reduce((s, current) => s + tabItem[current] + ' ', '')
+      //     } else {
+      //       res = tabItem[field]
+      //     }
+      //   } else {
+      //     res = item.name
+      //   }
+      //   return res
+      // },
       dropdownOpen(v) {
         this.pszOpen = v
       }

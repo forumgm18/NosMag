@@ -16,7 +16,8 @@ export const actions = {
   //   await dispatch('settings/fetch')
 
   // },
-  async nuxtServerInit({ commit, state, dispatch }, { app, store, route, req, res, error, redirect }) {
+  // async nuxtServerInit({ commit, state, dispatch }, { app, store, route, req, res, error, redirect }) {
+  async nuxtServerInit({ commit, dispatch }, { app }) {
     const sid = 'session_id'
     let sidv = app.$cookiz.get(sid, {path: '/'})
     // console.log('session_id: ', sidv)
@@ -26,6 +27,7 @@ export const actions = {
 
     await dispatch('menu/fetch')
     await dispatch('settings/fetch')
+    await dispatch('cart/getCart')
 
   },
 

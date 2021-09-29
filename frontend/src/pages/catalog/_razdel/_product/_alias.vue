@@ -347,9 +347,10 @@ export default {
     767: {count: 7, width: 75},
     576: {count: 7, width: 43}
   },
-  asyncData: async function ({store, params}) {
+  asyncData: async function ({app, store, params, error}) {
     // console.log('catalog/_razdel/product/_alias params', params)
     await store.dispatch('fetchContent', params.alias)
+    if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
   },
   computed: {
     feedBack() {

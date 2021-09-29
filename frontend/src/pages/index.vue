@@ -177,7 +177,7 @@ export default {
       loading: true
     }
   },
-  asyncData: async function ({store, params}) {
+  asyncData: async function ({app, store, params, error}) {
     // console.log('process.env', process.env)
     // console.log('index params:', params)
 
@@ -187,6 +187,7 @@ export default {
     // const alias = path[path.length - 1]
     // await this.$store.dispatch('fetchContent', alias)
     await store.dispatch('fetchContent', params.alias || '')
+    if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
     // this.loading = false
   },
 

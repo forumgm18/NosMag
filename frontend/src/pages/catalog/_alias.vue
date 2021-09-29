@@ -45,7 +45,7 @@ export default {
       loading: true,
     }
   },
-  fetch: async function ({store, params}) {
+  fetch: async function ({app, store, params, error}) {
     console.log('catalog/_alias params', params)
     // console.log('process.env', process.env)
     this.loading = true
@@ -53,6 +53,7 @@ export default {
     // const alias = path[path.length - 1]
 
     await store.dispatch('fetchContent', params.alias)
+    if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
     this.loading = false
   },
 
