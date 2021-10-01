@@ -50,11 +50,11 @@
                   v-for="(item, index ) in content.images"
                   :key="`slider-${index}`"
                 ) 
-                  //- .product-slider-item-content
-                    //- .img-box
+                  .product-slider-item-content
+                    .img-box
                       //- img(:src="item")
                       
-                  inner-image-zoom(:src="item")
+                      inner-image-zoom(:src="item")
 
 
 

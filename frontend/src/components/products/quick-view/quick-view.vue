@@ -44,23 +44,22 @@
               v-stars(:rating="product.stars || 0" )
               product-tags(:tags="labels" :pos-absolute='false')
 
-            .product-slider.proportional
-              .product-slider-img-box
-                .product-slider-container
-                  vue-slick-carousel(
-                    v-bind="settingsProductSlider"
-                    ref="productSlider"
-                    :asNavFor="$refs.productSliderThumbs"
-                    
-                    )
-                    .product-slider-item(
-                      v-for="(item, index ) in product.images_big"
-                      :key="`slider-${index}`"
-                    ) 
-                      //- .product-slider-item-content
-                        .img-box
-                          img(:src="item")
-                      inner-image-zoom(:src="item")
+            .product-slider
+              .product-slider-container
+                vue-slick-carousel(
+                  v-bind="settingsProductSlider"
+                  ref="productSlider"
+                  :asNavFor="$refs.productSliderThumbs"
+                  
+                  )
+                  .product-slider-item(
+                    v-for="(item, index ) in product.images_big"
+                    :key="`slider-${index}`"
+                  ) 
+                    .product-slider-item-content
+                      .img-box
+                        //- img(:src="item")
+                        inner-image-zoom(:src="item")
 
 
         .quick-view-col.info
