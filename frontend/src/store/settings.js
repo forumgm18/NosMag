@@ -3,7 +3,9 @@ export const state = () => ({
   sortmodes: null,
   header: null,
   footer: null,
-  status: ''
+  status: '',
+  currency: 'руб.',
+  currencyShort: 'р.'
 })
 
 export const mutations = {
@@ -42,5 +44,7 @@ export const getters = {
 
   city: s => s.header.city,
   phone: s => s.header.phone,
-  // info4Users: s => s.header.info,
+  currency: s => s.currency,
+  currencyShort: s => s.currencyShort,
+
 }

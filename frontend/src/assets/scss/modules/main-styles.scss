@@ -23,6 +23,12 @@
   --price-sale: #{$price-sale};
   --product-tag-bgr: #{$product-tag-bgr};
   --box-shadow-modal: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  --vue-scrollbar-width: 8px;
+  --vue-scrollbar-height: 8px;
+
+
+
+
   //============================
   --burger-bgr-color: transparent;
   --burger-bgr-show: transparent;
@@ -293,40 +299,25 @@ p {color: var(--text-color-default)}
 .bgr-tmp { background-color: var(--page-bgr-tmp);}
 .db {display: block!important;}
 .fg {flex-grow: 1!important;}
+
 .vue-scrollbar__scrollbar-vertical,.vue-scrollbar__scrollbar-horizontal  {
-  border-radius: 10px;
-  /*background: rgba(196, 196, 196, .5);*/
   background: transparent;
-  &:hover{
-    background: transparent;
-  }
-  .scrollbar {
-    border-radius: 10px;
-    background: rgba(196, 196, 196, 1);
-  }
+  &:hover{ background: transparent; }
+  .scrollbar { background: var(--base-color4); }
 }
 .vue-scrollbar__scrollbar-vertical {
-  --vue-scrollbar-width: 8px;
-  // width: 8px;
   width: var(--vue-scrollbar-width)!important;
   .scrollbar {
-    // width: 8px;
+    border-radius: var(--vue-scrollbar-width)!important;
     width: var(--vue-scrollbar-width)!important;
-
   }
 }
 
-
 .vue-scrollbar__scrollbar-horizontal {
-  --vue-scrollbar-height: 8px;
-  // height: 8px;
   height: var(--vue-scrollbar-height)!important;
   .scrollbar {
-    // height: 8px;
     height: var(--vue-scrollbar-height)!important;
-    // border-radius: 10px;
     border-radius: var(--vue-scrollbar-height)!important;
-    background: rgba(196, 196, 196, 1);
   }
 }
 

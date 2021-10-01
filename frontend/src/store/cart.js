@@ -13,27 +13,14 @@ export const mutations = {
       state[key] = v 
     }
   },
+  // ADD_TO_CART(state, val) {
   ADD_TO_CART(state, val) {
-      // [items] => Array
-      //                 (
-      //                     [0] => Array
-      //                         (
-      //                             [scode] => 210330000008
-      //                             [q] => 1
-      //                         )
-      //                 )
-      val.forEach(v => {
-        const st = state.items.find(s => s.scode === v.scode)
-        if (st) { 
-          st.q = v.q
-        } else {
-          state.items.push(v)
-        }
-      })
-      
+    val.rootCart.items_q = val.items_q  
   },
   CHANGE_CART(state, value) {},
-  REMOVE_FROM_CART(state, value) {},
+  REMOVE_FROM_CART(state, val) {
+    val.rootCart.items_q = val.items_q  
+  },
   CLEAR_CART(state) {},
 }
 
@@ -51,28 +38,28 @@ export const actions = {
   async addToCart({ state, commit, rootState}, val) {
     let v = Array.isArray(val) ? val : [val] 
     console.log('v: ', v)
-    debugger
+    // debugger
     const cart = await this.$axios.$post('/add_cart', {
           session_id: rootState.token.session_id,
           items: v
       }
     )
+    // debugger
     // if (cart.status ==='ok') dispatch('getCart')
     if (cart.status ==='ok') {
       console.log('Добавлено в корзину', val)
-      commit('ADD_TO_CART', v)
+      commit('ADD_TO_CART', {items_q: parseInt(cart.items_q, 10), rootCart:rootState.settings.header.cart })
     } else {
       console.log('Ошибка добавления в корзину', val)
     }
 
   },
-  async changeCart({ state, commit, rootState}, val) {
-    let v = Array.isArray(val) ? val : [].push(val) 
-    const cart = await this.$axios.$get('/chg_cart', {
-        params: {
+  async changeCartItem({ state, commit, rootState}, val) {
+    let v = []
+    if (Array.isArray(val)) {v = val} else {v.push(val)}
+    const cart = await this.$axios.$post('/chg_cart', {
           session_id: rootState.token.session_id,
           items: v
-        }
       }
     )
     if (cart.status ==='ok') {
@@ -83,18 +70,17 @@ export const actions = {
     }
 
   },
-  async delCart({ state, commit, rootState}, val) {
-    let v = Array.isArray(val) ? val : [].push(val) 
-    const cart = await this.$axios.$get('/del_cart', {
-        params: {
+  async delCartItem({ state, commit, rootState}, val) {
+    let v = []
+    if (Array.isArray(val)) {v = val} else {v.push(val)}
+    const cart = await this.$axios.$post('/del_cart', {
           session_id: rootState.token.session_id,
           items: v
-        }
       }
     )
     if (cart.status ==='ok') {
       console.log('Удалено из корзины', val)
-      commit('REMOVE_FROM_CART', v)
+      commit('REMOVE_FROM_CART', {items_q: parseInt(cart.items_q, 10), rootCart:rootState.settings.header.cart })
     } else {
       console.log('Ошибка Удаления из корзины', val)
     }

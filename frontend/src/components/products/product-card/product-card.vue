@@ -129,13 +129,14 @@ export default {
       this.$modal.show(`select-size-modal-${this.product.id}`, )
     },
     quickViewShow(v) { this.isQuickView = v },
-    addToCart() {
+    async addToCart() {
       const val = []
       val.push({scode: this.selectedSize.scode, q: 1 })
       // val.push({scode: this.selectedSize.scode, q: 1 })
       console.log('val: ', val)
       this.$store.dispatch('cart/addToCart', val)
       this.$modal.hide(`select-size-modal-${this.product.id}`, )
+      await this.$nuxt.refresh()
       // this.closeAddToCartPopup(false)
     },
     selectSize(v, toggle) {

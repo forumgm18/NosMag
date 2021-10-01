@@ -2,51 +2,54 @@
   main.container.cart-page
     section
       h1.page-title {{$options.CART_TITLE}}
-    section.cart-content
+    section.cart-content(v-if="cart")
       .cart-table
         .cart-table-row.title
           .cart-table-product Товар
           .cart-table-quantity Количество
           .cart-table-price Цена
-        .cart-table-row(v-for="i in 3" :key="i")
+        .cart-table-row(v-for="(item, ind) in cart.items" :key="ind")
+          .cart-table-row-del(@click.prevent="delCartItem(item.scode)")
+            svg.icon.icon-close <use href="#icon-close"/>
           .cart-table-product 
             .cart-product-img
               .cart-product-img-box
                 .img-box
-                  img(src="")
+                  img(:src="item.images_small[0]")
             .cart-product-info
-              .cart-product-title Набор носков из 5 пар Нева сокс “Ментоловый гонщик”
+              .cart-product-title {{item.name}}
               .cart-product-props 
                 .cart-product-props-label Размер:
-                .cart-product-props-value 27
+                .cart-product-props-value {{item.size}}
               .cart-product-props 
                 .cart-product-props-label Доставка:
-                .cart-product-props-value 29 июля
+                .cart-product-props-value {{item.post_date}}
 
           .cart-table-quantity 
             input-number(
-              :max="9999"
-              :min="0"
-              :value="1"
-              append-text="шт."
-              v-model="testNumber"
+              :max="item.ostatok"
+              :min="1"
+              :value="item.q"
+              :append-text="item.unit_name"
+              @input="qualityChange($event, item)"
               )
           .cart-table-price 
-            .cart-table-price-sale 240 000 р. 
+            .cart-table-price-sale {{item.oldprice}}{{currencyShort}}
             .cart-table-price-blok 
-              .cart-table-price-total 234 000 руб.
-              .cart-table-price-piece 1170 р. за шт
-
+              .cart-table-price-total {{itemCost(item.price, item.q)}} {{currency}}
+              .cart-table-price-piece {{priceForOne(item.price, item.unit_name)}}
       .cart-total
         .page-title {{$options.ORDER_TOTAL_TITLE}}
         .cart-total-row 
-          .cart-total-lable Товары 9999 шт.
-          .cart-total-sum 10 532 руб.
-        .cart-total-row 
+          .cart-total-lable {{goodsPieces(cart.items_q, 'шт')}}
+          .cart-total-sum 
+            div {{cart.sum}} {{currency}}
+            .cart-table-price-sale {{cart.oldsum}}  {{currency}}
+        .cart-total-row(v-if="totalSaleStr") 
           .cart-total-lable {{$options.ORDER_TOTAL_SALE_TEXT}}
-          .cart-total-sale  -268 руб.
+          .cart-total-sale.bold {{totalSaleStr}}
         .cart-total-delivery {{$options.ORDER_TOTAL_DELIVERY_TEXT}}
-        .btn {{$options.BTN_TOTAL_TEXT}}
+        .btn.btn-3 {{$options.BTN_TOTAL_TEXT}}
     
     section.order-content 
       h1.page-title {{$options.ORDER_TITLE}}
@@ -110,13 +113,13 @@
             .order-form-item
               .order-item-label
                 span {{$options.LABELS.TOWN}}
-              .order-item-input 
+              .order-item-input(:class="{ focus: cityFocuse }") 
                 .lbl {{$options.INPUT_TOWN_TOOLTIP_LABEL}}  
                 v-dropdown(
                   
                   :title="$options.PLACEHOLDERS.TOWN"
                   :multiple="false"
-                  :class="{ focus: cityFocuse }"
+                  
                 )
                   template(#title) 
                     input.dropdown-input(
@@ -158,13 +161,13 @@
         .order-form-col.od
 
           label.od-item
-            input(type="radio" v-model="test" value="1" hidden)
+            input(type="radio" v-model="orderDelivery" value="1" hidden)
             svg.icon.icon-radio <use href="#icon-radio"/>
             .od-item-label Самовывоз со склада в Москве
             .od-item-descr Адрес: г. Москва, ул. Кулакова д.20, стр.1А
 
           label.od-item
-            input(type="radio" v-model="test" value="2" hidden)
+            input(type="radio" v-model="orderDelivery" value="2" hidden)
             svg.icon.icon-radio <use href="#icon-radio"/>
             .od-item-label Доставка курьером по Москве
             .od-item-descr 
@@ -177,25 +180,25 @@
                 p Если стоимость ваших покупок составляет <strong>3000 р.</strong> и более, то мы доставим заказ в ваш город <strong>бесплатно!</strong>
 
           label.od-item
-            input(type="radio" v-model="test" value="3" hidden)
+            input(type="radio" v-model="orderDelivery" value="3" hidden)
             svg.icon.icon-radio <use href="#icon-radio"/>
             .od-item-label Доставка по Москве от Яндекс.Go
             .od-item-descr Укажите адрес, стоимость доставки расчитывается автоматически.
 
           label.od-item
-            input(type="radio" v-model="test" value="4" hidden)
+            input(type="radio" v-model="orderDelivery" value="4" hidden)
             svg.icon.icon-radio <use href="#icon-radio"/>
             .od-item-label Самовывоз из пункта выдачи СДЭК
             .od-item-descr Заказ приходит в пункт выдачи. Стоимость расчитывается автоматически.
 
           label.od-item
-            input(type="radio" v-model="test" value="5" hidden)
+            input(type="radio" v-model="orderDelivery" value="5" hidden)
             svg.icon.icon-radio <use href="#icon-radio"/>
             .od-item-label Доставка курьером от СДЭК
             .od-item-descr Укажите адрес, стоимость доставки расчитается автоматически.
 
           label.od-item
-            input(type="radio" v-model="test" value="6" hidden)
+            input(type="radio" v-model="orderDelivery" value="6" hidden)
             svg.icon.icon-radio <use href="#icon-radio"/>
             .od-item-label Самовывоз из пункта выдачи Почты России
             .od-item-descr Заказ приходит в Почтовый пункт. Стоимость фиксированная - 350 р.
@@ -274,6 +277,8 @@
   import vDropdown from '~/components/common/v-dropdown/v-dropdown'
   import vnmSelectList from '~/components/common/forms/vnm-select-list/vnm-select-list'
 
+  import { required, minValue, email } from 'vuelidate/lib/validators'
+
   export default {
     components: {
       inputNumber,
@@ -309,11 +314,21 @@
       TOWN: 'Город',  
       ADDRESS: 'Адрес', 
     },  
-  fetch: async function(){
+  fetch: async function({store}){
     // console.log('cities/getCities')
-    await this.$store.dispatch('cart/getCart')
-  },
+    await store.dispatch('cart/getCart')
 
+  },
+  validations: {
+    name: { required, minValue: minValue(1) },
+    fam: { required, minValue: minValue(1) },
+    tel: { required, minValue: minValue(12) },
+    town: { required, minValue: minValue(12) },
+    address: { required, minValue: minValue(12) },
+    email: { required, email },
+    orderPay: { required },
+    orderDelivery: { required },
+  },    
     data: function () {
       return {
         test: '',
@@ -326,23 +341,52 @@
         town: {},
         address: '',
         orderComment: '',
+        orderDelivery: '',
         orderPay: '',
         citiesSearchStr: '',
         cityFocuse: false,
-        // filteredCities: this.cities,
+        // cart: null,
       }
     },
   computed: {
     cities() {  return this.$store.state.cities.cities || null },
-    cart() {  return this.$store.state.cities.cities || null },
+    cart() {  return this.$store.state.cart.cart || null },
+    currency() { return this.$store.state.settings.currency },
+    currencyShort() {return this.$store.state.settings.currencyShort},
+    totalSaleStr() { 
+      const sum = this.cart.sum
+      const oldsum = this.cart.oldsum
+      if (!oldsum || oldsum <= sum ) return false
+
+      return `${oldsum - sum} ${this.currency}`
+    },
+
   },
-  // mounted(){
-  //   this.filteredCities = this.cities
-  // },
+  mounted(){
+    // const crt = this.$store.getters.getCart()
+    // debugger
+    if (this.storeCart) this.cart = Object.assign({}, this.storeCart)
+  },
   methods: {
     filterCities() { this.$store.dispatch('cities/searchCity', this.citiesSearchStr ) },
     cityFocused() { this.cityFocuse = true },
     cityBlur() { this.cityFocuse = false },
+    async delCartItem(scode) {
+      await this.$store.dispatch('cart/delCartItem', {scode} )
+      await this.$nuxt.refresh()
+      // await this.$store.dispatch('cart/getCart')
+    },
+    itemCost(price, q) { return parseFloat(price, 10) * parseInt(q, 10)},
+    async qualityChange(q, itm) {
+      // console.log('e: ', e)
+      // debugger
+      if (q != itm.q) {
+        await this.$store.dispatch('cart/changeCartItem', {scode: itm.scode, q: q} )
+        await this.$nuxt.refresh()
+      }
+    },
+    priceForOne(price, unit_name) { return `${price} ${this.currencyShort} за ${unit_name}`},
+    goodsPieces(q, unit_name) { return `Товары ${q} ${unit_name}.`},
   },
   watch:{
     town() {

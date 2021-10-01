@@ -44,20 +44,24 @@
               v-stars(:rating="product.stars || 0" )
               product-tags(:tags="labels" :pos-absolute='false')
 
-            .product-slider
-              vue-slick-carousel(
-                v-bind="settingsProductSlider"
-                ref="productSlider"
-                :asNavFor="$refs.productSliderThumbs"
-                
-                )
-                .product-slider-item(
-                  v-for="(item, index ) in product.images"
-                  :key="`slider-${index}`"
-                ) 
-                  .product-slider-item-content
-                    .img-box
-                      img(:src="item")
+            .product-slider.proportional
+              .product-slider-img-box
+                .product-slider-container
+                  vue-slick-carousel(
+                    v-bind="settingsProductSlider"
+                    ref="productSlider"
+                    :asNavFor="$refs.productSliderThumbs"
+                    
+                    )
+                    .product-slider-item(
+                      v-for="(item, index ) in product.images_big"
+                      :key="`slider-${index}`"
+                    ) 
+                      //- .product-slider-item-content
+                        .img-box
+                          img(:src="item")
+                      inner-image-zoom(:src="item")
+
 
         .quick-view-col.info
           .quick-view-price-block
@@ -90,7 +94,7 @@
               .product-delivery-label 
                 span.label {{$options.DELIVERY_LABEL}}
                 span.text {{product.delivery.info}}
-              .btn() {{$options.ADD_TO_BASKET_TEXT}}
+              .btn(@click="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
               nuxt-link.btn.btn-4(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
 
 
@@ -103,6 +107,8 @@ import productTabSizes from '~/components/products/product-tab-sizes/product-tab
 import VueSlickCarousel from 'vue-slick-carousel'
 import productTags from '~/components/products/product-tags/product-tags'
 import inputNumber from '~/components/common/forms/input-number/input-number'
+import InnerImageZoom from 'vue-inner-image-zoom'
+import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
 
 export default {
   name: 'quick-view',
@@ -111,7 +117,8 @@ export default {
     productTabSizes,
     VueSlickCarousel,
     productTags,
-    inputNumber
+    inputNumber,
+    InnerImageZoom
   },
   props: {
     product: {
@@ -225,12 +232,48 @@ export default {
         this.selectedSize = v.value
       }
     },
+    async addToCart() {
+      const val = []
+      val.push({scode: this.selectedSize.scode, q: 1 })
+      // val.push({scode: this.selectedSize.scode, q: 1 })
+      console.log('val: ', val)
+      this.$store.dispatch('cart/addToCart', val)
+      await this.$nuxt.refresh()
+      // this.$modal.hide(`select-size-modal-${this.product.id}`, )
+      // this.closeAddToCartPopup(false)
+    },
+
 
   },
 
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 @import "quick-view";
+ .product-slider.proportional {
+   position: relative;
+   padding-bottom: 100%;
+ }
+ .product-slider-img-box {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   z-index: 1; 
+ }
+ .product-slider-container {
+   border: 1px solid red;
+   width: 100%;
+   height: 100%;
+
+   .slick-slider {height: 100%;}
+   .slick-list {height: 100%;}
+   .slick-track {height: 100%;}
+   .slick-slide {
+     height: 100%;
+     > div {height: 100%;}
+   }
+   .product-slider-item {height: 100%;}
+   
+ }
 </style>

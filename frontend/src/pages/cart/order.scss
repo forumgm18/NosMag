@@ -45,7 +45,10 @@
           .dropdown_title {border-color: currentColor;}  
           .dropdown_arrow {color: currentColor;}
         }
-        .dropdown {margin-bottom: 21px;}
+        .dropdown {
+          --vue-scrollbar-width: 4px;
+          margin-bottom: 21px;
+        }
         .dropdown_title {
           line-height: 1!important;
           border: 1px solid var(--text-color-light);

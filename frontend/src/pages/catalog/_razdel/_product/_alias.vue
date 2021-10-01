@@ -50,9 +50,11 @@
                   v-for="(item, index ) in content.images"
                   :key="`slider-${index}`"
                 ) 
-                  .product-slider-item-content
-                    .img-box
-                      img(:src="item")
+                  //- .product-slider-item-content
+                    //- .img-box
+                      //- img(:src="item")
+                      
+                  inner-image-zoom(:src="item")
 
 
 
@@ -133,7 +135,7 @@
             .product-delivery-label 
               span.label {{$options.DELIVERY_LABEL}}
               span.text Хрен знает когда
-            .btn() {{$options.ADD_TO_BASKET_TEXT}}
+            .btn(@click.prevent="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
           div
             .product-delivery-info-text
               svg.icon.icon-delivery <use href="#icon-delivery"/>
@@ -205,7 +207,8 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import inputNumber from '~/components/common/forms/input-number/input-number'
 import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
 import productTags from '~/components/products/product-tags/product-tags'
-
+import InnerImageZoom from 'vue-inner-image-zoom'
+import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
 export default {
   components:{
     vLoading,
@@ -215,6 +218,7 @@ export default {
     inputNumber,
     productTabSizes,
     productTags,
+    InnerImageZoom,
 
   },
   data: function () {
@@ -439,6 +443,14 @@ export default {
         this.selectedSize = v.value
       }
     },
+    async addToCart() {
+      const val = []
+      val.push({scode: this.selectedSize.scode, q: this.selectedSizeCount })
+      // console.log('val: ', val)
+      this.$store.dispatch('cart/addToCart', val)
+      await this.$nuxt.refresh()
+    },
+
 
   }
 

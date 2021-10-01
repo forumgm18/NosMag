@@ -55,7 +55,7 @@
           if(e.target.closest(rootNode)) return
         }
         // debugger
-        console.log(`[data-root-id=fs-${this.id}]`)
+        // console.log(`[data-root-id=fs-${this.id}]`)
         this.selectOpen = false
       },
       openToggle() {
@@ -70,6 +70,7 @@
         this.$refs.fsList.style.position = 'fixed'
         this.$refs.fsList.style.left = `${left}px`
         this.$refs.fsList.style.top = `${top}px`
+        this.$refs.fsList.style.minWidth = `${parentBox.width}px`
 
       },
       clearSelection(e) {

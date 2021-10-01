@@ -12,7 +12,8 @@
   &-table{
     flex-grow: 1;
     &-row {
-      padding: 25px 0;
+      position: relative;
+      padding: 25px 50px 25px 0;
       margin-right: 25px;
       max-width: 1000px;
       display: flex;
@@ -26,6 +27,19 @@
 
           .cart-table-quantity {padding: 0 1.143em;}
           .cart-table-price {justify-content: center;}
+      }
+      &-del{
+        position: absolute;
+        top: 8px;
+        right: 0;
+        padding: 2px;
+        cursor: pointer;
+        line-height: 1;
+        font-size: 10px;
+        .icon {
+          display: block;
+        }
+
       }
     }
     &-product {
@@ -156,6 +170,7 @@
       line-height: 1;
       color: var(--base-color2);
       white-space: nowrap;
+      &.bold {font-weight: bold;}
     }
     &-delivery {
       // font-weight: 900;
