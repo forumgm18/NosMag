@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./frontend
+    command: yarn run dev
+    stdin_open: true
+    tty: true
+    environment:
+      - BROWSER_BASE_URL=${BROWSER_BASE_URL_LOCAL}
+      - NODE_ENV:development
+
+    volumes:
+      - ./frontend/src:/usr/src/app/src
+
+  nginx:
+    volumes:
+      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/log:/var/log/nginx

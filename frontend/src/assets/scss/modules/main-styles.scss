@@ -191,6 +191,10 @@ p {color: var(--text-color-default)}
   line-height: 1;
   margin-bottom: 1.5em;
   text-transform: uppercase;
+    @include media-max-width2($lg) { font-size: 22px;}
+    @include media-max-width2($md) { font-size: 18px;}
+    @include media-max-width2($sm) { font-size: 14px;}
+
 }
 .img-box {
   position: absolute;

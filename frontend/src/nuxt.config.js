@@ -84,6 +84,7 @@ export default {
   plugins: [
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
+    '~/plugins/vuelidate.js',
     // { src: '~/plugins/paginate.js', mode: 'client' },
     // { src: '~/plugins/popper.js', mode: 'client' },
     // { src: '~~/plugins/vuebar.js', mode: 'client' },

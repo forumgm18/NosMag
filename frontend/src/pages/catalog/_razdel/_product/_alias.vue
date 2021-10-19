@@ -53,8 +53,8 @@
                   .product-slider-item-content
                     .img-box
                       //- img(:src="item")
-                      
-                      inner-image-zoom(:src="item")
+                      .test
+                        inner-image-zoom(:src="item")
 
 
 
@@ -461,4 +461,7 @@ export default {
 
 <style lang="scss">
 @import "product-page";
+.test {
+  position: static;
+}
 </style>

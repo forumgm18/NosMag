@@ -25,8 +25,6 @@ services:
       - SERVER_BASE_URL=${SERVER_BASE_URL}
       - NODE_ENV:production
       # - NODE_ENV:development
-    volumes:
-      - .././images:/usr/src/app/src/static/images
 
     networks:
       - nosmag-network
