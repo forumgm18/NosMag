@@ -17,16 +17,17 @@ services:
     environment:
       - NUXT_HOST=${NUXT_HOST}
       - NUXT_PORT=3000
-      # - API_PROTOCOL=${AXIOS_API_PROTOCOL}
       - API_PREFIX=${AXIOS_API_PREFIX}
-      # - API_HOST=${AXIOS_API_HOST}
-      # - API_PORT=${AXIOS_API_PORT}
       - BROWSER_BASE_URL=${BROWSER_BASE_URL}
       - SERVER_BASE_URL=${SERVER_BASE_URL}
       - NODE_ENV:production
       # - NODE_ENV:development
     volumes:
-      - .././images:/usr/src/app/src/static/images
+      # - test_volume:/usr/src/app/src/static/images
+      # - test_vol:/usr/src/app/static/imag:ro
+      # - ./images:/usr/src/app/src/static/images
+      - .././images:/usr/src/app/static/images
+      # - /home/store/Projects/NosMag/NosMag-app/images:/usr/src/app/src/static/images
 
     networks:
       - nosmag-network
@@ -43,9 +44,15 @@ services:
     networks:
       - nosmag-network
 
-#volumes:
-#  mongodb_api:
-#  mongodb_auth:
+# volumes:
+#   # test_volume:
+#   #   external: true
+#   test_vol:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: /home/store/Projects/NosMag/NosMag-app/images
 
 networks:
   nosmag-network:
