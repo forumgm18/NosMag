@@ -1,0 +1,32 @@
+<template lang="pug">
+  //vnm-checkbox.filter-item(v-model="model" :value="val")
+    //label.checkbox(data-checked="value")
+      input( hidden   type="checkbox"  :value="val"  v-model="model" )
+      span.checkbox_text-block
+        span.checkbox_icon
+        span.checkbox_text
+          slot
+</template>
+
+<script>
+import vnmCheckbox from "~/components/common/forms/vnm-checkbox/vnm-checkbox"
+export default {
+  name: 'FilterCheckboxItem',
+  props: [ 'value', 'val' ],
+  components: {vnmCheckbox},
+  computed: {
+    model: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      },
+    },
+  },
+}
+</script>
+
+<style scoped>
+
+</style>

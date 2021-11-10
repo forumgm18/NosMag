@@ -1,0 +1,35 @@
+.popup {
+  display: none;
+  //position: absolute;
+  //position: relative;
+
+  //overflow: hidden;
+  width: 0;
+  height: 0;
+  &.show {
+    display: block;
+  }
+  &-close{
+    //z-index: -1;
+  }
+  &-body {
+    background-color: #fff;
+    padding: 1em 1.5em;
+    // border-radius: 14px;
+    border-radius: 5px;
+    min-width: fit-content;
+    height: fit-content;
+    position: absolute;
+    z-index: 10;
+  }
+  &-down {
+    .popup-body {top: 100%;}
+  }
+  &-up {
+    .popup-body {
+      bottom: 100%;
+      margin-bottom: 5px;
+    }
+
+  }
+}

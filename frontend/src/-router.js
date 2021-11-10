@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import RootPage from '~/pages/index'
-// import Catalog from '~/pages/catalog/index'
+import Alias from '~/pages/_alias/index.vue'
 
 Vue.use(Router)
 
@@ -12,13 +12,13 @@ export function createRouter() {
     // mode: 'abstract',
     routes: [
       {
-        path: '*',
+        path: '/',
         component: RootPage
       },
-      // {
-      //   path: '/catalog',
-      //   component:
-      // },
+      {
+        path: '/:alias',
+        component: Alias
+      },
     ]
   })
 }

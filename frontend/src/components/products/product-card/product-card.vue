@@ -103,7 +103,8 @@ export default {
     return {
       isQuickView: false,
       sale: 0,
-      mocCatalogLink: '/catalog/razdel/sub_razdel/',
+      // mocCatalogLink: '/catalog/razdel/sub_razdel/',
+      mocCatalogLink: '/',
       selectedSize: null,
       selectedSizeCount: 1,
       addToCartPopup: false

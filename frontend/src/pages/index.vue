@@ -1,116 +1,99 @@
 <template lang="pug">
-  main.main-page
-    section.main-top-section
-      .container
-        vue-slick-carousel.main-slider(
-          id="product-slider"
-          v-bind="settingsTopSlider"
+  div
+    pre-loader.in-page(v-if="$fetchState.pending")
+    main.main-page(v-else)
+      section.main-top-section
+        .container
+          vue-slick-carousel.main-slider(
+            id="product-slider"
+            v-bind="settingsTopSlider"
+            ref="c1"
+            :asNavFor="$refs.c2"
+            :focusOnSelect="true"
+          )
+            .main-slider-item
+              div.main-slider-content Рекламный баннер 100
+            .main-slider-item
+              div.main-slider-content Рекламный баннер 2
+            .main-slider-item
+              div.main-slider-content Рекламный баннер 3
+
+            template( v-slot:prevArrow)
+              button.main-slider-arrow.prev
+            template( v-slot:nextArrow)
+              button.main-slider-arrow.next
+
+
+
+          .main-tile(v-if="links")
+            //- nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`catalog/${lnk.link}`")
+            nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`/${lnk.link}`")
+              .main-tile-item-img
+                .img-box.hover
+                  .button-select {{$options.SELECT_LINK_TEXT}}
+                .img-box
+                  picture
+                    source( media="(min-width: 993px)" :srcset="`${lnk.images.xl}, ${lnk.images.xl_x2} x2`")
+                    source( media="(max-width: 992px)" :srcset="`${lnk.images.lg}, ${lnk.images.lg_x2} x2`")
+                    source( media="(max-width: 576px)" :srcset="`${lnk.images.sm}, ${lnk.images.sm_x2} x2`")
+                    img(:src="lnk.images.sm" :alt="lnk.name")
+              .main-tile-item-title {{lnk.name}}
+
+
+
+      section.main-popular.container
+        h2.main-section-title {{$options.SECTION_POPULAR_TITLE}}
+        vue-slick-carousel.main-popular-slider(
+          v-if="showcase"
+          id="main-popular-slider"
+          v-bind="settingsPopularSlider"
           ref="c1"
           :asNavFor="$refs.c2"
           :focusOnSelect="true"
         )
-          .main-slider-item
-            div.main-slider-content Рекламный баннер 100
-          .main-slider-item
-            div.main-slider-content Рекламный баннер 2
-          .main-slider-item
-            div.main-slider-content Рекламный баннер 3
 
+          product-card(
+            v-for="prod of showcase"
+            :key="prod.id"
+            :product="prod"
+            :is-btn="false"
+            :is-sizes="false"  )
+          //div( v-for="(prod, i) of showcase" :key="prod.id") {{i}}
           template( v-slot:prevArrow)
-            button.main-slider-arrow.prev
+            button.main-popular-slider-arrow.prev
           template( v-slot:nextArrow)
-            button.main-slider-arrow.next
+            button.main-popular-slider-arrow.next
 
 
 
-        .main-tile(v-if="links")
-          nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`catalog/${lnk.link}`")
+      section.main-popular.container
+        h2.main-section-title {{$options.SECTION_LINK1_TITLE}}
+        .main-tile(v-if="links1")
+          //- nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :to="`catalog/${lnk1.link}`")
+          nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :to="`/${lnk1.link}`")
             .main-tile-item-img
               .img-box.hover
-                .button-select Выбрать
+                .button-select {{$options.SELECT_LINK_TEXT}}
               .img-box
                 picture
-                  source( media="(min-width: 993px)" :srcset="`${lnk.images.xl}, ${lnk.images.xl_x2} x2`")
-                  source( media="(max-width: 992px)" :srcset="`${lnk.images.lg}, ${lnk.images.lg_x2} x2`")
-                  source( media="(max-width: 576px)" :srcset="`${lnk.images.sm}, ${lnk.images.sm_x2} x2`")
-                  img(:src="lnk.images.sm" :alt="lnk.name")
-            .main-tile-item-title {{lnk.name}}
+                  source( media="(min-width: 993px)" :srcset="`${lnk1.images.xl}, ${lnk1.images.xl_x2} x2`")
+                  source( media="(max-width: 992px)" :srcset="`${lnk1.images.lg}, ${lnk1.images.lg_x2} x2`")
+                  source( media="(max-width: 576px)" :srcset="`${lnk1.images.sm}, ${lnk1.images.sm_x2} x2`")
+                  img(:src="lnk1.images.sm" :alt="lnk1.name")
+            .main-tile-item-title {{lnk1.name}}
 
 
 
-    section.main-popular.container
-      h2.main-section-title Популярное
-      vue-slick-carousel.main-popular-slider(
-        v-if="showcase"
-        id="main-popular-slider"
-        v-bind="settingsPopularSlider"
-        ref="c1"
-        :asNavFor="$refs.c2"
-        :focusOnSelect="true"
-      )
-
-        product-card(
-          v-for="prod of showcase"
-          :key="prod.id"
-          :product="prod"
-          :is-btn="false"
-          :is-sizes="false"  )
-        //div( v-for="(prod, i) of showcase" :key="prod.id") {{i}}
-        template( v-slot:prevArrow)
-          button.main-popular-slider-arrow.prev
-        template( v-slot:nextArrow)
-          button.main-popular-slider-arrow.next
-
-
-
-    section.main-popular.container
-      h2.main-section-title Узнайте больше
-      .main-tile
-
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Размеры носков<br>(как измерить и таблица)
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Отзывы<br>покупателей
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Наши партнеры<br>(самый крупный<br>маркетплейс с носками)
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Конструктор<br>подбора
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Больше пар -<br>больше скидка!
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Накопительная скидка<br>до 40%
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Обмен и возврат<br>товара
-        .main-tile-item
-          .main-tile-item-img
-            .img-box
-              .main-tile-item-content Обмен и возврат<br>товара
-
-
-
-    section.main-reclama.container
-      .main-slider-item
-        div.main-slider-content Рекламный баннер
+      section.main-reclama.container
+        .main-slider-item
+          div.main-slider-content Рекламный баннер
 
 
 </template>
 
 <script>
 // import ProductList from '~/components/products/product-list/product-list'
+import preLoader from '~/components/common/preloader/preloader'
 import ProductCard from '~/components/products/product-card/product-card'
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
@@ -118,7 +101,9 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
-  components: { VueSlickCarousel,
+  components: { 
+    preLoader,
+    VueSlickCarousel,
     ProductCard,
     // ProductList
   },
@@ -177,17 +162,24 @@ export default {
       loading: true
     }
   },
-  asyncData: async function ({app, store, params, error}) {
-    // console.log('process.env', process.env)
-    // console.log('index params:', params)
-
+  SELECT_LINK_TEXT: 'Выбрать',
+  SECTION_POPULAR_TITLE: 'Популярное',
+  SECTION_LINK1_TITLE: 'Узнайте больше',
+  // asyncData: async function ({app, store, params, error}) {
+  //   // this.loading = true
+  //   await store.dispatch('fetchContent', params.alias || '')
+  //   if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
+  //   // this.loading = false
+  // },
+  // async fetch({app, store, params, error}) {
+  async fetch() {
+    // console.log('route: ', this.$route )
     // this.loading = true
-    // await this.checkToken()
-    // const path = this.$route.path.split('/')
-    // const alias = path[path.length - 1]
-    // await this.$store.dispatch('fetchContent', alias)
-    await store.dispatch('fetchContent', params.alias || '')
-    if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
+    // await store.dispatch('fetchContent', params.alias || '')
+    await this.$store.dispatch('fetchContent', this.$route.params.alias || '')
+
+    // if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
+    if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
     // this.loading = false
   },
 
@@ -195,6 +187,7 @@ export default {
     content: s => s.$store.getters['getContentData'],
     showcase() { return this.content.showcase},
     links() { return this.content.hasOwnProperty('links') ? this.content.links : undefined},
+    links1() { return this.content.hasOwnProperty('links1') ? this.content.links1 : undefined},
   },
 
   mounted() {
@@ -225,6 +218,8 @@ export default {
 
 <style lang="scss">
 @import 'main-page';
+.main-popular-slider .slick-slide {padding: 0 30px;}
+
 /*.product-card {*/
 /*  !*border: 1px solid red;*!*/
 /*  !*padding: 16px;*!*/

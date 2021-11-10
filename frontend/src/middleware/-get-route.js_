@@ -1,0 +1,25 @@
+import axios from 'axios'
+
+// export default function ({ route }) {
+export default async function ({store, route }) {
+  // return axios.post('http://my-stats-api.com', {
+  //   url: route.fullPath
+  // })
+  const alias = route.path.slice(1)
+  // console.log('middleware-route: ', route)
+  // console.log('middleware-router: ', router)
+  
+  await store.dispatch('fetchContent', alias)
+  // console.log('middleware-store.content: ', store.state)
+
+  // console.log('middleware-store.app: ', store.app)
+  const cp = `~/page-components/${store.state.content.type}/index.vue`
+  console.log('middleware-cp: ', cp)
+
+  store.app.router.replace({
+    name: alias,
+    path: `/${alias}`,
+    // component: `~/page-components/${store.state.content.type}/index.vue`
+    component: cp
+  })
+}

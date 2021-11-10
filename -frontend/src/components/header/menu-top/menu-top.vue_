@@ -1,0 +1,154 @@
+<template lang="pug">
+  .menu-container
+    .menu-close(@click="menuClose")
+    burger
+    //.menu-block(@mouseleave="menuClose")
+    .menu-block
+      ul#menu.menu
+        li.menu-item(
+          v-for="item of menuItems"
+          :key="item.name"
+          @mouseover="itemMouseEnter"
+          @mouseleave="itemMouseLeave"
+          )
+          div.menu-link(@click.prevent="menuItemClick")
+            .menu-arrow-next
+            span {{item.name}}
+          scroll-bar.submenu-block
+            ul.submenu.lv-2
+              li.submenu-link.title(@click="mobileMenuBack")
+                .menu-arrow-next.back
+                //span {{item.name}}
+                span Главное меню
+              li.submenu-item(
+                v-for="subitem of item.items"
+                :key="subitem.id"
+                @click.prevent="mobileSubMenuOpen"
+              )
+                nuxt-link.submenu-link.title(v-if="subitem.itemsHide" :to="subitem.link" @click.native="submenuItemClick") {{subitem.name}}
+                .submenu-link.title(v-else )
+                  .menu-arrow-next
+                  span {{subitem.name}}
+
+                ul.submenu.lv-3(v-if="!subitem.itemsHide")
+                  //li.submenu-link.title(@click="mobileMenuBack")
+                    .menu-arrow-next.back
+                    span {{subitem.name}}
+                  li.submenu-item(v-for="l3 of subitem.items" :key="l3.id")
+                    nuxt-link.submenu-link(:to="`/${l3.link}`" @click.native="submenuItemClick") {{l3.name}}
+
+</template>
+
+<script>
+import menuFunc from '~/utils/main-scripts'
+import burger from '~/components/header/burger/burger'
+import ScrollBar from 'vue2-scrollbar'
+export default {
+  name: 'MenuTop',
+  props: ['menuItems'],
+  components: { burger, ScrollBar  },
+  computed: {
+    // menuItems: s => s.$store.getters['menu/menuItems'],
+    // menuItems() {
+    //   const items = this.$store.getters['menu/menuItems']
+    //   items[0].items.forEach(el => el.itemsHide = true)
+    //   return items
+    // },
+  },
+  // async mounted() {
+  //   // console.log('this.menuItems: ', this.menuItems )
+  //   // console.log('this.menuItems.length: ', this.menuItems.length )
+  //   // if (this.menuItems.length) await this.$store.dispatch('menu/fetch')
+  // },
+  methods: {
+    menuClose() { menuFunc.menuState(false) },
+
+    menuItemClick(e) {
+      // console.log('menuItemClick')
+      e.stopPropagation()
+      const item = e.currentTarget.closest('.menu-item')
+      const isNotOpen = !item.classList.contains('open')
+      const menuItemsOpen = document.querySelectorAll('.menu-item.open')
+      if (menuItemsOpen) menuItemsOpen.forEach(el => el.classList.remove('open'))
+      if (isNotOpen) item.classList.add('open')
+    },
+    itemMouseEnter(e) {
+      // console.log('itemMouseEnter')
+      if (window.innerWidth < 769) return
+
+      // const setLeft = (el) => {
+      //   const cs = getComputedStyle(document.documentElement)
+      //   const w = parseInt(cs.getPropertyValue('--menu-max-width'), 10)
+      //   const elCoords = el.getBoundingClientRect()
+      //   const l = document.documentElement.clientWidth - (elCoords.left + w) - 15
+      //   return l < 0 ? l : 0
+      // }
+      const menuItem = e.currentTarget
+      // menuItem.classList.add('hover')
+      // const subMenu = menuItem.querySelector('.submenu')
+      // if (subMenu) subMenu.style.left = `${setLeft(menuItem)}px`
+      menuItem.classList.add('open')
+    },
+    itemMouseLeave(e) {
+      // console.log('itemMouseLeave')
+      if (window.innerWidth < 769) return
+      // const subMenu = e.currentTarget.querySelector('.submenu')
+      // if (subMenu) subMenu.style.left = 'initial'
+      e.currentTarget.classList.remove('open')
+    },
+    mobileMenuBack(e) {
+      // console.log('mobileMenuBack')
+      e.preventDefault()
+      e.stopPropagation()
+      const openLi = e.currentTarget.closest('.open')
+      // debugger
+      if (openLi) openLi.classList.remove('open')
+    },
+    // mobileSubMenuOpen(e) {
+    //   // console.log('mobileSubMenuOpen')
+    //   const canSubmenu = !!e.currentTarget.querySelector('.submenu')
+    //   if (canSubmenu) e.currentTarget.classList.add('open')
+    // },
+    mobileSubMenuOpen(e) {
+      // console.log('mobileSubMenuOpen')
+      const currentItemIsOpen = e.currentTarget.classList.contains('open')
+      // console.log('e.currentTarget.classList', e.currentTarget.classList)
+      // console.log('currentItemIsOpen', currentItemIsOpen)
+      const parentSubmenu = e.currentTarget.closest('.submenu')
+      if (parentSubmenu) {
+        const openedItems = parentSubmenu.querySelectorAll('.open')
+        if (openedItems) openedItems.forEach(el => el.classList.remove('open'))
+        const canSubmenu = !!e.currentTarget.querySelector('.submenu')
+        if (canSubmenu) {
+          if (!currentItemIsOpen) e.currentTarget.classList.add('open')
+
+
+        }
+
+
+      }
+
+    },
+
+    submenuItemClick(e) {
+      // console.log('submenuItemClick')
+      // if (process.browser ) {
+      //   if (window.innerWidth < 769) return
+      // }
+      const subItem = e.currentTarget
+      const menu = document.getElementById('menu')
+      if (menu) {
+        const openedItem = menu.querySelectorAll('.open')
+        // console.log('op:', openedItem )
+        if (openedItem) openedItem.forEach(el => el.classList.remove('open'))
+      }
+      this.menuClose()
+    }
+  }
+
+}
+</script>
+
+<style lang="scss">
+@import "menu";
+</style>

@@ -55,6 +55,7 @@ export default {
   serverMiddleware: [],
   router: {
     // prefetchLinks: false,
+    // middleware: 'get-route'
   },
   // Customize the progress-bar color
   // loading: {
@@ -99,8 +100,36 @@ export default {
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  // components: true,
+components: [
+    {
+      path: '~/components/common/',
+      prefix: ''
+    },
+    {
+      path: '~/components/header/',
+      prefix: ''
+    },
+    {
+      path: '~/components/footer/',
+      prefix: ''
+    },
+    {
+      path: '~/components/filters/',
+      prefix: ''
+    },
+    {
+      path: '~/components/products/',
+      prefix: ''
+    },
+    {
+      // path: '~/components/pages/',
+      path: '~/page-components/',
+      prefix: 'page',
+      pattern: '**/*.vue'
+    },
 
+  ],
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
@@ -123,6 +152,7 @@ export default {
     // 'cookie-universal-nuxt',
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
     '@nuxtjs/style-resources',
+    '@blokwise/dynamic',
     // '@nuxtjs/router',
     // '@nuxtjs/universal-storage',
   ],

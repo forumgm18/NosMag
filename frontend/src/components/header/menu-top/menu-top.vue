@@ -96,12 +96,13 @@ export default {
   },
   methods: {
     translit(v){
-      const catalog = '/catalog/'
-      if (v.toUpperCase().includes('НАБОР')) return catalog + 'sets/'
-      if (v.toUpperCase().includes('МУЖЧ')) return catalog + 'mens/'
-      if (v.toUpperCase().includes('ЖЕН')) return catalog + 'womans/'
-      if (v.toUpperCase().includes('ДЕТ')) return catalog + 'childrens/'
-      return ''
+      // const catalog = '/catalog/'
+      // if (v.toUpperCase().includes('НАБОР')) return catalog + 'sets/'
+      // if (v.toUpperCase().includes('МУЖЧ')) return catalog + 'mens/'
+      // if (v.toUpperCase().includes('ЖЕН')) return catalog + 'womans/'
+      // if (v.toUpperCase().includes('ДЕТ')) return catalog + 'childrens/'
+      // return ''
+      return '/'
     },
     menuClose() {
       menuFunc.menuState(false)

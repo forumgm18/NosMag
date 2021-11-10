@@ -85,7 +85,7 @@ export default {
       if (this.minValue) vObj.minValue = minValue(this.minValue)
       if (this.maxValue) vObj.maxValue = maxValue(this.maxValue)
     }
-    console.log('vObj: ', vObj)
+    // console.log('vObj: ', vObj)
     return { locValue: vObj }      
   },
 

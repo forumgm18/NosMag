@@ -1,0 +1,206 @@
+.razdel{
+  &-page{
+    padding-bottom: 100px;
+  }
+  &-filter {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+
+    //&-collapse {
+    //  --m: 6px;
+    //  --col: 7;
+    //
+    //  //border: 1px solid red;
+    //  display: flex;
+    //  align-items: center;
+    //  flex-wrap: wrap;
+    //  flex-grow: 1;
+    //  transition: max-height .3s;
+    //  max-height: 100vh;
+    //  overflow: hidden;
+    //  margin-left: calc(-1*var(--m));
+    //  //margin-right: calc(-1*var(--m));
+    //  margin-right: calc(3*var(--m));
+    //    @include media-max-width2(1600) {--col: 6;}
+    //    @include media-max-width2($xlg) {--col: 5;}
+    //    @include media-max-width2($lg) {--col: 4;  margin-right: var(--m);}
+    //    @include media-max-width2($md - 1) {
+    //      display: none;
+    //      margin-right: 0;
+    //      margin-left: 0;
+    //    }
+    //
+    //    &.open {
+    //      @include media-max-width2($md) {
+    //        display: block;
+    //      }
+    //
+    //    }
+    //
+    //
+    //  &.collapse {
+    //    @include media-min-width2($md) {max-height: 48px;}
+    //  }
+    //
+    //  &-btn {
+    //    //border: 1px solid red;
+    //    font-size: 14px;
+    //    margin-top: 1em;
+    //    height: 1.2em;
+    //    width: 1.2em;
+    //    display: flex;
+    //    align-items: center;
+    //    justify-content: center;
+    //    flex-shrink: 0;
+    //    margin-left: auto;
+    //    position: relative;
+    //    color: var(--text-color-default);
+    //    cursor: pointer;
+    //    transform: rotate(-90deg);
+    //    transition: .3s;
+    //    @include media-max-width2($md - 1) {display: none}
+    //
+    //    &.collapse {
+    //      transform: rotate(90deg);
+    //    }
+    //
+    //      .icon {
+    //        font-size: inherit;
+    //        color: inherit;
+    //      }
+    //
+    //  }
+    //}
+    //.btn-icon {
+    //  font-size: 30px;
+    //  &:not(:last-child){margin-right: 1em;}
+    //}
+  }
+}
+
+.filter {
+  display: none;
+
+  @include media-max-width2($md - 1) {
+    //border: 1px solid red;
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+    z-index: 1100;
+    height: 70vh;
+    width: 100%;
+    max-width: #{$sm}px;
+    background-color: #fff;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px 12px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+  }
+
+  &-close {
+    display: none;
+    &.open{
+      display: block;
+    }
+  }
+  &-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1;
+    span {
+      text-transform: uppercase;
+    }
+    .btn-icon {
+      font-size: .5em!important;
+      .icon-close { font-size: inherit;}
+    }
+  }
+  &-btn-block{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+    font-size: 30px;
+    @include media-min-width2($md) {display: none}
+    @include media-max-width2($sm) {font-size: 16px;}
+    .btn-icon {
+      font-size: inherit;
+      .icon { font-size: inherit;}
+    }
+
+  }
+
+}
+
+.filter-option_item-color {
+  font-size: 1.3333em;
+  width: 1em;
+  height: 1em;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  margin-right: .37em;
+  &.is-border {
+    border-color: var(--filter-border-color)!important;
+  }
+}
+
+.multicolor {
+  background: linear-gradient(to right, red, orange, yellow, green, cyan, blue, violet);
+}
+.black-white {
+  background: linear-gradient(to right, #000 0%, #000 50%, #fff 50%, #fff 100%)
+}
+
+.sort-block{
+  position: relative;
+  font-size: inherit;
+  margin-right: 1em;
+}
+.mobile-sort {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 1000;
+  padding: 16px 14px;
+  border-radius: 5px;
+  border: 1px solid var(--base-color2);
+  background-color: #fff;
+    &.open{
+      display: block;
+    }  
+  .radiobox_text {white-space: nowrap;}    
+}
+
+.product-list {
+  --col: 4;
+  --m: 9px;
+  @include media-max-width2(1700) {--col: 3;}
+  @include media-max-width2(991) {--col: 2;}
+}
+
+
+
+.pagination {
+  margin-top: 70px;
+  &-descr {
+    width: min-content;
+    width: fit-content;
+    margin: 0 auto;
+    margin-bottom: 50px;
+  }
+  .btn {
+    max-width: 200px;
+    margin: 0 auto;
+
+  }
+}
+

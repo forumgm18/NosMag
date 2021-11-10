@@ -1,0 +1,32 @@
+<template lang="pug">
+  .product-list
+    product-item(
+      v-for="prod of productList"
+      :key="prod.id"
+      :product="prod"
+      :is-btn="false"
+      :is-sizes="false"
+    )
+</template>
+
+<script>
+import ProductItem from '~/components/products/product-item'
+export default {
+  name: 'ProductList',
+  components: { ProductItem },
+  async fetch() {
+    await this.$store.dispatch('products/fetch')
+  },
+
+  data: () => ({
+    // pr: null
+  }),
+  computed: {
+    productList: s => s.$store.getters['products/products']
+  },
+}
+</script>
+
+<style scoped>
+
+</style>
