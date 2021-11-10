@@ -15,6 +15,7 @@ services:
 
     volumes:
       - ./frontend/src:/usr/src/app/src
+      - .././images:/usr/src/app/src/static/images
 
   nginx:
     volumes:

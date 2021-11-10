@@ -26,8 +26,7 @@
 
 
           .main-tile(v-if="links")
-            //- nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`catalog/${lnk.link}`")
-            nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`/${lnk.link}`")
+            nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`catalog/${lnk.link}`")
               .main-tile-item-img
                 .img-box.hover
                   .button-select {{$options.SELECT_LINK_TEXT}}
@@ -69,8 +68,7 @@
       section.main-popular.container
         h2.main-section-title {{$options.SECTION_LINK1_TITLE}}
         .main-tile(v-if="links1")
-          //- nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :to="`catalog/${lnk1.link}`")
-          nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :to="`/${lnk1.link}`")
+          nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :to="`catalog/${lnk1.link}`")
             .main-tile-item-img
               .img-box.hover
                 .button-select {{$options.SELECT_LINK_TEXT}}
