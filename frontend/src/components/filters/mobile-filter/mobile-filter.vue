@@ -87,8 +87,8 @@
 
 <script>
   import ScrollBar from 'vue2-scrollbar'
-  import vnmSelectList from '~/components/common/forms/vnm-select-list/vnm-select-list'
-  import inputNumber from '~/components/common/forms/input-number/input-number'
+  import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
+  import inputNumber from '~/components/forms/input-number/input-number'
 
   export default {
     name: 'mobile-filter',

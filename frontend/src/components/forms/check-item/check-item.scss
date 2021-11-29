@@ -1,0 +1,48 @@
+.check-item {
+  font-size: 16px;
+  color: var(--text-color-default);
+  cursor: pointer;
+  flex-shrink: 0;
+  flex-grow: 1;
+  &-body {
+    display: flex;
+    align-items: center;
+    font-size: inherit;
+    color: inherit;
+    border-radius: 5px;
+    border: 1px solid var(--text-color-light);
+    background-color: transparent;
+    transition: .3s;
+    padding: 1.8125em 1.625em;
+  }
+  &-icon{
+    font-size: 3.75em;
+    flex-shrink: 0;
+  }
+  &-text {
+    font-size: inherit;
+    color: inherit;
+    padding-left: 1.125em;
+    flex-grow: 1;
+
+  }
+  &-title {
+    font-size: 1.25em;
+    font-weight: 500;
+    color: inherit;
+    margin-bottom: 0.4em;
+  }
+  &-descr {
+    font-size: inherit;
+    color: var(--text-color-light);
+  }
+
+}
+input:checked {
+  & + .check-item-body {
+    background-color: var(--base-color1);
+    border-color: var(--base-color1);
+    color: #fff;
+    .check-item-descr {color: inherit;}
+  }
+}

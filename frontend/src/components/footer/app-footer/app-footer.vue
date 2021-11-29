@@ -13,7 +13,7 @@
               .menu-arrow-next.down
             .footer-collapse-body
               .footer-address
-                p(v-for="(cts, i) in footer.contacts.lines")
+                p(v-for="(cts, i) in footer.contacts.lines" :key="i")
                   span.footer-address-label(v-if="cts.header") {{cts.header}}
                   a(v-if="cts.link" :href="cts.link") {{cts.name}}
                   span.footer-address-text(v-else) {{cts.name}}
@@ -23,7 +23,7 @@
               span {{fmCol1.header}}
               .menu-arrow-next.down
             .footer-collapse-body
-              nuxt-link.footer-menu-link(v-for="(lnk, k) in fmCol1.links" :to="`/${lnk.alias}`") {{lnk.name}}
+              nuxt-link.footer-menu-link(v-for="(lnk, k) in fmCol1.links" :key="k" :to="`/${lnk.alias}`") {{lnk.name}}
 
         .footer-menu-col
           .footer-collapse(:class="{show: fColShow3}")
@@ -31,11 +31,11 @@
               span {{fmCol2.header}}
               .menu-arrow-next.down
             .footer-collapse-body
-              nuxt-link.footer-menu-link(v-for="(lnk, k) in fmCol2.links" :to="`/${lnk.alias}`") {{lnk.name}}
+              nuxt-link.footer-menu-link(v-for="(lnk, k1) in fmCol2.links" :key="k1" :to="`/${lnk.alias}`") {{lnk.name}}
 
           .footer-mobile-sb
             .footer-social
-              a.footer-social-link(v-for="(s, y) in footer.ilinks" :href="s.link")
+              a.footer-social-link(v-for="(s, y) in footer.ilinks" :key="y" :href="s.link")
                 svg.icon(:class="s.name")
                   use(:href="`#${s.name}`")
             a.footer-yamarket-link(:href="footer.yamarket.link")
@@ -45,7 +45,7 @@
         .footer-menu-col
           .footer-title.hide-mobile {{footer.oplata.header}}
           .footer-oplata
-            .footer-oplata-item(v-for="(opl, l) in footer.oplata.items")
+            .footer-oplata-item(v-for="(opl, l) in footer.oplata.items" :key="l")
               a.footer-oplata-link(v-if="opl.link")
                 svg.icon(:class="opl.icon")
                   use(:href="`#${opl.icon}`")
@@ -56,7 +56,7 @@
 
 
       .footer-policy-block
-        nuxt-link.footer-policy-link(v-for="(t, ti) in footer.tinks" :to="t.alias") {{t.name}}
+        nuxt-link.footer-policy-link(v-for="(t, ti) in footer.tinks" :key="ti" :to="t.alias") {{t.name}}
       .footer-copyright-block {{footer.copyright}}
 
 </template>

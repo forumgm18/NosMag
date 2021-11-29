@@ -13,7 +13,7 @@ export const mutations = {
 
 export const actions = {
   setNewSID ({ store, commit, rootState }) {
-    commit('setSID', this.$generateUUID)
+    commit('setSID', this.$generateUUID())
   },
 }
 

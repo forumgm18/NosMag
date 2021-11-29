@@ -102,6 +102,7 @@ export default {
       if (v.toUpperCase().includes('ЖЕН')) return catalog + 'womans/'
       if (v.toUpperCase().includes('ДЕТ')) return catalog + 'childrens/'
       return ''
+      // return '/'
     },
     menuClose() {
       menuFunc.menuState(false)

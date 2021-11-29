@@ -32,7 +32,7 @@
 <script>
   import dropDown from '@/components/common/drop-down/drop-down'
   export default {
-    name: 'product-tab-sizes',
+    // name: 'product-tab-sizes',
     components : {dropDown},
     props: {
       sizes: {

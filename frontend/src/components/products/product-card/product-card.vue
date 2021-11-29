@@ -7,7 +7,7 @@
           div.img-container(v-if="product.images.length")
             .product-img-hover( v-for="img of product.images" :key="img.id")
               .a
-                img(:src="img" :alt="product.comment" loading="lazy" itemprop = "image")
+                img(:src="`${imgPath}${img.toLowerCase()}`" :alt="product.comment" loading="lazy" itemprop = "image")
           svg.icon.icon-non-img(v-else) <use href="#icon-non-img"/>
           product-tags(:tags="labels")
           .btn-quick-view(
@@ -70,14 +70,12 @@
 
 <script>
 import VClamp from 'vue-clamp'
-import vStars from '~/components/common/stars/stars'
-import productTags from '~/components/products/product-tags/product-tags'
-import quickView from '~/components/products/quick-view/quick-view'
-import appPopup from '~/components/common/popup/app-popup'
 
 export default {
-  name: 'ProductCard',
-  components: { VClamp, vStars, quickView, productTags, appPopup },
+  name: 'product-card',
+  components: { 
+    VClamp, 
+    },
   props: {
     product: {
       type: Object,
@@ -103,7 +101,9 @@ export default {
     return {
       isQuickView: false,
       sale: 0,
+      imgPath: '/images/catalog/',
       mocCatalogLink: '/catalog/razdel/sub_razdel/',
+      // mocCatalogLink: '/',
       selectedSize: null,
       selectedSizeCount: 1,
       addToCartPopup: false

@@ -1,0 +1,50 @@
+.baloon {
+  --vue-scrollbar-width: 5px;
+  height: 400px;
+  width: 400px;
+  font-size: 20px;
+  &-body {
+    height: 100%;
+    padding: 16px 10px 40px 26px;
+    font-size: inherit;
+  }
+  &-scrollbar {
+    height: 100%;
+    // padding-right: 1.1em;
+  }
+  &-scroll-content {
+    font-size: inherit;
+    padding-right: 1em;
+    // min-height: 400px;
+    // min-width: 400px;
+      
+
+  }
+  &-title {
+    font-weight: 500;
+    font-size: 1.5em;
+    line-height: 1.1; 
+    margin-bottom: 0.8333em;
+  }
+  &-item {
+    font-size: inherit;
+    margin-bottom: 1.4em;
+    &-label {
+      font-size: .8em;
+      line-height: 1;
+      color: var(--text-color-light);
+      margin-bottom: .3125em;
+    }
+    &-text {
+      font-size: 1em;
+      line-height: 1.4;
+      // color: var(--text-colot-light);
+      // margin-bottom: .3125em;
+      span {display: block;}
+    }
+    .btn {
+      font-size: .8em;
+      max-width: 255px;
+    }
+  }
+}

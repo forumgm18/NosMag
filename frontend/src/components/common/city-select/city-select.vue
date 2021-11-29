@@ -5,12 +5,12 @@
       span(v-if="value.name" ) {{value.name}}
       span(v-else) {{$options.CITY_DEFAULT_TEXT}}
 
-    app-popup.city-select(
+    v-app-popup.city-select(
       v-model="isCitySelectShow"
       v-on:close-popup="citySelectClose"
     )
       .city-select-title {{$options.CITY_TITLE_TEXT}}
-      input-field.city-search-input(
+      v-input-field.city-search-input(
         v-model="citySearch"
         type="text"
         :placeholder="$options.INPUT_PLACEHOLDER"
@@ -34,14 +34,9 @@
 </template>
 
 <script>
-  import appPopup from '~/components/common/popup/app-popup'
-  import inputField from '~/components/common/forms/input-field/input-field'
   import scrollBar from 'vue2-scrollbar'
-
   export default {
   components: {
-    appPopup,
-    inputField,
     scrollBar
   },
   props: {

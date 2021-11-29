@@ -1,5 +1,5 @@
 .page-content {
-  padding-right: 30px;
+  padding-right: 32px;
 }
 
 .cart{
@@ -174,10 +174,16 @@
     }
   }
   &-total{
-      width: fit-content;
-      min-width: 25%;
+      padding: 40px 26px;
+      border: 1px solid currentColor;
+      border-radius: 5px;
+      // width: fit-content;
+      // min-width: 25%;
+      max-width: 398px;
       flex-shrink: 0;
-      margin-top: -2.5em;
+      // margin-top: -2.5em;
+      margin-top: 2.5em;
+      margin-bottom: 1.5384em;
       font-size: 26px;   
       position: sticky;   
       top: 2.5em;

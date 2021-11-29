@@ -12,7 +12,7 @@
         :is-selected="modelLength(f.id)"
         :class="{'is-price' : selectContentType(f.type)===$options.FILTER_PRICE}"
         @clear-all="clearAll(f.id, selectContentType(f.type))"
-      )
+        )
         template(#title) 
           span.text {{f.name}}
           span.dropdown_title-count(v-if="modelLength(f.id)") {{modelLength(f.id)}}
@@ -66,9 +66,9 @@
 </template>
 
 <script>
-  import InputNumber from '~/components/common/forms/input-number/input-number'
-  import vnmSelectList from '~/components/common/forms/vnm-select-list/vnm-select-list'
-  import vDropdown from '~/components/common/v-dropdown/v-dropdown'
+  import InputNumber from '~/components/forms/input-number/input-number'
+  import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
+  // import vDropdown from '~/components/common/v-dropdown/v-dropdown'
 
 export default {
     name: 'desktop-filter',
@@ -85,7 +85,7 @@ export default {
     components: {
       InputNumber,
       vnmSelectList,
-      vDropdown,
+      // vDropdown,
     },
     data: () => ({
       filterCollapse: true,

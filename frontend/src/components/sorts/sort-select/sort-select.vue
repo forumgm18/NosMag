@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import checkBox from '~/components/common/forms/check-box/check-box'
-import radioBox from '~/components/common/forms/radio-box/radio-box'
+import checkBox from '~/components/forms/check-box/check-box'
+import radioBox from '~/components/forms/radio-box/radio-box'
 export default {
   name: 'SortSelect',
   components: { checkBox, radioBox },

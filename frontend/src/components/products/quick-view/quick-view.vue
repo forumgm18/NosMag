@@ -105,7 +105,7 @@ import vStars from '~/components/common/stars/stars'
 import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
 import VueSlickCarousel from 'vue-slick-carousel'
 import productTags from '~/components/products/product-tags/product-tags'
-import inputNumber from '~/components/common/forms/input-number/input-number'
+import inputNumber from '~/components/forms/input-number/input-number'
 import InnerImageZoom from 'vue-inner-image-zoom'
 import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
 

@@ -4,7 +4,7 @@
       svg.icon.icon-user <use href="#icon-user"/>
       span {{title}}
 
-    app-popup.login(
+    v-app-popup.login(
       v-model="isLoginPopupShow"
       v-on:close-popup="loginPopupShow($event)"
       )
@@ -29,7 +29,7 @@
           :class="{active: !loginWithPhone}"
           @click="loginTypeToggle(false)"
         ) {{$options.LOGIN_WITH_EMAIL_TEXT}}
-        check-toggle(
+        v-check-toggle(
           v-model="loginWithPhone"
           off-color="var(--base-color1)"
           on-color="var(--base-color1)"
@@ -40,7 +40,7 @@
         ) {{$options.LOGIN_WITH_PHONE_TEXT}}
 
       .login-form
-        input-field(
+        v-input-field(
           v-if="loginWithPhone"
           :v-mask="'+7 ### ### ## ##'" 
           v-model="login"
@@ -50,7 +50,7 @@
           :is-error="loginError"
           required
           )
-        input-field(
+        v-input-field(
           v-else="condition"
           v-model="login"
           type="email"
@@ -62,7 +62,7 @@
         
         .login-form-label(v-if="isLogin") {{$options.PASSWORD_TEXT}}
         .login-form-label(v-else="condition") {{$options.REGISTER_PASSWORD_LABEL}}
-        input-field(
+        v-input-field(
           type="password"
           v-model="password"
           placeholder="........"
@@ -77,7 +77,7 @@
           @click="loginRegClick"
         ) {{`${isLogin ? $options.LOGIN_BTN_TEXT : $options.REGISTER_TEXT}`}}
 
-    app-popup.login(
+    v-app-popup.login(
       v-model="isConfirmRegisterPopupShow"
       v-on:close-popup="loginRegClick($event)"
     )
@@ -85,7 +85,7 @@
         span.text.active {{$options.REGISTER_TEXT}}
       .login-description {{$options.REGISTER_CONFIRM_TEXT}}
       .login-form
-        input-field(
+        v-input-field(
           v-model="confirmCode"
           type="text"
           :placeholder="$options.REGISTER_CONFIRM_CODE"
@@ -99,17 +99,8 @@
 </template>
 
 <script>
-import appPopup from '~/components/common/popup/app-popup'
-import inputField from '~/components/common/forms/input-field/input-field'
-import checkToggle from '~/components/common/forms/check-toggle/check-toggle'
-
 export default {
   name: 'LoginForm',
-  components: {
-    appPopup,
-    inputField,
-    checkToggle,
-  },
   props: {
     title: {type: String}
   },

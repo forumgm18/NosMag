@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    pre-loader.in-page(v-if="$fetchState.pending")
+    v-preloader.in-page(v-if="$fetchState.pending")
     main.main-page(v-else)
       section.main-top-section
         .container
@@ -26,7 +26,7 @@
 
 
           .main-tile(v-if="links")
-            nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="`catalog/${lnk.link}`")
+            nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :key="iLnk" :to="`catalog/${lnk.link}`")
               .main-tile-item-img
                 .img-box.hover
                   .button-select {{$options.SELECT_LINK_TEXT}}
@@ -56,8 +56,8 @@
             :key="prod.id"
             :product="prod"
             :is-btn="false"
-            :is-sizes="false"  )
-          //div( v-for="(prod, i) of showcase" :key="prod.id") {{i}}
+            :is-sizes="false"
+            )
           template( v-slot:prevArrow)
             button.main-popular-slider-arrow.prev
           template( v-slot:nextArrow)
@@ -68,7 +68,7 @@
       section.main-popular.container
         h2.main-section-title {{$options.SECTION_LINK1_TITLE}}
         .main-tile(v-if="links1")
-          nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :to="`catalog/${lnk1.link}`")
+          nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :key="iLnk1" :to="`catalog/${lnk1.link}`")
             .main-tile-item-img
               .img-box.hover
                 .button-select {{$options.SELECT_LINK_TEXT}}
@@ -91,8 +91,8 @@
 
 <script>
 // import ProductList from '~/components/products/product-list/product-list'
-import preLoader from '~/components/common/preloader/preloader'
-import ProductCard from '~/components/products/product-card/product-card'
+// import preLoader from '~/components/common/preloader/preloader'
+import productCard from '~/components/products/product-card/product-card'
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 // optional style for arrows & dots
@@ -100,9 +100,9 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
   components: { 
-    preLoader,
+    // preLoader,
     VueSlickCarousel,
-    ProductCard,
+    productCard,
     // ProductList
   },
   // props: ['showcase'],
@@ -182,10 +182,28 @@ export default {
   },
 
   computed: {
-    content: s => s.$store.getters['getContentData'],
-    showcase() { return this.content.showcase},
-    links() { return this.content.hasOwnProperty('links') ? this.content.links : undefined},
-    links1() { return this.content.hasOwnProperty('links1') ? this.content.links1 : undefined},
+    content() { return this.$store.getters['getContentData']},
+    showcase() { 
+      if (this.content) {
+        return this.content.showcase
+      } else {
+        return undefined
+      }  
+    },
+    links() { 
+      if (this.content) {
+        return this.content.hasOwnProperty('links') ? this.content.links : undefined
+      } else {
+        return undefined
+      }  
+    },
+    links1() { 
+      if (this.content) {
+        return this.content.hasOwnProperty('links1') ? this.content.links1 : undefined
+      } else {
+        return undefined
+      }  
+    },
   },
 
   mounted() {

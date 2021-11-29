@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    pre-loader.in-page(v-if="$fetchState.pending")
+    v-preloader.in-page(v-if="$fetchState.pending")
     main.container(v-else-if="content")
       //- section
         v-breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
@@ -110,18 +110,18 @@
               template(#nextArrow)
                 button.other-slider-arrow
                   svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-          product-tab-sizes(
-            :sizes="sizes"
-            :selected-size="selectedSize"
-            @select-size="selectSize"
-
-            )
+          client-only
+            product-tab-sizes(
+              :sizes="sizes"
+              :selected-size="selectedSize"
+              @select-size="selectSize"
+              )
 
           
           .product-quantity-block(v-if="selectedSize")
             .product-quantity-label {{$options.QUANTITY_LABEL}}
             .product-quantity
-              input-number(
+              v-input-number(
                 v-if="selectedSize"
                 :has-label="false"
                 :min="1"
@@ -203,29 +203,13 @@
     
 </template>
 <script>
-import preLoader from '~/components/common/preloader/preloader'
-
-// import vLoading from '~/components/common/preloader/preloader'
-
-// import vBreadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
-import vStars from '~/components/common/stars/stars'
 import VueSlickCarousel from 'vue-slick-carousel'
-import inputNumber from '~/components/common/forms/input-number/input-number'
-import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
-import productTags from '~/components/products/product-tags/product-tags'
 import InnerImageZoom from 'vue-inner-image-zoom'
 import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
 export default {
   components:{
-    preLoader,
-    // vBreadcrumbs,
-    vStars,
     VueSlickCarousel,
-    inputNumber,
-    productTabSizes,
-    productTags,
     InnerImageZoom,
-
   },
   data: function () {
     return {

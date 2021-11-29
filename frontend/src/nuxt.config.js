@@ -3,6 +3,7 @@
 const isDev = process.env.NODE_ENV !== 'production'
 // const srcPath = 'src/'
 export default {
+  // runtimeCompiler: true,
   // srcDir: 'src/',
   // Global page headers: https://go.nuxtjs.dev/config-head
   // env: {
@@ -82,6 +83,7 @@ export default {
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/yamap.js',  mode: 'client' },
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
     '~/plugins/vuelidate.js',
@@ -94,12 +96,52 @@ export default {
     // '~/plugins/-generate.uuid.js',
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
+    '~/plugins/vuebar.js',
     // '~/plugins/v-mask.js',
     // '~/plugins/v-select.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  // components: true,
+components: [
+    {
+      path: '~/components/common/',
+      prefix: 'v',
+      ignore: ['-*.vue'],
+    },
+    {
+      path: '~/components/forms/',
+      prefix: 'v',
+      ignore: ['-*','-*.vue'],
+    },
+    {
+      path: '~/components/header/',
+      prefix: ''
+    },
+    {
+      path: '~/components/footer/',
+      prefix: ''
+    },
+    {
+      path: '~/components/filters/',
+      prefix: ''
+    },
+    {
+      path: '~/components/products/',
+      prefix: '',
+      // ignore: ['-*','-*.vue'],
+    },
+    {
+      path: '~/components/page/',
+      prefix: 'page',
+      // ignore: ['-*','-*.vue'],
+    },
+    {
+      path: '~/components/yamap/',
+      prefix: 'v',
+      // ignore: ['-*','-*.vue'],
+    },
+  ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -213,7 +255,9 @@ export default {
 
       order: 'cssnanoLast',
     },
-    // extend(config, ctx) {
+    extend(config, ctx) {
+      // config.resolve.alias['vue'] = 'vue/dist/vue.common'
+      config.resolve.alias.vue = 'vue/dist/vue.common'
     //   const ORIGINAL_TEST = '/\\.(png|jpe?g|icons|webp)$/i'
     //   const vueSvgLoader = [
     //     {
@@ -284,6 +328,6 @@ export default {
     //   }
     //
     //   config.module.rules.push(svgRule) // Actually add the rule
-    // },
+    },
   },
 }

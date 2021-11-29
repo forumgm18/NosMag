@@ -28,7 +28,7 @@
   import scrollBar from 'vue2-scrollbar'
 
   export default {
-    name: 'v-dropdown',
+    name: 'drop-down',
     components: { 
       scrollBar, 
       // inputNumber, 
@@ -38,7 +38,7 @@
       title: String,  //
       id:{
         type: [String, Number],
-        default: function() {return this.$generateUUID }
+        default: function() {return this.$generateUUID() }
       },
       listClasses: {
         type: String,

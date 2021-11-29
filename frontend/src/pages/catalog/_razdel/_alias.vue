@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    pre-loader.in-page(v-if="$fetchState.pending")
+    v-preloader.in-page(v-if="$fetchState.pending")
     main.container.razdel-page(v-else)
       //- section
         breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
@@ -76,15 +76,8 @@
 </template>
 
 <script>
-import preLoader from '~/components/common/preloader/preloader'
-// import Loading from '~/components/common/preloader/preloader'
-// import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
-// import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
-import ProductList from '~/components/products/product-list/product-list'
-import MobileFilter from '~/components/filters/mobile-filter/mobile-filter'
-import DesktopFilter from '~/components/filters/desktop-filter/desktop-filter'
-import vDropdown from "~/components/common/v-dropdown/v-dropdown";
-import vnmSelectList from '~/components/common/forms/vnm-select-list/vnm-select-list'
+// import vDropdown from "~/components/common/v-dropdown/v-dropdown"
+import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
 
 import { mapGetters } from 'vuex'
 
@@ -93,13 +86,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Razdel',
   components: {
-    preLoader,
-    // Breadcrumbs,
-    // SublinksMenu,
-    ProductList,
-    MobileFilter,
-    DesktopFilter,
-    vDropdown,
+    // vDropdown,
     vnmSelectList,
     // Paginate
   },

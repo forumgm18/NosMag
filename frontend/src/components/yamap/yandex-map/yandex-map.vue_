@@ -1,0 +1,125 @@
+<template lang="pug">
+  yandex-map.yamap(
+    :settings="yamapSettings"  
+    :coords="yamapCoords"
+    :controls="yamapControls"
+    :zoom="yamapZoom"
+    @map-was-initialized="yamapInit"
+    @click="yamapClick"
+    
+    :debug="true"
+    )
+    ymap-marker( 
+      marker-id="123"
+      :coords="yamapCoords"
+      :icon="markerIcon"
+      @mouseenter="yamapMouseEnter"
+      @mouseleave="yamapMouseLeave"
+      
+      )
+        v-yamap-baloon.bal-class(slot="balloon")
+
+</template>
+
+<script>
+  import { yandexMap, ymapMarker } from 'vue-yandex-maps'
+  import vYamapBaloon from '~/components/yamap/yamap-baloon/yamap-baloon'
+  
+//   const test = Vue.component('aaa-aaa', {
+//   template: '<div>AAA component</div>'
+// })
+
+  export default {
+    components: {
+      yandexMap, ymapMarker,
+      // vYamapBaloon,
+    },
+    data() {
+      return {
+        // vYamapBaloon: vYamapBaloon,
+        test : {
+          template: '<div>AAA component</div>'
+        },
+
+        yamapSettings: {
+          apiKey: this.yandexApiKey || '',
+          lang: 'ru_RU',
+          coordorder: 'latlong',
+          enterprise: false,
+          version: '2.1',
+        },
+        yamapZoom: 10,
+        yamapCoords: [54, 39 ],
+        yamapControls: ['zoomControl'],
+        // ymapIconLayout: null,
+        markerIcon: {
+          // layout: 'default#imageWithContent',
+          layout: 'default#image',
+          imageHref: 'ym.png',
+          imageSize: [45, 62],
+          imageOffset: [-45, -62],
+
+        },
+        yamap: null,
+      }    
+    },    
+
+    computed: {
+      yandexApiKey() {return this.$store.state.settings.yandexApiKey},
+      // vYamapBaloon() {return () => import('~/components/yamap/yamap-baloon/yamap-baloon')}
+      vYamapBaloon() {return {vYamapBaloon}}
+    },
+    methods: {
+    yamapMouseEnter(e) {
+      console.log('enter: ', e.get('target').options)
+      e.get('target').options.set('iconImageHref', 'ym2.png')
+      },
+    yamapMouseLeave(e) {
+      console.log('leave: ', e.get('target').options)
+      e.get('target').options.set('iconImageHref', 'ym.png')
+      },
+    yamapInit(e) {
+      this.yamap = e
+    },
+    yamapClick(e){
+      // debugger
+      const coords = e.get('coords')
+      // const map = this.yamap.get('map')
+      const geo = this.yamap.geoObjects
+      console.log('geo: ', geo)
+      const options = this.yamap.options
+      console.log('options: ', options)
+
+
+// Создаем геообъект с типом геометрии "Точка".
+        const myGeoObject = new this.yamap.GeoObject({
+            // Описание геометрии.
+            geometry: {
+                type: "Point",
+                // coordinates: [55.8, 37.8]
+                coordinates: coords
+            },
+            // Свойства.
+            properties: {
+                // Контент метки.
+                iconContent: 'Я тащусь',
+                hintContent: 'Ну давай уже тащи'
+            }
+        }, {
+            // Опции.
+            // Иконка метки будет растягиваться под размер ее содержимого.
+            preset: 'islands#blackStretchyIcon',
+            // Метку можно перемещать.
+            draggable: true
+        })
+    // this.yamap.geoObjects.add(myGeoObject)    
+
+    }
+    },
+
+  }
+</script>
+
+<style lang="scss" scoped>
+
+</style>

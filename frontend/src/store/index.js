@@ -21,7 +21,7 @@ export const actions = {
     const sid = 'session_id'
     let sidv = app.$cookiz.get(sid, {path: '/'})
     // console.log('session_id: ', sidv)
-    if (sidv === undefined || sidv === null || sidv === 'undefined' || sidv === 'null') sidv = app.$generateUUID
+    if (sidv === undefined || sidv === null || sidv === 'undefined' || sidv === 'null') sidv = app.$generateUUID()
     commit('token/setSID', sidv)
     app.$cookiz.set(sid, sidv, { maxAge: 365 * 24 * 60 * 60 })
 

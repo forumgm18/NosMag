@@ -1,21 +1,16 @@
 <template lang="pug">
   div
-    pre-loader.in-page(v-if="$fetchState.pending")
+    v-preloader.in-page(v-if="$fetchState.pending")
     main.container.clarifying-page(v-else)
-    //- section
-      breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
-      h1.page-title(v-if="sublinks_menu") {{sublinks_menu.header}}
-    //-loading.center(v-if="loading")
-    //-section.container.content-section(v-else)
     section.content-section
       aside.sidebar-left(v-if="sublinks_menu")
         .sidebar-scroll
-          sublinks-menu(:items="sublinks_menu.items")
+          v-sublinks-menu(:items="sublinks_menu.items")
 
 
       article.main-content
         .main-tile(v-if="links")
-          nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :to="lnk.link")
+          nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :key="iLnk" :to="lnk.link")
             .main-tile-item-img
               .img-box.hover
                 .button-select Выбрать
@@ -30,19 +25,12 @@
 </template>
 
 <script>
-// import Loading from '~/components/common/preloader/preloader'
-import preLoader from '~/components/common/preloader/preloader'
-import SublinksMenu from '~/components/common/sublinks-menu/sublinks-menu'
-// import Breadcrumbs from '~/components/common/breadcrumbs/breadcrumbs'
 import ScrollBar from 'vue2-scrollbar'
 
 export default {
   name: 'clarifying-selection-page',
   components: {
-    preLoader, 
     ScrollBar, 
-    SublinksMenu, 
-    // Breadcrumbs
     },
   data: function () {
     return {

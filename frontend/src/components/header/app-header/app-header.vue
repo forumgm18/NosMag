@@ -30,16 +30,17 @@
               span {{header.oplata.name}}
 
             nuxt-link.header-link.delivery(:to="`/${header.dostavka.alias}`" )
-              svg.icon.icon-delivery <use href="#icon-delivery"/>
+              svg.icon.icon-box <use href="#icon-box"/>
               span {{header.dostavka.name}}
             .header-info-block
               .header-link.learn-more( @click.prevent="showTopInfoPopup")
                 svg.icon.icon-learn-more <use href="#icon-learn-more"/>
                 span.desktop {{header.info.header}}
                 span.tablet {{header.info.header_m}}
-              app-popup.popup-down(v-model="topInfoPopup" v-on:close-popup="closeTopInfoPopup")
+              v-app-popup.popup-down(v-model="topInfoPopup" v-on:close-popup="closeTopInfoPopup")
                 nuxt-link.header-info-link(
                   v-for="(lnk, l) in header.info.links"
+                  :key="l"
                   :to="`/${lnk.alias}`"
                   @click.native="closeTopInfoPopup(false)"
                 ) {{lnk.name}}
@@ -50,12 +51,12 @@
               span(v-if="header.city.name" ) {{header.city.name}}
               span(v-else) ваш город
             
-            city-select(v-model="header.city")  
+            v-city-select(v-model="header.city")  
 
           .header-phone-block
 
-            app-popup.header-feedback-popup.popup-down(v-model="feedbackPopup" v-on:close-popup="closeFeedbackPopup")
-              popup-input-form(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
+            v-app-popup.header-feedback-popup.popup-down(v-model="feedbackPopup" v-on:close-popup="closeFeedbackPopup")
+              v-popup-input-form(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
                 template( v-slot:default)
                   p Не нашли нужной информации?
                   p Оставьте свой номер, мы перезвоним вам в рабочее время
@@ -93,9 +94,10 @@
         .header-link.learn-more( @click.prevent="showBottomInfoPopup")
           svg.icon.icon-learn-more <use href="#icon-learn-more"/>
           span {{header.info.header}}
-        app-popup.popup-up(v-model="bottomInfoPopup" v-on:close-popup="closeBottomInfoPopup")
+        v-app-popup.popup-up(v-model="bottomInfoPopup" v-on:close-popup="closeBottomInfoPopup")
           nuxt-link.header-info-link(
-            v-for="(lnk, l) in header.info.links"
+            v-for="(lnk, l2) in header.info.links"
+            :key="l2"
             :to="`/${lnk.alias}`"
             @click.native="closeBottomInfoPopup(false)"
             ) {{lnk.name}}
@@ -105,14 +107,14 @@
         .header-link.header-feedback( @click.prevent="showFeedbackPopup")
           svg.icon.icon-phone <use href="#icon-phone"/>
           span обратный звонок
-        app-popup.header-feedback-popup.popup-up.call-phone(
+        v-app-popup.header-feedback-popup.popup-up.call-phone(
           v-model="feedbackPopup" 
           v-on:close-popup="closeFeedbackPopup"
         )
           a.popup-phone-link(:href="header.phone.link")
             svg.icon.icon-phone <use href="#icon-phone"/>
             span {{`Вызов ${header.phone.name}`}}
-          popup-input-form.mobile(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
+          v-popup-input-form.mobile(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
             template( v-slot:default)
               p Оставьте свой телефон для обратной связи
             template( v-slot:description)
@@ -130,31 +132,11 @@
 </template>
 
 <script>
-import menuTop from '~/components/header/menu-top/menu-top'
-import appPopup from '~/components/common/popup/app-popup'
-import popupInputForm from '~/components/common/forms/popup-input-form/popup-input-form'
-import topBasket from '~/components/header/basket/top-basket'
-
 import menuFunc from '~/utils/main-scripts'
-
-// import {isEmpty} from 'lodash'
-
-// import burger from '~/components/header/burger'
-import loginForm from '~/components/header/login-form/login-form'
-import citySelect from '~/components/common/city-select/city-select'
-// import HeaderSearch from '~/components/header/header-search'
-// import customSelect from '~/components/custom-select'
 import { mapState } from 'vuex'
 
 export default {
   name: 'appHeader',
-  components: {
-    menuTop, appPopup, topBasket,
-    popupInputForm,
-    //customSelect, burger, HeaderSearch, 
-    loginForm,
-    citySelect
-  },
   data: () => ({
     inputPhone:'',
     pageScrollPosition: 0,

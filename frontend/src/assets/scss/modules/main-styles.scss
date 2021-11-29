@@ -25,6 +25,10 @@
   --box-shadow-modal: 0px 2px 5px rgba(0, 0, 0, 0.1);
   --vue-scrollbar-width: 8px;
   --vue-scrollbar-height: 8px;
+  --scrollbar-track: #{$scrollbar-track};
+  --scrollbar-track-drag: #{$scrollbar-track-drag};
+  --scrollbar-track-drag-active: #{$scrollbar-track-drag-active};
+  --scrollbar-track-drag-hover: #{$scrollbar-track-drag-hover};
 
 
 

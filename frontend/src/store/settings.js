@@ -5,7 +5,12 @@ export const state = () => ({
   footer: null,
   status: '',
   currency: 'руб.',
-  currencyShort: 'р.'
+  currencyShort: 'р.',
+  imgPath: '/images/catalog/',
+  imgPrefix: { l: 'l_', m: 'm_', s: 's_', t: 't_'},
+  imgRetinaPrefix: 'x2_',
+  yandexApiKey: null,
+
 })
 
 export const mutations = {
@@ -14,7 +19,8 @@ export const mutations = {
     state.sortmodes = val.filters.sortmodes
     state.header = val.header
     state.footer = val.footer
-    state.status = val.status
+    state.status = val.status,
+    state.yandexApiKey = val.yandex_api_key
   },
   setNewCity (state, val) {
     state.header.city = val
@@ -46,5 +52,9 @@ export const getters = {
   phone: s => s.header.phone,
   currency: s => s.currency,
   currencyShort: s => s.currencyShort,
+  imgPath: s => s.imgPath,
+  imgPrefix: s => s.imgPrefix,
+  imgRetinaPrefix: s => s.imgRetinaPrefix,
+  yandexApiKey: s => s.yandexApiKey,
 
 }
