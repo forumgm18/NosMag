@@ -102,8 +102,8 @@ export default {
       isQuickView: false,
       sale: 0,
       imgPath: '/images/catalog/',
-      mocCatalogLink: '/catalog/razdel/sub_razdel/',
-      // mocCatalogLink: '/',
+      // mocCatalogLink: '/catalog/razdel/sub_razdel/',
+      mocCatalogLink: '/',
       selectedSize: null,
       selectedSizeCount: 1,
       addToCartPopup: false

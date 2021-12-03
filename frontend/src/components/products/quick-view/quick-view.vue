@@ -29,7 +29,7 @@
                   ) 
                     .thumbs-item_content
                       .img-box
-                        img(:src="itm")
+                        img(:src="imgPath + itm")
 
                   template( v-slot:prevArrow)
                     button.thumbs-arrow.prev
@@ -59,7 +59,7 @@
                     .product-slider-item-content
                       .img-box
                         //- img(:src="item")
-                        inner-image-zoom(:src="item")
+                        inner-image-zoom(:src="imgPath + item")
 
 
         .quick-view-col.info
@@ -199,6 +199,8 @@ export default {
     // info_table() { return this.product.info_table || null},
     params() { return this.product.params || null},
     sizes() { return this.product.sizes || null},
+    imgPath() {return this.$store.state.settings.imgPath || ''},
+
   },
   mounted(){
     document.body.append(this.$refs.quickView)

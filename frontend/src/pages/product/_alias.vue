@@ -24,7 +24,7 @@
                     ) 
                       .thumbs-item_content
                         .img-box
-                          img(:src="itm")
+                          img(:src="imgPath + itm")
 
                     template( v-slot:prevArrow)
                       button.thumbs-arrow.prev
@@ -56,7 +56,7 @@
                       .img-box
                         //- img(:src="item")
                         .test
-                          inner-image-zoom(:src="item")
+                          inner-image-zoom(:src="imgPath + item")
 
 
 
@@ -102,7 +102,7 @@
                   
                   )
                   .img-box
-                    img(:src="it.image")  
+                    img(:src="imgPath + it.image")  
 
               template(#prevArrow)
                 button.other-slider-arrow
@@ -361,6 +361,7 @@ export default {
     },
     sale() { return this.$sale(this.content.price, this.content.oldprice) || 0},
     title() {return this.$store.state.content.data.name || ''},
+    imgPath() {return this.$store.state.settings.imgPath || ''},
     content() { return this.$store.getters['getContentData'] || null},
     feedbacks() { return this.$store.state.content.data.feedbacks || null},
     sizes() { return this.$store.state.content.data.sizes || null},
