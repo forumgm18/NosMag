@@ -33,7 +33,6 @@ export const actions = {
       }
     )
     if (cart.status ==='ok') commit('SET_CART', cart)
-
   },
   async addToCart({ state, commit, rootState}, val) {
     let v = Array.isArray(val) ? val : [val] 

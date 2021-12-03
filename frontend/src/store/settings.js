@@ -4,8 +4,10 @@ export const state = () => ({
   header: null,
   footer: null,
   status: '',
-  currency: 'руб.',
-  currencyShort: 'р.',
+  // currency: 'руб.',
+  // currencyShort: 'р.',
+  currency: '&#8381;',
+  currencyShort: '&#8381;',
   imgPath: '/images/catalog/',
   imgPrefix: { l: 'l_', m: 'm_', s: 's_', t: 't_'},
   imgRetinaPrefix: 'x2_',
@@ -29,7 +31,7 @@ export const mutations = {
 
 export const actions = {
   async fetch ({ commit, rootState }) {
-    console.log('settings/fetch', rootState.token.session_id)
+    // console.log('settings/fetch', rootState.token.session_id)
     const settings = await this.$axios.$get('/get_settings', {
       params: {
         session_id: rootState.token.session_id
@@ -56,5 +58,6 @@ export const getters = {
   imgPrefix: s => s.imgPrefix,
   imgRetinaPrefix: s => s.imgRetinaPrefix,
   yandexApiKey: s => s.yandexApiKey,
+  userDefaultCity: s => s.header.city || undefined,
 
 }

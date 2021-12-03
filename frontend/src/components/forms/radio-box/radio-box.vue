@@ -1,7 +1,14 @@
 <template lang="pug">
 .radiobox
   label.radiobox-label
-    input(:class="{notchecked: !isChecked }" hidden type="radio" :checked="isChecked" :value="value" @change="updateInput")
+    input(
+      hidden 
+      type="radio" 
+      :class="{notchecked: !isChecked }" 
+      :checked="isChecked" 
+      :value="value" 
+      @change="updateInput"
+      )
     span.radiobox_text-block
       span(v-if="showIcon").radiobox_icon
       span.radiobox_text
@@ -9,7 +16,7 @@
 </template>
 
 <script>
- import {isEqual} from 'lodash'
+import {isEqual} from 'lodash'
 export default {
   name: 'radio-box',
   model: {
@@ -18,7 +25,7 @@ export default {
   },
   props: {
     // value: { type: String },
-     value: {},
+    value: {},
     modelValue: { default: '' },
     showIcon: {type:Boolean, default: true}
     // trueValue: { default: true },

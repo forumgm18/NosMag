@@ -3,7 +3,6 @@ export const state = () => ({
   city_name: null,
   pvzs: null,
   selectedPvz: null,
-
 })
 
 export const mutations = {
@@ -61,6 +60,10 @@ export const actions = {
    
     commit('setPvzInfo', content)
   },
+
+
+
+
 
 }
 export const getters = {

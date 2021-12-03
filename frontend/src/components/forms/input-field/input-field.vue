@@ -7,7 +7,7 @@
       :placeholder="placeholder"
       
     )
-    .input-field-error {{errorText}}
+    .input-field-error(v-if="errorText.length") {{errorText}}
 
 </template>
 

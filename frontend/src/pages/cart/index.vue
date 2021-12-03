@@ -11,14 +11,27 @@
       .page-title {{$options.ORDER_TOTAL_TITLE}}
       .cart-total-row 
         .cart-total-lable(v-html="goodsPieces(cart.items_q * 111, 'шт')") 
-        .cart-total-sum 
-          div {{cart.sum}} {{currency}}
-          .cart-table-price-sale {{cart.oldsum}}  {{currency}}
+        .cart-total-sum(v-html="`${cart.sum.toLocaleString()} ${currency}`")
+          //- .cart-table-price-sale(v-if="cartSale" v-html="`-${cartSale.toLocaleString()} ${currency}`")
       .cart-total-row(v-if="totalSaleStr") 
-        .cart-total-lable {{$options.ORDER_TOTAL_SALE_TEXT}}
-        .cart-total-sale.bold {{totalSaleStr}}
-      .cart-total-delivery {{$options.ORDER_TOTAL_DELIVERY_TEXT}}
-      .btn.btn-3(@click="goToOrder('order')") {{$options.BTN_TOTAL_TEXT}}
+        .cart-total-lable.sale {{$options.ORDER_TOTAL_SALE_TEXT}}
+        .cart-total-sum.sale(v-html="`${totalSaleStr}`")
+      .cart-total-row(v-if="totalSaleStr") 
+        .cart-total-lable {{$options.ORDER_DELIVERY_LABEL}}
+        .cart-total-sum Бесплатно
+      .cart-total-row
+        .cart-total-lable.total {{$options.ORDER_TOTAL_LABEL}}
+        .cart-total-sum.total(v-html="totalCartStr")
+      .cart-total-delivery {{$options.ORDER_DELIVERY_TEXT}}
+
+      .cart-total-row.columns
+        .cart-total-promo
+          .cart-total-lable.promo {{$options.ORDER_PROMO_LABEL}}
+          v-input-field(
+            v-model="promoCode"
+            placeholder="TY3433"
+            )
+        .btn(@click="goToOrder('order')") {{$options.BTN_TOTAL_TEXT}}
 
 </template>
 
@@ -26,32 +39,49 @@
   export default {
     components: {
       },
-    fetch: async function({store}){
-      await store.dispatch('cart/getCart')
+    async fetch(){
+      await this.$store.dispatch('cart/getCart')
     },
+
     CART_TITLE: 'Корзина',  
-    ORDER_TOTAL_TITLE: 'оформление заказа',  
+    ORDER_TOTAL_TITLE: 'ваш заказ',  
     ORDER_TOTAL_SALE_TEXT: 'Скидка',  
-    ORDER_TOTAL_DELIVERY_TEXT: 'Действует бесплатная доставка при заказе от 3 000 руб.',  
+    ORDER_DELIVERY_TEXT: 'Действует бесплатная доставка при заказе от 3 000 руб.',  
+    ORDER_DELIVERY_LABEL: 'Доставка',  
+    ORDER_PROMO_LABEL: 'Введите промокод',  
+    ORDER_TOTAL_LABEL: 'Итого',  
     BTN_TOTAL_TEXT: 'Заказать',  
 
     data() {
       return {
         mocCatalogLink: '/catalog/razdel/sub_razdel/',
         showOrder: false,
+        promoCode: '',
       }
     },
   computed: {
     cart() {  return this.$store.state.cart.cart || null },
     currency() { return this.$store.state.settings.currency },
-    // currencyShort() {return this.$store.state.settings.currencyShort},
-    totalSaleStr() { 
-      const sum = this.cart.sum
-      const oldsum = this.cart.oldsum
-      if (!oldsum || oldsum <= sum ) return false
-
-      return `${oldsum - sum} ${this.currency}`
+    cartSale() {
+      return this.cart ? 
+        this.cart.items.reduce((sum, item) => item.oldsum ? sum + item.oldsum : sum, 0)
+        : 0
     },
+    // currencyShort() {return this.$store.state.settings.currencyShort},
+    totalSaleStr(localeString = true) { 
+      const sum = this.cart.sum
+      const oldsum = this.cart.oldsum || sum
+      if ( sum === oldsum ) return false
+      const p = localeString ? (oldsum - sum).toLocaleString() : oldsum - sum
+      return `${p} ${this.currency}`
+    },
+    totalCartStr(localeString = true) { 
+      const sum = this.cart.sum
+      const delivery = 0
+      const p = localeString ? (sum + delivery).toLocaleString() : sum + delivery
+      return `${p} ${this.currency}`
+    },
+
   },
   // mounted(){
   //   // this.yamapSettings.apiKey = this.yandexApiKey || ''

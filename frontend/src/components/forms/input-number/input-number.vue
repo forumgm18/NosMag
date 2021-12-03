@@ -7,11 +7,10 @@
           svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>
         .number-input-block  
           input.number-input(
+            v-auto-min-width
             type="text"
             ref="input"
             :class="{modified: isModified}"
-            :size="inputSize"
-            :style="inputStyle"
             :value="locValue"
             @input="inputValue"
             @keydown="keyDown"
@@ -59,58 +58,38 @@ export default {
   mounted() { 
     this.locValue = this.value
   },
-  updated() {
-    // debugger
-    if (this.$refs.input) this.$refs.input.style.width = this.getInputWidth()
-  },
+  // updated() {
+  //   return
+  //   // debugger
+  //   // if (this.$refs.input) this.$refs.input.style.width = this.getInputWidth()
+  //   if (this.$refs.input) {
+  //     const borders = this.getInputBorders()
+  //     this.$refs.input.style.width = this.$refs.input.scrollWidth + borders.left + borders.right + 'px'
+  //   }
+  // },
   computed: {
-    inputStyle() {
-      let style = this.inputBorderColor ? `border-color: ${inputBorderColor};` : ''
-      if (this.inputTextUnderline) style = style + 'text-decoration: underline;'
-      // style = style + 'width:' + this.getInputWidth() + ';'
-      return style
-    },
-    inputSize() {
-      return this.locValue.toString().length
-    }
+    // inputStyle() {
+    //   let style = this.inputBorderColor ? `border-color: ${inputBorderColor};` : ''
+    //   if (this.inputTextUnderline) style = style + 'text-decoration: underline;'
+    //   // style = style + 'width:' + this.getInputWidth() + ';'
+    //   return style
+    // },
+    // inputSize() {
+    //   return this.locValue.toString().length
+    // }
 
   },
   methods: {
-    getInputWidth() { // Вычисляет ширину input`а
-      if(!process.browser ) return 'initial'
-      if(!this.$refs.input ) return 'initial'
-      
-      const mirror = document.createElement('div') // Создаем новый временный элемент
-      mirror.textContent = this.locValue           // Добавляем в него текст из input`а 
-      // Применяем стили input`а к созданному блоку
-      // Комбинированные свойства не работают в ФФ
-      const inputStyles = window.getComputedStyle(this.$refs.input)
-      mirror.style.fontFamily = inputStyles.getPropertyValue("font-family")
-      mirror.style.fontWeight = inputStyles.getPropertyValue("font-weight")
-      mirror.style.fontSize = inputStyles.getPropertyValue("font-size")
-      mirror.style.fontStyle = inputStyles.getPropertyValue("font-style")
-      mirror.style.paddingLeft = inputStyles.getPropertyValue("padding-left")
-      mirror.style.paddingRight = inputStyles.getPropertyValue("padding-right")
-      mirror.style.borderLeftWidth = inputStyles.getPropertyValue("border-left-width")
-      mirror.style.borderRightWidth = inputStyles.getPropertyValue("border-right-width")
-      mirror.style.borderLeftStyle = inputStyles.getPropertyValue("border-left-style")
-      mirror.style.borderRightStyle = inputStyles.getPropertyValue("border-right-style")
-      mirror.style.borderLeftColor = 'transparent'
-      mirror.style.borderRightColor = 'transparent'
-      mirror.style.boxSizing = inputStyles.getPropertyValue("box-sizing")
-      mirror.style.width = "fit-content"
-      mirror.style.width = "min-content" // для ФФ
-      
-      mirror.style.position = "absolute" 
-      mirror.style.left = "-9999px" 
-
-
-      document.body.append(mirror)
-      // Получаем его длину
-      const w = mirror.offsetWidth
-      mirror.remove() // удаляем временный элемент
-      return w + 'px'
-    },
+    // getInputBorders() {
+    //   const inputStyles = window.getComputedStyle(this.$refs.input)
+    //   let res = {}
+    //   res.left = parseInt(inputStyles.getPropertyValue("border-left-width"))
+    //   res.right = parseInt(inputStyles.getPropertyValue("border-right-width"))
+    //   res.top = parseInt(inputStyles.getPropertyValue("border-top-width"))
+    //   res.bottom = parseInt(inputStyles.getPropertyValue("border-bottom-width"))
+    //   console.log(res)
+    //   return res
+    // },
 
     inputValue(evt) {
       this.locValue = evt.target.value ? parseInt(evt.target.value) : this.min
@@ -161,6 +140,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import "input-number";
 </style>

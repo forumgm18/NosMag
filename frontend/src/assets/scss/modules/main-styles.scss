@@ -192,13 +192,15 @@ main {
 p {color: var(--text-color-default)}
 .page-title {
   font-weight: 500;
-  font-size: 26px;
+  // font-size: 26px;
   line-height: 1;
   margin-bottom: 1.5em;
   text-transform: uppercase;
-    @include media-max-width2($lg) { font-size: 22px;}
-    @include media-max-width2($md) { font-size: 18px;}
-    @include media-max-width2($sm) { font-size: 14px;}
+  @include adaptiv-font(30, 18);  
+
+    // @include media-max-width2($lg) { font-size: 22px;}
+    // @include media-max-width2($md) { font-size: 18px;}
+    // @include media-max-width2($sm) { font-size: 14px;}
 
 }
 .img-box {

@@ -9,13 +9,6 @@ export const mutations = {
 }
 
 export const actions = {
-  // async nuxtServerInit({ dispatch }, {params}) {
-  //   // await dispatch('fetchContent', params.alias)
-  //   // await dispatch('token/setNewToken')
-  //   await dispatch('menu/fetch')
-  //   await dispatch('settings/fetch')
-
-  // },
   // async nuxtServerInit({ commit, state, dispatch }, { app, store, route, req, res, error, redirect }) {
   async nuxtServerInit({ commit, dispatch }, { app }) {
     const sid = 'session_id'
@@ -31,7 +24,7 @@ export const actions = {
 
   },
 
-  async fetchContent({ state, commit, rootState }, alias) {
+  async fetchContent({ commit, rootState }, alias) {
     const c = await this.$axios.$get(`/get_content`, {
       params: {
         alias: alias,

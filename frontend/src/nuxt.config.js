@@ -97,6 +97,8 @@ export default {
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
     '~/plugins/vuebar.js',
+    '~/plugins/directives/auto-min-width.client.js',
+
     // '~/plugins/v-mask.js',
     // '~/plugins/v-select.js',
   ],
