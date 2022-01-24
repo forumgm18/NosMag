@@ -1,0 +1,20 @@
+.vue-scrollbar__scrollbar-vertical,.vue-scrollbar__scrollbar-horizontal  {
+  background: transparent;
+  &:hover{ background: transparent; }
+  .scrollbar { background: var(--base-color4); }
+}
+.vue-scrollbar__scrollbar-vertical {
+  width: var(--vue-scrollbar-width)!important;
+  .scrollbar {
+    border-radius: var(--vue-scrollbar-width)!important;
+    width: var(--vue-scrollbar-width)!important;
+  }
+}
+
+.vue-scrollbar__scrollbar-horizontal {
+  height: var(--vue-scrollbar-height)!important;
+  .scrollbar {
+    height: var(--vue-scrollbar-height)!important;
+    border-radius: var(--vue-scrollbar-height)!important;
+  }
+}

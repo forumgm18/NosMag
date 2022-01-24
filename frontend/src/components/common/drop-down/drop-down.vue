@@ -19,18 +19,18 @@
       .drop-down_list-title(ref="dropdownListTitle")
         slot(name="dropdown-list-title" )
       div(:class="scrollbarClasses" ref="scrollbarParent" )  
-        scroll-bar.drop-down_scroll(ref="scrollbar")
+        perfect-scrollbar.drop-down_scroll(ref="scrollbar")
           slot(name="dropdown-content")
 
 </template>
 
 <script>
-  import scrollBar from 'vue2-scrollbar'
+  // import scrollBar from 'vue2-scrollbar'
 
   export default {
     name: 'drop-down',
     components: { 
-      scrollBar, 
+      // scrollBar, 
       // inputNumber, 
       // vnmSelectList
     },

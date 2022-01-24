@@ -37,6 +37,11 @@
       multiple: {
         type: Boolean,
         default: false
+      },
+      fixedDropList: {
+        // Использовать Position: fixed для позиционирования выпадайки
+        type: Boolean,
+        default: false
       }
 
 
@@ -60,7 +65,7 @@
       },
       openToggle() {
         this.selectOpen = !this.selectOpen
-        this.showFilterList()
+        if (this.fixedDropList) this.showFilterList()
       },
       showFilterList() {
         const parentBox = this.$refs.fs.getBoundingClientRect()
@@ -84,11 +89,11 @@
 
     },
     beforeMount () {
-      if (process.client) window.addEventListener('scroll', this.winScroll)
+      if (process.client && this.fixedDropList) window.addEventListener('scroll', this.winScroll)
     },
     beforeDestroy() {
       if (process.client) {
-        window.removeEventListener('scroll', this.winScroll)
+        if (this.fixedDropList) window.removeEventListener('scroll', this.winScroll)
         document.removeEventListener('click', this.hideSelect)
       }
     },

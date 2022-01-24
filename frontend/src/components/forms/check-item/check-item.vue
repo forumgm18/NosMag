@@ -9,16 +9,15 @@
       v-model="proxyChecked"
       )
     .check-item-body
-      .check-item-content
-        .check-item-icon
-          slot(name="icon")
-        .check-item-text
-          .check-item-title
-            slot(name="title")
-          .check-item-descr
-            slot(name="descr")
-      .check-item-footer(v-if="hasFooter")
-        slot(name="footer")
+      .check-item-icon(v-if="hasIcon")
+        slot(name="icon")
+      .check-item-text(:class="{p0: !hasIcon}")
+        .check-item-title(v-if="hasTitle")
+          slot(name="title")
+        .check-item-descr(v-if="hasDescr")
+          slot(name="descr")
+        .check-item-offer(v-if="hasOffer")
+          slot(name="offer")
 
 
 </template>
@@ -32,13 +31,8 @@ export default {
   },
 
   props: {
-    value: {
-      // type: [Boolean, Array, String],
-      // default: false
-    },
+    value: { },
     checked: {
-      // type: [Boolean, Array, String],
-      // type: Boolean,
       default: false
     },
     isChecked: {
@@ -49,10 +43,23 @@ export default {
       type: String,
       default: 'checkbox'
     },
-    hasFooter: {
+    hasIcon: {
       type: Boolean,
-      default: false
-    }
+      default: true
+    },
+    hasTitle: {
+      type: Boolean,
+      default: true
+    },
+    hasDescr: {
+      type: Boolean,
+      default: true
+    },
+    hasOffer: {
+      type: Boolean,
+      default: true
+    },
+
   },
   computed: {
     proxyChecked: {
@@ -72,4 +79,5 @@ export default {
 
 <style lang="scss">
 @import 'check-item';
+.p0 {padding: 0;}
 </style>

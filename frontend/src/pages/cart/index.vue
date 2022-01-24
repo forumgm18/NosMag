@@ -4,9 +4,8 @@
       page-cart(
         :cart="cart"
         :cart-title="$options.CART_TITLE"
-        :link-path="mocCatalogLink"
         )
-      page-order(:show-order="showOrder")  
+      page-order(:show-order="showOrder" @select-delivery-type="selectDeliveryType" )  
     .cart-total
       .page-title {{$options.ORDER_TOTAL_TITLE}}
       .cart-total-row 
@@ -16,9 +15,9 @@
       .cart-total-row(v-if="totalSaleStr") 
         .cart-total-lable.sale {{$options.ORDER_TOTAL_SALE_TEXT}}
         .cart-total-sum.sale(v-html="`${totalSaleStr}`")
-      .cart-total-row(v-if="totalSaleStr") 
+      .cart-total-row(v-if="getDeliveryPrice") 
         .cart-total-lable {{$options.ORDER_DELIVERY_LABEL}}
-        .cart-total-sum Бесплатно
+        .cart-total-sum(v-html="getDeliveryPrice")
       .cart-total-row
         .cart-total-lable.total {{$options.ORDER_TOTAL_LABEL}}
         .cart-total-sum.total(v-html="totalCartStr")
@@ -31,7 +30,7 @@
             v-model="promoCode"
             placeholder="TY3433"
             )
-        .btn(@click="goToOrder('order')") {{$options.BTN_TOTAL_TEXT}}
+        .btn(@click="goToOrder('order')" :disabled="btnDisabled" @form-valid="formValid") {{orderSteps.steps[orderSteps.currentStep]}}
 
 </template>
 
@@ -50,13 +49,23 @@
     ORDER_DELIVERY_LABEL: 'Доставка',  
     ORDER_PROMO_LABEL: 'Введите промокод',  
     ORDER_TOTAL_LABEL: 'Итого',  
-    BTN_TOTAL_TEXT: 'Заказать',  
+    BTN_TOTAL_TEXT: 'Оформить заказать',  
 
     data() {
       return {
-        mocCatalogLink: '/catalog/razdel/sub_razdel/',
         showOrder: false,
+        // showOrder: true,
         promoCode: '',
+        deliveryTarif: null,
+        btnDisabled: false,
+        orderSteps: {
+          currentStep: 0,
+          steps: [
+            'Оформить заказ',
+            'Перейти к оплате',
+          ]
+        }
+
       }
     },
   computed: {
@@ -77,11 +86,16 @@
     },
     totalCartStr(localeString = true) { 
       const sum = this.cart.sum
-      const delivery = 0
+      const delivery = this.deliveryTarif ? this.deliveryTarif.price : 0
       const p = localeString ? (sum + delivery).toLocaleString() : sum + delivery
       return `${p} ${this.currency}`
     },
-
+    getDeliveryPrice () {
+      if (this.deliveryTarif) {
+        return this.deliveryTarif.price ? `${this.deliveryTarif.price} ${this.currency}` : 'Бесплатно'
+      }
+      return undefined
+    }
   },
   // mounted(){
   //   // this.yamapSettings.apiKey = this.yandexApiKey || ''
@@ -98,6 +112,7 @@
   //     }
   //   },
   //   priceForOne(price, unit_name) { return `${price} ${this.currencyShort} за ${unit_name}`},
+
     goodsPieces(q, unit_name) { return `Товары ${q}&nbsp;${unit_name}.`},
     // goToOrder() { this.showOrder = true },
     goToOrder(id) {
@@ -105,9 +120,17 @@
       if (el) {
         el.scrollIntoView({behavior: "smooth", inline: "nearest"})
         this.showOrder = true
+        this.orderSteps.currentStep = 
+          this.orderSteps.steps.length < this.orderSteps.currentStep ? this.orderSteps.currentStep++ : 0
       }
     },
     onResize() { this.documentWidth = document.documentElement.clientWidth },
+    selectDeliveryType(val) {
+      this.deliveryTarif = val
+    },
+    formValid(val) {
+      this.btnDisabled = !val
+    }
   },
   // watch:{
   //   town() {

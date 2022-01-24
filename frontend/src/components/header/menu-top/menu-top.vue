@@ -3,72 +3,75 @@
     //.menu-close.bgr-close( @click="menuClose"  @mouseenter="itemMouseLeave" )
     burger
     .menu-close.bgr-close( @click="menuClose"  @mouseenter="itemMouseLeave" )
-    .menu-block
+    client-only
+      .menu-block
 
 
-      scroll-bar.menu-scroll.lv-1
-        .menu-scroll-body
-          ul#menu.menu(@mouseenter="itemMouseLeave")
-            li.menu-item(
-              v-for="(itm, i ) in  menuItems"
-              :key="i"
-              :data-menu-id="`lv2-${i}`"
-              :class="{open: lv2Open === `lv2-${i}`}"
-              @mouseover="itemMouseEnter"
-              @click.prevent="itemClick"
-
-            )
-              div.menu-link
-                span {{itm.name}}
-                .menu-arrow-next
-                  svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-          ul.menu.menu-info(@mouseenter="itemMouseLeave")
-            li.menu-item(v-for="(lnk, j ) in  header.info.links")
-              //nuxt-link.menu-link(:to="`${translit(itm.name)}${lnk.alias}`" @click.native="menuClose")
-              nuxt-link.menu-link(:to="`!${lnk.alias}`" @click.native="menuClose")
-                span {{lnk.name}}
-            li.menu-item.menu-phone
-              a.menu-link(:href="header.phone.link" @click="menuClose") {{header.phone.name}}
-
-      .submenu-block
-        scroll-bar.menu-scroll
+        perfect-scrollbar.menu-scroll.lv-1
+        
           .menu-scroll-body
-            ul.submenu.lv-2(
-              v-for="(item, ind) in menuItems"
-              :data-menu-id="`lv2-${ind}`"
-              :class="{open: lv2Open === `lv2-${ind}`}"
-              @mouseover="itemMouseEnter"
-            )
-              li.submenu-item.title.go-back(@click.prevent="goBack(2)")
-                span {{item.name}}
-                .menu-arrow-next.go-back
-                  svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+            ul#menu.menu(@mouseenter="itemMouseLeave")
+              li.menu-item(
+                v-for="(itm, i ) in  menuItems"
+                :key="i"
+                :data-menu-id="`lv2-${i}`"
+                :class="{open: lv2Open === `lv2-${i}`}"
+                @mouseover="itemMouseEnter"
+                @click.prevent="itemClick"
 
-              li.submenu-item(
-                v-for="(subitem, j) in item.items"
-                :data-menu-id="`lv2-${ind}-lv3-${j}`"
-                :class="{open: lv3Open === `lv2-${ind}-lv3-${j}`}"
               )
-                nuxt-link.submenu-link.title(
-                  v-if="subitem.items === undefined"
-                  :to="`${translit(item.name)}${subitem.link}`"
-                  @click.native="menuClose"
-                  ) {{subitem.name}}
-                .submenu-link.title(v-else @click.prevent="subitemClick")
-                  span {{subitem.name}}
+                div.menu-link
+                  span {{itm.name}}
                   .menu-arrow-next
                     svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-                ul.submenu.lv-3(
-                  v-if="subitem.items != undefined"
-                  :class="{open: lv3Open === `lv3-${j}`}"
-                  )
-                  li.submenu-item.title.go-back(@click.prevent="goBack(3)")
-                    span {{subitem.name}}
-                    .menu-arrow-next.go-back
-                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+            ul.menu.menu-info(@mouseenter="itemMouseLeave")
+              li.menu-item(v-for="(lnk, j ) in  header.info.links")
+                //nuxt-link.menu-link(:to="`${translit(itm.name)}${lnk.alias}`" @click.native="menuClose")
+                nuxt-link.menu-link(:to="`!${lnk.alias}`" @click.native="menuClose")
+                  span {{lnk.name}}
+              li.menu-item.menu-phone
+                a.menu-link(:href="header.phone.link" @click="menuClose") {{header.phone.name}}
 
-                  li.submenu-item(v-for="(l, k) in subitem.items")
-                    nuxt-link.submenu-link(:to="`${translit(item.name)}${l.link}`" @click.native="menuClose") {{l.name}}
+        .submenu-block
+          perfect-scrollbar.menu-scroll
+          
+            .menu-scroll-body
+              ul.submenu.lv-2(
+                v-for="(item, ind) in menuItems"
+                :data-menu-id="`lv2-${ind}`"
+                :class="{open: lv2Open === `lv2-${ind}`}"
+                @mouseover="itemMouseEnter"
+              )
+                li.submenu-item.title.go-back(@click.prevent="goBack(2)")
+                  span {{item.name}}
+                  .menu-arrow-next.go-back
+                    svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+
+                li.submenu-item(
+                  v-for="(subitem, j) in item.items"
+                  :data-menu-id="`lv2-${ind}-lv3-${j}`"
+                  :class="{open: lv3Open === `lv2-${ind}-lv3-${j}`}"
+                )
+                  nuxt-link.submenu-link.title(
+                    v-if="subitem.items === undefined"
+                    :to="`${translit(item.name)}${subitem.link}`"
+                    @click.native="menuClose"
+                    ) {{subitem.name}}
+                  .submenu-link.title(v-else @click.prevent="subitemClick")
+                    span {{subitem.name}}
+                    .menu-arrow-next
+                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+                  ul.submenu.lv-3(
+                    v-if="subitem.items != undefined"
+                    :class="{open: lv3Open === `lv3-${j}`}"
+                    )
+                    li.submenu-item.title.go-back(@click.prevent="goBack(3)")
+                      span {{subitem.name}}
+                      .menu-arrow-next.go-back
+                        svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+
+                    li.submenu-item(v-for="(l, k) in subitem.items")
+                      nuxt-link.submenu-link(:to="`${translit(item.name)}${l.link}`" @click.native="menuClose") {{l.name}}
 
 </template>
 
@@ -76,12 +79,14 @@
 import menuFunc from '~/utils/main-scripts'
 import burger from '~/components/header/burger/burger'
 // import customSelect from '~/components/custom-select'
-import ScrollBar from 'vue2-scrollbar'
+// import ScrollBar from 'vue2-scrollbar'
 import { mapState } from 'vuex'
 
 export default {
   name: 'MenuTop',
-  components: { burger, ScrollBar },
+  components: { burger, 
+  // ScrollBar 
+  },
   // props: ['menuItems'],
   data: () => ({
     // arrItems: [],

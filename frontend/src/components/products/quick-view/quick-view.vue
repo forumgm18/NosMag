@@ -53,12 +53,12 @@
                   
                   )
                   .product-slider-item(
-                    v-for="(item, index ) in product.images_big"
+                    v-for="(item, index ) in product.images"
                     :key="`slider-${index}`"
                   ) 
                     .product-slider-item-content
                       .img-box
-                        //- img(:src="item")
+                        //- img(:src="imgPath + item")
                         inner-image-zoom(:src="imgPath + item")
 
 

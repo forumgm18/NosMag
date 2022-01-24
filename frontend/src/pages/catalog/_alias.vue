@@ -25,12 +25,12 @@
 </template>
 
 <script>
-import ScrollBar from 'vue2-scrollbar'
+// import ScrollBar from 'vue2-scrollbar'
 
 export default {
   name: 'clarifying-selection-page',
   components: {
-    ScrollBar, 
+    // ScrollBar, 
     },
   data: function () {
     return {

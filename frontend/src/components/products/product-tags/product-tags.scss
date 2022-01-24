@@ -3,7 +3,8 @@
     display: flex;    
     align-items: center;
     position: absolute;
-    bottom: 0;
+    // bottom: 0;
+    top: 10px;
     left: 0;
     z-index: 1;
     &.static {position: static;}
@@ -15,18 +16,24 @@
     align-items: center;
     justify-content: center;
     background-color: var(--product-tag-bgr);
-    font-size: 10px;
     color: #fff;
     line-height: 1;
-    padding: .3em .4em;
-    min-width: 3.8em;
+    padding: .444444em .777777em;
+    min-width: 4.3333em;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 9px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;    
     &:not(:last-child){  margin-right: .4em;}
 
     span {
-      font-size: inherit;
+      font: inherit;
       color: inherit;
       line-height: inherit;
-      margin-right: .2em;
+      margin-right: .3333em;
+      // text-transform: uppercase;
     }
     svg {
       font-size: inherit;

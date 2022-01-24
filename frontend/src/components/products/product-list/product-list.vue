@@ -1,5 +1,5 @@
 <template lang="pug">
-  .product-list
+  .product-list(v-if="items")
     product-card(
       v-for="prod of items"
       :key="prod.id"
@@ -16,7 +16,11 @@ export default {
   name: 'ProductList',
   components: { ProductCard },
   props: {
-    items: { type: Array, required: true},
+    items: { 
+      type: Array, 
+      required: true,
+      // default(){return null}
+      },
     isBtn: {
       type: Boolean,
       default: false,
@@ -35,6 +39,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'style';
+@import 'product-list';
 
 </style>

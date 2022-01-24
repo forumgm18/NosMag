@@ -39,7 +39,7 @@
 
     // }
     &-section{ 
-      --m: 16px;
+      --m: 15px;
       display: flex;
       flex-wrap: wrap;
       // margin-bottom: 30px;
@@ -47,14 +47,22 @@
       &.delivery-opt {
         align-items: stretch;
       }
+      &.order-toggle-btn {
+        align-items: stretch;
+        .check-btn { 
+          flex-grow: 1;
+          flex-shrink: 0;
+        }
+      }
       &.address {
         flex-wrap: nowrap;
         margin-bottom: 0;
       }
-      .check-item {
+      .check-item, .check-btn {
         margin-left: var(--m);
         margin-right: var(--m);
-        max-width: 291px;
+        margin-bottom: var(--m);
+        max-width: 400px;
       }
     }
     &-item{
@@ -69,15 +77,6 @@
         textarea {
           height: 130px;
         }
-      }
-      .map-show {
-        font-size: 14px;
-        color: var(--base-color1);
-        cursor: pointer;
-        white-space: nowrap;
-        // margin: 0.8571em 0;
-        // padding: 0.8571em 0;
-        line-height: 3;   
       }
 
     }
@@ -123,10 +122,14 @@
       &.dropdown {
         margin-left: 0;
         margin-right: 0;
+        &:hover {
+          .dropdown_title {border-color: currentColor;}  
+        }
       }
 
       &.focus {
-          .dropdown_title {border-color: currentColor;}  
+          // .dropdown_title {border-color: currentColor;}  
+          .dropdown_title {border-color: var(--base-color1)!important;}  
           .dropdown_arrow {color: currentColor;}
         }
         .dropdown {
@@ -141,8 +144,9 @@
         .dropdown_arrow {color: var(--text-color-light);}
         .dropdown-input {
           font: inherit;
-          padding: 0.8571em 1em;
+          // padding: 0.8571em 1em;
           // padding: 0.3571em 0;
+          padding: 0.785714285714em 1.28571428571em;
           background: #fff;
           // border: 1px solid var(--text-color-light);
           border: none;
@@ -344,6 +348,30 @@
     }
   }
 }  
+.map-show {
+  font-size: 14px;
+  color: var(--base-color1);
+  cursor: pointer;
+  white-space: nowrap;
+  // margin: 0.8571em 0;
+  // padding: 0.8571em 0;
+  line-height: 3;   
+}
+.deivery-service {
+
+    &-logo {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 65px;
+      color: var(--text-color-default);
+      
+    }
+    .check-item-descr {opacity: 1;}
+    .check-item-offer {text-align: center;}
+
+}
+
 .lbl {
   position: absolute;
   right: 0;

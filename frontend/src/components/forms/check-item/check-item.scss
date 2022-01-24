@@ -1,5 +1,5 @@
 .check-item {
-  font-size: 16px;
+  font-size: 20px;
   color: var(--text-color-default);
   cursor: pointer;
   flex-shrink: 0;
@@ -7,35 +7,18 @@
   &-body {
     border-radius: 5px;
     border: 1px solid var(--text-color-light);
-    background-color: var(--text-color-light);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  &-content{
-    display: flex;
-    align-items: center;
-    font-size: inherit;
-    color: inherit;
-    border-radius: 5px;
-    border: 1px solid var(--text-color-light);
-    // border-bottom-width: 1px;
-    // background-color: transparent;
+    // background-color: var(--text-color-light);
+    // background-color: var(--base-color3);
     background-color: #fff;
-    transition: .3s;
+    height: 100%;
+    // display: flex;
+    transition: .1s;
     padding: 1.8125em 1.625em;
-    margin: -1px -1px;
-    flex-grow: 1;
-  }
-  &-footer{
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
-    padding: .5em 1em;
   }
   &-icon{
-    font-size: 3.75em;
+    font-size: 2.6em;
     flex-shrink: 0;
+    margin-bottom: 0.3461em;
   }
   &-text {
     font-size: inherit;
@@ -45,27 +28,28 @@
 
   }
   &-title {
-    font-size: 1.25em;
+    font-size: inherit;
     font-weight: 500;
     color: inherit;
-    margin-bottom: 0.4em;
+    margin-bottom: 0.5em;
   }
   &-descr {
     font-size: inherit;
-    color: var(--text-color-light);
+    line-height: 1.3;
+    color: var(--text-color-default);
+    margin-bottom: .9375em;
+    opacity: .4;
+  }
+  &-offer {
+    font-size: inherit;
+    margin-bottom: .9375em;
   }
 
 }
 input:checked {
   & + .check-item-body {
-    background-color: var(--base-color3);
-    border-color: var(--base-color3);
-    color: #fff;
-    .check-item-content {
-      background-color: var(--base-color1);
-      border-color: var(--base-color1);
-      color: #fff;
-    }
-    .check-item-descr {color: inherit;}
+    border-color: var(--base-color1);
+    // outline: 3px solid var(--base-color1);
+    box-shadow: inset 0 0 0px 3px var(--base-color1);
   }
 }

@@ -1,22 +1,31 @@
 // Base colors
-$base-color1            : #326FCA;
-$base-color2            : #DD5500;
-$base-color3            : #233653;
-$base-color4            : #C4C4C4;
+$base-color1            : #326FCA; // hsla(216, 60%, 49%, 1)
+$base-color1-hover      : #265398; // hsla(216, 60%, 37%, 1);
+$base-color2            : #DD5500; // hsla(23, 100%, 43%, 1);
+$base-color3            : #233653; // hsla(216, 41%, 23%, 1)
+$base-color4            : #C4C4C4; // hsla(0, 0%, 77%, 1)
 $base-color5            : #EFEFEF;
 $base-color6            : #fff;
-$base-color7            : #aeaeae; // убрать на a7
-$base-color8            : #a7a7a7;
+$base-color7            : #a7a7a7; 
+// $base-color8            : #a7a7a7;
 $blackout               : rgba(104, 139, 205, 0.1);
 $substrate-bgr          : rgba(104, 139, 205, 0.2);
 $filter-close-bgr       : rgba(104, 139, 205, 0.4);
 $filter-border-color    : #9f9f9f; // убрать на a7
-$product-tag-bgr        : rgba(50, 111, 202, 0.5);
+$product-tag-bgr        : $base-color1; // rgba(50, 111, 202, 0.5);
 // $scrollbar-track        : rgba(196, 196, 196, 0.2);
 $scrollbar-track        : transparent;
-$scrollbar-track-drag   : rgba(196, 196, 196, 0.5);
-$scrollbar-track-drag-active : rgba(196, 196, 196, .8);
-$scrollbar-track-drag-hover : rgba(196, 196, 196, 1);
+$scrollbar-track-hover  : rgba(196, 196, 196, 0.2); // hsla(0, 0%, 77%, 0,2)
+$scrollbar-track-drag   : rgba(196, 196, 196, 0.2); // hsla(0, 0%, 77%, 0,2)
+
+$scrollbar-thumbs        : rgba(196, 196, 196, 0.5); // hsla(0, 0%, 77%, 0,5)
+$scrollbar-thumbs-hover  : rgba(196, 196, 196, 0.8); // hsla(0, 0%, 77%, 0,8)
+$scrollbar-thumbs-drag   : rgba(196, 196, 196, 1);   // hsla(0, 0%, 77%, 1)
+$product-card-hover-border   : rgba(35, 54, 83, 0.4); // hsla(216, 41%, 23%, .4)
+// rgba(35, 54, 83, 1)
+// hsla(216, 41%, 23%, 1)
+// $scrollbar-track-drag-active : rgba(196, 196, 196, .8);
+// $scrollbar-track-drag-hover : rgba(196, 196, 196, 1); hsla(0, 0%, 77%, 1)
 
 // Burger
 $burgerW: 20px;
@@ -60,8 +69,9 @@ $smPhoneWidth       : 100vw;
 //$default-color          : #ffffff;
 $text-color              : $base-color3; //#555555;
 $text-color-light        : $base-color4; //#cccccc;
-$text-color-light2       : $base-color8; //#cccccc;
+$text-color-light2       : $base-color7; //#cccccc;
 $price-sale              : $base-color2;
+$input-error              : $base-color2;
 //$logo-text-color         : #5a5a5a;
 //$warning-color           : $base-color2; //#FB4545;
 ////$success-color           : #26de81;

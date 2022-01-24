@@ -86,6 +86,8 @@ export default {
     { src: '~/plugins/yamap.js',  mode: 'client' },
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
+    { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
+    // '~/plugins/vue-perfect-scrollbar.client.js', 
     '~/plugins/vuelidate.js',
     // { src: '~/plugins/paginate.js', mode: 'client' },
     // { src: '~/plugins/popper.js', mode: 'client' },
@@ -96,7 +98,7 @@ export default {
     // '~/plugins/-generate.uuid.js',
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
-    '~/plugins/vuebar.js',
+    // '~/plugins/vuebar.js',
     '~/plugins/directives/auto-min-width.client.js',
 
     // '~/plugins/v-mask.js',
@@ -199,6 +201,11 @@ components: [
       video: ({ isDev }) =>
         isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]',
     },
+    babel: {
+      plugins: [
+        ['@babel/plugin-proposal-private-property-in-object', { loose: true }]
+      ],
+    },    
     ...(!isDev && {
       html: {
         minify: {

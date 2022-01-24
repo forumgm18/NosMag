@@ -13,8 +13,8 @@
 
 <script>
 
-import { required, email, minValue, maxValue, minWidth, maxWidth } from 'vuelidate/lib/validators'
-
+import { required, email, minValue, maxValue, minLength, maxLength } from 'vuelidate/lib/validators'
+import { validatePhone } from '@/utils/main-scripts'
 export default {
   props: {
     value: {
@@ -37,7 +37,7 @@ export default {
       type: String,
       default: ''
     },
-    isError: {
+    isValid: {
       type: Boolean,
       default: false
     },
@@ -45,11 +45,11 @@ export default {
       type: Boolean,
       default: false
     },
-    minWidth: {
+    minLength: {
       type: Number,
       default: null
     },
-    maxWidth: {
+    maxLength: {
       type: Number,
       default: null
     },
@@ -78,12 +78,15 @@ export default {
     if (this.required) vObj.required = required
     if (this.type === 'email') vObj.email = email
     if (this.type === 'text') {
-      if (this.minWidth) vObj.minWidth = minWidth(this.minWidth)
-      if (this.maxWidth) vObj.maxWidth = maxWidth(this.maxWidth)
+      if (this.minLength) vObj.minLength = minLength(this.minLength)
+      if (this.maxLength) vObj.maxLength = maxLength(this.maxLength)
     }
     if (this.type === 'number') {
       if (this.minValue) vObj.minValue = minValue(this.minValue)
       if (this.maxValue) vObj.maxValue = maxValue(this.maxValue)
+    }
+    if (this.type === 'tel') {
+      vObj.validatePhone = validatePhone
     }
     // console.log('vObj: ', vObj)
     return { locValue: vObj }      
@@ -92,8 +95,9 @@ export default {
 watch: {
     locValue: function(val, oldVal) {
       this.$emit('input', val, oldVal)
-      this.$emit('update:is-error', this.$v.locValue.$error)
-      
+      // this.$emit('update:is-error', this.$v.locValue.$error)
+      this.$emit('update:isValid', !this.$v.locValue.$error)
+      // debugger
     }
   }  
 

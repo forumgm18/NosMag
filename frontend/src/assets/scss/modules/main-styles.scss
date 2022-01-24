@@ -1,13 +1,14 @@
 :root{
   --base-color1 : #{$base-color1};
+  --base-color1-hover : #{$base-color1-hover};
   --base-color2 : #{$base-color2};
   --base-color3 : #{$base-color3};
   --base-color4 : #{$base-color4};
   --base-color5 : #{$base-color5};
   --base-color6 : #{$base-color6};
   --base-color7 : #{$base-color7};
-  --base-color8 : #{$base-color8};
-  --old-price-color: #{$base-color8};
+  // --base-color8 : #{$base-color8};
+  --old-price-color: #{$base-color7};
   --footer-bgr-color : #{$base-color1};
   --page-bgr-primary: #fff;
   --page-bgr-secondary: #e2e2e2;
@@ -23,13 +24,17 @@
   --price-sale: #{$price-sale};
   --product-tag-bgr: #{$product-tag-bgr};
   --box-shadow-modal: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  --vue-scrollbar-width: 8px;
-  --vue-scrollbar-height: 8px;
-  --scrollbar-track: #{$scrollbar-track};
-  --scrollbar-track-drag: #{$scrollbar-track-drag};
-  --scrollbar-track-drag-active: #{$scrollbar-track-drag-active};
-  --scrollbar-track-drag-hover: #{$scrollbar-track-drag-hover};
-
+  --scrollbar-width: 4px;
+  --scrollbar-height: 4px;
+  --scrollbar-track: #{$scrollbar-track};  // цвет полосы прокрутки
+  --scrollbar-track-hover: #{$scrollbar-track-hover}; // цвет полосы прокрутки при хувере
+  --scrollbar-track-drag: #{$scrollbar-track-drag}; // цвет полосы прокрутки при перетаскивании
+  --scrollbar-thumbs: #{$scrollbar-thumbs};  // цвет бобышки (индикатора) на плосе прокрутки
+  --scrollbar-thumbs-hover: #{$scrollbar-thumbs-hover}; // цвет бобышки (индикатора) при хувере
+  --scrollbar-thumbs-drag: #{$scrollbar-thumbs-drag}; // цвет бобышки (индикатора) при перетаскивании
+  --input-error : #{$input-error};
+  --product-card-hover-border : #{$product-card-hover-border};
+  
 
 
 
@@ -84,6 +89,27 @@
 
 
 }
+.scrollbar-size-2{
+  --scrollbar-width: 2px;
+  --scrollbar-height: 2px;
+}
+.scrollbar-size-3{
+  --scrollbar-width: 3px;
+  --scrollbar-height: 3px;
+}
+.scrollbar-size-4{
+  --scrollbar-width: 4px;
+  --scrollbar-height: 4px;
+}
+.scrollbar-size-5{
+  --scrollbar-width: 5px;
+  --scrollbar-height: 5px;
+}
+.scrollbar-size-6{
+  --scrollbar-width: 6px;
+  --scrollbar-height: 6px;
+}
+
 *{
   //border: 1px solid red;
 }
@@ -223,6 +249,10 @@ p {color: var(--text-color-default)}
 .price-sale {
   color: var(--price-sale)!important;
 }
+.price-sale-bgr {
+  --product-tag-bgr: var(--price-sale)!important;
+}
+
 .sidebar{
   &-left {
     //border: 1px solid green;
@@ -311,26 +341,6 @@ p {color: var(--text-color-default)}
 .db {display: block!important;}
 .fg {flex-grow: 1!important;}
 
-.vue-scrollbar__scrollbar-vertical,.vue-scrollbar__scrollbar-horizontal  {
-  background: transparent;
-  &:hover{ background: transparent; }
-  .scrollbar { background: var(--base-color4); }
-}
-.vue-scrollbar__scrollbar-vertical {
-  width: var(--vue-scrollbar-width)!important;
-  .scrollbar {
-    border-radius: var(--vue-scrollbar-width)!important;
-    width: var(--vue-scrollbar-width)!important;
-  }
-}
-
-.vue-scrollbar__scrollbar-horizontal {
-  height: var(--vue-scrollbar-height)!important;
-  .scrollbar {
-    height: var(--vue-scrollbar-height)!important;
-    border-radius: var(--vue-scrollbar-height)!important;
-  }
-}
 
 
 .vm--overlay{background: var(--bgr-close)!important;}

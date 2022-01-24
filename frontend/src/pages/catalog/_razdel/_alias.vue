@@ -2,15 +2,15 @@
   div
     v-preloader.in-page(v-if="$fetchState.pending")
     main.container.razdel-page(v-else)
-      //- section
-        breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
       section
         h1.page-title {{title}}
-      //-loading.center(v-if="loading")
-      //-section.content-section(v-else)
       section.content-section
         aside.sidebar-left
           sublinks-menu(v-if="sublinks_menu" :items="sublinks_menu.items")
+          //- v-radio-set(
+            :options="sortmodes" 
+            v-model="sortBy" 
+            )
 
 
         article.main-content
@@ -20,7 +20,7 @@
                 .btn-icon(@click="sortOpen")
                   svg.icon.icon-sort <use href="#icon-sort"/>
                 .mobile-sort(:class="{open: isSortOpen}" data-mobile-sort)
-                  vnm-select-list(
+                  v-radio-set(
                     :multiple="false"
                     item-type='radio'
                     :options="sortmodes" 
@@ -31,123 +31,109 @@
                 svg.icon.icon-filter <use href="#icon-filter"/>
       
 
-            mobile-filter( 
+            //- mobile-filter( 
               v-if="filters"
               :filters="filters"            
               :class="{open: isFilterOpen}"            
               v-model="selectedFilters"
               @filters-close="isFilterOpen=false" 
               @apply-filter="applyFilter"
-            )
+              )
             desktop-filter(
               v-if="filters"
               :filters="filters"            
               :class="{open: isFilterOpen}" 
               v-model="selectedFilters"         
-            )
+              )
               template(#sort)
                 v-dropdown.is-sort(
                   title="Сортировать по"
                   :multiple="false"
+                  key="sort-1"
                 )
                   template(#content)
-                    vnm-select-list(
-                      :multiple="false"
-                      item-type='radio'
+                    v-radio-set(
                       :options="sortmodes" 
                       v-model="sortBy" 
                     )
 
-          section.razdel-content
-            //-loading.center(v-if="loading")
-            product-list( 
+          section.razdel-content(v-if="loadingFiltered")
+            v-preloader.in-page
+          section.razdel-content(v-else)
+
+            product-list(
               v-if="products" 
               :items="products" 
               :is-btn="true" 
               :is-sizes="true"
               )
-            //-client-only
-              paginate(
-                v-if="pageCount > 1"
-                v-model="currentPage"              :page-count="pageCount"              :click-handler="pageChangeHandler"              :prev-text="`<icons class='icon'><use href='#icon-arrow-left'></use></icons>`"              :next-text="`<icons class='icon'><use href='#icon-arrow-right'></use></icons>`"              :container-class="'pagination'"              :page-link-class="'pagination-link'"              :prev-link-class="'pagination-link prev'"              :next-link-class="'pagination-link next'"              :hide-prev-next="true"              )
-          section.pagination
-            .pagination-descr {{$options.PAGINATE_TEXT}} {{itemsTotal}}
-            .btn.btn-4(@click="showMore") {{$options.SHOW_MORE_BTN}}
+            .pagination(v-if="products.length < itemsTotal")
+              v-preloader.in-page(v-if="loading")
+              .pagination-descr(v-if="!loading") {{getPaginateText}}
+              .btn.btn-4(@click="showMore") {{$options.SHOW_MORE_BTN}}
 </template>
 
 <script>
-// import vDropdown from "~/components/common/v-dropdown/v-dropdown"
-import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
-
 import { mapGetters } from 'vuex'
-
-
-
 export default {
   name: 'Razdel',
-  components: {
-    // vDropdown,
-    vnmSelectList,
-    // Paginate
-  },
-  data: function () {
+  components: { },
+  data() {
     return {
       selectedFilters: {},
       // loading: true,
       loading: false,
+      loadingFiltered: false,
       filterCollapse: true,
       sortBy: null,
       isFilterOpen: false,
       isSortOpen: false,
+      //=========================
+      limit: 10, // количество товаров на страницу
+      offset: 0, // Странца пагинации
+      queryFilters: [],
+      queryFiltersChange: false,
+      selModel: [],
+      // selModel: [{id:1519, name: 'AROS' },{id:428, name: 'Atlantic' },],
+
       }
   },
-  PAGINATE_TEXT: 'Отображается 8 из ',
   SHOW_MORE_BTN: 'Показать далее',
-  // asyncData: async function ({app, store, params, error}) {
-  // // fetch: async function ({store, params}) {
-  //   // console.log('catalog/_razdel/_alias params', params)
-  //   // this.loading = true
-  //   await store.dispatch('fetchContent', params.alias)
-  //   // let ctnType = store.state.content.type
-  //   if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
-  //   // if (ctnType === '404' || ctnType === 404) {
-  //   //   error({ statusCode: 404, message: '' })
-  //   // }
-  //   // this.loading = false
-    
-  // },
   async fetch() {
-    await this.$store.dispatch('fetchContent', this.$route.params.alias)
-    if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
+    await this.$store.dispatch('productList/fetchProductList', {
+      params:{
+        alias: this.$route.params.alias,
+        items_only: 0,
+        limit: this.limit,
+        offset: this.offset
+      },
+      isFilter: false  
+    })
+    // if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
   },
 
   computed: {
-    // ...mapGetters('razdel',['products', 'page', 'pageCount']),
     ...mapGetters('settings',['sortmodes']),
-    title() {return this.$store.state.content.data.name || ''},
-    // title() {return 'dfgdg'},
-    products() { return this.$store.state.content.data.items || null},
-    filters() { return this.$store.state.content.data.filters || null},
-    // breadcrumbs() {return this.$store.state.content.data.breadcrumbs || null},
+    title() {return this.$store.getters['productList/getTitle']},
+    products() { return this.$store.getters['productList/getProductList']},
+    filters() { return this.$store.getters['productList/getFilters']},
     breadcrumbs() {return this.$store.getters['getBreadcrumbs']},
-    sublinks_menu() {return this.$store.state.content.data.sublinks_menu || null},
-    itemsTotal() {return this.$store.state.content.data.items_total_q || null},
-    currentPage: {
-      get: function() { return this.page},
-      set: function(value) { this.$store.commit('razdel/setPage', value) }
-    },
+    sublinks_menu() { return this.$store.getters['productList/getSublinksMenu'] },
+    itemsTotal() {return this.$store.getters['productList/getProductsTotal']},
+    getPaginateText() { 
+      return `Отображается 
+        ${Math.min(this.limit + this.offset, this.itemsTotal)} из ${this.itemsTotal}` 
+    }
   },
   created() {
-    // this.currentPage = 1
-    // this.pageChangeHandler(1)
     if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0]
-    
+    // if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0].name
   },
-  mounted(){
+  beforeMount() {
     if (process.client) document.addEventListener('click', this.hideSort, true)
   },
   beforeDestroy(){
-     if (process.client) document.removeEventListener('click', this.hideSort)
+    if (process.client) document.removeEventListener('click', this.hideSort)
   },
   methods: {
     hideSort(e){
@@ -164,7 +150,68 @@ export default {
     sortOpen() {
       this.isSortOpen = !this.isSortOpen
     },
-    showMore () {},
+    async loadProducts(offset, items_only, isFilter = false) {
+      // this.offset = isFilter ? 0 : this.offset + this.limit
+      let queryParams = {
+        alias: this.$route.params.alias,
+        items_only,
+        limit: this.limit,
+        offset,
+      }
+      if (this.queryFilters && this.queryFilters.length) queryParams['filters'] = this.queryFilters
+
+      await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter})
+    },
+    async showMore() {
+      this.loading = true
+      this.offset += this.limit
+      await this.loadProducts(this.offset, 1)
+      this.loading = false
+    },
+    async showFilteredProducts() {
+      console.log('showFilteredProducts')
+      this.loadingFiltered = true
+      this.offset = 0 
+      await this.loadProducts(this.offset, 1, true)
+      this.loadingFiltered = false
+    },
+  },
+  watch: {
+    selectedFilters: {
+      handler(val) {
+        return
+        if (!process.browser) return
+        this.queryFilters = []
+          // цикл по ключам и значениям
+        for (let [key, v] of Object.entries(val)) {
+          if ( Array.isArray(v) ){
+            if (v.length) {
+              this.queryFilters.push({
+                id: key,
+                value: v.map(item => item.id)
+              }) 
+            }
+          } else {
+              // this.queryFilters.push({
+              //   id: key,
+              //   value: [v.active_min, v.active_max ]
+              // }) 
+          }
+          
+        }
+      },
+      deep: true
+    },
+    queryFilters: {
+      handler(val) {
+        if (!process.browser) return
+        console.log('queryFilters')
+        if (this.queryFiltersChange) this.showFilteredProducts()
+        this.queryFiltersChange = true
+      },
+      deep: true
+    },
+
   }
 }
 </script>

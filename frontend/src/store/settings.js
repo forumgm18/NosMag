@@ -12,6 +12,7 @@ export const state = () => ({
   imgPrefix: { l: 'l_', m: 'm_', s: 's_', t: 't_'},
   imgRetinaPrefix: 'x2_',
   yandexApiKey: null,
+  TEL_MASK: '+7 (###) ###-##-##',
 
 })
 
@@ -59,5 +60,6 @@ export const getters = {
   imgRetinaPrefix: s => s.imgRetinaPrefix,
   yandexApiKey: s => s.yandexApiKey,
   userDefaultCity: s => s.header.city || undefined,
+  phoneMask: s => s.TEL_MASK || undefined,
 
 }

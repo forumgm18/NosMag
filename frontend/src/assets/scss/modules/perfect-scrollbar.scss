@@ -1,0 +1,47 @@
+// .ps {
+//   // --vue-scrollbar-width: 4px;
+//   // --vue-scrollbar-height: 4px;
+//   // --scrollbar-track: #{$scrollbar-track};  // цвет полосы прокрутки
+//   // --scrollbar-track-hover: #{$scrollbar-track-hover}; // цвет полосы прокрутки при хувере
+//   // --scrollbar-track-drag: #{$scrollbar-track-drag}; // цвет полосы прокрутки при перетаскивании
+//   // --scrollbar-thumbs: #{$scrollbar-thumbs};  // цвет бобышки (индикатора) на плосе прокрутки
+//   // --scrollbar-thumbs-hover: #{$scrollbar-thumbs-hover}; // цвет бобышки (индикатора) при хувере
+//   // --scrollbar-thumbs-drag: #{$scrollbar-thumbs-drag}; // цвет бобышки (индикатора) при перетаскивании
+
+// }
+
+.ps__thumb-y {
+    background-color: var(--scrollbar-thumbs)!important;
+    border-radius: var(--scrollbar-width)!important;
+    width: var(--scrollbar-width)!important;
+    right: 0!important;
+}
+.ps__rail-y {
+    background-color: var(--scrollbar-track)!important;
+    border-radius: var(--scrollbar-width)!important;
+    width: var(--scrollbar-width)!important;
+    right: 0!important;
+    &.ps--clicking, &:hover, &:focus {width: calc(2 * var(--scrollbar-width))!important;}
+
+}
+
+.ps__rail-y:hover > .ps__thumb-y, 
+.ps__rail-y:focus > .ps__thumb-y, 
+.ps__rail-y.ps--clicking .ps__thumb-y {
+    width: calc(2 * var(--scrollbar-width))!important;
+}
+.ps__rail-y:hover > .ps__thumb-y, 
+.ps__rail-y:focus > .ps__thumb-y {
+    background-color: var(--scrollbar-thumbs-hover)!important;
+}
+.ps__rail-y.ps--clicking .ps__thumb-y {
+    background-color: var(--scrollbar-thumbs-drag)!important;
+}
+
+.ps__rail-y:hover, 
+.ps__rail-y:focus {
+    background-color: var(--scrollbar-track-hover)!important;
+}
+.ps__rail-y.ps--clicking {
+    background-color: var(--scrollbar-track-drag)!important;
+}

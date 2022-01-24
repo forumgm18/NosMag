@@ -1,7 +1,13 @@
 <template lang="pug">
 .checkbox
   label.checkbox-label
-    input(ref="chbx" hidden type="checkbox"  :value="value" v-model="proxyChecked")
+    input(
+      hidden 
+      type="checkbox"
+      :checked="shouldBeChecked"
+      :value="value"
+      @change="updateInput"      
+      )
     span.checkbox_text-block
       span.checkbox_icon
       span.checkbox_text
@@ -9,30 +15,61 @@
 </template>
 
 <script>
+// import radioCheckMixin from '@/mixins/radio-check.mix'
 export default {
   name: 'check-box',
   model: {
-    prop: "checked",
-    event: "change"
+    prop: 'modelValue',
+    event: 'change'
   },
-
   props: {
-    value: {},
-    checked: {
-      type: [Boolean, Array],
+    value: {
+      // type: String,
+    },
+    modelValue: {
+      default: false
+    },
+    // label: {
+    //   type: String,
+    //   required: true
+    // },
+    // Мы установили `true-value` и `false-value` в true и false по-умолчанию, таким образом
+    // мы всегда можем использовать их вместо проверки на то, установлены они или нет.
+    // Также здесь мы можем использовать camelCase, дефис разделяющий имя атрибута
+    // все равно будет работать
+    trueValue: {
+      default: true
+    },
+    falseValue: {
       default: false
     }
   },
   computed: {
-    proxyChecked: {
-      get() {
-        return this.checked;
-      },
-      set(val) {
-        this.$emit("change", val);
+    shouldBeChecked() {
+      if (this.modelValue instanceof Array) {
+        return this.modelValue.includes(this.value)
+      }
+      // Обратите внимание, что `true-value` и` false-value` являются camelCase в JS
+      return this.modelValue === this.trueValue    }
+  },
+  methods: {
+    updateInput(event) {
+      let isChecked = event.target.checked      
+      if (this.modelValue instanceof Array) {
+        let newValue = [...this.modelValue]
+
+        if (isChecked) {
+          newValue.push(this.value)
+        } else {
+          newValue.splice(newValue.indexOf(this.value), 1)
+        }
+
+        this.$emit('change', newValue)
+      } else {
+        this.$emit('change', isChecked ? this.trueValue : this.falseValue)
       }
     }
-  },
+  }
 }
 </script>
 

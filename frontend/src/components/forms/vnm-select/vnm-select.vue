@@ -11,7 +11,7 @@
       .vnm-select_arrow(@click="clearSelection" )
     .vnm-select_list-close(@click.stop="vnmClose")
     .vnm-select_list(data-vnm-select-item-list @click.stop="" :class="{'set-max-height' : options.length > 9}")
-      scroll-bar.vnm-select_list-scroll(v-if="contentType==='list'")
+      perfect-scrollbar.vnm-select_list-scroll(v-if="contentType==='list'")
         .vnm-select_list-scroll-body
           .vnm-option_item(
             v-for="opt1 in options"
@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import ScrollBar from 'vue2-scrollbar'
+// import ScrollBar from 'vue2-scrollbar'
 export default {
   name: 'vnm-select',
-  components: { ScrollBar },
+  // components: { ScrollBar },
   props: {
     settings: {
       type: Object,

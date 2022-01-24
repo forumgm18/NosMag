@@ -1,10 +1,12 @@
 <template lang="pug">
   .desktop-filter(v-if="filters")
-    .desktop-filter-collapse(:class="{collapse: filterCollapse}")
+    transition-group.desktop-filter-collapse(name="filter-toggle" tag="div" :class="{collapse: filterCollapse}")
+      //- .desktop-filter-collapse(:class="{collapse: filterCollapse}")
       slot(name="sort")
-
-      v-dropdown(
-        v-for="f in filters"
+      
+      v-dropdown.scrollbar-size-2(
+        v-for="(f, i) in filters"
+        v-show="i < filterMaxColumns"
         :key="f.id"
         :id="f.id"
         :title="f.name"
@@ -18,7 +20,7 @@
           span.dropdown_title-count(v-if="modelLength(f.id)") {{modelLength(f.id)}}
 
         template( #content )
-          vnm-select-list(
+          v-check-list(
             v-if="selectContentType(f.type)===$options.FILTER_LIST && f.values"
             :id="f.id"
             :multiple="true"
@@ -60,15 +62,10 @@
     .desktop-filter-collapse-btn(:class="{collapse: filterCollapse}" @click="filterCollapseToggle")
       svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
 
-
-
-
 </template>
 
 <script>
   import InputNumber from '~/components/forms/input-number/input-number'
-  import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
-  // import vDropdown from '~/components/common/v-dropdown/v-dropdown'
 
 export default {
     name: 'desktop-filter',
@@ -84,16 +81,21 @@ export default {
 
     components: {
       InputNumber,
-      vnmSelectList,
-      // vDropdown,
     },
     data: () => ({
       filterCollapse: true,
+      filterMaxColumns : 7,
     }),
     FILTER_LIST: 'list',
     FILTER_PRICE: 'price',
     FILTER_COLOR: 'color',
     PRICE_STEP: 100,
+    viewPortColumns: [
+      { w: 992, col: 3 },
+      { w:1200, col: 4 },
+      { w:1600, col: 5 },
+    ],
+
     created(){
       // Подготавливаем объект выбранных фильтров и делаем его реактивным
       this.filters.forEach(el => {
@@ -104,7 +106,23 @@ export default {
         }
       });
     },
+    beforeMount() {
+      if (process.browser) {
+        console.log('beforeMounted')
+        window.addEventListener('resize', this.setFilterMaxColumns)
+      }  
+    },
+    beforeDestroy() {
+      if (process.browser) {
+        window.removeEventListener('resize', this.setFilterMaxColumns)
+      }  
+    },
 
+    mounted(){
+      if (process.browser) {
+        this.setFilterMaxColumns()  
+      }
+    },
     computed: {
       model: {
         get() {
@@ -138,11 +156,58 @@ export default {
         return 'block'
       },
       filterCollapseToggle() {this.filterCollapse = !this.filterCollapse},
+      setFilterMaxColumns() {
+        // const w = document.documentElement.clientWidth
+        const w = window.innerWidth
+        const res = this.$options.viewPortColumns.find(c => c.w >= w )
+        this.filterMaxColumns = res ? res.col : 6
+      }
+    },
+    watch: {
+      filterCollapse(val) {
+        val ? this.setFilterMaxColumns() : this.filterMaxColumns = Infinity
+      }
     }
 
     }
 </script>
 
 <style lang="scss" scoped>
- @import "desktop-filter";
+  @import "desktop-filter";
+.filter-toggle-enter-active {
+  animation: filter-toggle .1s;
+}
+.filter-toggle-leave-active {
+  animation: filter-toggle .1s reverse;
+}
+@keyframes filter-toggle {
+  0% {
+    // transform: scale(0);
+    opacity: 0;
+    overflow: hidden;
+    height: 0;
+
+  }
+  25% {
+    opacity: .25;
+    height: .57em;
+  }
+  50% {
+    opacity: .5;
+    height: 1.14em;
+  }
+  75% {
+    opacity: .75;
+    height: 1.71em;
+  }
+  99% {
+    opacity: .99;
+    height: 2.25em;
+  }
+  100% {
+    opacity: 1;
+    overflow: initial;
+    height: auto;
+  }
+}
 </style>

@@ -36,7 +36,17 @@ export function declensionEndings(value, words) {
 export function contentError(value) {  
     return value === '404' || value === 404
 }
+export function searchHighlight(searchStr, text) {
+        return (text.toUpperCase().indexOf(searchStr.toUpperCase()) != -1) ?
+          text.replace(new RegExp(searchStr,'ig'),`<strong>$&</strong>`)
+        : text
+}
 
+export function validatePhone(phone){
+  // let regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/
+  let regex = /^(\+7|7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/
+  return regex.test(phone)
+}
 
 export default {
   menuState,

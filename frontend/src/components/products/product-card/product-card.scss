@@ -62,26 +62,35 @@
 }
 .product {
   &-card {
-    //border: 1px solid red;
+    // border: 1px solid gray;
     background-color: #fff;
     //padding: 10px;
     margin: var(--m);
+    padding: var(--m);
+    padding-bottom: 0;
     width: calc((100% / var(--col)) - 2*var(--m));
+    // width: calc(100% / var(--col));
     font-size: 16px;
+        // transition: .3s;
 
     position: relative;
-    //box-shadow: 0px 4px 16px rgba(85, 85, 85, 0.25);
+    // box-shadow: 0px 4px 16px rgba(85, 85, 85, 0.25);
+    // box-shadow: 0 0 0 19px #fff, 0 0 0 20px red;
     //border-radius: 16px;
       @include media-max-width2(1250) {   font-size: 14px;  }
       @include media-max-width2(1100) {   font-size: 12px;  }
       @include media-max-width2(992) {   font-size: 10px;  }
 
       &:hover {
+        box-shadow: 0 0 0 calc(1.3333 * var(--m) - 1px) #fff, 0 0 0 calc(1.3333 * var(--m)) var(--product-card-hover-border);
+        z-index: 2;
+
         //box-shadow: 0px 4px 16px rgba(85, 85, 85, 0.25);
         //border-radius: var(--border-radius);
         .product-item-size {
           display: block;
         }
+        .product-img-hover:before{content: '';}
         .product-item-btn-panel {
           @include media-min-width2(769) {
             max-height: 100vh;
@@ -90,6 +99,34 @@
 
           }
         }
+        .product-card_bottom-hover-block {
+          max-height: 200px;
+          opacity: 1;
+          border-color:  var(--product-card-hover-border);
+          // border-top-color: transparent;
+          padding: 9px;
+          z-index: 2;
+
+        }
+      }
+
+      &_bottom-hover-block {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height .3s;
+        position: absolute;
+        top: 100%;
+        left: calc(-1.3333 * var(--m));
+        width: calc(100% + 1.3333 * 2 * var(--m));
+        z-index: 2;
+        background-color: #fff;
+        // background-color: gray;
+        padding: 0 9px;
+        border: 1px solid transparent;
+        border-top-width: 0;
+
+
       }
 
       &-base {
@@ -200,7 +237,8 @@
         height: 100%;
         display: flex;
         align-items: stretch;
-        z-index: 1;
+        // z-index: 1;
+        z-index: 0;
 
           &:hover {
             .btn-quick-view {display: flex;}
@@ -284,7 +322,7 @@
     cursor: pointer;
     //position: relative;
     &:before {
-      content: '';
+      // content: '';
       display: block;
       height: 3px;
       border-radius: 3px;

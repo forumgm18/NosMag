@@ -12,10 +12,15 @@
         opacity: 1;
         visibility: visible;
       }
+      input, textarea {
+        border-color: var(--input-error)!important;
+        // border-color: var(--input-error);
+      }
     }
     input {
       font: inherit;
-      padding: 0.8571em 1em;
+      // padding: 0.928571em 1.428571em;
+      padding: 0.785714285714em 1.28571428571em;
       background: #fff;
       border: 1px solid var(--text-color-light);
       border-radius: 5px;
@@ -23,9 +28,13 @@
       color: inherit;
       transition: .3s;
 
-        &:focus {
+        &:hover {
           border-color: currentColor;
         }
+        &:focus {
+          border-color: var(--base-color1);
+        }
+
     }
     textarea {
       font: inherit;
@@ -44,11 +53,13 @@
     &-error {
       // position: absolute;
       width: 100%;
-      font-size: 0.8571em;
-      line-height: 1.2;
-      color: var(--base-color2);
+      // font-size: 0.8571em;
+      font-size: 1em;
+      line-height: 1;
+      color: var(--input-error);
       left: 0;
-      top: 100%;
+      // top: calc(100% + 10px);
+      margin-top: 10px;
       opacity: 0;
       visibility: hidden;
       transition: .3s;

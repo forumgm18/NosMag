@@ -1,14 +1,18 @@
 .btn {
   --btn-text-color: #fff;
   --btn-bgr-color: var(--base-color1); 
+  --btn-bgr-color-hover: var(--base-color1-hover); 
   --btn-border-color: var(--base-color1); 
+  --btn-border-color-hover: var(--base-color1-hover); 
   // color: #fff;
   color: var(--btn-text-color);
   background-color: var(--btn-bgr-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 10px;
+  // padding: 5px 10px;
+  padding: .9em 1em;
+  line-height: 1;
   transition: .3s;
   font-weight: bold;
   cursor: pointer;
@@ -18,10 +22,11 @@
 
   &:hover {
     text-decoration: none;
-    //background-color: var(--btn-hover-color);
-    background-color: transparent;
+    background-color: var(--btn-bgr-color-hover);
+    border-color: var(--btn-border-color-hover);
+    // background-color: transparent;
     // color: var(--base-color1);
-    color: var(--btn-bgr-color);
+    // color: var(--btn-bgr-color);
 
   }
 

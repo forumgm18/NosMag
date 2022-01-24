@@ -1,4 +1,5 @@
 export const state = () => ({
+  tarifs: null
 })
 
 export const mutations = {
@@ -22,7 +23,7 @@ export const actions = {
 }
 
 export const getters = {
-  getCity: s => s.city,
-  getTarifZone: s => s.tarif_zone,
-  getTarifs: s => s.tarifs,
+  getCity: s => s.city || null,
+  getTarifZone: s => s.tarif_zone || null,
+  getTarifs: s => s.tarifs || null,
 }

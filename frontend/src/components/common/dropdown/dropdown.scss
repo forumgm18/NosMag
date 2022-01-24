@@ -84,7 +84,7 @@
       display: flex;
       align-items: center;
       flex-grow: 1;
-      margin-right: 1em;
+      // margin-right: 1em;
       font-size: inherit;
       line-height: 2.15;
       padding: 0 0.7em;
@@ -175,7 +175,7 @@
       //height: 300px;
       height: fit-content;
       max-height: 22em;
-      //min-width: 100%;
+      min-width: 100%;
       width: fit-content;
 
       &.set-max-height {

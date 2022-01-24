@@ -16,17 +16,19 @@
         :placeholder="$options.INPUT_PLACEHOLDER"
         :error-text="$options.INPUT_ERROR_TEXT"
         :is-error="citySearchError"
-        @input="inputChange"
+        
         
       )
       .city-auto-select {{$options.CITY_AUTO_SELECT_TEXT}}
-      scroll-bar.city-result-scroll(v-if="cities" :key="citySearch")
-        ul.city-search-result
-          li.city-search-item(
-            v-for="city in cities" 
-            :key="city.id"
-            @click="citySelected(city.id)"
-          ) {{city.name}}
+      client-only
+        perfect-scrollbar.city-result-scroll(v-if="cities" :key="citySearch" ref="cityScrollBar")
+          ul.city-search-result
+            li.city-search-item(
+              v-for="city in cities" 
+              :key="city.id"
+              @click="citySelected(city.id)"
+              v-html="$searchHighlight(citySearch, city.name)"
+            ) 
 
 
 
@@ -34,10 +36,11 @@
 </template>
 
 <script>
-  import scrollBar from 'vue2-scrollbar'
+ import { debounce } from 'lodash'
+
   export default {
   components: {
-    scrollBar
+    // scrollBar
   },
   props: {
     value: {
@@ -46,7 +49,6 @@
     }
   },
   fetch: async function(){
-    // console.log('cities/getCities')
     await this.$store.dispatch('cities/getCities')
   },
   data() {
@@ -81,7 +83,13 @@
       this.citySelectClose()
 
     },
-    inputChange() { return this.$store.dispatch('cities/searchCity', this.citySearch ) },
+  },
+  watch: {
+    citySearch: debounce(
+                  function(val) { 
+                    this.$store.dispatch('cities/searchCity', val ) 
+                  }, 
+                300 )
   }  
   }
 </script>

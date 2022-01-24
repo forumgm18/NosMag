@@ -3,10 +3,14 @@
     v-if="tags && tags.length"
     :class="{ static: !posAbsolute }"
     )
-    .product-tag(v-for="(tag, index) in tags" :key="index") 
-      span {{tag.name}}
-      svg.icon( :class="tag.icon" ) 
-        use(:href="`#${tag.icon}`")
+    template(v-for="(tag, index) in tags" ) 
+      .product-tag(
+        v-if="(tag.type ==='sale' && showSaleTag) || tag.type !='sale'"
+        :key="index"
+        )
+        span {{tag.name}}
+        svg.icon( :class="tag.icon" ) 
+          use(:href="`#${tag.icon}`")
 
 </template>
 
@@ -22,11 +26,16 @@
         type: Boolean,
         default: true,
       },
+      showSaleTag: {
+        type: Boolean,
+        default: false,
+        // default: true,
+      }
 
     },
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 @import 'product-tags';
 </style>

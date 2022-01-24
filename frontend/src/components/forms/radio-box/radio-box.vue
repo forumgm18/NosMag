@@ -1,10 +1,10 @@
 <template lang="pug">
-.radiobox
+.radiobox(:class="{ 'is-checked' : isChecked }")
   label.radiobox-label
     input(
       hidden 
       type="radio" 
-      :class="{notchecked: !isChecked }" 
+      :class="{notchecked1: !isChecked }" 
       :checked="isChecked" 
       :value="value" 
       @change="updateInput"
@@ -24,33 +24,29 @@ export default {
     event: 'change'
   },
   props: {
-    // value: { type: String },
     value: {},
-    modelValue: { default: '' },
+    modelValue: { },
     showIcon: {type:Boolean, default: true}
-    // trueValue: { default: true },
-    // falseValue: { default: false },
   },
   computed: {
     isChecked() {
       if (this.modelValue instanceof Object) {
         return isEqual(this.modelValue, this.value)
       }
-
       return this.modelValue === this.value
     }
   },
   methods: {
-    updateInput(event) {
-      let isChecked = event.target.checked
-      if (this.modelValue instanceof Object) {
-        let newValue = isChecked ? Object.assign({},this.value) : {}
-        this.$emit('change', newValue)
-      } else {
-        // this.$emit('change', event.target.value)
-        this.$emit('change', this.value)
-      }
-
+    updateInput() {
+      // let isChecked = event.target.checked
+      // if (this.modelValue instanceof Object) {
+      //   let newValue = isChecked ? Object.assign({},this.value) : {}
+      //   this.$emit('change', newValue)
+      // } else {
+      //   // this.$emit('change', event.target.value)
+      //   this.$emit('change', this.value)
+      // }
+      this.$emit('change', this.value)
       
     }
   }

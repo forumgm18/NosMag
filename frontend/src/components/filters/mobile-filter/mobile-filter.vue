@@ -11,12 +11,13 @@
         .mobile-filter_body
           .mobile-filter_content
             .mobile-list
-              scroll-bar.mobile-filter_scroll
-                div
-                  .mobile-filter_item(v-for="f in filters" :key="f.id" @click.stop="selectFirst(f.id)")
-                    span.title {{f.name}}
-                    span.title_selected-items {{printSelectedItems(f.id)}}
-                    span.link.mla(v-if="currentFilterLength(f.id)" @click.stop="clearAllFilterItems(f.id)") {{$options.RESET_TEXT}}
+              client-only
+                perfect-scrollbar.mobile-filter_scroll.scrollbar-size-2
+                  div
+                    .mobile-filter_item(v-for="f in filters" :key="f.id" @click.stop="selectFirst(f.id)")
+                      span.title {{f.name}}
+                      span.title_selected-items {{printSelectedItems(f.id)}}
+                      span.link.mla(v-if="currentFilterLength(f.id)" @click.stop="clearAllFilterItems(f.id)") {{$options.RESET_TEXT}}
           .mobile-filter_footer
             .btn.btn-mobile-filter.btn-base2-transparent(@click="clearAllFilters") {{$options.RESET_TEXT}}
             .btn.btn-mobile-filter(@click.stop="applyFilter") {{$options.APPLY_TEXT}}
@@ -63,7 +64,7 @@
               span.link(@click="selectAllFilterItems(f.id)") {{$options.CHOOSE_ALL_TEXT}}
               span.link(@click="clearAllFilterItems(f.id)") {{$options.RESET_TEXT}}
             .mobile-list
-              vnm-select-list(
+              v-select-list(
                 v-if="f.values"
                 :id="f.id"
                 :multiple="true"
@@ -86,15 +87,15 @@
 </template>
 
 <script>
-  import ScrollBar from 'vue2-scrollbar'
-  import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
+  // import ScrollBar from 'vue2-scrollbar'
+  // import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
   import inputNumber from '~/components/forms/input-number/input-number'
 
   export default {
     name: 'mobile-filter',
     components: {
-      ScrollBar,
-      vnmSelectList,
+      // ScrollBar,
+      // vnmSelectList,
       inputNumber,
     },
     props: {
@@ -213,5 +214,5 @@
 
 <style lang="scss">
   @import "mobile-filter";
-  .vue-scrollbar__scrollbar-vertical {  --vue-scrollbar-width: 2px; }
+  // .vue-scrollbar__scrollbar-vertical {  --vue-scrollbar-width: 2px; }
 </style>

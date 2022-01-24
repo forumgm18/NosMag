@@ -16,27 +16,37 @@
       .product-card_info
         .product-card_info-top
           .product-card_price-block(itemprop = "offers" itemscope itemtype = "https://schema.org/Offer" )
-            .product-card_price-old(v-if="sale && !product.price_min") {{ product.oldprice }}
-            .product-card_price-actual(v-if="product.price_min" :class="{'price-sale': sale && !product.price_min}" )
+            .product-card_price-actual( :class="{'price-sale': sale && !product.price_min}" )
               meta(itemprop="priceCurrency" content="RUB")
-              span(itemprop="price") от {{ product.price_min }}
-              span {{currency}}
-            .product-card_price-actual(v-else :class="{'price-sale': sale}")
+              span(itemprop="price") {{ priceStr }}
+              span(v-html="currency")
+            //- .product-card_price-actual(v-else )
               meta(itemprop="priceCurrency" content="RUB")
-              span(itemprop="price") {{ product.price }}
-              span {{currency}}
-          .btn-add2basket(@click="showModal")
-            svg.icon.icon-btn-plus.plus <use href="#icon-btn-plus"/>
-            span.text {{$options.BTN_ADD2BASKET_TEXT}}
-            svg.icon.icon-basket <use href="#icon-basket"></use>
-
+              span(itemprop="price") {{ priceStr }}
+              span(v-html="currency")
+            .product-card_price-old(v-if="sale && !product.price_min") 
+              span {{ product.oldprice }}
+              span(v-html="currency")
+            .product-tag.price-sale-bgr(v-if="sale && !product.price_min")
+              span SALE
+              svg.icon.icon-percent <use href="#icon-percent"/>  
+        v-stars(:rating="product.rating_stars || 0" )
         nuxt-link.product-card_descr(:to="`${mocCatalogLink}${product.alias}`" itemprop="url")
           v-clamp(autoresize :max-lines="2" itemprop = "name") {{ product.name }}
-        v-stars(:rating="product.rating_stars || 0" )
+    .product-card_bottom-hover-block
+      div  
+        .btn(@click="showModal")
+          span.text {{$options.BTN_ADD2BASKET_TEXT}}
+        .product-card_sizes(v-if="sizes && sizes.length")
+          .product-card_sizes-title Размеры в наличии
+          v-clamp(autoresize :max-lines="1" ) {{sizesToStr}}
+        
+
+
+
     quick-view(
       v-if="isQuickView" 
       :product="product"
-      :catalog-link="mocCatalogLink"
       @close-quick-view="quickViewShow"
       )
     //- app-popup.popup-up(v-model="addToCartPopup" v-on:close-popup="closeAddToCartPopup")
@@ -51,7 +61,7 @@
         span.text Выберите размер
         span.psz-popup-close(@click="$modal.hide(`select-size-modal-${product.id}`)")
           svg.icon.icon-close <use href="#icon-close"/>
-      .psz-table-content-title(v-if="selectedSize")
+      .psz-table-content-title(v-if="selectedSize.table && selectedSize.table.length")
         .psz-item.title
           .col {{selectedSize.table[0].name}}
           .col(v-if="selectedSize.table[1]") {{selectedSize.table[1].name}}
@@ -64,7 +74,7 @@
           ) 
           .col {{item.table[0].value}}
           .col(v-if="item.table[1]") {{item.table[1].value}}
-      .btn(@click="addToCart") {{$options.BTN_ADD2BASKET_TEXT_2}}
+      .btn(@click.stop.prevent="addToCart") {{$options.BTN_ADD2BASKET_TEXT_2}}
           
 </template>
 
@@ -91,17 +101,17 @@ export default {
       required: false,
       default: true
     },
-    currency: {
-      type: String,
-      // default: '&#8381;'
-      default: 'руб.'
-    },
+    // currency: {
+    //   type: String,
+    //   // default: '&#8381;'
+    //   default: this.defaultCurrency || 'руб.'
+    // },
     },
   data: function () {
     return {
       isQuickView: false,
       sale: 0,
-      imgPath: '/images/catalog/',
+      // imgPath: '/images/catalog/',
       // mocCatalogLink: '/catalog/razdel/sub_razdel/',
       mocCatalogLink: '/',
       selectedSize: null,
@@ -113,9 +123,19 @@ export default {
   BTN_ADD2BASKET_TEXT: 'В корзину',
   BTN_ADD2BASKET_TEXT_2: 'Добавить в корзину',
   computed: {
+    currency() {return this.$store.getters['settings/currency']},
     labels() { return this.product.labels || null},
     info_table() { return this.product.info_table || null},
     sizes() { return this.product.sizes || null},
+    imgPath() {return this.$store.state.settings.imgPath || ''},
+    sizesToStr() { 
+      if (this.sizes && this.sizes.length) {
+        return this.sizes.reduce((s, item) => s + item.name + ' ' , '')
+      } else {return ''}
+    },
+    priceStr() {
+      return this.product.price_min ? `от ${this.product.price_min}` : this.product.price
+    }
   },
   mounted() {
     // console.log(this.product)
@@ -136,7 +156,7 @@ export default {
       console.log('val: ', val)
       this.$store.dispatch('cart/addToCart', val)
       this.$modal.hide(`select-size-modal-${this.product.id}`, )
-      await this.$nuxt.refresh()
+      // await this.$nuxt.refresh()
       // this.closeAddToCartPopup(false)
     },
     selectSize(v, toggle) {
@@ -154,6 +174,7 @@ export default {
 
 <style lang="scss">
 @import 'product-card';
+@import '~/components/products/product-tab-sizes/product-tab-sizes';
 .psz-popup {
   font-size: 14px;
 

@@ -1,33 +1,13 @@
 <template lang="pug">
-  section.order-content.show(id="order" :class="{ show: showOrder }") 
+  section.order-content(id="order" :class="{ show: showOrder }") 
     //- h1.page-title {{$options.ORDER_TITLE}}
     .order-form
-      .order-section-label {{$options.LABELS.DELIVERY_METHOD}}
-      .order-form-section.delivery-opt
-        v-check-item(
-          v-for="(d, i) in deliveryTarifs" :key="i"
-          type="radio" 
-          v-model="orderDelivery" 
-          :value="d.type" 
-          :is-checked="!!d.active" 
-          :has-footer="true"
-          )
-          template(#icon)
-            svg.icon(:class="getTarifIcon(d.type)") 
-              use(:href="`#${getTarifIcon(d.type)}`")
-          template(#title) {{getTarif(d.type).name}}
-          template(#descr) {{getTarif(d.type).info}}
-          template(#footer)
-            span(v-html="getTarifFooter(d.type)")
-
-
-      .order-text(v-if="orderDelivery === 'samovyvoz'") 
-        span Склад находится по адресу: 
-        span.link(@click="showMapClick") {{getTarif('samovyvoz').address}}
-      .order-form-section.address(v-if="orderDelivery != 'samovyvoz'")
+      .order-section-label {{$options.LABELS.ADDRESS.TOWN}}
+      .order-form-section
         .order-form-item
-          .order-item-label
+          //- .order-item-label
             span {{$options.LABELS.ADDRESS.TOWN}}
+            span(v-if="fieldsIsRequired.town.req").req *
           client-only  
             v-dropdown.order-item-input(
               :class="{ focus: cityFocuse }"
@@ -42,10 +22,10 @@
                   :placeholder="$options.PLACEHOLDERS.TOWN"
                   @focus="cityFocused"
                   @blur="cityBlur"
-                  @input="filterCities"
+                  
                 )
               template( #content )
-                vnm-select-list(
+                v-select-list(
                   v-if="cities"
                   :multiple="false"
                   item-type='radio'
@@ -56,50 +36,89 @@
                   )
                   
                   template(#optText="{opt}" ) 
-                    span.filter-option_item-text {{opt.name}}
+                    //- span.filter-option_item-text {{opt.name}}
+                    span(v-html="$searchHighlight(citiesSearchStr, opt.name)").filter-option_item-text
+      .order-form-section.order-toggle-btn
+        v-check-btn(v-model="deliveryType" value="pvz") {{$options.DELIVERY_PVZ_TEXT}}
+        v-check-btn(v-model="deliveryType" value="courier") {{$options.DELIVERY_COURIER_TEXT}}
+
+
+      .order-section-label {{$options.LABELS.DELIVERY_METHOD}}
+      .order-form-section.delivery-opt(v-if="deliveryTarifs")
+        v-check-item(
+          v-for="(d, i) in deliveryTarifs" :key="i"
+          type="radio" 
+          v-model="deliveryType" 
+          :value="d.type" 
+          :is-checked="!!d.active" 
+          :has-footer="true"
+          )
+          template(#icon)
+            svg.icon(:class="getTarifIcon(d.type)") 
+              use(:href="`#${getTarifIcon(d.type)}`")
+          template(#title) {{getTarif(d.type).name}}
+          template(#descr) {{getTarif(d.type).info}}
+          template(#offer)
+            span(v-html="getTarifFooter(d.type)")
+
+
+      .order-text(v-if="deliveryType === 'samovyvoz'") 
+        span Склад находится по адресу: 
+        span.link(@click="showMapClick") {{getTarif('samovyvoz').address}}
+
+      div(v-if="1===2 && deliveryType === 'courier' || deliveryType === 'express'")
+        .order-section-label {{$options.LABELS.DELIVERY_SERVICE}}
+        .order-form-section.delivery-opt(v-if="deliveryServiceTarifs")
+          v-check-item.deivery-service(
+            v-for="(d, i) in deliveryServiceTarifs" :key="i"
+            type="radio" 
+            v-model="deliveryService" 
+            :value="d.type" 
+            :is-checked="!!d.active" 
+            :has-icon="false"
+            :has-title="false"
+            )
+            template(#descr v-if="getDeliveryServiceIcon(d.type)")
+              svg.deivery-service-logo.icon(:class="getDeliveryServiceIcon(d.type)") 
+                use(:href="`#${getDeliveryServiceIcon(d.type)}`")
+
+            template(#offer)
+              span(v-html="getTarifFooter(d.type)")
+
+
+      .order-form-section.address(v-if="deliveryType != 'samovyvoz'")
         .order-form-item
           .order-item-label
-            span {{$options.LABELS.ADDRESS.STREET}}
+            span {{$options.LABELS.ADDRESS.ADDR}}
+            span(v-if="fieldsIsRequired.addr.req").req *
           v-input-field.order-item-input(
-            v-model="address.street"
+            v-model="address.addr"
             type="text"
-            :placeholder="$options.PLACEHOLDERS.ADDRESS.STREET"
+            :placeholder="$options.PLACEHOLDERS.ADDRESS.ADDR"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
           )
         .order-form-item
-          .order-item-label
-            span {{$options.LABELS.ADDRESS.DOM}}
-          v-input-field.order-item-input(
-            v-model="address.dom"
-            type="text"
-            :placeholder="$options.PLACEHOLDERS.ADDRESS.DOM"
-            :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
-          )
-        .order-form-item.kv-zip
-          .order-item-label
-            span {{$options.LABELS.ADDRESS.KV}}
-          v-input-field.order-item-input(
-            v-model="address.kv"
-            type="text"
-            :placeholder="$options.PLACEHOLDERS.ADDRESS.KV"
-            :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
-          )
-        .order-form-item.kv-zip
           .order-item-label
             span {{$options.LABELS.ADDRESS.ZIP}}
+            span(v-if="fieldsIsRequired.zip.req").req *
           v-input-field.order-item-input(
             v-model="address.zip"
             type="text"
             :placeholder="$options.PLACEHOLDERS.ADDRESS.ZIP"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
+            v-mask="'######'"
+            :minLength="6"
+            :maxLength="6"
+            :required="true"
+            :is-valid.sync="fieldsIsRequired.zip.valid" 
+
           )
-        .order-form-item.kv-zip
-          .order-item-label(style="opacity:0")
-            span q
-          .map-show(@click="showMapClick" :style="{ visibility: showMapLinkVisible }") {{showMapText}}
+      .order-text(v-if="showMapLinkVisible")    
+        .map-show(@click="showMapClick" ) {{showMapText}}
+
       client-only
         .map-section(v-if="yandexApiKey" :class="{ show: showMap }" ref="mapContainer")
-          //- v-yandex-map(:markers="[yamapCoords]" :coords="yamapCoords")
+          
           yandex-map.yamap(
             :settings="$options.static.yamap.settings"  
             :options="$options.static.yamap.options"  
@@ -127,110 +146,116 @@
               @mouseleave="yamapMouseLeave"
               @balloon-click="markerSelect"
               )
-              //- v-yamap-baloon.bal-class(slot="balloon")
-              //- template(#balloon)
-
-              
-      
-
 
 
       .order-section-label {{$options.LABELS.USER_DATA}}
       .order-form-section
-        .order-form-item(v-if="orderDelivery != 'samovyvoz'")
+        .order-form-item(v-if="deliveryType != 'samovyvoz'")
           .order-item-label
-            span {{$options.LABELS.FAM}}
-            span.req *
+            span {{$options.LABELS.SNAME}}
+            span(v-if="fieldsIsRequired.sname.req").req *
           v-input-field.order-item-input(
-            v-model="fam"
+            v-model="sname"
             type="text"
-            :placeholder="$options.PLACEHOLDERS.FAM"
+            :placeholder="$options.PLACEHOLDERS.SNAME"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
             :required="true"
+            :is-valid.sync="fieldsIsRequired.sname.valid" 
+
           )
         .order-form-item
           .order-item-label
             span {{$options.LABELS.NAME}}
-            span.req *
+            span(v-if="fieldsIsRequired.name.req").req *
           v-input-field.order-item-input(
             v-model="name"
             type="text"
             :placeholder="$options.PLACEHOLDERS.NAME"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
             :required="true"
+            :is-valid.sync="fieldsIsRequired.name.valid" 
+
           )
 
-        .order-form-item(v-if="orderDelivery === 'post' || orderDelivery === 'express'")
+        .order-form-item(v-if="deliveryType === 'post' || deliveryType === 'express'")
           .order-item-label
-            span {{$options.LABELS.OTCH}}
+            span {{$options.LABELS.TNAME}}
+            span(v-if="fieldsIsRequired.tname.req").req *
           v-input-field.order-item-input(
-            v-model="otch"
+            v-model="tname"
             type="text"
-            :placeholder="$options.PLACEHOLDERS.OTCH"
+            :placeholder="$options.PLACEHOLDERS.TNAME"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
+            :is-valid.sync="fieldsIsRequired.tname.valid" 
+
           )
       
         .order-form-item(:style="{ order: fileldFlexOrder('email') }")
           .order-item-label
             span {{$options.LABELS.EMAIL}}
-            span.req *
+            span(v-if="fieldsIsRequired.email.req").req *
           v-input-field.order-item-input(
             v-model="email"
             type="email"
             :placeholder="$options.PLACEHOLDERS.EMAIL"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
-            :is-error.sync="orderFormError" 
+            :is-valid.sync="fieldsIsRequired.email.valid" 
           )
         .order-form-item
           .order-item-label
             span {{$options.LABELS.TEL}}
-            span.req *
+            span(v-if="fieldsIsRequired.tel.req").req *
           v-input-field.order-item-input(
             v-model="tel"
-            type="text"
+            type="tel"
             :placeholder="$options.PLACEHOLDERS.TEL"
             :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
             :required="true"
-            :v-mask="$options.TEL_MASK"
+            :v-mask="phoneMask"
+            :is-valid.sync="fieldsIsRequired.tel.valid" 
+
           )
 
-
-
-
       .order-section-label {{$options.LABELS.PAYMENT_METHOD}}
-      .order-form-section
-        v-check-item(type="radio" v-model="orderPay" value="1" :is-checked="true")
+      .order-form-section.order-toggle-btn
+        v-check-btn(v-model="prePay" :value="1" :is-checked="true") {{$options.PREPAY_CARD_TEXT}}
+        v-check-btn(v-model="prePay" :value="0") {{$options.PREPAY_MONEY_TEXT}}
+      
+      .order-form-section(v-if="prePay === 1")
+        v-check-item(type="radio" v-model="prePayType" value="1" :is-checked="true")
           template(#icon)
-            svg.icon.icon-paycard <use href="#icon-paycard"/>
-          template(#title) Оплата онлайн
-          template(#descr) На сайте картой
+            svg.icon.icon-visa <use href="#icon-visa"/>
+            svg.icon.icon-mastercard <use href="#icon-mastercard"/>
+          template(#title) Пластиковой картой
+          //- template(#descr) На сайте картой
 
-        v-check-item(type="radio" v-model="orderPay" value="0")
+        v-check-item(type="radio" v-model="prePayType" value="0" )
           template(#icon)
-            svg.icon.icon-paymoney <use href="#icon-paymoney"/>
-          template(#title) При получении
-          template(#descr) Наличкой/терминал
+            svg.icon.icon-yoomoney(style="--yoo: #8B3FFD;") <use href="#icon-yoomoney"/>
+          template(#title) Электронный кошелек
+          //- template(#descr) Наличкой/терминал
+          
       .order-form-section
         .order-form-item.comment
           .order-item-label {{$options.LABELS.ORDER_COMMENT}}
           .order-item-input.input-field
             textarea(v-model="orderComment")
-
+      div 
+        span Форма Валидна: 
+        span {{orderFormIsValid}}
 </template>
 
 <script>
-  import vnmSelectList from '~/components/forms/vnm-select-list/vnm-select-list'
-  // import { yandexMap, ymapMarker } from 'vue-yandex-maps'
   import { required, minValue, email } from 'vuelidate/lib/validators'
-// import ScrollBar from 'vue2-scrollbar'
-//  import {clone as cloneArray} from 'lodash'
-
+  import yamap from './yamaps-options/yamap'
+  import clusterOptions from './yamaps-options/cluster-options'
+  import clusterCallbacks from './yamaps-options/cluster-callbacks'
+  import marker from './yamaps-options/marker'
+  import PLACEHOLDERS from './labels-text/placeholders'
+  import LABELS from './labels-text/labels'
+  import { debounce } from 'lodash'
+ 
   export default {
-    components: {
-      // yandexMap, ymapMarker,
-      vnmSelectList,
-      // ScrollBar,
-    },
     props: {
       showOrder: {
         type: Boolean,
@@ -240,188 +265,105 @@
 
     ORDER_TITLE: 'оформление заказа',  
     INPUT_ERROR_TEXT_DEFAULT: 'Это поле обязательно',  
-    INPUT_TOWN_TOOLTIP_LABEL: 'Начните вводить название города',  
-    TEL_MASK: '+7 (###) ###-##-##',
-    PLACEHOLDERS: {
-      NAME: 'Иван',  
-      FAM: 'Иванов',  
-      OTCH: 'Иванович',  
-      EMAIL: 'ioanio1987@mail.ru',  
-      TEL: '+7 912 000 00 00',  
-      TOWN: 'Москва',  
-      ADDRESS: {
-        TOWN: 'Город',
-        STREET: 'Улица',
-        DOM: 'Дом',
-        KV: 'Квартира',
-        ZIP: 'Индекс',
-        }, 
-      RECIPIENT: 'Получатель', 
-    },  
-    LABELS: {
-      NAME: 'Имя',  
-      FAM: 'Фамилия',  
-      OTCH: 'Отчество',  
-      EMAIL: 'E-mail',  
-      TEL: 'Телефон',  
-      DELIVERY_METHOD: 'Способ доставки',  
-      USER_DATA: 'Данные получателя',  
-      PAYMENT_METHOD: 'Способ оплаты',  
-      ORDER_COMMENT: 'Комментарий к заказу',  
-      ADDRESS: {
-        TOWN: 'Город',
-        STREET: 'Улица',
-        DOM: 'Дом',
-        KV: 'Квартира',
-        ZIP: 'Индекс',
-        }, 
-      RECIPIENT: 'Получатель', 
-    },  
+    DELIVERY_PVZ_TEXT: 'Пункт выдачи',  
+    DELIVERY_COURIER_TEXT: 'Курьер',  
+    PREPAY_CARD_TEXT: 'Оплата онлайн',  
+    PREPAY_MONEY_TEXT: 'Оплата при получении',  
+    PLACEHOLDERS, 
+    LABELS,
     validations: {
       name: { required, minValue: minValue(1) },
-      fam: { required, minValue: minValue(1) },
+      sname: { required, minValue: minValue(1) },
       tel: { required, minValue: minValue(12) },
       town: { required, minValue: minValue(12) },
       address: { required, minValue: minValue(12) },
       email: { required, email },
-      orderPay: { required },
-      orderDelivery: { required },
+      prePay: { required },
+      deliveryType: { required },
     },
     static: {
       yMap: null,
-      yamap: {
-        settings: {
-          // apiKey: this.yandexApiKey || '',
-          apiKey: '',
-          lang: 'ru_RU',
-          coordorder: 'latlong',
-          enterprise: false,
-          version: '2.1',
-        },
-        options: {
-          suppressMapOpenBlock: true,
-        },
-        zoom: 10,
-        coords: [54, 39],
-        controls: ['zoomControl', 'fullscreenControl'],
-      },
-      clusterOptions: {
-        1: {
-          // clusterIconColor: 'var(--base-color1)',
-          clusterIconColor: '#326FCA',
-          clusterDisableClickZoom: false,
-          clusterOpenBalloonOnClick: false,
-          // clusterIconContentLayout: '<div class="cluster-icon">{{ properties.geoObjects.length }}</div>',
-          // clusterIconContentLayout: '<div class="cluster-icon">$[properties.geoObjects.length]</div>',
-          // clusterNumbers: [20],
-          // clusterIcons: [
-          //     {
-          //       href: '/ym-cluster.png',
-          //       size: [60, 60],
-          //       offset: [-30, -30],
-          //       shape: {
-          //         type: 'Circle',
-          //         coordinates: [0, 0],
-          //         radius: 30
-          //       }                    
-          //     },
-          //     {
-          //       href: '/ym-cluster.png',
-          //       size: [80, 80],
-          //       offset: [-40, -40],
-          //       shape: {
-          //         type: 'Circle',
-          //         coordinates: [0, 0],
-          //         radius: 40
-          //       }                    
-          //     }
-          // ],
-        },
-      }, 
-      clusterCallbacks: {
-        1:{
-          // mouseenter: this.clusterMouseEnter,
-          // mouseleave: this.clusterMouseLeave,
-          mouseenter: function(e){
-            // e.get('target').options.set('iconColor', '#DD5500')
-            console.log (e.get('target').getOverlaySync())
-            
-            
-            },
-          mouseleave: function(e){e.get('target').options.set('iconColor', '#326FCA')},
-        }
-      }, 
-      marker: {
-        icon: {
-          layout: 'default#imageWithContent',
-          imageHref: '',
-          iconImageHref: '',
-          imageSize: [62, 62],
-          imageOffset: [-62, -62],
-          contentLayout: '<svg class="icon icon-location in-map $[options.moreClassesForGodClasses]"><use href="#icon-location"/></svg>' 
-        },
-        props: {
-          hintContent: 'markerProps - hint',
-        },
-        options: {
-          balloonMinWidth: 400,
-          balloonMinHeight: 400,
-        },
-
-      }
-
-    },    
+      yamap, 
+      clusterOptions, 
+      clusterCallbacks, 
+      marker,
+    }, 
     data: function () {
       return {
+        showMap: false,
         showAllMarkers: true,
         markers: null,
         name: '',
-        fam: '',
-        otch: '',
+        sname: '',
+        tname: '',
         tel: '',
         email: '',
-        showMap: false,
         address: {
           town: {},
-          street: '',
-          dom: '',
-          kv: '',
+          addr:'',
           zip: ''
         },
-        recipient: '',
         orderComment: '',
-        orderDelivery: '',
-        orderPay: 1,
+        deliveryType: '',
+        deliveryService: '',
+        prePay: 1,
+        prePayType: '',
         citiesSearchStr: '',
         cityFocuse: false,
-        // showOrder: false,
-        orderFormError: false,
-        documentWidth: 0,
+        orderFormError: true,
+        // documentWidth: 0,
         selectedMarker: null,
-        mapWidth: '100%',
-        showMapLinkVisible: 'hidden',
+        // showMapLinkVisible: 'hidden',
+        showMapLinkVisible: false,
+        fieldsIsRequired: {
+          name:{ req: true, valid: false },
+          tel:{ req: true, valid: false },
+          town:{ req: true, valid: false },
+          deliveryType:{ req: true, valid: false },
+          prePay:{ req: true, valid: true },
+          sname: { req:false, valid: false },
+          tname: { req:false, valid: false },
+          email: { req:false, valid: false },
+          addr: { req:false, valid: false },
+          zip: { req:false, valid: false },
+          orderComment: { req:false, valid: false },
+          deliveryService: { req:false, valid: false },
+        },
+
       }
     },
     async fetch() {
-      const params = {city_id: this.userDefaultCity.id, prepay: this.orderPay}
+      const params = {city_id: this.userDefaultCity.id, prepay: this.prePay}
       await this.$store.dispatch('delivery/getDeliveryOptions', params)
     },    
  
     computed: {
       pvzList() { return this.$store.getters['pvz/pvzList'] },
       userDefaultCity() { return this.$store.getters['settings/userDefaultCity'] },
+      phoneMask() { return this.$store.getters['settings/phoneMask'] },
       deliveryTarifs() { return this.$store.getters['delivery/getTarifs'] },
-      
+      deliveryServiceTarifs() {return null},
+
       cities() {  return this.$store.state.cities.cities || null },
       currency() { return this.$store.state.settings.currency },
       currencyShort() {return this.$store.state.settings.currencyShort},
       yandexApiKey() {return this.$store.state.settings.yandexApiKey},
       showMapText() { return this.showMap ? 'Скрыть карту' : 'Указать на карте' },
       balloonComponent() { return () => import('~/components/yamap/yamap-baloon/yamap-baloon') },
-
+      orderFormIsValid() {
+        // console.log('Object.entries(this.fieldsIsRequired) ', Object.entries(this.fieldsIsRequired))
+        // const requiredFields = Object.entries(this.fieldsIsRequired).filter(item => item[1].req)
+        // const valid = requiredFields.reduce((res, current) => res && current[1].valid, true)   
+        const requiredFields = Object.values(this.fieldsIsRequired).filter(item => item.req)
+        const valid = requiredFields.reduce((res, current) => res && current.valid, true)   
+        // console.log('requiredFields', requiredFields)
+        // console.log('valid', valid)
+        this.$emit('form-valid', valid)
+        return valid
+      }
     },
     methods: {
-      filterCities() { this.$store.dispatch('cities/searchCity', this.citiesSearchStr ) },
+      // filterCities() { this.$store.dispatch('cities/searchCity', this.citiesSearchStr ) },
       cityFocused() { this.cityFocuse = true },
       cityBlur() { this.cityFocuse = false },
       showMapClick() { this.showMap = !this.showMap },
@@ -430,36 +372,25 @@
       clusterMouseEnter(e) { e.get('target').options.set('iconColor', '#DD5500') },
       clusterMouseLeave(e) { e.get('target').options.set('iconColor', '#326FCA') },
       mapInitialized(val){ 
-        val.container.events.add('fullscreenenter', this.mapFullscreenEnter)
         val.container.events.add('fullscreenexit', this.mapFullscreenExit)
         this.yMap = val 
-        window.addEventListener('resize', this.mapFullscreenExit)
-      },
-      mapFullscreenEnter(e) {
-        // debugger
-        this.mapWidth = this.$refs.mapContainer.clientWidth
-        
+        if (process.browser) window.addEventListener('resize', this.mapFullscreenExit)
       },
       mapFullscreenExit(e) {
-        console.log('resize')
-        // debugger
-        // Изменим размеры контейнера карты.
+        // Получим контейнер карты.
         const mapContainer = this.yMap.container.getElement()
+        // Установим width = '100%' для контейнера карты и его родителя.
         mapContainer.parentElement.style.width = '100%'
-        // mapContainer.style.width = `${this.mapWidth}px`
         mapContainer.style.width = '100%'
         // Инициируем пересчет размеров.
         this.yMap.container.fitToViewport()
-        
-
-        
       },
-      markerSelect(val) {
+      async markerSelect(val) {
         this.selectedMarker = val
         this.yMap.balloon.close()
-        this.$store.dispatch('pvz/setPvz', val)
+        await this.$store.dispatch('pvz/setPvz', val)
       },
-      getTarif(t) {return this.deliveryTarifs.find(item => item.type === t) || null},
+      getTarif(t) {return this.deliveryTarifs ? this.deliveryTarifs.find(item => item.type === t) : null},
       getTarifFooter(t) {
         const tarif = this.deliveryTarifs.find(item => item.type === t)
         if (!(!!tarif)) return ''
@@ -468,7 +399,7 @@
       },
       fileldFlexOrder(fld) {
         if (fld === 'email') {
-          if(this.orderDelivery === 'samovyvoz') return 5
+          if(this.deliveryType === 'samovyvoz') return 5
         }
         return 'auto'
       },
@@ -492,8 +423,62 @@
             break
         } 
         return icn
-
-      }
+      },
+      getDeliveryServiceIcon(t) {
+        let icn = false
+        switch(t) {
+          case 'cdek' : 
+            icn = 'icon-logo-cdek'
+            break
+          case 'doctavista' : 
+            icn = 'icon-logo-doctavista'
+            break
+          case 'ya-go' : 
+            icn = 'icon-logo-ya-go'
+            break
+        } 
+        return icn
+      },
+      updateFieldsIsRequired() {
+        const f = this.fieldsIsRequired
+        switch(this.deliveryType) { 
+          case 'samovyvoz' :
+            f.sname.req = false
+            f.tname.req = false
+            f.addr.req = false
+            f.zip.req = false
+            f.deliveryService.req = false
+            break  
+          case 'pvz' :
+            f.sname.req = true
+            f.tname.req = false
+            f.addr.req = false
+            f.zip.req = false
+            f.deliveryService.req = true
+            break  
+          case 'courier' :
+            f.sname.req = true
+            f.tname.req = false
+            f.addr.req = true
+            f.zip.req = false
+            f.deliveryService.req = false
+            break  
+          case 'express' :
+            f.sname.req = false
+            f.tname.req = false
+            f.addr.req = true
+            f.zip.req = false
+            f.deliveryService.req = false
+            break  
+          case 'post' :
+            f.sname.req = true
+            f.tname.req = true
+            f.addr.req = true
+            f.zip.req = true
+            f.deliveryService.req = false
+            break  
+          }
+      },
     },
     mounted(){
       // this.yamapSettings.apiKey = this.yandexApiKey || ''
@@ -501,7 +486,7 @@
       this.address.town = this.userDefaultCity
     },
     beforeDestroy() {
-      window.removeEventListener('resize', this.mapFullscreenExit)
+      if (process.browser) window.removeEventListener('resize', this.mapFullscreenExit)
     },
     watch:{
       'address.town' : async function(val, oldVal ) {
@@ -511,37 +496,90 @@
           await this.$store.dispatch('pvz/getPvzList', {city_id: val.id} )
           this.markers = this.pvzList 
           this.showAllMarkers = true 
-          await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: this.orderPay} )
+          await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: this.prePay} )
+          this.$emit('select-delivery-type', this.getTarif(this.deliveryType))
+  
+          this.fieldsIsRequired.town.valid = true // Тип Доставки выбран
+
         }
       },
-      orderDelivery(val) {
+      // deliveryType(val) {
+      //   // debugger
+      //   this.$emit('select-delivery-type', this.getTarif(val))
+      //   this.updateFieldsIsRequired()
+      //   if (val === 'samovyvoz' ) {
+      //     // this.showMapLinkVisible = 'visible'
+      //     // this.showMapLinkVisible = true
+      //     const tarifSamovyvoz = this.getTarif(val)
+      //     this.markers = [ {
+      //       id: 'samovyvoz_id',
+      //       coord: [tarifSamovyvoz.lat, tarifSamovyvoz.lon],
+      //       data: { active : 1, code: 'SAM1', name: 'Самовывоз со склада в Москве'}
+      //       }]
+      //     this.showAllMarkers = false 
+      //     if (this.yMap){
+      //       this.yMap.setCenter(this.markers[0].coord, 17)
+      //     }
+      //     // return
+      //   }
+      //   if (val === 'post' || val === 'express' || val === 'courier' ) {
+      //     this.showMap = false
+      //     // this.showMapLinkVisible = 'hidden'
+      //     this.showMapLinkVisible = false
+      //   }
+      //   if (val === 'pvz') {
+      //     this.showAllMarkers = true 
+      //     this.markers = this.pvzList
+      //     // this.showMapLinkVisible = 'visible'
+      //     this.showMapLinkVisible = true
+      //   }
+        
+      // },
+      deliveryType(val) {
         // debugger
-        if (val === 'samovyvoz' ) {
-          this.showMapLinkVisible = 'visible'
-          const tarifSamovyvoz = this.getTarif(val)
-          this.markers = [ {
-            id: 'samovyvoz_id',
-            coord: [tarifSamovyvoz.lat, tarifSamovyvoz.lon],
-            data: { active : 1, code: 'SAM1', name: 'Самовывоз со склада в Москве'}
-            }]
-          this.showAllMarkers = false 
-          if (this.yMap){
-            this.yMap.setCenter(this.markers[0].coord, 17)
-          }
-          return
-        }
-        if (val === 'post' || val === 'express' || val === 'courier' ) {
-          this.showMap = false
-          this.showMapLinkVisible = 'hidden'
-        }
-        if (val === 'pvz') {
-          this.showAllMarkers = true 
-          this.markers = this.pvzList
-          this.showMapLinkVisible = 'visible'
+        this.$emit('select-delivery-type', this.getTarif(val))
+        this.updateFieldsIsRequired() // Обновляем список обязательных полей формы
+        this.fieldsIsRequired.deliveryType.valid = true // Тип Доставки выбран
+        switch(val){
+          case 'samovyvoz':
+            const tarifSamovyvoz = this.getTarif(val)
+            this.markers = [ {
+              id: 'samovyvoz_id',
+              coord: [tarifSamovyvoz.lat, tarifSamovyvoz.lon],
+              data: { active : 1, code: 'SAM1', name: 'Самовывоз со склада в Москве'}
+              }]
+            this.showAllMarkers = false 
+            if (this.yMap){ this.yMap.setCenter(this.markers[0].coord, 17) }
+            break
 
-        }
-
-      }
+          case 'pvz':
+            this.showAllMarkers = true 
+            this.markers = this.pvzList
+            // this.showMapLinkVisible = 'visible'
+            this.showMapLinkVisible = true
+            break
+        
+          default:  // (val === 'post' || val === 'express' || val === 'courier' ) 
+            this.showMap = false
+            // this.showMapLinkVisible = 'hidden'
+            this.showMapLinkVisible = false
+            }
+        
+      },
+      deliveryService(val) {
+        this.fieldsIsRequired.deliveryService.valid = !!val // Выбрана служба доставки
+      },
+      async prePay(val) {
+        await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: val} )
+        this.$emit('select-delivery-type', this.getTarif(this.deliveryType))
+      },
+      citiesSearchStr: debounce(
+                        function(val) {
+                          this.$store.dispatch('cities/searchCity', val )
+                        }, 
+                        300 )
+        
+      
     },
     
   }
