@@ -114,6 +114,11 @@ components: [
       ignore: ['-*.vue'],
     },
     {
+      path: '~/components/icons/',
+      prefix: 'v',
+      ignore: ['-*.vue'],
+    },
+    {
       path: '~/components/forms/',
       prefix: 'v',
       ignore: ['-*','-*.vue'],
