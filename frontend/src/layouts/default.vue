@@ -1,6 +1,8 @@
 <template lang="pug">
   .site-boby
-    v-app-icons
+    //- v-app-icons
+    //- v-app-icons(:show-all-icons="true")
+    v-app-icons(:show-all-icons="false")
     app-header
     client-only
       section.container(v-if="breadcrumbs && breadcrumbs.length")

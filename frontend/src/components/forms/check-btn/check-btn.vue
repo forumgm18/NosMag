@@ -3,13 +3,13 @@
     input(
       ref="inpt"
       hidden 
-      :checked="isChecked"
+      :checked="isInputChecked"
       :type="type"  
       :value="value" 
       v-model="proxyChecked"
       )
     .check-btn_content(:style="stylesSettings")
-      .check-btn_icon
+      v-icon-check.check-btn_icon(:type="type" :is-checked="isInputChecked" )
       .check-btn_text
         slot
 
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import {isEqual} from 'lodash'
 export default {
   name: 'check-btn',
   model: {
@@ -66,6 +67,13 @@ export default {
     }
   },
   computed: {
+    isInputChecked() {
+      if (this.proxyChecked instanceof Object) {
+        return isEqual(this.proxyChecked, this.value)
+      }
+      return this.proxyChecked === this.value
+    },
+
     proxyChecked: {
       get() {
         return this.checked
@@ -101,15 +109,17 @@ export default {
         transition: .3s;
         background-color: var(--bgc);
       }
+      // &_icon {
+      //   width: 1em;
+      //   height: 1em;
+      //   font-size: 1.6em;
+      //   border: 0.28125em solid var(--text-color-light);
+      //   border-radius: 50%;
+      //   transition: .3s;
+      //   margin-right: 0.8125em;
+      // }
       &_icon {
-        width: 1em;
-        height: 1em;
-        font-size: 1.6em;
-        border: 0.28125em solid var(--text-color-light);
-        border-radius: 50%;
-        transition: .3s;
-        margin-right: 0.8125em;
-
+        
       }
       &_text{
         flex-grow: 1;

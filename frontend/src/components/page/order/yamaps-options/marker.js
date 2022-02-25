@@ -8,7 +8,7 @@ const marker = {
           contentLayout: '<svg class="icon icon-location in-map $[options.moreClassesForGodClasses]"><use href="#icon-location"/></svg>' 
         },
         props: {
-          hintContent: 'markerProps - hint',
+          // hintContent: 'markerProps - hint',
         },
         options: {
           balloonMinWidth: 400,

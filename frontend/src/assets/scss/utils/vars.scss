@@ -3,6 +3,7 @@ $base-color1            : #326FCA; // hsla(216, 60%, 49%, 1)
 $base-color1-hover      : #265398; // hsla(216, 60%, 37%, 1);
 $base-color2            : #DD5500; // hsla(23, 100%, 43%, 1);
 $base-color3            : #233653; // hsla(216, 41%, 23%, 1)
+$base-color3-opacity-01 : hsla(216, 41%, 23%, .1);
 $base-color4            : #C4C4C4; // hsla(0, 0%, 77%, 1)
 $base-color5            : #EFEFEF;
 $base-color6            : #fff;
@@ -71,11 +72,11 @@ $text-color              : $base-color3; //#555555;
 $text-color-light        : $base-color4; //#cccccc;
 $text-color-light2       : $base-color7; //#cccccc;
 $price-sale              : $base-color2;
-$input-error              : $base-color2;
+$input-error             : $base-color2;
 //$logo-text-color         : #5a5a5a;
 //$warning-color           : $base-color2; //#FB4545;
 ////$success-color           : #26de81;
-//$danger-color            : #FB4545;
+$danger-color            : #DD0000; // hsla(0, 100%, 43%, 1)
 //$light-color             : #999999;
 //$purple-color            : #8854d0;
 //

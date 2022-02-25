@@ -8,6 +8,8 @@
   --base-color6 : #{$base-color6};
   --base-color7 : #{$base-color7};
   // --base-color8 : #{$base-color8};
+  --base-color3-opacity-01 : #{$base-color3-opacity-01};
+
   --old-price-color: #{$base-color7};
   --footer-bgr-color : #{$base-color1};
   --page-bgr-primary: #fff;
@@ -34,7 +36,7 @@
   --scrollbar-thumbs-drag: #{$scrollbar-thumbs-drag}; // цвет бобышки (индикатора) при перетаскивании
   --input-error : #{$input-error};
   --product-card-hover-border : #{$product-card-hover-border};
-  
+  --danger-color: #{$danger-color};
 
 
 
@@ -162,6 +164,7 @@ input, textarea {
   font-family: $mainFont;
   font-size: $mainFontSize;
 }
+
 .site-boby {
   //border: 1px solid red;
   display: flex;
@@ -214,7 +217,24 @@ main {
   flex-grow: 1;
   //margin-left: auto;
 }
+.mt-0 {margin-top: 0!important;}
+.mb-0 {margin-bottom: 0!important;}
+.mb-2em {margin-bottom: 2em!important;}
+.mb-1_5rem {margin-bottom: 1.5em!important;}
 
+.base-color-1 {color: var(--base-color1)!important;}
+.base-color-2 {color: var(--base-color2)!important;}
+.base-color-3 {color: var(--base-color3)!important;}
+.base-color-4 {color: var(--base-color4)!important;}
+.base-color-5 {color: var(--base-color5)!important;}
+.base-color-6 {color: var(--base-color6)!important;}
+.link {
+  // color: var(--base-color1);
+  cursor: pointer;
+  display: inline-block;
+  padding-bottom: .1em;
+  border-bottom: 1px dashed currentColor;
+}
 p {color: var(--text-color-default)}
 .page-title {
   font-weight: 500;

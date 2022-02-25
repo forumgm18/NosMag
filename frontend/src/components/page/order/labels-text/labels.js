@@ -9,9 +9,11 @@ const LABELS = {
         USER_DATA: 'Данные получателя',  
         PAYMENT_METHOD: 'Способ оплаты',  
         ORDER_COMMENT: 'Комментарий к заказу',  
+        ADDRESS_LABEL: 'Адрес',  
+        PVZ: 'Пункт выдачи',  
         ADDRESS: {
-          TOWN: 'Город',
-          ADDR: 'Адрес',
+          TOWN: 'Выберите город',
+          ADDR: 'Улица, дом, квартира',
           ZIP: 'Индекс',
           }, 
       }  

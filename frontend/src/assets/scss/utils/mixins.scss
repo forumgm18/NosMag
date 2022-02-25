@@ -11,7 +11,7 @@
 }
 // size to one line
 @mixin icon-size($height, $width: $height) {
-  font-size:$height+px;
+  // font-size:$height+px;
   //min-width:($width/$height)+em;
   //width:($width/$height)+em;
   min-width:(math.div($width, $height))+em;

@@ -10,7 +10,7 @@ const yamap = {
         options: {
           suppressMapOpenBlock: true,
         },
-        zoom: 10,
+        zoom: 16,
         coords: [54, 39],
         controls: ['zoomControl', 'fullscreenControl'],
       }

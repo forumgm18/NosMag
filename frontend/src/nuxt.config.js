@@ -88,7 +88,9 @@ export default {
     { src: '~/plugins/v-mask.js', mode: 'client' },
     { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
     // '~/plugins/vue-perfect-scrollbar.client.js', 
+    '~/plugins/vue-gallery.js',
     '~/plugins/vuelidate.js',
+    '~/plugins/floating-vue.js',
     // { src: '~/plugins/paginate.js', mode: 'client' },
     // { src: '~/plugins/popper.js', mode: 'client' },
     // { src: '~~/plugins/vuebar.js', mode: 'client' },
@@ -150,6 +152,19 @@ components: [
       prefix: 'v',
       // ignore: ['-*','-*.vue'],
     },
+    {
+      path: '~/components/pvz-info/',
+      prefix: 'v',
+      ignore: ['-*.vue'],
+      // ignore: ['-*','-*.vue'],
+    },
+    {
+      path: '~/components/order/',
+      // pattern: `**/*.vue`,
+      prefix: 'v',
+      // ignore: ['-*.vue'],
+      // ignore: ['-*','-*.vue'],
+    },
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -186,8 +201,8 @@ components: [
     events: false,
     google: {
       // families: ['PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap'],
-      // families: ['Roboto:wght@400;500;700&display=swap'],
-      families: ['Roboto:wght@400;500;600;700;800;900&display=swap'],
+      // families: ['Roboto:wght@400;500;600;700;800;900&display=swap'],
+      families: ['Roboto:wght@400;500;700;900&display=swap'],
     },
     timeout: 5000,
   },

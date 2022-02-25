@@ -1,5 +1,6 @@
 import Vue from 'vue'
 const calcWidth = el => {
+  el.style.width = null
   const inputStyles = window.getComputedStyle(el)
   const l = parseInt(inputStyles.getPropertyValue("border-left-width"))
   const r = parseInt(inputStyles.getPropertyValue("border-right-width"))  

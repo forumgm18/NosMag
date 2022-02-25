@@ -1,4 +1,5 @@
 export const state = () => ({
+  authToken: '1A000001AB715AA3',
   settings: null,
   sortmodes: null,
   header: null,
@@ -39,7 +40,7 @@ export const actions = {
       }
 
     })
-    commit('setSettings', settings)
+    if (settings.status === 'ok') commit('setSettings', settings)
   },
 }
 

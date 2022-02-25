@@ -61,6 +61,10 @@ export default {
       type: Number,
       default: null
     },
+    setErrorState: {
+      type: Boolean,
+      default: false
+    }
 
   },
   data() {
@@ -98,6 +102,10 @@ watch: {
       // this.$emit('update:is-error', this.$v.locValue.$error)
       this.$emit('update:isValid', !this.$v.locValue.$error)
       // debugger
+    },
+    value(val) { this.locValue = val},
+    setErrorState(val){
+      if (val) this.$v.$touch()
     }
   }  
 

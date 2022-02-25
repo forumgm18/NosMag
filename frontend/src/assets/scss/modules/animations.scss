@@ -1,0 +1,27 @@
+  @keyframes collaspe-in {
+    0% {
+      opacity: 0;
+      overflow: hidden;
+      max-height: 0;
+      
+    }
+    25% {
+      opacity: .25;
+      max-height: calc(.25 * var(--mh));
+    }
+    50% {
+      opacity: .5;
+      max-height: calc(.5 * var(--mh));
+
+    }
+    75% {
+      opacity: .75;
+      max-height: calc(.75 * var(--mh));
+
+    }
+    100% {
+      opacity: 1;
+      overflow: initial;
+      max-height: var(--mh);
+    }
+  }

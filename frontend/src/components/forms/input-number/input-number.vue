@@ -4,7 +4,9 @@
       label.number-label(v-if="hasLabel" :style="`${labelColor ? 'color:'+labelColor: ''}`") {{label}}
       .number-block
         .number-arrow.down(@click="arrowDown")
-          svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>
+          //- svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>
+          svg.icon.icon-btn-plus.minus <use href="#icon-btn-plus"/>
+          
         .number-input-block  
           input.number-input(
             v-auto-min-width
@@ -19,7 +21,8 @@
             )
           span(v-if="appendText.length") {{appendText}}
         .number-arrow.up(@click="arrowUp")
-          svg.icon.icon-number-arrow <use href="#icon-number-arrow"/>
+          //- svg.icon.icon-number-arrow <use href="#icon-number-arrow"/>
+          svg.icon.icon-btn-plus <use href="#icon-btn-plus"/>
 
 </template>
 

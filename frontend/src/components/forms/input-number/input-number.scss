@@ -1,5 +1,5 @@
 .number {
-  max-width: 100px;
+  max-width: 118px;
   display: flex;
   align-items: center;
   // padding: .857em 1em;
@@ -79,9 +79,10 @@
     //padding-left: .5em;
     //padding-right: .5em;
     // padding: .15em;
-    padding: .25em;
+    // padding: .25em;
     cursor: pointer;
     transition: .3s;
+    font-size: 1.2em;
       &:hover{ color:var(--text-color-default) }
 
     &.up {

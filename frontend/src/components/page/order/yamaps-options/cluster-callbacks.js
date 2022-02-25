@@ -4,7 +4,7 @@ const clusterCallbacks = {
           // mouseleave: this.clusterMouseLeave,
           mouseenter: function(e){
             // e.get('target').options.set('iconColor', '#DD5500')
-            console.log (e.get('target').getOverlaySync())
+            // console.log (e.get('target').getOverlaySync())
             
             
             },

@@ -42,10 +42,14 @@
       line-height: 1.2;
       color: var(--text-color-default);
       cursor: pointer;
-      margin-bottom: 0.45em;
+      // margin-bottom: 0.45em;
+      padding: .25em;
       // transition: .1s;
 
         &:hover {font-weight: bold;}
+        &.focus {
+          background-color: var(--base-color3-opacity-01);
+        }
 
 
     }

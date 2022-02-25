@@ -42,6 +42,11 @@
         // Использовать Position: fixed для позиционирования выпадайки
         type: Boolean,
         default: false
+      },
+
+      isOpen: {
+        type: Boolean,
+        default: false
       }
 
 
@@ -50,7 +55,7 @@
       selectOpen: false,
     }),
     mounted() {
-      
+      this.selectOpen = this.isOpen
       document.addEventListener('click', this.hideSelect, true)
     },
     methods: {
@@ -88,16 +93,23 @@
       winScroll() { if (this.selectOpen) this.showFilterList() },
 
     },
+
     beforeMount () {
       if (process.client && this.fixedDropList) window.addEventListener('scroll', this.winScroll)
     },
     beforeDestroy() {
+      console.log('sdfdsf')
       if (process.client) {
         if (this.fixedDropList) window.removeEventListener('scroll', this.winScroll)
         document.removeEventListener('click', this.hideSelect)
       }
     },
-
+    watch: {
+      isOpen(val) {
+        this.selectOpen = val
+        this.$emit('update:is-open', val)
+      }
+    }
   }
 </script>
 

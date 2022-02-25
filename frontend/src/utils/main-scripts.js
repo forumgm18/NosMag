@@ -37,6 +37,7 @@ export function contentError(value) {
     return value === '404' || value === 404
 }
 export function searchHighlight(searchStr, text) {
+        if(!(!!searchStr && !!text)) return text
         return (text.toUpperCase().indexOf(searchStr.toUpperCase()) != -1) ?
           text.replace(new RegExp(searchStr,'ig'),`<strong>$&</strong>`)
         : text

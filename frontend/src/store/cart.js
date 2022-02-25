@@ -9,9 +9,20 @@ export const state = () => ({
 export const mutations = {
   SET_CART(state, val) {
   // цикл по ключам и значениям
-    for (let [key, v] of Object.entries(val)) {
+    for (let [key, v] of Object.entries(val.cart)) {
       state[key] = v 
     }
+    if (state.oform && state.oform.prices) {
+      state.oform.prices = state.oform.prices.map(v => {
+        let vv = parseFloat(v.value)
+        if (vv) {
+          v.value = vv.toLocaleString() + ' ' + val.rootState.settings.currencyShort
+        } else { 
+          v.value = 'Бесплатно'
+        }
+        return v
+      })
+    } 
   },
   // ADD_TO_CART(state, val) {
   ADD_TO_CART(state, val) {
@@ -25,14 +36,16 @@ export const mutations = {
 }
 
 export const actions = {
-  async getCart({ state, commit, rootState}) {
+  async getCart({ state, commit, rootState}, prepay = 1) {
     const cart = await this.$axios.$get('/get_cart', {
         params: {
+          prepay: 1,
           session_id: rootState.token.session_id
         }
       }
     )
-    if (cart.status ==='ok') commit('SET_CART', cart)
+    // console.log('cart: ', cart.cart.items)
+    if (cart.status ==='ok') commit('SET_CART', {cart, rootState})
   },
   async addToCart({ state, commit, rootState}, val) {
     let v = Array.isArray(val) ? val : [val] 
@@ -88,7 +101,10 @@ export const actions = {
 }
 
 export const getters = {
-  getCart: s => s.cart,
+  getCart: s => s.cart || null,
+  getOform: s => s.oform || null,
+  getPromo: s => s.promo || null,
+  // getCartAvailable: s => s.cart.map(item => item.active),
   cartTotalPrice: (state, getters) => {
     return getters.cartProducts.reduce((total, product) => {
       return total + product.price * product.quantity

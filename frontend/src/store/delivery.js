@@ -1,9 +1,9 @@
 export const state = () => ({
-  tarifs: null
+  // tarifs: null
 })
 
 export const mutations = {
-  testDeliveryOptions(state, val) {
+  setDeliveryOptions(state, val) {
   // цикл по ключам и значениям
     for (let [key, v] of Object.entries(val)) { state[key] = v }
   },
@@ -17,7 +17,15 @@ export const actions = {
         session_id: rootState.token.session_id
       }
     })
-    commit('testDeliveryOptions', data)
+    commit('setDeliveryOptions', data)
+  },
+  async setDeliveryType({ rootState }, deliveryType) {
+    const c = await this.$axios.$post('/set_delivery_type', {
+      	delivery_type: deliveryType,
+        session_id: rootState.token.session_id
+    })
+    // commit('setDeliveryOptions', data)
+    return c.status || undefined
   },
 
 }
@@ -25,5 +33,5 @@ export const actions = {
 export const getters = {
   getCity: s => s.city || null,
   getTarifZone: s => s.tarif_zone || null,
-  getTarifs: s => s.tarifs || null,
+  getTarifs: s => s.delivery || null,
 }

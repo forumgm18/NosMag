@@ -2,7 +2,7 @@ export const state = () => ({
   city_id: null,
   city_name: null,
   pvzs: null,
-  selectedPvz: null,
+  // selectedPvz: null,
 })
 
 export const mutations = {
@@ -11,9 +11,9 @@ export const mutations = {
     state.city_name = val.city_name
     state.pvzs = val.pvzs
   },
-  setPvzInfo(state, val) {
-    state.selectedPvz = val
-  },
+  // setPvzInfo(state, val) {
+  //   state.selectedPvz = val
+  // },
 }
 
 export const actions = {
@@ -37,6 +37,7 @@ export const actions = {
     })
 
     c.pvz.phones = JSON.parse(c.pvz.phones)
+    c.pvz.office_image_list = JSON.parse(c.pvz.office_image_list)
     // Преобразуем строковые числа в числа
     const content = JSON.parse(JSON.stringify(c),function (key, value) {
       if (value === (+value).toString()) return +value
@@ -51,14 +52,15 @@ export const actions = {
         session_id: rootState.token.session_id
     })
 
-    c.pvz.phones = JSON.parse(c.pvz.phones)
-    // Преобразуем строковые числа в числа
-    const content = JSON.parse(JSON.stringify(c),function (key, value) {
-      if (value === (+value).toString()) return +value
-      return value
-    } )
+    // c.pvz.phones = JSON.parse(c.pvz.phones)
+    // // Преобразуем строковые числа в числа
+    // const content = JSON.parse(JSON.stringify(c),function (key, value) {
+    //   if (value === (+value).toString()) return +value
+    //   return value
+    // } )
    
-    commit('setPvzInfo', content)
+    // commit('setPvzInfo', content)
+    return c.status || undefined
   },
 
 
@@ -78,6 +80,7 @@ export const getters = {
             active: pvz.active,
             code: pvz.code,
             name: pvz.name,
+            addr: pvz.location_address,
           }
         }
       })
