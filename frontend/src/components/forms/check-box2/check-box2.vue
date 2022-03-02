@@ -1,6 +1,7 @@
 <template lang="pug">
-.checkbox
-  label.checkbox-label
+  //- .checkbox
+  //- label.checkbox-label
+  label.checkbox(:class="{ checked : shouldBeChecked }")
     input(
       hidden 
       type="checkbox"

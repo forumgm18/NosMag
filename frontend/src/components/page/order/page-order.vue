@@ -8,36 +8,14 @@ section
       //- div ================== Выбор Города ============================
       .order-form-section
         .order-form-row
-          .order-form-item.mb-1_5rem
-            client-only  
-              v-dropdown2.order-item-input(
-                ref="town"
-                :class="{ focus: cityFocuse }"
-                :is-open="cityInputOpened"
-                :title="$options.PLACEHOLDERS.ADDRESS.TOWN"
-                :multiple="false"
-                )
-                template(#title) 
-                  input.dropdown-input(
-                    ref="cityInput"
-                    type="text"
-                    v-model="citiesSearchStr"
-                    :placeholder="$options.PLACEHOLDERS.TOWN"
-                    @focus="cityFocused"
-                    @blur="cityBlur"
-                    @keydown="inputKeyDown"
-                  )
-                template( #content )
-                  perfect-scrollbar.search-result-list(v-if="cities" :key="citiesSearchStr")    
-                    ul.city-search-result(ref="cityList" tabindex="-1")
-                      li.city-search-item(
-                        v-for="(city, index) in cities" 
-                        :key="city.id"
-                        :tabindex="index"
-                        @click="citySelected(city)"
-                        v-html="$searchHighlight(citiesSearchStr, city.name)"
-                        @keydown.prevent="cityListKeyDown($event, city)"
-                      ) 
+          .order-form-item.col-2.mb-1_5rem
+            v-select-single(
+              :options="cities"  
+              option-key="full_name"
+              :placeholder="$options.PLACEHOLDERS.TOWN"
+              :search-string.sync="citiesSearchStr"
+              v-model="address.town"
+            )
         //- div ================== Выбор Типа Доставки (Курьер/ПВЗ) ============================
     
         //- .order-form-section
@@ -95,19 +73,20 @@ section
         .order-section-label {{$options.LABELS.ADDRESS_LABEL}}  
         .order-form-section
           .order-form-row.address
-            .order-form-item.col-2
+            .order-form-item.col-2(ref="addr")
               .order-item-label
                 span {{$options.LABELS.ADDRESS.ADDR}}
                 span(v-if="fieldsIsRequired.addr.req").req *
               v-input-field.order-item-input(
                 v-model="address.addr"
-                :is-valid.sync="fieldsIsRequired.addr.valid"
                 type="text"
                 :placeholder="$options.PLACEHOLDERS.ADDRESS.ADDR"
                 :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
+                :is-valid.sync="fieldsIsRequired.addr.valid"
                 :set-error-state="setErrorState"
+                :required="fieldsIsRequired.addr.req"
               )
-            .order-form-item(v-if="deliveryService.type === 'post'")
+            .order-form-item(v-if="deliveryService.type === 'post'" ref="zip")
               .order-item-label
                 span {{$options.LABELS.ADDRESS.ZIP}}
                 span(v-if="fieldsIsRequired.zip.req").req *
@@ -119,7 +98,7 @@ section
                 v-mask="'######'"
                 :minLength="6"
                 :maxLength="6"
-                :required="true"
+                :required="fieldsIsRequired.zip.req"
                 :is-valid.sync="fieldsIsRequired.zip.valid" 
                 :set-error-state="setErrorState"
 
@@ -128,7 +107,7 @@ section
       .order-section-label {{$options.LABELS.USER_DATA}}
       .order-form-section
         .order-form-row
-          .order-form-item(v-if="deliveryService.type != 'samovyvoz'")
+          .order-form-item(v-if="deliveryService.type != 'samovyvoz'" ref="sname")
             .order-item-label
               span {{$options.LABELS.SNAME}}
               span(v-if="fieldsIsRequired.sname.req").req *
@@ -137,11 +116,11 @@ section
               type="text"
               :placeholder="$options.PLACEHOLDERS.SNAME"
               :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
-              :required="true"
+              :required="fieldsIsRequired.sname.req"
               :is-valid.sync="fieldsIsRequired.sname.valid" 
               :set-error-state="setErrorState"
             )
-          .order-form-item
+          .order-form-item(ref="name")
             .order-item-label
               span {{$options.LABELS.NAME}}
               span(v-if="fieldsIsRequired.name.req").req *
@@ -150,12 +129,12 @@ section
               type="text"
               :placeholder="$options.PLACEHOLDERS.NAME"
               :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
-              :required="true"
+              :required="fieldsIsRequired.name.req"
               :is-valid.sync="fieldsIsRequired.name.valid" 
               :set-error-state="setErrorState"
             )
 
-          .order-form-item(v-if="deliveryService.type === 'post'")
+          .order-form-item(v-if="deliveryService.type === 'post'" ref="tname")
             .order-item-label
               span {{$options.LABELS.TNAME}}
               span(v-if="fieldsIsRequired.tname.req").req *
@@ -165,9 +144,10 @@ section
               :placeholder="$options.PLACEHOLDERS.TNAME"
               :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
               :is-valid.sync="fieldsIsRequired.tname.valid" 
+              :required="fieldsIsRequired.tname.req"
 
             )
-          .order-form-item
+          .order-form-item(ref="tel")
             .order-item-label
               span {{$options.LABELS.TEL}}
               span(v-if="fieldsIsRequired.tel.req").req *
@@ -176,13 +156,13 @@ section
               type="tel"
               :placeholder="$options.PLACEHOLDERS.TEL"
               :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
-              :required="true"
+              :required="fieldsIsRequired.tel.req"
               :v-mask="phoneMask"
               :is-valid.sync="fieldsIsRequired.tel.valid" 
               :set-error-state="setErrorState"
             )
         
-          .order-form-item(:style="{ order: fileldFlexOrder('email') }")
+          .order-form-item(:style="{ order: fileldFlexOrder('email') }" ref="email")
             .order-item-label
               span {{$options.LABELS.EMAIL}}
               span(v-if="fieldsIsRequired.email.req").req *
@@ -190,8 +170,10 @@ section
               v-model="email"
               type="email"
               :placeholder="$options.PLACEHOLDERS.EMAIL"
-              :error-text="$options.INPUT_ERROR_TEXT_DEFAULT"
+              :error-text="$options.PLACEHOLDERS.EMAIL"
               :is-valid.sync="fieldsIsRequired.email.valid" 
+              :required="fieldsIsRequired.email.req"
+
             )
 
       .order-section-label {{$options.LABELS.PAYMENT_METHOD}}
@@ -221,8 +203,8 @@ section
         .order-form-row
           .order-form-item.col-2.comment
             .order-item-label {{$options.LABELS.ORDER_COMMENT}}
-            .order-item-input.input-field
-              textarea(v-model="orderComment")
+            .order-item-input
+              v-input-field(type="textarea" v-model="orderComment")
 
       div 
         span Форма Валидна: 
@@ -324,7 +306,7 @@ section
     }, 
     data: function () {
       return {
-        setErrorState: false,
+        setErrorState: false, // принудительноая установка полей формы в ошибку
         showPvzDetailOnly: false,
         showMap: false,
         showAllMarkers: true,
@@ -355,20 +337,19 @@ section
         // showMapLinkVisible: 'hidden',
         showMapLinkVisible: false,
         fieldsIsRequired: {
-          name:{ req: true, valid: false },
-          tel:{ req: true, valid: false },
-          town:{ req: true, valid: false },
-          // deliveryService:{ req: true, valid: false },
-          prePay:{ req: true, valid: true },
-          sname: { req:false, valid: false },
-          tname: { req:false, valid: false },
-          email: { req:false, valid: false },
-          addr: { req:false, valid: false },
-          zip: { req:false, valid: false },
-          orderComment: { req:false, valid: false },
-          deliveryType: { req:true, valid: false },
-          deliveryService: { req:true, valid: false },
-          pvz: { req:false, valid: false },
+          town:{ req: true, valid: false, order: 1 },
+          addr: { req:false, valid: false, order: 2 },
+          zip: { req:false, valid: false, order: 3 },
+          sname: { req:false, valid: false, order: 4 },
+          name:{ req: true, valid: false, order: 5 },
+          tname: { req:false, valid: false, order: 6 },
+          tel:{ req: true, valid: false, order: 7 },
+          email: { req:false, valid: false, order: 8 },
+          deliveryType: { req:true, valid: false, order: 9 },
+          deliveryService: { req:true, valid: false, order: 10 },
+          pvz: { req:false, valid: false, order: 11 },
+          prePay:{ req: true, valid: true, order: 12 },
+          orderComment: { req:false, valid: false, order: 13 },
         },
         payments: null
       }
@@ -378,8 +359,8 @@ section
       await this.$store.dispatch('delivery/getDeliveryOptions', params)
       const payments = await this.$axios.$get('/get_payments', { session_id: this.$store.state.token.session_id })
       if (payments.status === 'ok') this.payments = payments.payments
-      this.delivery = this.deliveryTarifs.types.find(item => item.active)
-      this.deliveryService = this.delivery.items.find(item => item.active)
+      if (this.deliveryTarifs && this.deliveryTarifs.types) this.delivery = this.deliveryTarifs.types.find(item => item.active)
+      if (this.delivery && this.delivery.items) this.deliveryService = this.delivery.items.find(item => item.active)
 
     },    
  
@@ -415,6 +396,7 @@ section
       inputKeyDown(e) {
         if( !this.cityInputOpened) this.cityInputOpened = true
         if (e.key === 'ArrowDown') {
+          e.preventDefault()
           // console.log('inputKeyDown', this.$refs.cityList)
           if (this.$refs.cityList.childNodes && this.$refs.cityList.childNodes.length) {
             this.$refs.cityList.childNodes[0].focus()
@@ -610,8 +592,10 @@ section
             icn = 'icon-logo-ya-go'
             break
           case 'post': 
-          case 'express': 
             icn = 'icon-logo-pochta'
+            break
+          case 'express': 
+            icn = 'icon-logo-courier'
             break
           case 'samovyvoz': 
             icn = 'icon-logo'
@@ -653,27 +637,34 @@ section
           // this.markers = this.pvzList 
           this.showAllMarkers = true 
           await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: this.prePay} )
-          // this.$emit('select-delivery-type', this.getTarif(this.delivery))
   
           this.fieldsIsRequired.town.valid = true // Тип Доставки выбран
 
           this.delivery = this.deliveryTarifs.types.find(item => item.active)
-          this.deliveryService = this.delivery.items.find(item => item.active)
+          // this.deliveryService = this.delivery.items.find(item => item.active)
 
         }
       },
       delivery(val) {
         this.deliveryService  = val.items.find(item => item.active) || val.items[0]
       },
-      deliveryService(val, oldVal) {
+      async deliveryService(val, oldVal) {
         this.deliveryInfo = val.type === 'samovyvoz' ? val : this.lastDeliveryInfo
 
         if (!isEqual(val, oldVal)) {
           console.log('set_delivery_type', val, oldVal)
-          this.$store.dispatch('delivery/setDeliveryType', val.type)
-          this.$emit('need-update-cart', this.prePay)
+          await this.$store.dispatch('delivery/setDeliveryType', val.type)
+          const cartParams = {
+            prePay: this.prePay,
+            city_id: this.address.town.id,
+            delivery_type: val.type  
+          }
+          this.$emit('need-update-cart', cartParams)
+          // const params = {city_id: this.address.town.id, prepay: this.prePay}
+          // const getDeliveryStatus = await this.$store.dispatch('delivery/getDeliveryOptions', params)
+          // console.log('getDeliveryStatus: ', getDeliveryStatus)
         }  
-
+        // Обновляем список обязательных полей для формы
         let reqFieldsArr = ['name', 'tel', 'town', 'deliveryType', 'prePay']
         switch(val.type){
           case 'samovyvoz':
@@ -751,6 +742,14 @@ section
 
         } else {
           if (val > 1) this.setErrorState = !this.orderFormIsValid
+          // Вычисляем первое не верно заполненное поле
+          let refItem = Object.entries(this.fieldsIsRequired)
+                                .sort((v1,v2) => v1[1].order - v2[1].order)
+                                .find(([key,val]) => val.req && !val.valid)
+          if (refItem) { // И перемещаемся к нему
+            refItem = refItem[0]                      
+            if (this.$refs[refItem]) this.$refs[refItem].scrollIntoView({block: "center", behavior: "smooth"})
+          }
         }  
       },
       citiesSearchStr: debounce(
@@ -767,6 +766,9 @@ section
 
 <style lang="scss">
   // .qqq { height: 100%; width: 100%;}
+  .select-single {
+    font-size: .8em!important;
+  }
   .prop-item {
     &:not(:last-child){margin-bottom: .7em;}
     span {font-weight: 500;}

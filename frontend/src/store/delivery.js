@@ -18,6 +18,8 @@ export const actions = {
       }
     })
     commit('setDeliveryOptions', data)
+    console.log('getDeliveryStatus: ', data.status)
+    return data.status || undefined
   },
   async setDeliveryType({ rootState }, deliveryType) {
     const c = await this.$axios.$post('/set_delivery_type', {
@@ -25,6 +27,7 @@ export const actions = {
         session_id: rootState.token.session_id
     })
     // commit('setDeliveryOptions', data)
+    console.log('setDeliveryStatus: ', c.status)
     return c.status || undefined
   },
 

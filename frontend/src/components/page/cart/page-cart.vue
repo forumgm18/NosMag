@@ -55,6 +55,16 @@
             .cart-product-props 
               .cart-product-props-label Цвет:
               .cart-product-props-value {{item.color}}
+            .cart-product-props 
+              .cart-product-props-label(v-html="`Цена за ${item.unit_name}:`") 
+              .cart-product-props-value(v-html="`${item.price} ${currencyShort}`") 
+            .cart-product-props.oldprice(v-if="item.price != item.oldprice") 
+              .cart-product-props-label.oldprice(v-html="`Старая цена за ${item.unit_name}:`") 
+              .cart-product-props-value.oldprice(v-html="`${item.oldprice} ${currencyShort}`") 
+            //- .cart-product-props.comment(v-if="item.comment && item.comment.length") 
+              .cart-product-props-value.comment(v-html="item.comment") 
+            .cart-product-props.comment
+              .cart-product-props-value.comment In ipsum cillum adipisicing id reprehenderit. Fugiat labore excepteur labore commodo nulla duis nostrud fugiat. 
 
         //- div ================== Количество ============================
         .cart-col-2  
@@ -70,7 +80,7 @@
           .cart-table-price(v-if="item.ostatok > 0") 
             .cart-table-price-blok 
               .cart-table-price-total(v-html="itemCostStr(item)")
-              .cart-table-price-piece(v-html="priceForOneStr(item)")
+              .cart-table-price-piece(v-html="itemOldCostStr(item)")
               //- .cart-item-comment(v-html="`Adipisicing cillum reprehenderit esse adipisicing.`")
             .cart-table-sale-block
               .cart-table-price-sale(v-if="item.oldprice" v-html="saleText(item)")
@@ -140,12 +150,16 @@
       //   // await this.$store.dispatch('cart/getCart')
       // },
       // itemCost(price, q, localeFormatStr = true) { 
-      itemCostStr(item, localeFormatStr = true) { 
-        const p = parseFloat(item.price, 10) * parseInt(item.q, 10)
-        // const p = item.price * item.q
-        // const p = item.price
+      costStr(price, q , localeFormatStr = true) { 
+        const p = parseFloat(price, 10) * parseInt(q, 10)
         const res = localeFormatStr ? p.toLocaleString() : p
         return `${res} ${this.currencyShort}`
+        },
+      itemCostStr(item, localeFormatStr = true) { 
+        return this.costStr(item.price, item.q, localeFormatStr)
+        },
+      itemOldCostStr(item, localeFormatStr = true) { 
+        return this.costStr(item.oldprice, item.q, localeFormatStr)
         },
       // priceForOne(price, unit_name) { return `${price} ${this.currencyShort} за ${unit_name}`},
       priceForOneStr(item, localeFormatStr = true) { 

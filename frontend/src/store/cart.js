@@ -36,10 +36,21 @@ export const mutations = {
 }
 
 export const actions = {
-  async getCart({ state, commit, rootState}, prepay = 1) {
+  // async getCart({ state, commit, rootState}, prepay = 1) {
+  //   const cart = await this.$axios.$get('/get_cart', {
+  //       params: {
+  //         prepay: 1,
+  //         session_id: rootState.token.session_id
+  //       }
+  //     }
+  //   )
+  //   // console.log('cart: ', cart.cart.items)
+  //   if (cart.status ==='ok') commit('SET_CART', {cart, rootState})
+  // },
+  async getCart({ state, commit, rootState}, paramsCart) {
     const cart = await this.$axios.$get('/get_cart', {
         params: {
-          prepay: 1,
+          ...paramsCart,
           session_id: rootState.token.session_id
         }
       }

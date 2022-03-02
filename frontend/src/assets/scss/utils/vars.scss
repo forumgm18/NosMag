@@ -23,6 +23,7 @@ $scrollbar-thumbs        : rgba(196, 196, 196, 0.5); // hsla(0, 0%, 77%, 0,5)
 $scrollbar-thumbs-hover  : rgba(196, 196, 196, 0.8); // hsla(0, 0%, 77%, 0,8)
 $scrollbar-thumbs-drag   : rgba(196, 196, 196, 1);   // hsla(0, 0%, 77%, 1)
 $product-card-hover-border   : rgba(35, 54, 83, 0.4); // hsla(216, 41%, 23%, .4)
+$select-item-hover       : rgba(50, 111, 202, 0.1); // hsla(216, 41%, 23%, .4)
 // rgba(35, 54, 83, 1)
 // hsla(216, 41%, 23%, 1)
 // $scrollbar-track-drag-active : rgba(196, 196, 196, .8);
@@ -39,7 +40,7 @@ $mainFont                : Roboto, sans-serif;
 $mainFontColor           : $base-color3;
 
 // Size
-$mainFontSize            : 16px;
+$mainFontSize            : 20px;
 $mainFontWeight          : 400;
 $mainLineHeight          : 1;
 

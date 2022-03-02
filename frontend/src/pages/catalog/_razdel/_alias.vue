@@ -61,7 +61,7 @@
             v-preloader.in-page
           section.razdel-content(v-else)
 
-            product-list(
+            product-list.noselect(
               v-if="products" 
               :items="products" 
               :is-btn="true" 

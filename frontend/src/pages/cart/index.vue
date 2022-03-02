@@ -43,8 +43,10 @@
         .cart-total-delivery(v-if="oform.comment && oform.comment.length") {{oform.comment}}
           //- ============= Способ связи ======================
         v-contact-method(
-          :selcomm="oform.selcomm"
+          :selcomm="selcomm"
           v-model="contactMethod"
+          :other-phone.sync="otherPhone"
+          @hide="updateSelcomm"
         )
         .btn(
           @click="goToOrder('order')" 
@@ -53,25 +55,23 @@
           ) {{oform.button_text}}
 
         .policy(v-if="agrees")
-          v-check-box2(
+          v-check-box2.policy-item(
             v-for="(agr, index) in agrees" :key="index"
             v-model="agr.checked"
             )
-            nuxt-link(:to="agr.link") {{agr.name}}
+            nuxt-link.link(:to="agr.link") {{agr.name}}
 
       .cart-total-block
         //- ============= Промокод ======================
         v-promo-code(
           :promo="promo"
-          v-model="promoCode"
           @set-promo-succsess="setPromo"
-          @set-promo-fail="delPromo"
           )
 </template>
 
 <script>
   import collapseMixin from '@/mixins/animate-collapse.mix'
-  import {cloneDeep} from 'lodash'
+  import {cloneDeep, isEqual} from 'lodash'
 
   export default {
     mixins: [collapseMixin],
@@ -101,42 +101,19 @@
         },
         orderClick: 0,
         agrees: null,
-        contactMethod: []
+        contactMethod: [],
+        otherPhone: ''
 
       }
     },
   computed: {
     cart() {  return this.$store.getters['cart/getCart'] },
     oform() {  return this.$store.getters['cart/getOform'] },
+    selcomm() { return this.oform && this.oform.selcomm ? this.oform.selcomm : null},
     promo() {  return this.$store.getters['cart/getPromo'] },
     cartAvailable() { return this.cart.items.filter(item => item.active)},
     cartNotAvailable() {return this.cart.items.filter(item => !item.active)},
     currency() { return this.$store.state.settings.currency },
-    // cartSale() {
-    //   return this.cart ? 
-    //     this.cart.items.reduce((sum, item) => item.oldsum ? sum + item.oldsum : sum, 0)
-    //     : 0
-    // },
-    // currencyShort() {return this.$store.state.settings.currencyShort},
-    // totalSaleStr(localeString = true) { 
-    //   const sum = this.cart.sum
-    //   const oldsum = this.cart.oldsum || sum
-    //   if ( sum === oldsum ) return false
-    //   const p = localeString ? (oldsum - sum).toLocaleString() : oldsum - sum
-    //   return `${p} ${this.currency}`
-    // },
-    // totalCartStr(localeString = true) { 
-    //   const sum = this.cart.sum
-    //   const delivery = this.deliveryTarif ? this.deliveryTarif.price : 0
-    //   const p = localeString ? (sum + delivery).toLocaleString() : sum + delivery
-    //   return `${p} ${this.currency}`
-    // },
-    // getDeliveryPrice () {
-    //   if (this.deliveryTarif) {
-    //     return this.deliveryTarif.price ? `${this.deliveryTarif.price} ${this.currency}` : 'Бесплатно'
-    //   }
-    //   return undefined
-    // },
     showUnavailableText() {
       return this.showUnavailable ? 'Скрыть недоступные к заказу' : 'Недоступны к заказу'
     },
@@ -152,7 +129,8 @@
       await this.$store.dispatch('cart/getCart')
     },
     delPromo() {
-      this.promoCode = ''
+      // this.promoCode = ''
+      this.setPromo()
     },
     async getCartInfo(val){
       await this.$store.dispatch('cart/getCart', val)
@@ -176,6 +154,36 @@
         //   this.orderSteps.steps.length < this.orderSteps.currentStep ? this.orderSteps.currentStep++ : 0
       }
     },
+    async updateSelcomm() {
+      let paramsIsUpdate = false // Изменились данные или нет
+      const params = {}
+      // Формируем массив выбранных каналов связи
+      params.types = this.contactMethod.map(v => {
+                                      return {active: 1, type: v.type}
+                                    })
+      // Формируем массив активных каналов связи, полученных с сервера
+      const sc = this.selcomm.types.map(v => {
+                                      return {active: v.active, type: v.type}
+                                    }).filter(v => v.active)
+      // Сравниваем в массива
+      // Если различия есть то данные изменились
+      if (!isEqual(params.types, sc)) paramsIsUpdate = true
+      // Сравниваем резервный телефон
+      if (this.otherPhone.length != 18) this.otherPhone = ''
+      // if (this.otherPhone != this.selcomm.phone) paramsIsUpdate = true
+      // Добавляем резервный телефон в параметры запроса
+      if (this.otherPhone.length === 18) params.phone = this.otherPhone
+
+      if ( paramsIsUpdate ) { // Если данные изменились то фиксируем на сервере
+        const res = await this.$axios.$post('/set_selcomm', {
+              session_id: this.$store.state.token.session_id,
+              ...params
+          }
+        )
+        console.log('updateSelcomm:', res)
+      }
+
+    },
     onResize() { this.documentWidth = document.documentElement.clientWidth },
     selectDeliveryType(val) {
       this.deliveryTarif = val
@@ -185,8 +193,8 @@
     }
   },
   // watch:{
-  //   town() {
-  //     this.citiesSearchStr = this.town.name
+  //   oform(val) {
+  //     this.contactMethod = val.selcomm.types.filter(v => v.active)
   //   }
   // },
   beforeMount() {

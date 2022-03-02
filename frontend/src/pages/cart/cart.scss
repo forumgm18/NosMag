@@ -20,8 +20,8 @@
     display: flex;
     align-items: flex-start;
     width: 100%;
-    font-size: 20px;
-    @include adaptiv-font(20, 12);  
+    font-size: 1rem;
+    // @include adaptiv-font(20, 12);  
     @include media-max-width2($md - 1) { display: block; }
 
     // margin-bottom: 5em;
@@ -79,6 +79,7 @@
     // flex-grow: 1;
     flex-basis: 43%;
     font-size: inherit;
+    padding-left: 1rem;
     // @include media-max-width2($sm - 1) { 
     //   flex-wrap: wrap;
     //   justify-content: space-between;
@@ -264,7 +265,7 @@
     }
     &-price{
       // border: 1px solid red;
-      display: flex;
+      // display: flex;
       align-items: flex-start;
       // justify-content: flex-end;
       justify-content: center;
@@ -273,6 +274,7 @@
       // flex-basis: 30%;
       font-size: inherit;
       margin-left: auto;
+      min-width: 170px;
       @include media-max-width2($sm - 1) { 
         // flex-basis: 50%;
         flex-basis: auto;
@@ -281,6 +283,7 @@
       &-blok { 
         font-size: inherit;
         min-width: 155px;
+        margin-bottom: .5rem;
           @include media-max-width2($lg) { min-width: unset;}
         
 
@@ -311,7 +314,7 @@
         // color: var(--text-color-light);
         color: var(--text-color-default);
         margin-top: 0.5em;
-        // text-decoration-line: line-through;
+        text-decoration-line: line-through;
         // text-align: right;
         white-space: nowrap;
         // @include media-max-width2($xlg) { font-size: 10px;}
@@ -379,12 +382,26 @@
         white-space: nowrap;
         font-size: inherit;
         font-weight: 500;
+        &.oldprice {
+          color: var(--text-color-light)
+        }
 
       }
       &-value {
         white-space: nowrap;
         font-size: inherit;
         font-weight: 400;
+        &.oldprice {
+          color: var(--text-color-light);
+          text-decoration: line-through;
+        }
+        &.comment {
+          white-space: normal;
+          opacity: .6;
+          font-size: .8rem;
+          line-height: 1.2;
+          padding-top: .2rem;
+        }
 
       }
     }
@@ -501,7 +518,15 @@
         font-size: .7em;
         line-height: 1.2;
         color: var(--text-color-light);
-        a { color: var(--base-color1)}
+        &-item {
+          font-size: inherit;
+          display: block;
+          &:not(:last-child) {margin-bottom: 1em;}
+          .icon {
+            margin-right: .8em;
+          }
+        }
+        // a { color: var(--base-color1)}
       }
   }
   

@@ -1,13 +1,38 @@
 <template lang="pug">
-  .input-field(:class="{'is-error': $v.locValue.$error}")
-    input(
-      v-model="$v.locValue.$model"
-      v-mask="vMask"
-      :type="type"
-      :placeholder="placeholder"
-      
-    )
-    .input-field-error(v-if="errorText.length") {{errorText}}
+  .input-field-container
+    .input-field(
+      :class="{textarea: type==='textarea', 'is-error': $v.locValue.$error || setErrorStateFinal,'is-success': !$v.locValue.$error && showSuccessText, focus: isFocus}")
+      template(v-if="type==='textarea'")
+        client-only
+          perfect-scrollbar.input-field-textarea(ref="ps")
+            .input-field-textarea-container
+              textarea(
+                ref="textarea"
+                v-model="$v.locValue.$model"
+                v-mask="vMask"
+                :type="type"
+                :placeholder="placeholder"
+                @focus="isFocus=true"
+                @blur="isFocus=false"
+                @keyup="calcHeight"
+              )
+      input(
+        v-else
+        v-model="$v.locValue.$model"
+        v-mask="vMask"
+        :type="type"
+        :placeholder="placeholder"
+        @focus="isFocus=true"
+        @blur="isFocus=false"
+      )
+      .input-field-clear(v-if="hasClear" @click="clearInput")
+        slot(name="field-clear") Удалить
+
+    slot(name="error")
+      .input-field-error(v-if="errorText.length" v-html="errorText") 
+    slot(name="success")
+      .input-field-success(v-if="showSuccessText && successText.length" v-html="successText") 
+
 
 </template>
 
@@ -33,9 +58,21 @@ export default {
       type: String,
       default: ''
     },
+    showError: {
+      type: Boolean,
+      default: true
+    },
     errorText: {
       type: String,
       default: ''
+    },
+    successText: {
+      type: String,
+      default: ''
+    },
+    showSuccessText: {
+      type: Boolean,
+      default: false
     },
     isValid: {
       type: Boolean,
@@ -64,13 +101,23 @@ export default {
     setErrorState: {
       type: Boolean,
       default: false
+    },
+    setErrorStateFinal: {
+      type: Boolean,
+      default: false
+    },
+    hasClear: {
+      type: Boolean,
+      default: false
     }
+
 
   },
   data() {
     return {
       locValue: this.value,
-      validationsObj: null
+      validationsObj: null,
+      isFocus: false
     }
   },
   // validations: {
@@ -95,7 +142,13 @@ export default {
     // console.log('vObj: ', vObj)
     return { locValue: vObj }      
   },
-
+mounted() {
+  this.$nextTick(function() {
+    this.$forceUpdate()
+    // Обновляем высоту textarea 
+    if (this.type === 'textarea') this.calcHeight()
+  })
+},
 watch: {
     locValue: function(val, oldVal) {
       this.$emit('input', val, oldVal)
@@ -106,6 +159,22 @@ watch: {
     value(val) { this.locValue = val},
     setErrorState(val){
       if (val) this.$v.$touch()
+    }
+  },
+  methods: {
+    clearInput() {
+      this.locValue = ''
+      this.$emit('clear-input')
+    },
+    calcHeight(){
+      // debugger
+      // let target = e.target
+      let target = this.$refs.textarea
+      const minH = this.$refs.ps.$el.clientHeight
+      const h = Math.max( target.scrollHeight, minH)
+      target.style.height = null
+      target.style.height = h  + 'px'
+      this.$refs.ps.update()
     }
   }  
 

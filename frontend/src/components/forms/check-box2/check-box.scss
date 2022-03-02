@@ -13,6 +13,7 @@
     font-size: inherit;
     color: inherit;
     cursor: inherit;
+      .icon {flex-shrink: 0;}
   }
   &_text {
     display: inline-flex;

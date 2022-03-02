@@ -72,7 +72,8 @@
   &-arrow {
     //border: 1px solid green;
     flex-shrink: 0;
-    color: var(--base-color4);
+    // color: var(--base-color4);
+    color:var(--text-color-default);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +84,7 @@
     cursor: pointer;
     transition: .3s;
     font-size: 1.2em;
-      &:hover{ color:var(--text-color-default) }
+      &:hover{ color:var(--base-color2) }
 
     &.up {
     }

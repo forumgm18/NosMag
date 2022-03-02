@@ -15,8 +15,10 @@ export default {
             icn = 'icon-logo-ya-go'
             break
           case 'post': 
-          case 'express': 
             icn = 'icon-logo-pochta'
+            break
+          case 'express': 
+            icn = 'icon-logo-courier'
             break
           case 'samovyvoz': 
             icn = 'icon-logo'

@@ -95,7 +95,8 @@
       }
     }
     &-item{
-      margin: 0 var(--m) 9px var(--m);
+      // margin: 0 var(--m) 9px var(--m);
+      margin: 0 var(--m);
       flex-basis:  calc(33.33% - 2*var(--m));
       // display: flex;
       // align-items: center;
@@ -104,11 +105,16 @@
       }
       &.kv-zip {max-width: 112px;}
       &.comment {
-        // flex-basis: 100%;
+        // border: 1px solid red;
         max-width: 845px;
-        textarea {
-          height: 130px;
+        .order-item-input {
+          // border: 1px solid green;
+          // height: 130px;
+          height: 180px;
         }
+        // textarea {
+        //   height: 130px;
+        // }
       }
 
     }
@@ -141,7 +147,7 @@
         }
     }
     &-input {
-      // width: 100%;
+      width: 100%;
       // position: relative;
       // font-size: 14px;
       // margin-bottom: 0.5em;
@@ -187,6 +193,8 @@
           width: 100%;
           color: inherit;
           transition: 0.3s;
+          border: 1px solid var(--text-color-light);
+          border-radius: 5px;
         }
     }
   }

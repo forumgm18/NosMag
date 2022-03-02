@@ -55,7 +55,7 @@
                   ref="collapse"
                   ) {{addressComment}}
                 .map-sidebar-show-more(
-                  v-if="addrCommentCollapse" 
+                  v-if="addrCommentCollapse && showMoreVisible()" 
                   @click="addrCommentShow"
                   ) {{ $options.SHOW_MORE }}
 
@@ -112,13 +112,10 @@
       }
     },
     SHOW_MORE: 'Читать дальше',
+    mounted() {
+      this.$nextTick(this.$forceUpdate())
+    },
     computed: {
-      // showMoreVisible(){
-      //   debugger
-      //   const clps = this.$refs.collapse
-      //   // const stl = window.getComputedStyle(this.$refs.collapse)
-      //   return clps.scrollHeight > 0 
-      // },
       address(){
         let res
         switch(this.pvz.type) {
@@ -229,7 +226,12 @@
       },
       goBack() {
         this.$emit('go-back')
-      }
+      },
+      showMoreVisible(){
+        const clps = this.$refs.collapse 
+        return clps ? clps.scrollHeight > clps.offsetHeight : true
+      },
+
     }
 
 

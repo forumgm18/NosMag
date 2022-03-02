@@ -3,6 +3,16 @@
   display: none!important;
 }
 .v-popper--theme-dropdown .v-popper__inner {
-  box-shadow: 0px 0px 20px rgba(35, 54, 83, 0.15)!important;
-  border: none!important;
+  // box-shadow: 0px 0px 20px rgba(35, 54, 83, 0.15)!important;
+  // border: none!important;
 }
+
+.popper-container {
+  .v-popper__inner {
+    // background: #fff;
+    border: 1px solid var(--base-color3);
+    border-radius: 5px;
+    box-shadow: none!important;
+  }
+}
+
