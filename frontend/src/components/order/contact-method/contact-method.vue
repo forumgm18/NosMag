@@ -1,7 +1,8 @@
 <template lang="pug">
   .selcomm(v-if="selcomm && getSelcommText(selcomm.type_active)")
-    span(v-html="`${selcomm.header} &ndash; `") 
-    v-dropdown(
+    //- span(v-html="`${selcomm.header} &ndash; `") 
+    span(v-html="`${selcomm.header}:`") 
+    v-dropdown.selcomm-anker(
       placement="left"
       @hide="$emit('hide')"
     )
@@ -71,7 +72,7 @@
     },
     watch: {
       selcomm(val) {
-        console.log('selcomm:', val)
+        // console.log('selcomm:', val)
         this.locValue = val.types.filter(v => v.active)
         if (val.phone) this.otherPhoneValue = val.phone
       }  
@@ -122,6 +123,9 @@
       &-label {
         font-size: .8rem;
         margin-bottom: .5em;
+      }
+      &-anker{
+        margin: 0 auto;
       }
   }
 

@@ -1,7 +1,7 @@
 <template lang="pug">
   client-only
     .number(:style="borderColor ? `border-color: ${borderColor}` : ''")
-      label.number-label(v-if="hasLabel" :style="`${labelColor ? 'color:'+labelColor: ''}`") {{label}}
+      label.number-label(v-if="hasLabel" :style="`${labelColor ? 'color:'+labelColor: ''}`" v-html="label") 
       .number-block
         .number-arrow.down(@click="arrowDown")
           //- svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>

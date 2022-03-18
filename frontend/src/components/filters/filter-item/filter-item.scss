@@ -1,0 +1,97 @@
+.filter-item{
+    font-size: 14px;
+    // margin-right: 16px;
+    padding: var(--df-margin);
+    flex-basis: calc(100% / var(--df-column));
+    flex-shrink: 0;
+    &:not(.is-selected){
+      .filter-item_close {transition: .3s;}
+      &.v-popper--shown {
+        .filter-item_close {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    &.is-sort {
+      .filter-item{
+        &_title{
+          background-color: var(--base-color2);
+          border-color: var(--base-color2);
+          color: #fff;
+          &.is-selected{
+            background-color: var(--base-color3);
+            color: #fff;
+          }
+
+        }
+      }
+    }
+
+  &_title{
+    display: flex;
+    align-items: center;
+    font-size: inherit;
+    // padding: .4em 1.4em;
+    padding: .4em .5em .4em 1.4em;
+    border: 1px solid baseColorOpacity3(0.4);
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .3s;
+    &.is-selected{
+      background-color: var(--base-color3);
+      color: #fff;
+    }
+      .text{
+        white-space: nowrap;
+        padding: .4em 0;
+      }
+      .count {
+        white-space: nowrap;
+        padding: .4em 0;
+        padding-left: .5em;
+      }
+
+  }
+  &_close {
+    // transition: .3s;
+    margin-left: auto;
+    padding: .4em;
+    .icon {display: block;}
+  }
+    &_popper-container{
+      font-size: 14px;
+      margin-top: calc(-1*var(--df-margin));
+      margin-left: var(--df-margin);
+      .v-popper__inner{      
+        padding: 1em .3em 1em 1em;    
+      }
+    }
+    &_select-all {
+      font-size: inherit;
+      display: flex;
+      align-items: center;
+      margin-bottom: .7142857em;
+      cursor: pointer;
+      &:hover {
+        .filter-item_select-all_text {opacity: .6;}
+      }
+      &:focus {
+        .filter-item_select-all_text {
+          opacity: .6;
+          // color: red;
+        }
+      }
+
+      &_icon {
+        font-size: 1.166667em;
+        margin-right: .5em;
+        flex-shrink: 0;
+
+      }
+      &_text{
+        font-size: inherit;
+      }
+    }
+
+}

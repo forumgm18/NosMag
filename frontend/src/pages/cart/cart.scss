@@ -391,9 +391,11 @@
         white-space: nowrap;
         font-size: inherit;
         font-weight: 400;
-        &.oldprice {
+        .oldprice {
           color: var(--text-color-light);
           text-decoration: line-through;
+          font-size: .8em;
+          padding-right: .5em;
         }
         &.comment {
           white-space: normal;
@@ -520,11 +522,18 @@
         color: var(--text-color-light);
         &-item {
           font-size: inherit;
-          display: block;
+          display: flex;
+          align-items: center;
           &:not(:last-child) {margin-bottom: 1em;}
-          .icon {
+          .checkbox {
+            font-size: inherit;
             margin-right: .8em;
+            margin-top: .15em;
           }
+          // .icon {
+          //   font-size: inherit;
+          //   margin-right: .8em;
+          // }
         }
         // a { color: var(--base-color1)}
       }

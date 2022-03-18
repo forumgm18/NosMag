@@ -1,72 +1,73 @@
 <template lang="pug">
   main.container.cart-content(v-if="cart")
-    .page-content
-      .cart-page
-        h1.page-title {{$options.CART_TITLE}}
-        page-cart(
-          key="available"
-          :cart="cartAvailable"
-          :cart-title="$options.CART_TITLE"
-          :value="selectedItems"
-          v-model="selectedItems"
-          )
-      .link(
-        v-if="cartNotAvailable && cartNotAvailable.length" 
-        @click="showUnavailable = !showUnavailable"
-        ) {{showUnavailableText}}
-      transition(v-if="cartNotAvailable && cartNotAvailable.length" name="fade" @enter="collpseEnter" )
-        .cart-page.unavailable(v-if="showUnavailable" ref="unCart")    
+    template(v-if="cart && cart.items && cart.items.length")
+      .page-content
+        .cart-page
+          h1.page-title {{$options.CART_TITLE}}
           page-cart(
-            key="unavailable"
-            :cart="cartNotAvailable"
+            key="available"
+            :cart="cartAvailable"
             :cart-title="$options.CART_TITLE"
+            :value="selectedItems"
+            v-model="selectedItems"
             )
-      page-order(
-        :class="{ 'show-unavailable': showUnavailable }"
-        :show-order="showOrder"
-        :order-click="orderClick"
-        @select-delivery-type="selectDeliveryType"
-        @need-update-cart="getCartInfo" 
-        )  
-    .cart-total
-      .cart-total-block
-        //- ============= Итого ======================
-        .cart-total-row(v-for="(item, index) in oform.prices" :key="index")
-          .cart-total-lable(
-            :class="{ total: item.type === 'itogo', sale: item.type === 'skidka',  }"
-          ) {{item.name}}
-          .cart-total-sum(
-            :class="{ total: item.type === 'itogo', sale: item.type === 'skidka',  }"
-            v-html="`${item.value}`"
-            )
-          //- ============= Текст про бесплатную доставку ======================
-        .cart-total-delivery(v-if="oform.comment && oform.comment.length") {{oform.comment}}
-          //- ============= Способ связи ======================
-        v-contact-method(
-          :selcomm="selcomm"
-          v-model="contactMethod"
-          :other-phone.sync="otherPhone"
-          @hide="updateSelcomm"
-        )
-        .btn(
-          @click="goToOrder('order')" 
-          :class={disabled: btnDisabled }
-          @form-valid="formValid"
-          ) {{oform.button_text}}
-
-        .policy(v-if="agrees")
-          v-check-box2.policy-item(
-            v-for="(agr, index) in agrees" :key="index"
-            v-model="agr.checked"
-            )
-            nuxt-link.link(:to="agr.link") {{agr.name}}
-
-      .cart-total-block
-        //- ============= Промокод ======================
-        v-promo-code(
-          :promo="promo"
-          @set-promo-succsess="setPromo"
+        .link(
+          v-if="cartNotAvailable && cartNotAvailable.length" 
+          @click="showUnavailable = !showUnavailable"
+          ) {{showUnavailableText}}
+        transition(v-if="cartNotAvailable && cartNotAvailable.length" name="fade" @enter="collpseEnter" )
+          .cart-page.unavailable(v-if="showUnavailable" ref="unCart")    
+            page-cart(
+              key="unavailable"
+              :cart="cartNotAvailable"
+              :cart-title="$options.CART_TITLE"
+              )
+        page-order(
+          :class="{ 'show-unavailable': showUnavailable }"
+          ref="pageOrder"
+          :show-order="showOrder"
+          :order-click="orderClick"
+          @select-delivery-type="selectDeliveryType"
+          @need-update-cart="getCartInfo" 
+          )  
+      .cart-total
+        .cart-total-block
+          //- ============= Итого ======================
+          .cart-total-row(v-for="(item, index) in oform.prices" :key="index")
+            .cart-total-lable(
+              :class="{ total: item.type === 'itogo', sale: item.type === 'skidka',  }"
+            ) {{item.name}}
+            .cart-total-sum(
+              :class="{ total: item.type === 'itogo', sale: item.type === 'skidka',  }"
+              v-html="`${item.value}`"
+              )
+            //- ============= Текст про бесплатную доставку ======================
+          .cart-total-delivery(v-if="oform.comment && oform.comment.length") {{oform.comment}}
+            //- ============= Способ связи ======================
+          v-contact-method(
+            :selcomm="selcomm"
+            v-model="contactMethod"
+            :other-phone.sync="otherPhone"
+            @hide="updateSelcomm"
           )
+          .btn(
+            @click="goToOrder('order')" 
+            :class={disabled: btnDisabled }
+            @form-valid="formValid"
+            ) {{oform.button_text}}
+
+          .policy(v-if="agrees")
+            .policy-item(v-for="(agr, index) in agrees" :key="index")
+              v-check-box2( v-model="agr.checked" )
+              v-link.link(:to="agr.link" target="_blank") {{agr.name}}
+
+        .cart-total-block
+          //- ============= Промокод ======================
+          v-promo-code(
+            :promo="promo"
+            @set-promo-succsess="setPromo"
+            )
+    .cart-empty(v-else) Корзина пуста
 </template>
 
 <script>
@@ -86,8 +87,8 @@
       return {
         selectedItems: [],
         showUnavailable: false,
-        showOrder: false,
-        // showOrder: true,
+        // showOrder: false,
+        showOrder: true,
         promoCode: '',
         promoCollapse: true,
         deliveryTarif: null,
@@ -143,12 +144,17 @@
     // goodsPieces(q, unit_name) { return `Товары ${q}&nbsp;${unit_name}.`},
     // goToOrder() { this.showOrder = true },
     goToOrder(id) {
-      const el = document.getElementById(id)
+      // const el = document.getElementById(id)
+      const el = this.$refs.pageOrder.$el
+      // debugger
       if (el) {
-        if (!this.showOrder) {
-          el.scrollIntoView({behavior: "smooth", inline: "nearest"})
+        // if (!this.showOrder || !this.orderClick) {
+          // el.scrollIntoView({behavior: "smooth", inline: "nearest"})
+          el.scrollIntoView({behavior: "smooth"})
+          console.log('to order')
+          // el.scrollIntoView()
           this.showOrder = true
-        }
+        // }
         this.orderClick++
         // this.orderSteps.currentStep = 
         //   this.orderSteps.steps.length < this.orderSteps.currentStep ? this.orderSteps.currentStep++ : 0
@@ -180,7 +186,7 @@
               ...params
           }
         )
-        console.log('updateSelcomm:', res)
+        // console.log('updateSelcomm:', res)
       }
 
     },

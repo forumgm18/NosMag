@@ -51,10 +51,12 @@
 
     &-btn {
       //border: 1px solid red;
-      font-size: 14px;
+      font-size: 44px;
       margin-top: 1em;
-      height: 1.2em;
-      width: 1.2em;
+      // height: 1.2em;
+      // width: 1.2em;
+      height: 1em;
+      width: 1em;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -62,18 +64,31 @@
       margin-left: auto;
       position: relative;
       color: var(--text-color-default);
+
+      border: 2px solid baseColorOpacity3(0.4);
+      border-radius: 5px;
+
       cursor: pointer;
-      transform: rotate(-90deg);
+      // transform: rotate(-90deg);
+      // transform: rotate(180deg);
       transition: .3s;
       @include media-max-width2($md - 1) {display: none}
 
       &.collapse {
-        transform: rotate(90deg);
+        // transform: rotate(90deg);
+        // transform: rotate(0deg);
+        .icon {
+          transform: rotate(0deg);
+        }
+
       }
 
       .icon {
         font-size: inherit;
         color: inherit;
+        transform: rotate(180deg);
+        transition: .3s;
+
       }
 
     }

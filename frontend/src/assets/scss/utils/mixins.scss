@@ -102,3 +102,13 @@
 
   @return calc( #{$k} * 100vw + #{$b} );
 }
+//================== Цвета ====================================
+@function baseColorOpacity1($opacity: 1) {
+  @return hsla(216, 60%, 49%, $opacity);
+}
+@function baseColorOpacity2($opacity: 1) {
+  @return hsla(23, 100%, 43%, $opacity);
+}
+@function baseColorOpacity3($opacity: 1) {
+  @return hsla(216, 41%, 23%, $opacity);
+}

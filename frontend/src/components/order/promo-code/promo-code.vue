@@ -12,26 +12,28 @@
         :error-text="errorText"
         :set-error-state-final="isError"
         :show-error="false"
-        :has-clear="true"
+        :has-clear="promo.active"
         @clear-input="clearInput"
+        @keyup.enter="setPromo"
         )
         template(#error)
           .promo-error( v-if="isError && errorText.length" )  {{errorText}} 
         template(#success)
           .promo-succsess( v-if="!isError && promoSuccsess" )   
-            nuxt-link(
-              v-if="promoSuccsess === 'info_link'"
-              :to="promo.link"
-              v-html="promo.info"
-              ) 
+            template(v-if="promoSuccsess != 'info'")
+              nuxt-link(
+                v-if="!$isLinkExternal(promo.link)"
+                :to="promo.link"
+                v-html="linkText"
+                ) 
+              a(
+                v-else
+                :href="promo.link"
+                v-html="linkText"
+              )  
             span(
-              v-else-if="promoSuccsess === 'info'"
+              v-else
               v-html="promo.info"
-              ) 
-            nuxt-link(
-              v-else-if="promoSuccsess === 'link'"
-              v-html="promo.link"
-              :to="promo.link"
               ) 
 
       .btn.mb-0(@click="setPromo") Применить  
@@ -67,6 +69,11 @@
         if (res && this.promo && this.promo.link) res = 'link'
         if (this.promo && this.promo.info && this.promo.link) res = 'info_link'
         return res
+      },
+
+      linkText(){
+        if (this.promoSuccsess === 'info_link') return this.promo.info
+        if (this.promoSuccsess === 'link') return this.promo.link
       }
     },
     mounted() {
@@ -74,7 +81,8 @@
       this.promoCode = this.promo.code 
     },
     methods: {
-      async setPromo() {
+      async setPromo(e) {
+        console.log('setPromo', e)
         const res = await this.$axios.$post(`/set_promo`, {
           code: this.promoCode,
           session_id: this.$store.state.token.session_id
@@ -121,7 +129,7 @@
         overflow: hidden;
         transition: .3s;
         max-height: 400px;
-        padding-top: 0.5em;
+        padding-top: 1rem;
         &.collapse {
           max-height: 0;
           padding-top: 0;

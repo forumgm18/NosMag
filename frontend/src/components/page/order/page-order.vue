@@ -30,8 +30,6 @@ section
         
 
         //- div ================== Выбор Тарифа Доставки ============================
-        
-        
         .order-form-row.delivery-opt(v-if="deliveryTarifs")
           v-check-item(
             v-for="(d, i) in delivery.items" :key="i"
@@ -40,6 +38,7 @@ section
             :value="d" 
             :is-checked="!!d.active" 
             :has-footer="true"
+            
             )
             template(#icon)
               svg.icon(:class="[getDeliveryServiceIcon(d.type), {base: d.type==='samovyvoz'}]") 
@@ -51,7 +50,7 @@ section
               div.prop-item(v-html="formatDeliveryProp('price', d.price)")
 
         //- div ================== Кнопка Выбор ПВЗ ============================
-        .order-form-row( v-if="showSelectPvzBtn" )
+        .order-form-row( v-if="showSelectPvzBtn" ref="pvz")
           .btn.order-form-btn( @click="showMapClick" ) {{showMapText}}
 
         //- div ================== Инфо о ПВЗ ============================
@@ -69,15 +68,16 @@ section
               )
         //- div ================== Поля формы ============================
         //- div ================== Адрес ============================
-      template(v-if="delivery.group_type === 'courier' || deliveryService.type === 'post'")  
-        .order-section-label {{$options.LABELS.ADDRESS_LABEL}}  
-        .order-form-section
+      template
+        .order-section-label(v-show="delivery.group_type === 'courier' || deliveryService.type === 'post'") {{$options.LABELS.ADDRESS_LABEL}}  
+        .order-form-section(v-show="delivery.group_type === 'courier' || deliveryService.type === 'post'")  
           .order-form-row.address
-            .order-form-item.col-2(ref="addr")
+            .order-form-item.col-2()
               .order-item-label
                 span {{$options.LABELS.ADDRESS.ADDR}}
                 span(v-if="fieldsIsRequired.addr.req").req *
               v-input-field.order-item-input(
+                ref="addr"
                 v-model="address.addr"
                 type="text"
                 :placeholder="$options.PLACEHOLDERS.ADDRESS.ADDR"
@@ -86,11 +86,12 @@ section
                 :set-error-state="setErrorState"
                 :required="fieldsIsRequired.addr.req"
               )
-            .order-form-item(v-if="deliveryService.type === 'post'" ref="zip")
+            .order-form-item(v-show="deliveryService.type === 'post'" )
               .order-item-label
                 span {{$options.LABELS.ADDRESS.ZIP}}
                 span(v-if="fieldsIsRequired.zip.req").req *
               v-input-field.order-item-input(
+                ref="zip"
                 v-model="address.zip"
                 type="text"
                 :placeholder="$options.PLACEHOLDERS.ADDRESS.ZIP"
@@ -107,11 +108,12 @@ section
       .order-section-label {{$options.LABELS.USER_DATA}}
       .order-form-section
         .order-form-row
-          .order-form-item(v-if="deliveryService.type != 'samovyvoz'" ref="sname")
+          .order-form-item(v-show="deliveryService.type != 'samovyvoz'" )
             .order-item-label
               span {{$options.LABELS.SNAME}}
               span(v-if="fieldsIsRequired.sname.req").req *
             v-input-field.order-item-input(
+              ref="sname"
               v-model="sname"
               type="text"
               :placeholder="$options.PLACEHOLDERS.SNAME"
@@ -120,11 +122,12 @@ section
               :is-valid.sync="fieldsIsRequired.sname.valid" 
               :set-error-state="setErrorState"
             )
-          .order-form-item(ref="name")
+          .order-form-item()
             .order-item-label
               span {{$options.LABELS.NAME}}
               span(v-if="fieldsIsRequired.name.req").req *
             v-input-field.order-item-input(
+              ref="name"
               v-model="name"
               type="text"
               :placeholder="$options.PLACEHOLDERS.NAME"
@@ -134,11 +137,12 @@ section
               :set-error-state="setErrorState"
             )
 
-          .order-form-item(v-if="deliveryService.type === 'post'" ref="tname")
+          .order-form-item(v-show="deliveryService.type === 'post'" )
             .order-item-label
               span {{$options.LABELS.TNAME}}
               span(v-if="fieldsIsRequired.tname.req").req *
             v-input-field.order-item-input(
+              ref="tname"
               v-model="tname"
               type="text"
               :placeholder="$options.PLACEHOLDERS.TNAME"
@@ -147,11 +151,12 @@ section
               :required="fieldsIsRequired.tname.req"
 
             )
-          .order-form-item(ref="tel")
+          .order-form-item()
             .order-item-label
               span {{$options.LABELS.TEL}}
               span(v-if="fieldsIsRequired.tel.req").req *
             v-input-field.order-item-input(
+              ref="tel"
               v-model="tel"
               type="tel"
               :placeholder="$options.PLACEHOLDERS.TEL"
@@ -162,11 +167,12 @@ section
               :set-error-state="setErrorState"
             )
         
-          .order-form-item(:style="{ order: fileldFlexOrder('email') }" ref="email")
+          .order-form-item(:style="{ order: fileldFlexOrder('email') }" )
             .order-item-label
               span {{$options.LABELS.EMAIL}}
               span(v-if="fieldsIsRequired.email.req").req *
             v-input-field.order-item-input(
+              ref="email"
               v-model="email"
               type="email"
               :placeholder="$options.PLACEHOLDERS.EMAIL"
@@ -338,16 +344,16 @@ section
         showMapLinkVisible: false,
         fieldsIsRequired: {
           town:{ req: true, valid: false, order: 1 },
-          addr: { req:false, valid: false, order: 2 },
-          zip: { req:false, valid: false, order: 3 },
-          sname: { req:false, valid: false, order: 4 },
-          name:{ req: true, valid: false, order: 5 },
-          tname: { req:false, valid: false, order: 6 },
-          tel:{ req: true, valid: false, order: 7 },
-          email: { req:false, valid: false, order: 8 },
-          deliveryType: { req:true, valid: false, order: 9 },
-          deliveryService: { req:true, valid: false, order: 10 },
-          pvz: { req:false, valid: false, order: 11 },
+          pvz: { req:false, valid: false, order: 2 },
+          addr: { req:false, valid: false, order: 3 },
+          zip: { req:false, valid: false, order: 4 },
+          sname: { req:false, valid: false, order: 5 },
+          name:{ req: true, valid: false, order: 6 },
+          tname: { req:false, valid: false, order: 7 },
+          tel:{ req: true, valid: false, order: 8 },
+          email: { req:false, valid: false, order: 9 },
+          deliveryType: { req:true, valid: false, order: 10 },
+          deliveryService: { req:true, valid: false, order: 11 },
           prePay:{ req: true, valid: true, order: 12 },
           orderComment: { req:false, valid: false, order: 13 },
         },
@@ -390,6 +396,11 @@ section
                 !this.deliveryInfo
         
       },
+      // getFirstRequiredNotValidField() {
+      //   const compare = (v1, v2) => v1[1].order - v2[1].order 
+      //   let arr = Object.entries(this.requiredFields).filter((key, v) => v.req && !v.valid)
+      //   if (arr) return arr.sort(compare)[0]
+      // }
 
     },
     methods: {
@@ -405,6 +416,18 @@ section
           if (!this.cityInputOpened) this.cityInputOpened = true
         }
       },
+      async inputSetFocus(refName) {
+        await this.$nextTick();
+        const el = this.$refs[refName]
+        if(el) {
+          // el.$el.scrollIntoView({behavior: "smooth", inline: "nearest"})
+          el.$el.scrollIntoView({behavior: "smooth", block: "center",})
+          if ( el.$refs.input ) el.$refs.input.focus()
+          if ( el.$refs.textarea ) el.$refs.textarea.focus()
+
+        }
+      },
+
       cityListKeyDown(e, val){
         let el = e.target
         switch(e.key) {
@@ -456,23 +479,6 @@ section
         return `<span>${s}</span> ${v}`
       },
 
-      setRequiredFields(v) {
-        // setRequiredFields([ 'name', 'tel', 'town', 'prePay', 'sname', 'tname', 'email', 'addr', 'zip', 'orderComment', 'deliveryService']),
-        // const obj = this.fieldsIsRequired
-        console.log('v', v)
-        if (v instanceof Array) {
-          Object.entries(this.fieldsIsRequired).forEach( itm => {
-            // console.log('itm', itm)
-            itm[1].req = false
-            })
-          // debugger
-          v.forEach(item => {
-            if (this.fieldsIsRequired.hasOwnProperty(item)) this.fieldsIsRequired[item].req = true
-            })
-        } else {
-          if (this.fieldsIsRequired.hasOwnProperty(v)) this.fieldsIsRequired[v].req = true
-        }
-      },
       showMapClick() { 
         this.showAllMarkers = true
         this.showPvzDetailOnly = false
@@ -530,7 +536,7 @@ section
         }
       },
       markerPreSelect(val, e) {
-        console.log('markerPreSelect', val)
+        // console.log('markerPreSelect', val)
         // this.deliveryInfo = {name: val.data.name, code: val.data.code}
         // this.lastDeliveryInfo = {name: val.data.name, code: val.data.code}
 
@@ -615,6 +621,66 @@ section
         } 
         return icn
       },
+      setRequiredFields(v) {
+        // setRequiredFields([ 'name', 'tel', 'town', 'prePay', 'sname', 'tname', 'email', 'addr', 'zip', 'orderComment', 'deliveryService']),
+        // const obj = this.fieldsIsRequired
+        // console.log('v', v)
+        if (v instanceof Array) {
+          Object.entries(this.fieldsIsRequired).forEach( itm => {
+            // console.log('itm', itm)
+            itm[1].req = false
+            })
+          // debugger
+          v.forEach(item => {
+            if (this.fieldsIsRequired.hasOwnProperty(item)) this.fieldsIsRequired[item].req = true
+            })
+        } else {
+          if (this.fieldsIsRequired.hasOwnProperty(v)) this.fieldsIsRequired[v].req = true
+        }
+      },
+
+      updateReqiredFields(val) {
+        // Обновляем список обязательных полей для формы
+        let reqFieldsArr = ['name', 'tel', 'town', 'deliveryType', 'prePay']
+        switch(val){
+          case 'samovyvoz':
+            reqFieldsArr.push('deliveryService') 
+            break
+          
+          case 'cdek_pvz':
+            reqFieldsArr.push('sname', 'deliveryService')
+            if (!!this.pvzList && this.pvzList.length) reqFieldsArr.push('pvz')
+            break
+          
+          case 'cdek_courier':
+            reqFieldsArr.push('sname','addr')
+            // reqFieldsArr = ['name', 'sname', 'tel', 'addr', 'deliveryService', 'prePay']  
+            break
+          
+          case 'post':
+            reqFieldsArr.push('sname','tname','addr','zip' )
+            // reqFieldsArr = ['name', 'sname', 'tname', 'tel', 'addr', 'zip', 'deliveryService', 'prePay']  
+            break
+          
+          case 'express':
+            reqFieldsArr.push('addr')
+            // reqFieldsArr = ['name', 'tel', 'addr', 'deliveryService', 'prePay']  
+            break
+
+        }
+        this.setRequiredFields(reqFieldsArr)
+      },
+      getFirstRequiredNotValidField() {
+        const compare = (v1, v2) => {return v1[1].order - v2[1].order }
+        // debugger
+        let arr = Object.entries(this.fieldsIsRequired)
+                        .filter(([key, v]) => v.req && !v.valid)
+                        .sort(compare)
+        // if (this.deliveryService.type === 'samovyvoz') {
+        //   if (arr[0][0] === 'pvz') return arr[1][0]
+        // }
+        return (arr && arr.length) ? arr[0][0] : false
+      }
     },
     mounted(){ 
       // this.yamapSettings.apiKey = this.yandexApiKey || ''
@@ -649,13 +715,18 @@ section
         this.deliveryService  = val.items.find(item => item.active) || val.items[0]
       },
       async deliveryService(val, oldVal) {
+        // Обновляем список обязательных полей для формы
+        this.updateReqiredFields(val.type)
+        this.fieldsIsRequired.deliveryType.valid = (val && val.type) ? true : false
+        this.fieldsIsRequired.deliveryService.valid = !!val 
+        // Обновляем Инфо о доставке
         this.deliveryInfo = val.type === 'samovyvoz' ? val : this.lastDeliveryInfo
 
         if (!isEqual(val, oldVal)) {
-          console.log('set_delivery_type', val, oldVal)
+          // console.log('set_delivery_type', val, oldVal)
           await this.$store.dispatch('delivery/setDeliveryType', val.type)
           const cartParams = {
-            prePay: this.prePay,
+            prepay: this.prePay,
             city_id: this.address.town.id,
             delivery_type: val.type  
           }
@@ -664,41 +735,7 @@ section
           // const getDeliveryStatus = await this.$store.dispatch('delivery/getDeliveryOptions', params)
           // console.log('getDeliveryStatus: ', getDeliveryStatus)
         }  
-        // Обновляем список обязательных полей для формы
-        let reqFieldsArr = ['name', 'tel', 'town', 'deliveryType', 'prePay']
-        switch(val.type){
-          case 'samovyvoz':
-            reqFieldsArr.push('deliveryService') 
-            break
-          
-          case 'cdek_pvz':
-            reqFieldsArr.push('sname', 'deliveryService')
-            if (!!this.pvzList && this.pvzList.length) reqFieldsArr.push('pvz')
-            break
-          
-          case 'cdek_courier':
-            reqFieldsArr.push('sname','addr')
-            // reqFieldsArr = ['name', 'sname', 'tel', 'addr', 'deliveryService', 'prePay']  
-            break
-          
-          case 'post':
-            reqFieldsArr.push('sname','tname','addr','zip' )
-            // reqFieldsArr = ['name', 'sname', 'tname', 'tel', 'addr', 'zip', 'deliveryService', 'prePay']  
-            break
-          
-          case 'express':
-            reqFieldsArr.push('addr')
-            // reqFieldsArr = ['name', 'tel', 'addr', 'deliveryService', 'prePay']  
-            break
-
-        }
-        this.setRequiredFields(reqFieldsArr)
-          
-        this.fieldsIsRequired.deliveryType.valid = (val && val.type) ? true : false
-        // this.fieldsIsRequired.deliveryService.valid = (this.deliveryService.type !='samovyvoz' ) ? true : false
-        this.fieldsIsRequired.deliveryService.valid = !!val 
-        
-
+        if (val.type != 'samovyvoz') this.inputSetFocus('addr')
       },
       lastDeliveryInfo(val){
         this.deliveryInfo = val 
@@ -711,6 +748,12 @@ section
         this.fieldsIsRequired.pvz.valid = v
 
       },
+      deliveryInfo(val) {
+        if (!val) return
+        const refName = this.getFirstRequiredNotValidField()
+        // console.log('deliveryInfo refName', refName)
+        if (refName) this.inputSetFocus(refName)  
+      },
       pvzList(val) {
         this.fieldsIsRequired.pvz.req =  (!!val && val.length ) 
       },
@@ -718,27 +761,38 @@ section
         await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: val} )
         this.$emit('select-delivery-type', this.getTarif(this.delivery))
       },
-      orderClick(val) {
+      async orderClick(val) {
         console.log('orderClick', val)
+        if (val === 1) return
         // setErrorState
         if (this.orderFormIsValid) {
-            let param = {}
-              param.name = this.name
-              param.sname = this.sname
-              param.tname = this.tname
-              param.phone = this.tel
-              param.email = this.email
-              param.comment = this.orderComment
-              param.post_index = this.address.zip
-              param.address = this.address.addr
-              param.city_id = this.address.town.id
-              param.pvz_code = this.lastDeliveryInfo.code
-              param.tarif_type = this.deliveryService.type
-              param.prepay = this.prepay
+            let param = {
+              name:       this.name.trim(),
+              sname:      this.sname.trim(),
+              tname:      this.tname.trim(),
+              phone:      this.tel,
+              email:      this.email.trim(),
+              comment:    this.orderComment.trim(),
+              post_index: this.address.zip.trim(),
+              address:    this.address.addr.trim(),
+              city_id:    this.address.town.id,
+              pvz_code:   this.lastDeliveryInfo ? this.lastDeliveryInfo.code : '',
+              tarif_type: this.deliveryService ? this.deliveryService.type : '',
+              prepay:     this.prePay,
+            }
+            console.log('order params', param)
 
-            // [session_id] => test
-            // [tarif_type] => pvz
-            // [auth-token] => api-test
+          const orderRes = await this.$store.dispatch('order/newOrder', param)
+          if (orderRes.status === 'ok') {
+            console.log('order success', orderRes)
+            // this.$router.push({path: '/new-order'})
+          } else {
+            console.log('order fail', orderRes)
+          }
+          // this.$router.push({path: '/new-order'})
+          this.$router.push({path: '/order/pay-success'})
+
+
 
         } else {
           if (val > 1) this.setErrorState = !this.orderFormIsValid

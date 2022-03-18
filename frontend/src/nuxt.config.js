@@ -73,34 +73,29 @@ export default {
 
 
 
-  css: ['./assets/scss/global-styles.scss'],
   styleResources: {
-    // your settings here
-    // scss: ['./assets/scss/global-variables.scss'], // alternative: scss
     scss: ['./assets/scss/utils/vars.scss', './assets/scss/utils/mixins.scss'], // alternative: scss
-    less: [],
-    stylus: [],
   },
+  css: [
+    '@/assets/scss/utils/reset.scss',
+    '@/assets/scss/utils/css-vars.scss',
+    '@/assets/scss/global-styles.scss',
+  ],
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/yamap.js',  mode: 'client' },
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
     { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
-    // '~/plugins/vue-perfect-scrollbar.client.js', 
+    // { src: '~/plugins/vue-clamp.js', mode: 'client' },
+    '~/plugins/vue-clamp.js',
     '~/plugins/vue-gallery.js',
     '~/plugins/vuelidate.js',
     '~/plugins/floating-vue.js',
-    // { src: '~/plugins/paginate.js', mode: 'client' },
-    // { src: '~/plugins/popper.js', mode: 'client' },
-    // { src: '~~/plugins/vuebar.js', mode: 'client' },
-    // { src: '~~/plugins/vue-awesome-swiper.js', mode: 'client' },
     '~/plugins/loading.js',
-    // '~/plugins/btn-go-back.js',
-    // '~/plugins/-generate.uuid.js',
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
-    // '~/plugins/vuebar.js',
     '~/plugins/directives/auto-min-width.client.js',
 
     // '~/plugins/v-mask.js',
@@ -109,7 +104,7 @@ export default {
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   // components: true,
-components: [
+  components: [
     {
       path: '~/components/common/',
       prefix: 'v',
@@ -135,7 +130,7 @@ components: [
     },
     {
       path: '~/components/filters/',
-      prefix: ''
+      prefix: 'v'
     },
     {
       path: '~/components/products/',
@@ -191,6 +186,7 @@ components: [
     '@nuxtjs/style-resources',
     // '@nuxtjs/router',
     // '@nuxtjs/universal-storage',
+
   ],
   // storage: {
   //   localStorage: { prefix: '' },

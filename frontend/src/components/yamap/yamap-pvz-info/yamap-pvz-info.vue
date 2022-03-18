@@ -49,15 +49,24 @@
                 
             li.map-sidebar-item(v-if="addressComment && addressComment.length")
               .map-sidebar-item_title Как добраться
-              .map-sidebar-item_text 
-                .map-sidebar-item_text-collapse(
+              .map-sidebar-item_clamptext 
+                //- .map-sidebar-item_text-collapse(
                   :class="{ collapse: addrCommentCollapse }"
                   ref="collapse"
                   ) {{addressComment}}
-                .map-sidebar-show-more(
+                //- .map-sidebar-show-more(
                   v-if="addrCommentCollapse && showMoreVisible()" 
                   @click="addrCommentShow"
                   ) {{ $options.SHOW_MORE }}
+                v-clamp(autoresize :max-lines="3" ) {{ addressComment }}
+                  template(#after="{ expand, clamped }")
+                    span( 
+                      v-if="clamped" 
+                      @click="expand" 
+                      class="map-sidebar-show-more"
+                      v-html="`<br>${$options.SHOW_MORE}`"
+                      ) 
+
 
 </template>
 

@@ -3,19 +3,20 @@
     v-preloader.in-page(v-if="$fetchState.pending")
     main.container.razdel-page(v-else)
       section
-        h1.page-title {{title}}
+        h1.page-title {{pageTitle}}
       section.content-section
         aside.sidebar-left
           sublinks-menu(v-if="sublinks_menu" :items="sublinks_menu.items")
-          //- v-radio-set(
-            :options="sortmodes" 
-            v-model="sortBy" 
+          //- v-listbox(
+            :options="filters[5].values" 
+            v-model="test" 
+            :select-all="true"
             )
-
+            template(#text="{opt}" ) {{opt.name}}
 
         article.main-content
           section.razdel-filter(:class="{collapse: filterCollapse}" v-if="1==1" )
-            .filter-btn-block
+            //- .filter-btn-block
               .sort-block
                 .btn-icon(@click="sortOpen")
                   svg.icon.icon-sort <use href="#icon-sort"/>
@@ -27,7 +28,7 @@
                     v-model="sortBy" 
                     @input="sortOpen"
                   )
-              .btn-icon(@click="filterOpen")
+              .btn-icon(@click="filterToggle")
                 svg.icon.icon-filter <use href="#icon-filter"/>
       
 
@@ -39,23 +40,70 @@
               @filters-close="isFilterOpen=false" 
               @apply-filter="applyFilter"
               )
-            desktop-filter(
+            //- v-desktop-filter(
               v-if="filters"
               :filters="filters"            
               :class="{open: isFilterOpen}" 
-              v-model="selectedFilters"         
+              v-model="test2"
+              
+              )
+            v-desktop-filter2(
+              v-if="filters"
+              :filters="filters"            
+              :class="{open: isFilterOpen}" 
+              v-model="selectedFilters"
               )
               template(#sort)
-                v-dropdown.is-sort(
-                  title="Сортировать по"
-                  :multiple="false"
+                v-dropdown.filter-item.is-sort(
                   key="sort-1"
-                )
-                  template(#content)
+                  :distance="0"
+                  placement="bottom-start"
+                  popper-class="filter-item_popper-container"
+                  )
+                  .filter-item_title(:tabindex="1")
+                    span.text Сортировать по
+                    .filter-item_close(v-close-popper)
+                      svg.icon.icon-arrow-down <use href="#icon-arrow-down"/>
+                  template(#popper)
                     v-radio-set(
                       :options="sortmodes" 
                       v-model="sortBy" 
+                      container-class="listbox"
                     )
+              template(#price v-if="filtersPrice")
+                v-dropdown.filter-item(
+                  key="price-1"
+                  :distance="0"
+                  placement="bottom-start"
+                  popper-class="filter-item_popper-container"
+                  )
+                  .filter-item_title(:tabindex="1")
+                    span.text {{filtersPrice.name}}
+                    .filter-item_close(v-close-popper)
+                      svg.icon.icon-arrow-down <use href="#icon-arrow-down"/>
+                  template(#popper)
+                    .filter-item_price
+                      .filter-price-block
+                        v-input-number.price-filter(
+                          :has-label="true"
+                          :min="filtersPrice.values.min"
+                          :max="priceFilter.active_max"
+                          :step="$options.PRICE_STEP"
+                          v-model="priceFilter.active_min"
+                          label="от"
+                          border-color="currentColor"
+                          style="margin-right: 10px;"
+                          )
+                        v-input-number.price-filter(
+                          label="до"
+                          :has-label="true"
+                          :min="priceFilter.active_min"
+                          :max="filtersPrice.values.max"
+                          :step="$options.PRICE_STEP"
+                          v-model="priceFilter.active_max"
+                          border-color="currentColor"
+                        )
+
 
           section.razdel-content(v-if="loadingFiltered")
             v-preloader.in-page
@@ -67,67 +115,110 @@
               :is-btn="true" 
               :is-sizes="true"
               )
-            .pagination(v-if="products.length < itemsTotal")
+            .pagination(v-if="products && products.length < itemsTotal")
               v-preloader.in-page(v-if="loading")
               .pagination-descr(v-if="!loading") {{getPaginateText}}
+              //- v-preloader(v-if="$fetchState.pending")
+              //- .pagination-descr(v-if="!$fetchState.pending") {{getPaginateText}}
               .btn.btn-4(@click="showMore") {{$options.SHOW_MORE_BTN}}
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'Razdel',
-  components: { },
+  name: 'Catalog',
   data() {
     return {
+      testChb: false,
+      // test:[],
+      test:[{id:387,name:'зима'},{id:413,name:'лето'}],
+      
+      test2:[],
+      priceFilter: {active_min: 0, active_max: 0},
       selectedFilters: {},
+      sortBy: null,
       // loading: true,
       loading: false,
       loadingFiltered: false,
       filterCollapse: true,
-      sortBy: null,
       isFilterOpen: false,
       isSortOpen: false,
       //=========================
-      limit: 10, // количество товаров на страницу
+      items_only: 0,
+      limit: 24, // количество товаров на страницу
       offset: 0, // Странца пагинации
-      queryFilters: [],
+      // queryFilters: [],
       queryFiltersChange: false,
+      canMonitor: false,  // Компонент инициализирован и можно следить за Переменными
       selModel: [],
       // selModel: [{id:1519, name: 'AROS' },{id:428, name: 'Atlantic' },],
 
       }
   },
   SHOW_MORE_BTN: 'Показать далее',
+  PRICE_STEP: 100,
   async fetch() {
-    await this.$store.dispatch('productList/fetchProductList', {
-      params:{
-        alias: this.$route.params.alias,
-        items_only: 0,
-        limit: this.limit,
-        offset: this.offset
-      },
-      isFilter: false  
-    })
-    // if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
+    const res = await this.loadProducts()
+    if (res ==='error') return this.$nuxt.error({ statusCode: 404, message: 'Раздел не найден' })
   },
-
+  created() {
+    // this.canMonitor = false
+    if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0]
+  },
+  mounted(){
+    this.canMonitor = false // Запрещаем следить за Переменными
+    this.queryFiltersChange = false
+    // Подготавливаем объект выбранных фильтров и делаем его реактивным
+    this.filters.filter(v => v.type != 'price')
+                .forEach( v => this.$set(this.selectedFilters, v.id, []) )
+    this.$nextTick(() => { this.canMonitor = true  })
+    // console.log('catalog selectedFilters', this.selectedFilters)
+    // debugger
+  },
   computed: {
     ...mapGetters('settings',['sortmodes']),
-    title() {return this.$store.getters['productList/getTitle']},
+    // pageTitle() {return this.$store.getters['productList/getPageTitle']},
+    pageTitle() {return this.$store.getters['getPageTitle']},
     products() { return this.$store.getters['productList/getProductList']},
     filters() { return this.$store.getters['productList/getFilters']},
-    breadcrumbs() {return this.$store.getters['getBreadcrumbs']},
+    filtersPrice() { return this.filters ? this.filters.find(f => f.type === 'price') : null},
+    // priceRange() {
+    //   if (this.filters) {
+    //     const priceFilter = this.filters.find(v => v.type === 'price')
+    //     if (priceFilter) return priceFilter.max - priceFilter.min
+    //   }
+    //   return 0
+    // },
+
+    isFilter() { // Если выбран какой-либо фильтр
+      return this.queryFilters && this.queryFilters.length 
+      },
     sublinks_menu() { return this.$store.getters['productList/getSublinksMenu'] },
     itemsTotal() {return this.$store.getters['productList/getProductsTotal']},
     getPaginateText() { 
       return `Отображается 
         ${Math.min(this.limit + this.offset, this.itemsTotal)} из ${this.itemsTotal}` 
+    },
+    queryFilters(){
+      const res = Object.entries(this.selectedFilters)
+                        .filter(([key, v]) => v.length)
+                        .map(([key,v]) => {
+                          return {
+                            id: key,
+                            value: v.map(item => item.id)
+                          }
+                        })
+      const pf = this.priceFilter
+      
+      if (pf.active_min != 0 || pf.active_max != 0) {
+        res.push({
+                id: this.filtersPrice.id,
+                value: [pf.active_min, pf.active_max ]
+              })
+      }
+      return res
+
     }
-  },
-  created() {
-    if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0]
-    // if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0].name
   },
   beforeMount() {
     if (process.client) document.addEventListener('click', this.hideSort, true)
@@ -144,28 +235,29 @@ export default {
       console.log('applyFilter: ', v)
     },
     
-    filterOpen() {
+    filterToggle() {
       this.isFilterOpen = !this.isFilterOpen
     },
     sortOpen() {
       this.isSortOpen = !this.isSortOpen
     },
-    async loadProducts(offset, items_only, isFilter = false) {
-      // this.offset = isFilter ? 0 : this.offset + this.limit
+    async loadProducts() {
       let queryParams = {
         alias: this.$route.params.alias,
-        items_only,
+        items_only: this.items_only,
         limit: this.limit,
-        offset,
+        offset: this.offset,
       }
-      if (this.queryFilters && this.queryFilters.length) queryParams['filters'] = this.queryFilters
-
-      await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter})
+      if (this.isFilter) queryParams['filters'] = this.queryFilters
+      return await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter: this.isFilter})
     },
     async showMore() {
       this.loading = true
       this.offset += this.limit
-      await this.loadProducts(this.offset, 1)
+      this.items_only = 1
+      // await this.loadProducts(this.offset, 1)
+      await this.loadProducts()
+      // await this.$fetch()
       this.loading = false
     },
     async showFilteredProducts() {
@@ -179,38 +271,22 @@ export default {
   watch: {
     selectedFilters: {
       handler(val) {
-        return
-        if (!process.browser) return
-        this.queryFilters = []
-          // цикл по ключам и значениям
-        for (let [key, v] of Object.entries(val)) {
-          if ( Array.isArray(v) ){
-            if (v.length) {
-              this.queryFilters.push({
-                id: key,
-                value: v.map(item => item.id)
-              }) 
-            }
-          } else {
-              // this.queryFilters.push({
-              //   id: key,
-              //   value: [v.active_min, v.active_max ]
-              // }) 
-          }
-          
-        }
+        if (!process.browser || !this.canMonitor) return
+        this.queryFiltersChange++ 
       },
       deep: true
     },
-    queryFilters: {
-      handler(val) {
-        if (!process.browser) return
-        console.log('queryFilters')
-        if (this.queryFiltersChange) this.showFilteredProducts()
-        this.queryFiltersChange = true
+    priceFilter: {
+      handler(val){
+        if (!process.browser || !this.canMonitor) return
+        this.queryFiltersChange++ 
       },
       deep: true
     },
+    queryFiltersChange(val){
+      if (!process.browser) return
+      if (val) this.showFilteredProducts()
+    }
 
   }
 }

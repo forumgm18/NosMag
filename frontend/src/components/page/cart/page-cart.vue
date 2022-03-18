@@ -57,8 +57,13 @@
               .cart-product-props-value {{item.color}}
             .cart-product-props 
               .cart-product-props-label(v-html="`Цена за ${item.unit_name}:`") 
-              .cart-product-props-value(v-html="`${item.price} ${currencyShort}`") 
-            .cart-product-props.oldprice(v-if="item.price != item.oldprice") 
+              .cart-product-props-value
+                span.oldprice(
+                  v-if="item.price != item.oldprice"
+                  v-html="`${costStr(item.oldprice, 1)}`"
+                  )
+                span(v-html="`${costStr(item.price, 1)} ${currencyShort}`") 
+            //- .cart-product-props.oldprice(v-if="item.price != item.oldprice") 
               .cart-product-props-label.oldprice(v-html="`Старая цена за ${item.unit_name}:`") 
               .cart-product-props-value.oldprice(v-html="`${item.oldprice} ${currencyShort}`") 
             //- .cart-product-props.comment(v-if="item.comment && item.comment.length") 
@@ -150,16 +155,16 @@
       //   // await this.$store.dispatch('cart/getCart')
       // },
       // itemCost(price, q, localeFormatStr = true) { 
-      costStr(price, q , localeFormatStr = true) { 
+      costStr(price, q, localeFormatStr = true) { 
         const p = parseFloat(price, 10) * parseInt(q, 10)
         const res = localeFormatStr ? p.toLocaleString() : p
-        return `${res} ${this.currencyShort}`
+        return `${res}`
         },
       itemCostStr(item, localeFormatStr = true) { 
-        return this.costStr(item.price, item.q, localeFormatStr)
+        return `${this.costStr(item.price, item.q, localeFormatStr)} ${this.currencyShort}`
         },
       itemOldCostStr(item, localeFormatStr = true) { 
-        return this.costStr(item.oldprice, item.q, localeFormatStr)
+        return `${this.costStr(item.oldprice, item.q, localeFormatStr)} ${this.currencyShort}`
         },
       // priceForOne(price, unit_name) { return `${price} ${this.currencyShort} за ${unit_name}`},
       priceForOneStr(item, localeFormatStr = true) { 

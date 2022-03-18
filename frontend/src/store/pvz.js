@@ -51,14 +51,6 @@ export const actions = {
         pvz_code: codePvz,
         session_id: rootState.token.session_id
     })
-
-    // c.pvz.phones = JSON.parse(c.pvz.phones)
-    // // Преобразуем строковые числа в числа
-    // const content = JSON.parse(JSON.stringify(c),function (key, value) {
-    //   if (value === (+value).toString()) return +value
-    //   return value
-    // } )
-   
     // commit('setPvzInfo', content)
     return c.status || undefined
   },

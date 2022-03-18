@@ -1,6 +1,4 @@
 <template lang="pug">
-  //- .checkbox
-  //- label.checkbox-label
   label.checkbox(:class="{ checked : shouldBeChecked }")
     input(
       hidden 
@@ -9,7 +7,6 @@
       :value="value"
       @change="updateInput"      
       )
-    //- input(type="checkbox" hidden v-model="selectItems" :value="{scode: item.scode}")
     span.checkbox_text-block
       v-icon-check(:is-checked="shouldBeChecked")
       span.checkbox_text

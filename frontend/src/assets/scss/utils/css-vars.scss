@@ -1,0 +1,99 @@
+:root{
+  --base-color1 : #{$base-color1};
+  --base-color1-hover : #{$base-color1-hover};
+  --base-color2 : #{$base-color2};
+  --base-color3 : #{$base-color3};
+  --base-color4 : #{$base-color4};
+  --base-color5 : #{$base-color5};
+  --base-color6 : #{$base-color6};
+  --base-color7 : #{$base-color7};
+  // --base-color8 : #{$base-color8};
+  --base-color3-opacity-01 : #{$base-color3-opacity-01};
+
+  --old-price-color: #{$base-color7};
+  --footer-bgr-color : #{$base-color1};
+  --page-bgr-primary: #fff;
+  --page-bgr-secondary: #e2e2e2;
+  --page-bgr-tmp: #a7a7a7;
+  --bgr-close: #{$substrate-bgr};
+  --bgr-filter-close: #{$filter-close-bgr};
+  --text-color-default: #{$text-color};
+  --text-color-light: #{$text-color-light};
+  --text-color-light2: #{$text-color-light2};
+  --menu-info-mobile: #{$base-color4 };
+  --text-block-hover: #{$base-color5 };
+  --filter-border-color: #{$filter-border-color };
+  --price-sale: #{$price-sale};
+  --product-tag-bgr: #{$product-tag-bgr};
+  --product-tag-sale-bgr: #{$price-sale};
+  --box-shadow-modal: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  --scrollbar-width: 4px;
+  --scrollbar-height: 4px;
+  --scrollbar-track: #{$scrollbar-track};  // цвет полосы прокрутки
+  --scrollbar-track-hover: #{$scrollbar-track-hover}; // цвет полосы прокрутки при хувере
+  --scrollbar-track-drag: #{$scrollbar-track-drag}; // цвет полосы прокрутки при перетаскивании
+  --scrollbar-thumbs: #{$scrollbar-thumbs};  // цвет бобышки (индикатора) на плосе прокрутки
+  --scrollbar-thumbs-hover: #{$scrollbar-thumbs-hover}; // цвет бобышки (индикатора) при хувере
+  --scrollbar-thumbs-drag: #{$scrollbar-thumbs-drag}; // цвет бобышки (индикатора) при перетаскивании
+  --input-error : #{$input-error};
+  --product-card-hover-border : #{$product-card-hover-border};
+  --danger-color: #{$danger-color};
+  --select-item-hover: #{$select-item-hover};
+
+
+  //========= Desktop Filter Vars ===================
+      --df-margin: 8px;
+      --df-column: 6;
+  //========= / Desktop Filter Vars ===================
+
+  //============================
+  --burger-bgr-color: transparent;
+  --burger-bgr-show: transparent;
+  --burger-color : #{$base-color1};
+
+  //--warning-color : #{$warning-color};
+  //--danger-color : #{$danger-color};
+  //
+  //--text-color-light: #{$text-color-light};
+  //--filter-checkbox-color: #{lighten($text-color-light,10%)};
+  //--border-radius: 16px;
+  //--box-shadow-default: 0px 4px 4px rgba(85, 85, 85, 0.1);
+  //--sale: #{$sale-color};
+  //--sp-tab-border-color : #f4f4f4;
+  //
+  //--triangle : #cecece;
+  //--link-color: #{$base-color1};
+  //--submenu-border: #dedede;
+  //--submenu-bgr: #fff;
+  //--submenu-item-hover: #f4f4f4;
+  //--btn-color: hsl(198, 100%, 36%);
+  //--btn-hover-color: hsl(198, 100%, 26%);
+  //--btn-chart-color: hsl(21, 100%, 74%);
+  //--btn-chart-hover-color: hsl(21, 100%, 64%);
+  //--border-color-default: #dedede;
+  //
+  //--btn-danger-hover-color: #{darken($danger-color, 25%)};
+  //
+  //
+  ////--page-bgr-secondary: #8b8b8b;
+  //
+  //--form-error: #{$warning-color};
+  //--form-text: rgba(10, 10, 10, 1);
+  //--form-placeholder: rgba(100, 100, 100, .5);
+  //--form-border-radius: 5px;
+  //
+  //--footer-address-color: #fff;//#aaa;
+  //--star: #FF9F0A;
+  //--star-gray : #{$text-color-light};
+  --menu-max-width: 720px;
+  //--p : 24px;
+  //@include media-max-width2(1200) { --p: 16px;}
+  --p: 16px;
+
+
+  @include media-min-width2($sm) { --p: 24px;}
+
+//  box-shadow: 0 0 0 2px #fff,0 0 0 4px var(--base-color1); // Окантовка выбранного слайда
+
+
+}

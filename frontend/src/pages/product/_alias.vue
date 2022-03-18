@@ -341,13 +341,8 @@ export default {
     767: {count: 7, width: 75},
     576: {count: 7, width: 43}
   },
-  // asyncData: async function ({app, store, params, error}) {
-  //   // console.log('catalog/_razdel/product/_alias params', params)
-  //   await store.dispatch('fetchContent', params.alias)
-  //   if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
-  // },
   async fetch() {
-    await this.$store.dispatch('fetchContent', this.$route.params.alias)
+    await this.$store.dispatch('product/fetchProduct', this.$route.params.alias)
     if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
   },
 
@@ -360,13 +355,14 @@ export default {
       }
     },
     sale() { return this.$sale(this.content.price, this.content.oldprice) || 0},
-    title() {return this.$store.state.content.data.name || ''},
-    imgPath() {return this.$store.state.settings.imgPath || ''},
-    content() { return this.$store.getters['getContentData'] || null},
-    feedbacks() { return this.$store.state.content.data.feedbacks || null},
-    sizes() { return this.$store.state.content.data.sizes || null},
-    info_table() { return this.$store.state.content.data.info_table || null},
-    labels() { return this.$store.state.content.data.labels || null},
+    title() {return this.$store.getters['getPageTitle']},
+    imgPath() {return this.$store.getters['settings/imgPath']},
+    // imgPath() {return this.$store.state.settings.imgPath || ''},
+    content() { return this.$store.getters['product/getProduct']},
+    feedbacks() { return this.$store.getters['product/getFeedbacks']},
+    sizes() { return this.content.sizes || null},
+    info_table() { return this.content.info_table || null},
+    labels() { return this.content.labels || null},
     otherSliderItemsShowSettings() {
       if (!process.browser) return 1
       const innerW = window.innerWidth

@@ -15,8 +15,11 @@
                 @focus="isFocus=true"
                 @blur="isFocus=false"
                 @keyup="calcHeight"
+                v-on="inputListeners"
+
               )
       input(
+        ref="input"
         v-else
         v-model="$v.locValue.$model"
         v-mask="vMask"
@@ -24,6 +27,7 @@
         :placeholder="placeholder"
         @focus="isFocus=true"
         @blur="isFocus=false"
+        v-on="inputListeners"
       )
       .input-field-clear(v-if="hasClear" @click="clearInput")
         slot(name="field-clear") Удалить
@@ -120,9 +124,6 @@ export default {
       isFocus: false
     }
   },
-  // validations: {
-  //   locValue: this.validationsObj
-  // },  
 
   validations () {
     const vObj = {}
@@ -142,25 +143,44 @@ export default {
     // console.log('vObj: ', vObj)
     return { locValue: vObj }      
   },
-mounted() {
-  this.$nextTick(function() {
-    this.$forceUpdate()
-    // Обновляем высоту textarea 
-    if (this.type === 'textarea') this.calcHeight()
-  })
-},
-watch: {
-    locValue: function(val, oldVal) {
-      this.$emit('input', val, oldVal)
-      // this.$emit('update:is-error', this.$v.locValue.$error)
-      this.$emit('update:isValid', !this.$v.locValue.$error)
-      // debugger
-    },
-    value(val) { this.locValue = val},
-    setErrorState(val){
-      if (val) this.$v.$touch()
-    }
+  computed: {
+      inputListeners: function () {
+        var vm = this
+        // `Object.assign` объединяет объекты вместе, чтобы получить новый объект
+        return Object.assign({},
+          // Мы добавляем все слушатели из родителя
+          this.$listeners,
+          // Затем мы можем добавить собственные слушатели или
+          // перезаписать поведение некоторых существующих.
+          {
+            // Это обеспечит, что будет работать v-model на компоненте
+            input: function (event) {
+              vm.$emit('input', event.target.value)
+            },
+          }
+        )
+      }
+  },  
+  mounted() {
+    this.$nextTick(function() {
+      this.$forceUpdate()
+      // Обновляем высоту textarea 
+      if (this.type === 'textarea') this.calcHeight()
+    })
   },
+
+  watch: {
+      locValue: function(val, oldVal) {
+        this.$emit('input', val, oldVal)
+        // this.$emit('update:is-error', this.$v.locValue.$error)
+        this.$emit('update:isValid', !this.$v.locValue.$error)
+        // debugger
+      },
+      value(val) { this.locValue = val},
+      setErrorState(val){
+        if (val) this.$v.$touch()
+      }
+    },
   methods: {
     clearInput() {
       this.locValue = ''
@@ -178,7 +198,8 @@ watch: {
     }
   }  
 
-}
+  }
+  
 </script>
 
 <style lang="scss" >

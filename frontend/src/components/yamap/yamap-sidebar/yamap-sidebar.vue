@@ -114,8 +114,10 @@
     flex-shrink: 0;
     &.detail {
       .map-sidebar-item {
-        padding-bottom: 0;
+        // padding-bottom: 0;
+        padding-top: 0;
         &:after {content: none;}
+        &.btn-inside {padding-top: 1.5em;}
       }
     }
   }

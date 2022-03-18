@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const state = () => ({
   // items: null,        //  массив с данными о товарах в корзине
   // oldsum: null,       //	int	может отсутств	старая (зачеркн) сумма цен
@@ -10,7 +12,9 @@ export const mutations = {
   SET_CART(state, val) {
   // цикл по ключам и значениям
     for (let [key, v] of Object.entries(val.cart)) {
-      state[key] = v 
+      // state[key] = v 
+      Vue.set(state, key, v)
+
     }
     if (state.oform && state.oform.prices) {
       state.oform.prices = state.oform.prices.map(v => {

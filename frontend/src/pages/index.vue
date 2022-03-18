@@ -177,32 +177,36 @@ export default {
     await this.$store.dispatch('fetchContent', this.$route.params.alias || '')
 
     // if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
-    if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
+    // if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
+    if (this.$contentError(this.$store.state.type)) error({ statusCode: 404, message: '' })
     // this.loading = false
   },
 
   computed: {
-    content() { return this.$store.getters['getContentData']},
+    // content() { return this.$store.getters['getContentData']},
     showcase() { 
-      if (this.content) {
-        return this.content.showcase
-      } else {
-        return undefined
-      }  
+      return this.$store.getters['getShowcase']
+      // if (this.content) {
+      //   return this.content.showcase
+      // } else {
+      //   return undefined
+      // }  
     },
     links() { 
-      if (this.content) {
-        return this.content.hasOwnProperty('links') ? this.content.links : undefined
-      } else {
-        return undefined
-      }  
+      return this.$store.getters['getLinks']
+      // if (this.content) {
+      //   return this.content.hasOwnProperty('links') ? this.content.links : undefined
+      // } else {
+      //   return undefined
+      // }  
     },
     links1() { 
-      if (this.content) {
-        return this.content.hasOwnProperty('links1') ? this.content.links1 : undefined
-      } else {
-        return undefined
-      }  
+      return this.$store.getters['getLinks1']
+      // if (this.content) {
+      //   return this.content.hasOwnProperty('links1') ? this.content.links1 : undefined
+      // } else {
+      //   return undefined
+      // }  
     },
   },
 

@@ -1,5 +1,8 @@
 <template lang="pug">
-  label.check-btn
+  label.check-btn(
+    @mouseenter="mouseEnter('icon')"
+    @mouseleave="mouseLeave('icon')"
+    ) 
     input(
       ref="inpt"
       hidden 
@@ -9,7 +12,7 @@
       v-model="proxyChecked"
       )
     .check-btn_content(:style="stylesSettings")
-      v-icon-check.check-btn_icon(:type="type" :is-checked="isInputChecked" )
+      v-icon-check.check-btn_icon(ref="icon" :type="type" :is-checked="isInputChecked" )
       .check-btn_text
         slot
 
@@ -86,6 +89,11 @@ export default {
   mounted() {
     if (this.isChecked) this.proxyChecked = this.value
   },
+  methods: {
+    mouseEnter(iconRef){ this.$refs[iconRef].hover = true },
+    mouseLeave(iconRef){ this.$refs[iconRef].hover = false },
+
+  }
 }
 </script>
 

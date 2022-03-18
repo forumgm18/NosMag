@@ -1,11 +1,13 @@
 export const state = () => ({
-  tarifs: null
+  order: null
 })
 
 export const mutations = {
   setNewOrder(state, val) {
+    state.order = val
   // цикл по ключам и значениям
-    for (let [key, v] of Object.entries(val)) { state[key] = v }
+    // for (let [key, v] of Object.entries(val)) { state[key] = v }
+    console.log('newOrder state', state)
   },
   setOrders(state, val) {
   // цикл по ключам и значениям
@@ -20,7 +22,9 @@ export const actions = {
         session_id: rootState.token.session_id
     })
     commit('setNewOrder', data)
+    return data.status
   },
+
   async getOrders({ commit, rootState}) {
     const data = await this.$axios.$get('/get_orders', {
       params: {
@@ -33,5 +37,5 @@ export const actions = {
 }
 
 export const getters = {
-  // getCity: s => s.city,
+  getNewOrder: s => s.order 
 }

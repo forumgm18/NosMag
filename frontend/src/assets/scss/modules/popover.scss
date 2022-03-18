@@ -6,6 +6,10 @@
   // box-shadow: 0px 0px 20px rgba(35, 54, 83, 0.15)!important;
   // border: none!important;
 }
+.v-popper__inner {
+  border-radius: 5px;
+  box-shadow: none!important;
+  }
 
 .popper-container {
   .v-popper__inner {

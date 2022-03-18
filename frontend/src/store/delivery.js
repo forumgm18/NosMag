@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const state = () => ({
   // tarifs: null
 })
@@ -5,7 +7,10 @@ export const state = () => ({
 export const mutations = {
   setDeliveryOptions(state, val) {
   // цикл по ключам и значениям
-    for (let [key, v] of Object.entries(val)) { state[key] = v }
+    for (let [key, v] of Object.entries(val)) { 
+      // state[key] = v 
+      Vue.set(state, key, v)
+    }
   },
 }
 
@@ -23,7 +28,7 @@ export const actions = {
   },
   async setDeliveryType({ rootState }, deliveryType) {
     const c = await this.$axios.$post('/set_delivery_type', {
-      	delivery_type: deliveryType,
+        delivery_type: deliveryType,
         session_id: rootState.token.session_id
     })
     // commit('setDeliveryOptions', data)

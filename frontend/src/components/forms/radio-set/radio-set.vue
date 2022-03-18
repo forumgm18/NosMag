@@ -1,26 +1,31 @@
 <template lang="pug">
-  client-only
-    perfect-scrollbar.radioset(
-      v-once :options="scrollbarSettings"
-      
-      )
-      .radioset_scroll-body
-        label.radioset_item( v-for="(opt, ind) in options" :key="ind" )
-          input.radioset_input(
-            hidden
-            type="radio"
-            v-model="modelValue"
-            :value="opt"
-            :name="inpName"
+  div(:class="containerClass")
+    client-only
+      perfect-scrollbar.radioset_scroll( v-once :options="scrollbarSettings" )
+        div(:class="scrollBodyClass")
+          label( 
+            v-for="(opt, ind) in options" 
+            :key="ind" 
+            :class="itemClass"
             )
-          .radioset_body  
-            slot(name="optText" :opt="opt" )
-              .radioset_icon
-                //- svg.icon.icon-radio
-                  use(href="#icon-radio")  
-                //- svg.icon.icon-radio.checked
-                  use(href="#icon-radio")  
-              span.radioset_text {{opt.name}}
+            input(
+              hidden
+              type="radio"
+              v-model="modelValue"
+              :value="opt"
+              :name="inpName"
+              @change="updateIcon(`chb${ind}`, $event.target.checked)"
+              )
+            div(:class="itemBodyClass")
+              slot(name="icon")  
+                v-icon-check(
+                  :ref="`chb${ind}`"
+                  v-if="showIcon"
+                  :class="slotIconClass"
+                  :is-checked="opt === value"
+                  )
+              slot(name="text" :opt="opt" )
+                span(:class="slotTextClass") {{opt.name}}
 
 </template>
 
@@ -33,7 +38,6 @@
         required: true
       },
       value: {
-        // type: Array,
         required: true
       },
       showIcon: {type:Boolean, default: true},
@@ -45,22 +49,67 @@
             minScrollbarLength: 30,
           }
         }  
-      }
+      },
+      containerClass: {
+        type: String,
+        default: 'radioset'
+      },
+      itemClass: {
+        type: String,
+        default() {return `${this.containerClass}-item`}
+      },
+      slotIconClass: {
+        type: String,
+        // default: 'radioset-item_icon'
+        default() {return `${this.itemClass}_icon`}
+      },
+      slotTextClass: {
+        type: String,
+        // default: 'radioset-item_text'
+        default() {return `${this.itemClass}_text`}
+      },
+      itemBodyClass: {
+        type: String,
+        // default: 'radioset-item_body'
+        default() {return `${this.itemClass}_body`}
+      },
+      scrollbarClass: {
+        type: String,
+        // default: 'radioset_scroll-body'
+        default() {return `${this.containerClass}_scroll`}
+      },
+      scrollBodyClass: {
+        type: String,
+        // default: 'radioset_scroll-body'
+        default() {return `${this.scrollbarClass}_scroll-body`}
+      },
+
+
     },
     data() {
       return {
         modelValue: null,
-        inpName: ''
+        inpName: '',
+        checkIcons:[]
       }
     },
     created() {
       this.inpName = `radio-${(100000 * Math.random()).toFixed()}`
       this.modelValue = this.value
+      this.checkIcons
     },
     watch: {
-      modelValue(newValue) {this.$emit('input', newValue)}
+      modelValue(newValue) {this.$emit('input', newValue)},
+      value(val) {this.modelValue = val}
     },
+    methods: {
+      updateIcon(iconRef, val) {
+        const vv = Object.values(this.$refs)
+        vv.forEach(r => r[0].checked = false)
+        this.$refs[iconRef][0].checked = val
 
+      }
+    }
   }
 </script>
 

@@ -4,67 +4,150 @@
       [data-svg-transition] * {transition : {{transition}};}
     </style>
     <g v-if="type==='checkbox'">  
-      <rect width="30" height="30" :fill="isChecked ? checkedColorBgr : 'transparent'" rx="3"/>
-      <rect width="28" height="28" x="1" y="1" :stroke="isChecked ? 'transparent' : 'var(--base-color4)'" stroke-width="2" rx="2"/>
-      <g :fill="isChecked ? colorMarker : 'transparent'">
+      <rect width="30" height="30" :fill="iconBgrColor" rx="3"/>
+      <rect width="28" height="28" x="1" y="1" :stroke="iconBorderColor" stroke-width="2" rx="2"/>
+      <g :fill="iconMarkerColor">
         <path d="M12.92 22.5a1.11 1.11 0 01-.94-.481l-5.485-6.941c-.392-.561-.314-1.283.235-1.684.55-.4 1.255-.32 1.647.24l5.484 6.942c.392.561.313 1.283-.235 1.683-.236.16-.47.241-.706.241z"/>
         <path d="M12.92 22.5c-.235 0-.549-.08-.706-.24-.549-.401-.627-1.203-.235-1.684l9.644-12.585c.392-.561 1.176-.641 1.647-.24.549.4.627 1.202.235 1.683l-9.644 12.585a1.11 1.11 0 01-.941.481z"/>
       </g>
     </g>
     <g v-else>
-      <circle cx="15" cy="15" r="14.5" :stroke="isChecked ? colorMarker : 'var(--base-color4)'"/>
-      <circle cx="15" cy="15" r="10.313" :fill="isChecked ? colorMarker : 'transparent'"/>
+      <circle cx="15" cy="15" r="14.5" :stroke="iconBorderColor"/>
+      <circle cx="15" cy="15" r="10.313" :fill="iconMarkerColor"/>
     </g>
   </svg>
 </template>
 <script>
-const checkedColorMarkerCheckbox = '#fff'             // Цвет по-умолчанию для маркера чекбокса
-const checkedColorMarkerRadio = 'var(--base-color1)'  // Цвет по-умолчанию для маркера радиобокса
+
 export default {
   name: "icon-check",
   props: {
-    checkedColorBgr: {
+    baseCheckedColor: {
       type: String,
       default: 'var(--base-color1)'
     },
-    checkedColorMarker: {
+    baseNotCheckedColor: {
       type: String,
-      default: ''
+      default: 'var(--base-color4)'
+    },
+    baseHoverColor: {
+      type: String,
+      default: 'var(--base-color3)'
+    },
+
+    notCheckedColor: {
+      type: Object,
+      default() {
+        return {
+          checkbox:{ 
+            marker: 'transparent',        // Цвет маркера
+            background: 'transparent',    // Цвет фона 
+            // border: 'var(--base-color4)'  // Цвет обводки (границы) 
+            border: this.baseNotCheckedColor,  // Цвет обводки (границы) 
+          },
+          radio:{ 
+            marker: 'transparent',        // Цвет маркера
+            background: 'transparent',    // Цвет фона 
+            // border: 'var(--base-color4)'  // Цвет обводки (границы) 
+            border: this.baseNotCheckedColor,  // Цвет обводки (границы) 
+          },
+        }
+      }
+    },
+    checkedColor: {
+      type: Object,
+      default() {
+        return {
+          checkbox:{ 
+            marker: '#fff',                     // Цвет маркера
+            // background: 'var(--base-color1)',   // Цвет фона 
+            background: this.baseCheckedColor,   // Цвет фона 
+            // border: 'var(--base-color1)'        // Цвет обводки (границы) 
+            border: this.baseCheckedColor        // Цвет обводки (границы) 
+          },
+          radio:{ 
+            // marker: 'var(--base-color1)',       // Цвет маркера
+            marker: this.baseCheckedColor,       // Цвет маркера
+            background: 'transparent',          // Цвет фона 
+            // border: 'var(--base-color1)'        // Цвет обводки (границы) 
+            border: this.baseCheckedColor        // Цвет обводки (границы) 
+          },        
+        }
+      }
+    },
+    hoverColor: {
+      type: Object,
+      default() {
+        return {
+          checkbox:{ 
+            marker:  'transparent',       // Цвет маркера
+            background: 'transparent',    // Цвет фона 
+            // border: 'var(--base-color3)'  // Цвет обводки (границы) 
+            border: this.baseHoverColor  // Цвет обводки (границы) 
+          },
+          radio:{ 
+            marker:  'transparent',       // Цвет маркера
+            background: 'transparent',    // Цвет фона 
+            // border: 'var(--base-color3)'  // Цвет обводки (границы) 
+            border: this.baseHoverColor  // Цвет обводки (границы) 
+          },
+        }
+      }
     },
     isChecked: {
       type: Boolean,
       default: false
     },
+    isHover: {
+      type: Boolean,
+      default: false
+    },
     transition: {
       type: String,
-      default: '.3s'
+      default: '.15s'
     },
     type: {
       type: String,
-      default: 'checkbox'
+      default: 'checkbox',
+
     },
 
   },
   data() {
     return {
-      colorMarker: ''
+      checked: false,
+      hover: false,
     }
   },
   created() {
-    if (this.checkedColorMarker === '') {
-      this.colorMarker =  this.type === 'checkbox' ? checkedColorMarkerCheckbox : checkedColorMarkerRadio
-    } else {
-      this.colorMarker = this.checkedColorMarker
-    }
+    this.checked = this.isChecked
+    this.hover = this.isHover
+  },
+  computed: {
+    iconIsChecked(){ return this.checked },
+    iconIsHover() { return this.hover },
+    iconBorderColor() { return this.getIconColor('border') },
+    iconBgrColor() { return this.getIconColor('background') },
+    iconMarkerColor() { return this.getIconColor('marker') },
+
+  },
+  methods: {
+    getIconColor(el) {
+      let res = this.notCheckedColor[this.type][el]
+      if (!this.iconIsChecked) {
+        if (this.iconIsHover) {
+          res = this.hoverColor[this.type][el]
+        }
+      } else {
+        res = this.checkedColor[this.type][el]
+      }
+      return res
+    },
+
+  },
+  watch: {
+    isChecked(val) { this.checked = val },
+    isHover(val) { this.hover = val },
   }
 }
 </script>
-<style lang="scss" scoped>
-  // svg {
-  //   width: 1em;
-  //   height: 1em;
-  //   font-size: 50px;
-  // }
-  // * {transition : .3s}
-
-</style>

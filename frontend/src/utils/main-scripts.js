@@ -48,7 +48,40 @@ export function validatePhone(phone){
   let regex = /^(\+7|7|8)?[\s\-]?\(?[0-9]{3}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/
   return regex.test(phone)
 }
+// export function testLinkExternal(link){
+//   return link.includes('http://') || link.includes('https://')
+// }
+export function linkToInternalFormat(link){
+  const lnk = link.trim()
+  let httpStr = 'http://'
+  let http = lnk.trim().startsWith('http://') || false
+  let https = lnk.trim().startsWith('https://') || false
+  if (http) return lnk.slice(httpStr.length)
+  if (https) return lnk.slice(httpStr.length + 1)
+  return lnk
+}
+export function parseJsonStrToNumbers(val){
+  return JSON.parse(JSON.stringify(val), 
+          (key, value) => (value === (+value).toString()) ? +value : value )
 
+}
+export function getNodeElementHeight(node) {
+  // in Browser only!
+    const list = [
+        'margin-top',
+        'margin-bottom',
+        'border-top',
+        'border-bottom',
+        'padding-top',
+        'padding-bottom',
+        'height'
+    ]
+
+    const style = window.getComputedStyle(node)
+    return list
+        .map(k => parseInt(style.getPropertyValue(k), 10))
+        .reduce((prev, cur) => prev + cur)
+}
 export default {
   menuState,
   menuToggle,

@@ -1,0 +1,47 @@
+.listbox {
+  height: 100%;
+  font-size: 12px;
+    &.set-max-height {
+        height: 18em;
+    }
+    &-item{
+      display: flex;
+      align-items: center;
+      padding: 0.5em 0;
+      cursor: pointer;
+      font-size: inherit;
+      &:hover {
+        .listbox-item_text { opacity: .6;}
+      }
+      &:hover, &:focus {
+        .listbox-item_text { opacity: .6; color: red}
+      }
+      &.checked {
+        // .listbox-item_text { color: green!important}
+      }
+
+      &_body{
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      &_text{
+        font-size: inherit;
+        color:inherit;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+      }
+      &_icon{
+        font-size: 1.166667em;
+        margin-right: .5em;
+        flex-shrink: 0;
+        
+      }
+
+    }
+    &_scroll-body {
+      height: 100%;
+      padding-right: 1.1em;
+    }
+}

@@ -144,7 +144,9 @@
   font-size: 1.3333em;
   width: 1em;
   height: 1em;
-  border-radius: 5px;
+  flex-shrink: 0;
+  // border-radius: 5px;
+  border-radius: 50%;
   border: 1px solid transparent;
   margin-right: .37em;
   &.is-border {

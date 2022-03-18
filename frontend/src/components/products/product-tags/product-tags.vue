@@ -4,13 +4,12 @@
     :class="{ static: !posAbsolute }"
     )
     template(v-for="(tag, index) in tags" ) 
-      .product-tag(
+      product-tag(
         v-if="(tag.type ==='sale' && showSaleTag) || tag.type !='sale'"
+        :type="tag.type"
+        :name="tag.name"
         :key="index"
         )
-        span {{tag.name}}
-        svg.icon( :class="tag.icon" ) 
-          use(:href="`#${tag.icon}`")
 
 </template>
 
@@ -36,6 +35,16 @@
   }
 </script>
 
-<style lang="scss" >
-@import 'product-tags';
+<style lang="scss" scoped >
+// @import 'product-tags';
+.product-tags {
+    display: flex;    
+    align-items: center;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    z-index: 1;
+    &.static {position: static;}
+  }
+
 </style>

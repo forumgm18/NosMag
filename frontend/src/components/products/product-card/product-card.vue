@@ -1,5 +1,6 @@
 <template lang="pug">
   .product-card(:data-product-id="product.id" itemscope itemtype = "https://schema.org/Product")
+    .product-card_border(v-for="(b, index) in ['top','right','bottom','left']" :key="index" :class="b")
     meta(v-if="product.art" itemprop="productID" :content="`артикул: ${product.art}`")
     .product-card-base
       nuxt-link(:to="`${mocCatalogLink}${product.alias}`" class="product-card_img" itemprop="url")
@@ -16,7 +17,7 @@
       .product-card_info
         .product-card_info-top
           .product-card_price-block(itemprop = "offers" itemscope itemtype = "https://schema.org/Offer" )
-            .product-card_price-actual( :class="{'price-sale': sale && !product.price_min}" )
+            .product-card_price-actual(  )
               meta(itemprop="priceCurrency" content="RUB")
               span(itemprop="price") {{ priceStr }}
               span(v-html="currency")
@@ -27,20 +28,23 @@
             .product-card_price-old(v-if="sale && !product.price_min") 
               span {{ product.oldprice }}
               span(v-html="currency")
-            .product-tag.price-sale-bgr(v-if="sale && !product.price_min")
-              span SALE
-              svg.icon.icon-percent <use href="#icon-percent"/>  
-        v-stars(:rating="product.rating_stars || 0" )
+            product-tag(v-if="sale && !product.price_min" name="SALE" type="sale" bgr-color="var(--product-tag-sale-bgr)")
+              
+        v-stars.product-rating(:rating="product.rating_stars || 0" )
         nuxt-link.product-card_descr(:to="`${mocCatalogLink}${product.alias}`" itemprop="url")
           v-clamp(autoresize :max-lines="2" itemprop = "name") {{ product.name }}
+            template(#after="{ expand, clamped }")
+              span( v-if="clamped" @click="expand" class="dot-clamp") ...
     .product-card_bottom-hover-block
       div  
         .btn(@click="showModal")
           span.text {{$options.BTN_ADD2BASKET_TEXT}}
         .product-card_sizes(v-if="sizes && sizes.length")
           .product-card_sizes-title Размеры в наличии
-          v-clamp(autoresize :max-lines="1" ) {{sizesToStr}}
-        
+          .product-card_sizes-text
+            v-clamp(autoresize :max-lines="1" ellipsis="") {{sizesToStr}}
+              template(#after="{ expand, clamped }")
+                span( v-if="clamped" @click="expand" class="dot-clamp") ...
 
 
 
@@ -49,7 +53,7 @@
       :product="product"
       @close-quick-view="quickViewShow"
       )
-    //- app-popup.popup-up(v-model="addToCartPopup" v-on:close-popup="closeAddToCartPopup")
+
     modal(
       :name="`select-size-modal-${product.id}`"
       height="auto"
@@ -66,26 +70,25 @@
           .col {{selectedSize.table[0].name}}
           .col(v-if="selectedSize.table[1]") {{selectedSize.table[1].name}}
       .psz-table-content(v-if="sizes" ref="pszTc")
-        .psz-item(
-          v-for="(item, index) in sizes" :key="index"
-          :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
-          @click="selectSize(item, item.active && item.ostatok > 0)"
-          v-if="item.table && item.table.length"
-          ) 
-          .col {{item.table[0].value}}
-          .col(v-if="item.table[1]") {{item.table[1].value}}
+        template(v-for="(item, index) in sizes")
+          .psz-item(
+            :key="index"
+            :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
+            @click="selectSize(item, item.active && item.ostatok > 0)"
+            v-if="item.table && item.table.length"
+            ) 
+            .col {{item.table[0].value}}
+            .col(v-if="item.table[1]") {{item.table[1].value}}
       .btn(@click.stop.prevent="addToCart") {{$options.BTN_ADD2BASKET_TEXT_2}}
           
 </template>
 
 <script>
-import VClamp from 'vue-clamp'
+// import VClamp from 'vue-clamp'
 
 export default {
   name: 'product-card',
-  components: { 
-    VClamp, 
-    },
+  // components: {     VClamp,     },
   props: {
     product: {
       type: Object,
@@ -131,8 +134,15 @@ export default {
     sizesToStr() { 
       if (this.sizes && this.sizes.length) {
         return this.sizes.reduce((s, item) => s + item.name + ' ' , '')
+        // return this.sizes.reduce((s, item) => s + item.name + '&emsp;' , '')
       } else {return ''}
     },
+    sizesToStrHtml() { 
+      if (this.sizes && this.sizes.length) {
+        return this.sizes.reduce((s, item) => s + `<el class="sizes-item">${item.name}</el>`, '')
+      } else {return ''}
+    },
+
     priceStr() {
       return this.product.price_min ? `от ${this.product.price_min}` : this.product.price
     }

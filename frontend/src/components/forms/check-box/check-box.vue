@@ -1,10 +1,9 @@
 <template lang="pug">
-.checkbox
-  label.checkbox-label
+  label.checkbox(:class="{ checked : shouldBeChecked || isChecked }")
     input(
       hidden 
       type="checkbox"
-      :checked="shouldBeChecked"
+      :checked="shouldBeChecked || isChecked"
       :value="value"
       @change="updateInput"      
       )
@@ -42,20 +41,25 @@ export default {
     },
     falseValue: {
       default: false
+    },
+    isChecked: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     shouldBeChecked() {
-      if (this.modelValue instanceof Array) {
+      if (Array.isArray(this.modelValue)) {
         return this.modelValue.includes(this.value)
       }
       // Обратите внимание, что `true-value` и` false-value` являются camelCase в JS
-      return this.modelValue === this.trueValue    }
+      return this.modelValue === this.trueValue    
+    }
   },
   methods: {
     updateInput(event) {
       let isChecked = event.target.checked      
-      if (this.modelValue instanceof Array) {
+      if (Array.isArray(this.modelValue)) {
         let newValue = [...this.modelValue]
 
         if (isChecked) {
