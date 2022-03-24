@@ -20,14 +20,15 @@
 </template>
 
 <script>
-  import InputNumber from '~/components/forms/input-number/input-number'
+  // import InputNumber from '~/components/forms/input-number/input-number'
 
 export default {
     name: 'desktop-filter',
     props: {
       filters: {
         type: [Array, Object],
-        required: true
+        required: true,
+        default: null
       },
       value: {
         type: [Array, Object]
@@ -35,9 +36,9 @@ export default {
       }
     },
 
-    components: {
-      InputNumber,
-    },
+    // components: {
+    //   InputNumber,
+    // },
     data: () => ({
       filterCollapse: true,
       filterMaxColumns : 7,

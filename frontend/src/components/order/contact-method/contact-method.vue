@@ -3,7 +3,7 @@
     //- span(v-html="`${selcomm.header} &ndash; `") 
     span(v-html="`${selcomm.header}:`") 
     v-dropdown.selcomm-anker(
-      placement="left"
+      placement="auto"
       @hide="$emit('hide')"
     )
       span.selcomm-change {{getSelcommText(selcomm.type_active)}}
@@ -86,7 +86,7 @@
     font-size: .8em;
     line-height: 1.4;
     padding: .9em 1.7em;
-    margin-bottom: 1.25em;
+    margin-bottom: 1rem;
     border: 1px solid var(--base-color4);
     border-radius: 5px;
     text-align: center;

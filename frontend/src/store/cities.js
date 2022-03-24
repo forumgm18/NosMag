@@ -49,5 +49,5 @@ export const actions = {
 }
 
 export const getters = {
-  cities: s => s.cities,
+  getCities: s => s.cities || null,
 }

@@ -2,9 +2,9 @@
   section.container 
     v-preloader.in-page(v-if="$fetchState.pending")
     template(v-else)
-      .page-register-order(v-if="content") 
-        h1.page-title {{content.title}}
-        .order-info {{content.content}}
+      .page-register-order
+        h1.page-title(v-if="pageTitle && pageTitle.length") {{pageTitle}}
+        .order-info(v-if="comment && comment.length") {{comment}}
 
 </template>
 
@@ -17,11 +17,14 @@
       }
     },
     computed: {
-      content() { return this.$store.getters['getContentData']}
+      pageTitle() { return this.$store.getters['order/getOrderInfo']},
+      comment() { return this.$store.getters['order/getOrderComment']},
     }
   }
 </script>
 
 <style lang="scss" scoped>
-
+.page-register-order {
+  margin-bottom: 3rem;
+}
 </style>

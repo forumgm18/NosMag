@@ -270,7 +270,8 @@ header {
         bottom: 0;
         z-index: 1;
         width: 100%;
-        padding: 0 var(--p) 1em var(--p);
+        // padding: 0 var(--p) 1em var(--p);
+        padding: 0 var(--container-padding-side) 1em var(--container-padding-side);
         background-color: var(--base-color1);
 
       }
@@ -334,6 +335,9 @@ header {
       @include media-max-width2($md) {
         //margin: 0;
         display: none;
+      }
+      &_popup-container {
+        max-width: 260px;
       }
     }
     &-label {
@@ -516,9 +520,12 @@ header {
       white-space: nowrap;
       font-size: 16px;
       font-weight: 500;
-      margin-bottom: 1em;
+      padding: .25em 0;
+      // margin-bottom: 1em;
+      // margin-bottom: 0;
       &:not(:last-child){
-        margin-bottom: .5em;
+        // padding: .25em;
+        // margin-bottom: .5em;
       }
     }
   }

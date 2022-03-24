@@ -1,11 +1,18 @@
 .page-content {
   padding-right: 32px;
   flex-grow: 1;
-  @include media-max-width2($lg) { padding-right: 20px; }
-  @include media-max-width2($md - 1) { padding-right: 0; }
+  @include media-max-width2($xlg - 1) {padding-right: 0; }
 
 }
+.cart-mobile-padding {
+  visibility: hidden;
+  opacity: 0;
+  display: none;
+  @include media-max-width2($md - 1) {
+    display: flex;
+  }
 
+}
 .cart{
   &-page{
     margin-top: 70px;
@@ -22,7 +29,8 @@
     width: 100%;
     font-size: 1rem;
     // @include adaptiv-font(20, 12);  
-    @include media-max-width2($md - 1) { display: block; }
+      @include media-max-width2($xlg - 1) {   display: block;  }
+    // @include media-max-width2($md - 1) { display: block; }
 
     // margin-bottom: 5em;
   }
@@ -67,10 +75,12 @@
     // flex-grow: 1;
     font-size: inherit;
     flex-basis: 57%;
-    // @include media-max-width2($sm - 1) { 
-    //   flex-wrap: wrap;
-    //   justify-content: space-between;
-    // }
+    @include media-max-width2($md - 1) { 
+      flex-basis: 100%;
+      margin-bottom: 1rem;
+      // flex-wrap: wrap;
+      // justify-content: space-between;
+    }
   }
   &-col-2 {
     display: flex;
@@ -80,10 +90,21 @@
     flex-basis: 43%;
     font-size: inherit;
     padding-left: 1rem;
-    // @include media-max-width2($sm - 1) { 
-    //   flex-wrap: wrap;
-    //   justify-content: space-between;
-    // }
+      @include media-max-width2($md - 1) { 
+        padding-left: 0;
+        flex-basis: 100%;
+      }
+  }
+  &-sub-col {
+    display: flex;
+    // align-items: flex-start;
+    align-items: stretch;
+    // flex-grow: 1;
+    flex-basis: 100%;
+    font-size: inherit;
+      @include media-max-width2($sm - 1) { 
+        flex-wrap: wrap;
+      }
   }
   &-item-comment {
     font-size: .6em;
@@ -103,6 +124,7 @@
       // font-size: 16px;
       font-size: inherit;
       margin-bottom: 1.25em;
+      @include media-max-width2($md - 1) { justify-content: space-between;}
       .cart-check {
         span {font-size: .8em;}
       }
@@ -120,6 +142,11 @@
 
       border-bottom: 1px solid var(--base-color4);
       font-size: inherit;
+        @include media-max-width2($md - 1) { 
+          flex-wrap: wrap;
+          justify-content: space-between;
+          padding: 12px 22px 12px 0;
+        }
 
         // @include media-max-width2($xlg) { max-width: 500px;}
       &.not-available{
@@ -152,7 +179,7 @@
         border-radius: 5px;
         border: none;
           // @include media-max-width2($xlg) { font-size: 12px;}
-          @include media-max-width2($sm - 1) { display: none;}
+          @include media-max-width2($md - 1) { display: none;}
 
           >div:not(.cart-check) {font-size: .8em;}
           // .cart-table-quantity {
@@ -225,10 +252,13 @@
       //   @include media-max-width2($xlg - 1) { min-width: unset;}
       @include media-max-width2($sm - 1) { 
         // flex-basis: 50%;
-        flex-basis: auto;
+        flex-basis: 100%;
         margin: initial;
-        margin-right: 12px;
+        // margin-right: 12px;
+        margin-right: 0;
+        margin-top: 1rem;
         min-width: unset;
+        order: 2;
       }
 
       .number { 
@@ -275,9 +305,16 @@
       font-size: inherit;
       margin-left: auto;
       min-width: 170px;
+        @include media-max-width2($md - 1) { 
+          margin-left: 0;
+          
+        }
+
       @include media-max-width2($sm - 1) { 
+        order: 1;
+        flex-grow: 1;
         // flex-basis: 50%;
-        flex-basis: auto;
+        // flex-basis: auto;
       }
 
       &-blok { 
@@ -297,6 +334,11 @@
         margin-right: 0.5em;
         // white-space: nowrap;
         width: 130px;
+          @include media-max-width2($md - 1) { 
+            width: auto;
+            
+          }
+
           // @include media-max-width2($xlg) { font-size: 10px;}
       }
       &-total {
@@ -334,8 +376,12 @@
       width: 140px;
       margin-right: 1em;
       flex-shrink: 0;
-        @include media-max-width2($xlg) { width: 107px;}
-        @include media-max-width2($lg) { width: 70px;}
+        // @include media-max-width2($xlg) { width: 107px;}
+        @include media-max-width2($xl) { width: calcFluidFontSize(100, 140, $xlg, $xl);}
+        @include media-max-width2($xlg - 1) { width: calcFluidFontSize(68, 100, $lg, $xlg);}
+        @include media-max-width2($lg - 1) { width: calcFluidFontSize(84, 68, $md, $lg);}
+        @include media-max-width2($md - 1) { width: calcFluidFontSize(100, 84, $sm, $md);}
+        @include media-max-width2($sm - 1) { width: calcFluidFontSize(60, 100, $xs, $sm);}
 
       &-box {
         padding-bottom: 100%;
@@ -409,29 +455,49 @@
     }
   }
   &-total {
+    --m: .75rem;
     max-width: 398px;
     flex-shrink: 0;
     margin-top: 2.5em;
     margin-bottom: 1.5384em;
-    font-size: inherit;   
+    // font-size: inherit;   
+    font-size: 1rem;
+
     position: sticky;   
     top: 2.5em;
+    flex-basis: calcFluidFontSize(315, 398, $xlg, $xl);
       @include media-max-width2($xlg) { 
-        max-width: 245px;
+        max-width: unset;
         // font-size: 18px;
+        // width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-basis: auto;
+        margin-left: calc(-1 * var(--m));
+        margin-right: calc(-1 * var(--m));
       }
-      @include media-max-width2($lg) { 
-        max-width: 216px;
-        font-size: 12px;
+      @include media-max-width2($md - 1) { 
+        margin: 0;
+        display: block;
       }
-      @include media-max-width2($md - 1) { max-width: unset; }
+      // @include media-max-width2($md - 1) { max-width: unset; }
+
       &-block {
         // padding: 2em 1.3em 1.3333em 1.3em;
-        padding: 2em 1.3em;
+        padding: 2rem 1.3rem;
         border: 1px solid currentColor;
         border-radius: 5px;
         width: 100%;
         margin-bottom: 1.5384em;
+          @include media-max-width2($xlg) { 
+            flex-basis: calc(50% - 2*var(--m));
+            margin: 0 var(--m) 1.5rem var(--m);
+          }
+          @include media-max-width2($md - 1) { 
+            flex-basis: 100%;
+            margin-left: 0;
+            margin-right: 0;
+          }
 
       }      
       
@@ -439,7 +505,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 1em;
+        margin-bottom: 1rem;
         width: 100%;
         font-size: inherit;   
           &.columns {
@@ -479,6 +545,7 @@
         line-height: 1;
         // flex-grow: 1;
         white-space: nowrap;
+        text-align: right;
           // @include media-max-width2($xlg) { font-size: 26px;}
         &.sale {color: var(--base-color2);}  
         &.total {
@@ -492,10 +559,11 @@
         line-height: 1.3;
         // text-align: center;
         // max-width: 330px;
-        color: var(--text-color-light);
+        color: var(--text-color-default);
+        opacity: .6;
         // padding: 1.43em;
         // margin-top: 2.4em;
-        margin-bottom: 1.25em;
+        margin-bottom: 1rem;
         // border: 1px solid currentColor;
         // border-radius: 5px;
           // @include media-max-width2($xlg) { font-size: 10px;max-width: 240px;}
@@ -506,7 +574,7 @@
         width: 100%;
         font-weight: bold;
         font-size: inherit;
-        margin-bottom: 1em;
+        margin-bottom: 1rem;
 
           @include media-max-width2($md) { 
             //  font-size: 10px;
@@ -517,14 +585,14 @@
 
       }
       .policy {
-        font-size: .7em;
-        line-height: 1.2;
+        font-size: .7rem;
+        line-height: 1;
         color: var(--text-color-light);
         &-item {
           font-size: inherit;
           display: flex;
           align-items: center;
-          &:not(:last-child) {margin-bottom: 1em;}
+          &:not(:last-child) {margin-bottom: .45rem;}
           .checkbox {
             font-size: inherit;
             margin-right: .8em;

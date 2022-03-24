@@ -4,15 +4,15 @@
     placement="bottom-start"
     auto-min-size
     popper-class="filter-item_popper-container"
-    :class="{ 'is-selected': locValue.length}"
+    :class="{ 'is-selected': locValue && locValue.length}"
     :tabindex="0"
     )
-    .filter-item_title(:class="{ 'is-selected': locValue.length}" :tabindex="1")
+    .filter-item_title(:class="{ 'is-selected': locValue && locValue.length}" :tabindex="1")
       span.text {{name}}
-      span.count(v-if="locValue.length") {{locValue.length}}
+      span.count(v-if="locValue && locValue.length") {{locValue.length}}
       .filter-item_close(
         v-close-popper
-        v-if="locValue.length === 0"
+        v-if="locValue && locValue.length === 0"
         )
         svg.icon.icon-arrow-down <use href="#icon-arrow-down"/>
       .filter-item_close(
@@ -28,7 +28,7 @@
         :options="options" 
         :select-all.sync="selectAll"
         :has-select-all="true"
-        :list-box-height="options.length > 9 ? '20em': false"
+        :list-box-height="options && options.length > 9 ? '20em': false"
         v-model="locValue"
         :tabindex="3"
         )
@@ -50,11 +50,17 @@
 <script>
   export default {
     props: {
-      options: {},
+      options: {
+        type: Array,
+        default() {return null}
+      },
       // id:{},
       type:{},
       name:{},
-      value: {}
+      value: {
+        type: Array,
+        default() {return null}
+      }
     },
     FILTER_LIST: 'list',
     FILTER_PRICE: 'price',

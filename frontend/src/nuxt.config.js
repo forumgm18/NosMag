@@ -1,30 +1,9 @@
-// const imageminMozjpeg = require('imagemin-mozjpeg')
-// const ImageminPlugin = require('imagemin-webpack-plugin').default
 const isDev = process.env.NODE_ENV !== 'production'
 // const srcPath = 'src/'
 export default {
-  // runtimeCompiler: true,
-  // srcDir: 'src/',
-  // Global page headers: https://go.nuxtjs.dev/config-head
-  // env: {
-  //   baseUrl: process.env.BASE_URL || 'http://localhost:3000',
-  //   apiUrl: process.env.API_URL || '???',
-  //   _AXIOS_BASE_URL_: process.env.API_URL || 'http://localhost:3000/api'
-  // },
   publicRuntimeConfig: {
     // baseURL: process.env.NODE_ENV === 'production' ? '78.24.223.226' : 'http://nosmag-new.local',
     baseURL: process.env.BROWSER_BASE_URL,
-    // axiosApiHost: 'nosmag.ru',
-    // axiosApiPrefix: '/api',
-    // axiosApiProtocol: 'https',
-    // axiosApiPort: 443,
-
-  //   axios: {
-  //     prefix: `${process.env.API_PREFIX}/`,
-  //     https: process.env.API_PROTOCOL === 'https',
-  //     baseURL: `${process.env.API_PROTOCOL || 'https'}://${process.env.API_HOST}${process.env.API_PREFIX}`,
-  //     browserBaseURL: `${process.env.API_PROTOCOL || 'https'}://${process.env.API_HOST}${process.env.API_PREFIX}`,
-  // },
     axios: {
       // prefix: `${process.env.API_PREFIX}/`,
       // https: process.env.API_PROTOCOL === 'https',
@@ -188,16 +167,9 @@ export default {
     // '@nuxtjs/universal-storage',
 
   ],
-  // storage: {
-  //   localStorage: { prefix: '' },
-  //   // initialState,  // Object {}
-  //   // ignoreExceptions //
-  // },
   webfontloader: {
     events: false,
     google: {
-      // families: ['PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap'],
-      // families: ['Roboto:wght@400;500;600;700;800;900&display=swap'],
       families: ['Roboto:wght@400;500;700;900&display=swap'],
     },
     timeout: 5000,
@@ -283,76 +255,6 @@ export default {
     extend(config, ctx) {
       // config.resolve.alias['vue'] = 'vue/dist/vue.common'
       config.resolve.alias.vue = 'vue/dist/vue.common'
-    //   const ORIGINAL_TEST = '/\\.(png|jpe?g|icons|webp)$/i'
-    //   const vueSvgLoader = [
-    //     {
-    //       loader: 'vue-icons-loader',
-    //       options: {
-    //         svgo: false,
-    //       },
-    //     },
-    //   ]
-    //   const imageMinPlugin = new ImageminPlugin({
-    //     pngquant: {
-    //       quality: '5-30',
-    //       speed: 7,
-    //       strip: true,
-    //     },
-    //     jpegtran: {
-    //       progressive: true,
-    //     },
-    //     gifsicle: {
-    //       interlaced: true,
-    //     },
-    //     plugins: [
-    //       imageminMozjpeg({
-    //         quality: 70,
-    //         progressive: true,
-    //       }),
-    //     ],
-    //   })
-    //   if (!ctx.isDev) config.plugins.push(imageMinPlugin)
-    //
-    //   config.module.rules.forEach((rule) => {
-    //     if (rule.test.toString() === ORIGINAL_TEST) {
-    //       rule.test = /\.(png|jpe?g|webp)$/i
-    //       rule.use = [
-    //         {
-    //           loader: 'url-loader',
-    //           options: {
-    //             limit: 1000,
-    //             name: ctx.isDev
-    //               ? '[path][name].[ext]'
-    //               : 'img/[contenthash:7].[ext]',
-    //           },
-    //         },
-    //       ]
-    //     }
-    //   })
-    //   //  Create the custom SVG rule
-    //   const svgRule = {
-    //     test: /\.svg$/,
-    //     // use: ['babel-loader', 'vue-icons-loader', 'url-loader']
-    //     oneOf: [
-    //       {
-    //         resourceQuery: /inline/,
-    //         use: vueSvgLoader,
-    //       },
-    //       {
-    //         resourceQuery: /data/,
-    //         loader: 'url-loader',
-    //       },
-    //       {
-    //         resourceQuery: /raw/,
-    //         loader: 'raw-loader',
-    //       },
-    //       {
-    //         loader: 'file-loader', // By default, always use file-loader
-    //       },
-    //     ],
-    //   }
-    //
-    //   config.module.rules.push(svgRule) // Actually add the rule
     },
   },
 }

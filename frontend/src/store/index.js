@@ -76,6 +76,7 @@ export const getters = {
   getLinks1: s => s.links1 || null,
   getSublinks: s => s.sublinks || null,
   getSublinksMenu: s => s.sublinks_menu || null,
+  getContent: s => s.content || null,
 
 
 }

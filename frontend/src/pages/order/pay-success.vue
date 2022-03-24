@@ -2,8 +2,8 @@
   section.container 
     v-preloader.in-page(v-if="$fetchState.pending")
     template(v-else)
-      h1.page-title {{content.title}}
-      .order-info {{content.content}}
+      h1.page-title(v-if="pageTitle") {{pageTitle}}
+      .order-info(v-if="content") {{content}}
 
 </template>
 
@@ -16,7 +16,8 @@
       }
     },
     computed: {
-      content() { return this.$store.getters['getContentData']}
+      content() { return this.$store.getters['getContent']},
+      pageTitle() { return this.$store.getters['getTitle']}
     }
   }
 </script>

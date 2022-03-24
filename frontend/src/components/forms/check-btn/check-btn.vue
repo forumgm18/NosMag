@@ -99,7 +99,8 @@ export default {
 
 <style lang="scss">
   .check-btn {
-    font-size: 12px;
+    // font-size: 12px;
+    font-size: 1rem;
     color: var(--tc);
     cursor: pointer;
       // &:hover {color: var(--text-color-light);}
@@ -109,7 +110,8 @@ export default {
         justify-content: space-between;
         font-style: normal;
         font-weight: 500;
-        font-size: 20px;
+        // font-size: 20px;
+        font-size: inherit;
         line-height: 100%;
         padding: 1.7em 1.3em;
         border: 1px solid var(--text-color-light);

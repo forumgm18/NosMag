@@ -95,11 +95,11 @@ export default {
       }
     },
     isChecked: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: false
     },
     isHover: {
-      type: Boolean,
+      type: [Boolean, Number],
       default: false
     },
     transition: {

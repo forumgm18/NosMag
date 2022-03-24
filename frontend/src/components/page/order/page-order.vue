@@ -25,20 +25,18 @@ section
             v-model="delivery" 
             :value="dt"
             ) {{dt.name}}
-          .order-form-item(v-if="deliveryTarifs.comment")
+          .order-form-item.has-note(v-if="deliveryTarifs.comment")
             v-note(:note="deliveryTarifs.comment" :link="deliveryTarifs.comment_link")
         
 
         //- div ================== Выбор Тарифа Доставки ============================
         .order-form-row.delivery-opt(v-if="deliveryTarifs")
-          v-check-item(
+          v-check-item.order-form-item(
             v-for="(d, i) in delivery.items" :key="i"
             type="radio" 
             v-model="deliveryService" 
             :value="d" 
             :is-checked="!!d.active" 
-            :has-footer="true"
-            
             )
             template(#icon)
               svg.icon(:class="[getDeliveryServiceIcon(d.type), {base: d.type==='samovyvoz'}]") 
@@ -187,7 +185,7 @@ section
         .order-form-row.order-toggle-btn
           v-check-btn.order-form-item(v-model="prePay" :value="1" :is-checked="true") {{$options.PREPAY_CARD_TEXT}}
           v-check-btn.order-form-item(v-model="prePay" :value="0") {{$options.PREPAY_MONEY_TEXT}}
-          .order-form-item(v-if="payments.comment")
+          .order-form-item.has-note(v-if="payments.comment")
             v-note(:note="payments.comment" :link="payments.comment_link")
       
         template(v-if="prePay === 1 && payments")
@@ -780,17 +778,21 @@ section
               tarif_type: this.deliveryService ? this.deliveryService.type : '',
               prepay:     this.prePay,
             }
-            console.log('order params', param)
+            // console.log('order params', param)
 
           const orderRes = await this.$store.dispatch('order/newOrder', param)
-          if (orderRes.status === 'ok') {
-            console.log('order success', orderRes)
-            // this.$router.push({path: '/new-order'})
+          if (orderRes === 'ok') {
+            // console.log('order success', orderRes)
+            const formUrl = this.$store.getters['order/getPrepayFormUrl']
+            if (formUrl && formUrl.length && process.browser) {
+              window.location.href = formUrl
+            } else {
+              this.$router.push({path: '/order/register'})
+            }
           } else {
-            console.log('order fail', orderRes)
+            // console.log('order fail', orderRes)
+            this.$router.push({path: '/order/pay-fail'})
           }
-          // this.$router.push({path: '/new-order'})
-          this.$router.push({path: '/order/pay-success'})
 
 
 

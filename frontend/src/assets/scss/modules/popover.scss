@@ -1,3 +1,23 @@
+// ---- theme: header_menu ----- start -----
+.v-popper--theme-header_menu .v-popper__inner {
+  background: var(--dropdown-background);
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--dropdown-border);
+  border-radius: 5px;
+  box-shadow: var(--dropdown-box-shadow);
+}
+
+.v-popper--theme-header_menu .v-popper__arrow-outer {
+  visibility: hidden;
+}
+
+.v-popper--theme-header_menu .v-popper__arrow-inner {
+  visibility: hidden;
+}
+// ---- theme: header_menu ----- end -----
+
+
+
 .v-popper__arrow-container{
   // скрываем стрелку у всплывашек
   display: none!important;

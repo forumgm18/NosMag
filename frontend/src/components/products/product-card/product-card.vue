@@ -1,6 +1,5 @@
 <template lang="pug">
   .product-card(:data-product-id="product.id" itemscope itemtype = "https://schema.org/Product")
-    .product-card_border(v-for="(b, index) in ['top','right','bottom','left']" :key="index" :class="b")
     meta(v-if="product.art" itemprop="productID" :content="`артикул: ${product.art}`")
     .product-card-base
       nuxt-link(:to="`${mocCatalogLink}${product.alias}`" class="product-card_img" itemprop="url")

@@ -14,3 +14,25 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .err404{
+    &-block {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+      .btn {
+        margin-top: 2rem;
+        max-width: 360px;
+      }
+    }
+    &-title{
+      font-size: 5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+    &-text{
+      p {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+</style>

@@ -11,17 +11,11 @@
       cursor: pointer;
       font-size: inherit;
       &:hover {
-        .listbox-item_text { 
-          opacity: .6;
-          // color: red
-        }
+        .listbox-item_text { opacity: .6;}
       }
-      &:focus {
-        .listbox-item_text { 
-          opacity: .6; 
-          // color: red
-        }
-      }
+      // &:hover, &:focus {
+      //   // .listbox-item_text { opacity: .6; color: red}
+      // }
       &.checked {
         // .listbox-item_text { color: green!important}
       }

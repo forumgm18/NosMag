@@ -41,6 +41,16 @@
   --select-item-hover: #{$select-item-hover};
 
 
+  //========= Поля контейнера (левое/правое) ===================
+  --container-padding-side: #{calcFluidFontSize(96, 115, $xlg, $xl)};
+  //========= / Поля контейнера (левое/правое) ===================
+
+  //========= Dropdown (Dropdown Menu) Vars ===================
+  --dropdown-border: #{$dropdown-border};
+  --dropdown-box-shadow: none;
+  --dropdown-background: #fff;
+  //========= / Dropdown (Dropdown Menu) Vars ===================
+
   //========= Desktop Filter Vars ===================
       --df-margin: 8px;
       --df-column: 6;
@@ -90,6 +100,27 @@
   //@include media-max-width2(1200) { --p: 16px;}
   --p: 16px;
 
+
+  @include media-max-width2($xlg) { 
+  //========= Поля контейнера (левое/правое) ===================
+  --container-padding-side: 96px;
+  //========= / Поля контейнера (левое/правое) ===================
+  }
+  @include media-max-width2($lg) { 
+  //========= Поля контейнера (левое/правое) ===================
+  --container-padding-side: #{calcFluidFontSize(40, 96, $md, $lg)};
+  //========= / Поля контейнера (левое/правое) ===================
+  }
+  @include media-max-width2($md) { 
+  //========= Поля контейнера (левое/правое) ===================
+  --container-padding-side: #{calcFluidFontSize(20, 40, $sm, $md)};
+  //========= / Поля контейнера (левое/правое) ===================
+  }
+  @include media-max-width2($sm) { 
+  //========= Поля контейнера (левое/правое) ===================
+  --container-padding-side: #{calcFluidFontSize(12, 20, $xs, $sm)};
+  //========= / Поля контейнера (левое/правое) ===================
+  }
 
   @include media-min-width2($sm) { --p: 24px;}
 

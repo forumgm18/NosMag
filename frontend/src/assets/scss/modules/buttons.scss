@@ -45,7 +45,10 @@
     --btn-text-color: var(--text-color-default);
     --btn-bgr-color: transparent; 
     --btn-border-color: var(--base-color4); 
+    &:hover {
+      --btn-text-color: #fff;
 
+    }
   }
   &-icon {
     cursor: pointer;

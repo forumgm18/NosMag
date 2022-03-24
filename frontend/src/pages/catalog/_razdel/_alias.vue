@@ -7,12 +7,11 @@
       section.content-section
         aside.sidebar-left
           sublinks-menu(v-if="sublinks_menu" :items="sublinks_menu.items")
-          //- v-listbox(
-            :options="filters[5].values" 
+          //- v-listbox2(
+            :options="testOpt" 
             v-model="test" 
-            :select-all="true"
             )
-            template(#text="{opt}" ) {{opt.name}}
+            template(#text="{opt}" ) {{opt}}
 
         article.main-content
           section.razdel-filter(:class="{collapse: filterCollapse}" v-if="1==1" )
@@ -117,10 +116,9 @@
               )
             .pagination(v-if="products && products.length < itemsTotal")
               v-preloader.in-page(v-if="loading")
-              .pagination-descr(v-if="!loading") {{getPaginateText}}
-              //- v-preloader(v-if="$fetchState.pending")
-              //- .pagination-descr(v-if="!$fetchState.pending") {{getPaginateText}}
-              .btn.btn-4(@click="showMore") {{$options.SHOW_MORE_BTN}}
+              template(v-if="!loading")
+                .pagination-descr {{getPaginateText}}
+                .btn.btn-4(@click="showMore") {{$options.SHOW_MORE_BTN}}
 </template>
 
 <script>
@@ -130,8 +128,9 @@ export default {
   data() {
     return {
       testChb: false,
-      // test:[],
-      test:[{id:387,name:'зима'},{id:413,name:'лето'}],
+      testOpt: ['val-1', 'val-2', 'val-3', 'val-4'],
+      test:[],
+      // test:[{id:387,name:'зима'},{id:413,name:'лето'}],
       
       test2:[],
       priceFilter: {active_min: 0, active_max: 0},
@@ -148,9 +147,10 @@ export default {
       limit: 24, // количество товаров на страницу
       offset: 0, // Странца пагинации
       // queryFilters: [],
-      queryFiltersChange: false,
+      queryFiltersChange: 0,
+      isNewFilter: 0,
       canMonitor: false,  // Компонент инициализирован и можно следить за Переменными
-      selModel: [],
+      // selModel: [],
       // selModel: [{id:1519, name: 'AROS' },{id:428, name: 'Atlantic' },],
 
       }
@@ -167,7 +167,7 @@ export default {
   },
   mounted(){
     this.canMonitor = false // Запрещаем следить за Переменными
-    this.queryFiltersChange = false
+    this.queryFiltersChange = 0
     // Подготавливаем объект выбранных фильтров и делаем его реактивным
     this.filters.filter(v => v.type != 'price')
                 .forEach( v => this.$set(this.selectedFilters, v.id, []) )
@@ -181,7 +181,10 @@ export default {
     pageTitle() {return this.$store.getters['getPageTitle']},
     products() { return this.$store.getters['productList/getProductList']},
     filters() { return this.$store.getters['productList/getFilters']},
-    filtersPrice() { return this.filters ? this.filters.find(f => f.type === 'price') : null},
+    filtersPrice() { 
+      // return null
+      return this.filters ? this.filters.find(f => f.type === 'price') : null
+      },
     // priceRange() {
     //   if (this.filters) {
     //     const priceFilter = this.filters.find(v => v.type === 'price')
@@ -249,7 +252,15 @@ export default {
         offset: this.offset,
       }
       if (this.isFilter) queryParams['filters'] = this.queryFilters
-      return await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter: this.isFilter})
+      // Проверяем Обновился фильтр или нет
+      // При изменении фильтра значение this.queryFiltersChange инкрементируется 
+      let isNewFilter = this.isNewFilter != this.queryFiltersChange
+
+      if (this.filtersChange != this.queryFiltersChange) {
+        this.isNewFilter = this.queryFiltersChange
+      }
+
+      return await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter: this.isFilter, isNewFilter})
     },
     async showMore() {
       this.loading = true

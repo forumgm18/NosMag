@@ -1,5 +1,6 @@
 .check-item {
-  font-size: 20px;
+  // font-size: 20px;
+  font-size: 1rem;
   color: var(--text-color-default);
   cursor: pointer;
   flex-shrink: 0;
@@ -13,18 +14,22 @@
     height: 100%;
     // display: flex;
     transition: .1s;
-    padding: 1.8125em 1.625em;
+    // padding: 1.8125em 1.625em;
+    padding: 1.5em;
+    font-size: inherit;
   }
   &-icon{
-    font-size: 2.6em;
+    // font-size: 2.6em;
+    font-size: 2.3em;
     flex-shrink: 0;
-    margin-bottom: 0.3461em;
+    // margin-bottom: 0.3461em;
+    margin-bottom: 0.3870em;
     .icon {display: block;}
   }
   &-text {
     font-size: inherit;
     color: inherit;
-    padding-left: 1.125em;
+    // padding-left: 1.125em;
     flex-grow: 1;
 
   }
@@ -32,18 +37,24 @@
     font-size: inherit;
     font-weight: 500;
     color: inherit;
-    margin-bottom: 0.5em;
+    // margin-bottom: 0.5em;
+    margin-bottom: 1em;
   }
   &-descr {
     font-size: inherit;
     line-height: 1.3;
     color: var(--text-color-default);
-    margin-bottom: .9375em;
+    margin-bottom: .75em;
     opacity: .4;
   }
   &-offer {
     font-size: inherit;
-    margin-bottom: .9375em;
+    line-height: 1.17;
+    // margin-bottom: .9375em;
+    .prop-item {
+      line-height: inherit;
+      &:not(:last-child){margin-bottom: .75em;}
+    }
   }
 
 }

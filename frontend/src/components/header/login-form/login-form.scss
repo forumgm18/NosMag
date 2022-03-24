@@ -5,6 +5,9 @@
 }
 .login {
   color: var(--text-color-default);
+  min-width: 247px;
+  max-width: 270px;
+
   .popup-body {
     min-width: 247px;
     padding: 1.5em;

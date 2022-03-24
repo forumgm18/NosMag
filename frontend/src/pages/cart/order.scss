@@ -60,12 +60,13 @@
 
     }
     &-section{ 
-      --m: 15px;
+      // --m: 15px;
+      --m: .75rem;
       // display: flex;
       // flex-wrap: wrap;
       // margin-bottom: 30px;
-      margin: 0 calc(-1 * var(--m)) 24px  calc(-1 * var(--m));
-      margin-bottom: 3em;
+      margin: 0 calc(-1 * var(--m)) 1.5rem  calc(-1 * var(--m));
+      // margin-bottom: 3em;
       &.m-0 { margin: 0;}
       &.delivery-opt {
         align-items: stretch;
@@ -91,15 +92,48 @@
         margin-left: var(--m);
         margin-right: var(--m);
         margin-bottom: calc(2 * var(--m));
-        max-width: 400px;
+        // max-width: 400px;
+          // @include media-max-width2( $xlg ) {
+          //   max-width: unset;
+          // }
+      }
+      .check-item {
+        @include media-max-width2( $lg ) {
+          flex-basis: calc(33.3333% - 2*var(--m));
+        }
+        @include media-max-width2( $md - 1 ) {
+          flex-basis: calc(50% - 2*var(--m));
+        }
+        @include media-max-width2( $sm - 1 ) {
+          flex-basis: 100%;
+          flex-basis: calc(100% - 2*var(--m));
+
+        }
+
       }
     }
     &-item{
       // margin: 0 var(--m) 9px var(--m);
       margin: 0 var(--m);
       flex-basis:  calc(33.33% - 2*var(--m));
+      flex-grow: 0;
       // display: flex;
       // align-items: center;
+      @include media-max-width2( $xxlg ) {
+        flex-basis: calc(50% - 2*var(--m));
+      }
+      @include media-max-width2( $sm - 1  ) {
+        // flex-basis: calc(50% - 2*var(--m));
+        flex-basis: 100%;
+      }
+
+      &.has-note {
+        @include media-max-width2( $xxlg ) {
+          flex-basis: 100%;
+          margin-bottom: calc(2 * var(--m));
+        }
+
+      }
       &.col-2 {
         flex-basis:  calc(66.66% - 2*var(--m));
       }
@@ -107,6 +141,11 @@
       &.comment {
         // border: 1px solid red;
         max-width: 845px;
+          @include media-max-width2( $xlg ) {
+            flex-basis: 100%;
+            max-width: unset;
+          }
+
         .order-item-input {
           // border: 1px solid green;
           // height: 130px;
@@ -398,7 +437,8 @@
   // padding: 0.8571em 0;
   // line-height: 3;   
   max-width: var(--order-form-btn-maw);
-  width: 100%;
+  // width: 100%;
+  width: calc(100% - 2*var(--m));
   margin-left: var(--m);
 }
 .deivery-service {

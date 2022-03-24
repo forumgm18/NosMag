@@ -32,18 +32,19 @@
             nuxt-link.header-link.delivery(:to="`/${header.dostavka.alias}`" )
               svg.icon.icon-box <use href="#icon-box"/>
               span {{header.dostavka.name}}
-            .header-info-block
-              .header-link.learn-more( @click.prevent="showTopInfoPopup")
-                svg.icon.icon-learn-more <use href="#icon-learn-more"/>
-                span.desktop {{header.info.header}}
-                span.tablet {{header.info.header_m}}
-              v-app-popup.popup-down(v-model="topInfoPopup" v-on:close-popup="closeTopInfoPopup")
-                nuxt-link.header-info-link(
-                  v-for="(lnk, l) in header.info.links"
-                  :key="l"
-                  :to="`/${lnk.alias}`"
-                  @click.native="closeTopInfoPopup(false)"
-                ) {{lnk.name}}
+            .header-info-block    
+              v-dropdown( theme="header_menu" popper-class="popup-header-container" )
+                .header-link.learn-more( @click.prevent="showTopInfoPopup")
+                  svg.icon.icon-learn-more <use href="#icon-learn-more"/>
+                  span.desktop {{header.info.header}}
+                  span.tablet {{header.info.header_m}}
+                template(#popper)
+                  nuxt-link.header-info-link(
+                    v-for="(lnk, l) in header.info.links"
+                    :key="l"
+                    :to="`/${lnk.alias}`"
+                    @click.native="closeTopInfoPopup(false)"
+                  ) {{lnk.name}}
 
 
             //- nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
@@ -54,23 +55,22 @@
             v-city-select(v-model="header.city")  
 
           .header-phone-block
+            v-dropdown( theme="header_menu" popper-class="header-phone-block_popup-container" )
+              .header-link.header-feedback
+                svg.icon.icon-phone <use href="#icon-phone"/>
+                span.desktop обратный звонок
+                span.tablet телефон
 
-            v-app-popup.header-feedback-popup.popup-down(v-model="feedbackPopup" v-on:close-popup="closeFeedbackPopup")
-              v-popup-input-form(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
-                template( v-slot:default)
-                  p Не нашли нужной информации?
-                  p Оставьте свой номер, мы перезвоним вам в рабочее время
-                template( v-slot:description)
-                  p.live-chat-text Либо напишите вопрос ниже справа в live-чат
+              template(#popper)
+                .header-feedback-popup
+                  v-popup-input-form(v-model="inputPhone" v-on:close-popup="closeFeedbackPopup")
+                    template( v-slot:default)
+                      p Не нашли нужной информации?
+                      p Оставьте свой номер, мы перезвоним вам в рабочее время
+                    template( v-slot:description)
+                      p.live-chat-text Либо напишите вопрос ниже справа в live-чат
 
 
-
-
-
-            .header-link.header-feedback( @click.prevent="showFeedbackPopup")
-              svg.icon.icon-phone <use href="#icon-phone"/>
-              span.desktop обратный звонок
-              span.tablet телефон
             .header-phone
               a.header-phone-link(:href="header.phone.link") {{header.phone.name}}
             //-  .header-phone-label {{header.phone.info}}
@@ -148,22 +148,9 @@ export default {
   //   return { bodyAttrs: { class: this.menuOpen ? 'menu-open' : '' } }
   // },
   computed: {
-    // ...mapGetters('settings', ['phone', 'city']),
     ...mapState('settings', ['header']),
-    // ...mapState(['header']),
-    // header: s => s.$store.getters['header'],
-    // phone() { return this.header.phone },
-    // city() { return this.header.city },
-    // ...mapGetters('menu', ['menuItems']),
-    // slogan: th => th.siteConfig.mainSlogan,
-    // menuItems: s => s.$store.getters['menu/menuItems'],
-    // headerNotEmpty() { return !isEmpty(this.header) },
   },
   methods: {
-    // citySelect (item) { console.log(item) },
-    // info4UsersSelect (item) {
-    //   if (item.href) this.$router.push(item.href)
-    // },
     menuBottomMobileToggle() {   menuFunc.menuToggle()  },
     showTopInfoPopup() { this.topInfoPopup = !this.topInfoPopup},
     showBottomInfoPopup() { this.bottomInfoPopup = !this.bottomInfoPopup},

@@ -106,18 +106,17 @@
         //box-shadow: 0px 4px 16px rgba(85, 85, 85, 0.25);
         // border-radius: var(--border-radius);
         &:before{
-          // content: '';
+          content: '';
           position: absolute;  
-          height: var(--m);
+          // height: var(--m);
+          height: calc(100% + var(--m) + 1px);
           width: calc(100% + 2 * var(--m));
           top: calc(-1 * var(--m));
           left: calc(-1 * var(--m));  
           border-radius: var(--border-radius) var(--border-radius) 0 0;          
-          border: 1px solid transparent;
-          border-top-color:  var(--product-card-hover-border);
-        }
-        .product-card_border {
-          opacity: 1;
+          border: 1px solid var(--product-card-hover-border);
+          border-bottom-color:  transparent;
+          z-index: -1;
         }
         .product-item-size {
           display: block;
@@ -145,56 +144,6 @@
         }
       }
 
-      &_border {
-          opacity: 0;
-          // transition: .1s;
-          position: absolute;  
-          // height: var(--m);
-          // width: calc(100% + 2 * var(--m));
-          // top: calc(-1 * var(--m));
-          // left: calc(-1 * var(--m));  
-          // border-radius: var(--border-radius) var(--border-radius) 0 0;          
-          border: 1px solid transparent;
-          // border-top-color:  var(--product-card-hover-border);
-          --border-div-height: calc(var(--m) - var(--border-radius) / 2);
-          &.top, &.bottom {
-            left: calc(-1 * var(--m));  
-            // height: var(--m);
-            // height: calc(2 * var(--m));
-            height: var(--border-div-height);
-            width: calc(100% + 2 * var(--m));
-          }
-          &.top {
-            top: calc(-1 * var(--m));
-            border-color:  var(--product-card-hover-border);
-            border-bottom-color:  transparent;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
-          } 
-          &.bottom {
-            display: none;
-            bottom: calc(-1 * var(--m));
-            border-color:  var(--product-card-hover-border);
-            border-top-color:  var(--product-card-hover-border);
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
-          }
-          &.left, &.right {
-            top: calc(-1 * var(--border-div-height) / 2 );
-            // height: calc(100% + 2 * var(--m));
-            height: calc(100% + var(--m) / 2);
-            // height: 100%;
-            width:  var(--m);
-          }
-          &.left {
-            left: calc(-1 * var(--m)); 
-            border-left-color:  var(--product-card-hover-border); 
-          } 
-          &.right {
-            right: calc(-1 * var(--m));
-            border-right-color:  var(--product-card-hover-border);  
-          }
-
-       
-      }
       &_bottom-hover-block {
         max-height: 0;
         overflow: hidden;

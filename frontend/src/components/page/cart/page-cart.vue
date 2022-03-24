@@ -72,31 +72,43 @@
               .cart-product-props-value.comment In ipsum cillum adipisicing id reprehenderit. Fugiat labore excepteur labore commodo nulla duis nostrud fugiat. 
 
         //- div ================== Количество ============================
-        .cart-col-2  
-          .cart-table-quantity 
-            v-input-number(
-              :max="item.ostatok || 1"
-              :min="1"
-              :value="item.q"
-              @input="qualityChange($event, item)"
-              )
-            .cart-item-comment(v-if="item.ostatok_comment.length") {{item.ostatok_comment}}
-          //- div ================== Блок цены ============================
-          .cart-table-price(v-if="item.ostatok > 0") 
-            .cart-table-price-blok 
-              .cart-table-price-total(v-html="itemCostStr(item)")
-              .cart-table-price-piece(v-html="itemOldCostStr(item)")
-              //- .cart-item-comment(v-html="`Adipisicing cillum reprehenderit esse adipisicing.`")
-            .cart-table-sale-block
-              .cart-table-price-sale(v-if="item.oldprice" v-html="saleText(item)")
-              //- .cart-item-comment(v-html="`Adipisicing cillum reprehenderit esse adipisicing.`")
+        .cart-col-2
+          .cart-mobile-padding
+            label.cart-check
+              v-icon-check(:is-checked="isSelectCartItem({scode: item.scode})")
+            //- div ================== Фотка товара ============================
+            nuxt-link.cart-product-img(:to="`${linkPath}${item.alias}`")
+              .cart-product-img-box
+                .img-box
+                  img(
+                    :src="`${imgPath + imgPrefix.t + item.images[0]}`"
+                    :srcset="`${imgPath + imgPrefix.t +imgRetinaPrefix + item.images[0]} 2x`"
+                    )
+          .cart-sub-col
+            .cart-table-quantity 
+              v-input-number(
+                :max="item.ostatok || 1"
+                :min="1"
+                :value="item.q"
+                @input="qualityChange($event, item)"
+                )
+              .cart-item-comment(v-if="item.ostatok_comment.length") {{item.ostatok_comment}}
+            //- div ================== Блок цены ============================
+            .cart-table-price(v-if="item.ostatok > 0") 
+              .cart-table-price-blok 
+                .cart-table-price-total(v-html="itemCostStr(item)")
+                .cart-table-price-piece(v-html="itemOldCostStr(item)")
+                //- .cart-item-comment(v-html="`Adipisicing cillum reprehenderit esse adipisicing.`")
+              .cart-table-sale-block
+                .cart-table-price-sale(v-if="item.oldprice" v-html="saleText(item)")
+                //- .cart-item-comment(v-html="`Adipisicing cillum reprehenderit esse adipisicing.`")
 
-          .cart-table-price(v-else) 
-            .cart-table-price-blok
-              .cart-inactive-title 
-                svg.icon.icon-not-available <use href="#icon-not-available"/>
-                span {{item.inactive_header}}
-              .cart-inactive-comment {{item.inactive_comment}}
+            .cart-table-price(v-else) 
+              .cart-table-price-blok
+                .cart-inactive-title 
+                  svg.icon.icon-not-available <use href="#icon-not-available"/>
+                  span {{item.inactive_header}}
+                .cart-inactive-comment {{item.inactive_comment}}
 
       //- .cart-total-row.cart-table-footer 
         .cart-total-lable(v-html="`Товары ${cart.items_q}&nbsp;шт.`") 

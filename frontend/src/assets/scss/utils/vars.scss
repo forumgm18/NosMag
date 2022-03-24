@@ -23,6 +23,7 @@ $scrollbar-thumbs        : rgba(196, 196, 196, 0.5); // hsla(0, 0%, 77%, 0,5)
 $scrollbar-thumbs-hover  : rgba(196, 196, 196, 0.8); // hsla(0, 0%, 77%, 0,8)
 $scrollbar-thumbs-drag   : rgba(196, 196, 196, 1);   // hsla(0, 0%, 77%, 1)
 $product-card-hover-border   : rgba(35, 54, 83, 0.4); // hsla(216, 41%, 23%, .4)
+$dropdown-border         : rgba(35, 54, 83, 0.4); // hsla(216, 41%, 23%, .4)
 $select-item-hover       : rgba(50, 111, 202, 0.1); // hsla(216, 41%, 23%, .4)
 // rgba(35, 54, 83, 1)
 // hsla(216, 41%, 23%, 1)
@@ -52,6 +53,7 @@ $mainLineHeight          : 1;
 //$smPhoneWidth            : 320px;
 
 $xl          : 1920;
+$xxlg        : 1700;
 $xlg         : 1200;
 $lg          : 992;
 $md          : 768;
@@ -59,12 +61,11 @@ $sm          : 576;
 $xsm         : 480;
 $xs          : 320;
 
-$desktopWidth       : 1738px;
-$smDesktopWidth     : 848px;
-$tableWidth         : 724px;
-$smTableWidth       : 100vw;
-$phoneWidth         : 100vw;
-$smPhoneWidth       : 100vw;
+$xlDesktopWidth     : 1738px;
+$xlgDesktopWidth    : 1056px;
+$lgDesktopWidth     : 848px;
+$mdDesktopWidth     : 736px;
+$smDesktopWidth     : 100vw;
 
 // Main color
 

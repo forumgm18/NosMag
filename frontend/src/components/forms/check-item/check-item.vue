@@ -53,7 +53,7 @@ export default {
     },
     hasDescr: {
       type: Boolean,
-      default: true
+      default: false
     },
     hasOffer: {
       type: Boolean,

@@ -14,40 +14,72 @@ export const mutations = {
     }
   },
   setProductList (state, val) {
-    // console.log('setProductList', val)
+    console.log('setProductList', val)
     // Vue.set(state, 'status', val.content.status)
     // Vue.set(state, 'type', val.content.type)
     if (val.content.status) Vue.set(val.rootState, 'status', val.content.status)
     if (val.content.type) Vue.set(val.rootState, 'type', val.content.type)
-  // цикл по ключам и значениям
+    // цикл по ключам и значениям
     for (let [key, v] of Object.entries(val.content.data)) {
-      key==='breadcrumbs' || key==='name' ? Vue.set(val.rootState, key, v) : Vue.set(state, key, v)
+      // key==='breadcrumbs' || key==='name' ? Vue.set(val.rootState, key, v) : Vue.set(state, key, v)
+      if (key==='breadcrumbs' || key==='name') {
+        Vue.set(val.rootState, key, v) 
+      } else {
+        // Vue.set(state, key, v)
+        if (key === 'filters') { // добавляем поле active в фильтры
+          let tmp = [...v]
+          tmp.forEach(t => {
+            if (Array.isArray(t.values)) {
+              t.values = t.values.map((item) => {
+                return item.hasOwnProperty('active') // если поле active уже есть
+                  ? item                             // возвращаем как есть
+                  : { ...item, active: 0 }           // если поля active нет то добавляем
+              })
+            }
+
+          })
+          state[key] = tmp
+        } else {
+          state[key] = v
+        }
+        
+      }
     }
     // console.log('setProductList state', state)
   },
   updateProductList (state, val) {
-    // console.log('updateProductList', val)
+    console.log('updateProductList', val)
     // console.log('updateProductList (isFilter)', isFilter)
-    if (state.items && state.items.length && !val.isFilter) {
-      // console.log('updateProductList (items)', val)
-
-    // цикл по ключам и значениям
-      for (let [key, v] of Object.entries(val.data)) {
-        if (key != 'items') { 
-          // state[key] = v 
+    // debugger
+    if (val.isFilter && val.isNewFilter) {
+      // цикл по ключам и значениям
+        for (let [key, v] of Object.entries(val.data)) {
+          // state[key] = v
           Vue.set(state, key, v)
-        } else {
-          state[key] = [...state[key], ...v]
         }
+        return
     }
-    } else {
-      // console.log('updateProductList (all)', val)
-    // цикл по ключам и значениям
-      for (let [key, v] of Object.entries(val.data)) {
-        // state[key] = v 
-        Vue.set(state, key, v)
-      }
-  }
+      if (state.items && state.items.length) {
+        // if (state.items && state.items.length && !val.isFilter) {
+        // console.log('updateProductList (items)', val)
+        // цикл по ключам и значениям
+        for (let [key, v] of Object.entries(val.data)) {
+          if (key != 'items') {
+            // state[key] = v
+            Vue.set(state, key, v)
+          } else {
+            state[key] = [...state[key], ...v]
+          }
+        }
+      } 
+    // else {
+    //   // console.log('updateProductList (all)', val)
+    // // цикл по ключам и значениям
+    //   for (let [key, v] of Object.entries(val.data)) {
+    //     // state[key] = v 
+    //     Vue.set(state, key, v)
+    //   }
+    // }
   }
 }
 
@@ -75,7 +107,7 @@ export const actions = {
 
         if (queryParam.params.items_only) {
           // console.log('fetchProd isFilter' , queryParam.isFilter)
-          commit('updateProductList', {...content, isFilter: queryParam.isFilter})  
+          commit('updateProductList', {...content, isFilter: queryParam.isFilter, isNewFilter: queryParam.isNewFilter})  
         } else {
           commit('setProductList', {content, rootState})  
         }

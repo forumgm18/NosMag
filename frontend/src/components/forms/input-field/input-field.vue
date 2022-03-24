@@ -4,7 +4,7 @@
       :class="{textarea: type==='textarea', 'is-error': $v.locValue.$error || setErrorStateFinal,'is-success': !$v.locValue.$error && showSuccessText, focus: isFocus}")
       template(v-if="type==='textarea'")
         client-only
-          perfect-scrollbar.input-field-textarea(ref="ps")
+          perfect-scrollbar.input-field-textarea(ref="ps" v-once :options="scrollbarSettings")
             .input-field-textarea-container
               textarea(
                 ref="textarea"
@@ -113,7 +113,17 @@ export default {
     hasClear: {
       type: Boolean,
       default: false
+    },
+    scrollbarSettings: {
+      type: Object,
+      default() { 
+        return {
+          suppressScrollX: true,
+          minScrollbarLength: 30,
+        }
+      }  
     }
+
 
 
   },
@@ -187,16 +197,29 @@ export default {
       this.$emit('clear-input')
     },
     calcHeight(){
+      // console.log('calcHeight')
       // debugger
-      // let target = e.target
       let target = this.$refs.textarea
-      const minH = this.$refs.ps.$el.clientHeight
-      const h = Math.max( target.scrollHeight, minH)
-      target.style.height = null
-      target.style.height = h  + 'px'
-      this.$refs.ps.update()
+      if (target) {
+        const minH = this.$refs.ps.$el.clientHeight
+        const h = Math.max( target.scrollHeight, minH)
+        target.style.height = null
+        target.style.height = h  + 'px'
+        this.$refs.ps.update()
+      }
     }
-  }  
+  },
+  beforeMount() {
+    if(process.browser) {
+      window.addEventListener('resize', this.calcHeight);
+    }
+  },
+  beforeDestroy() {
+    if(process.browser) {
+      window.removeEventListener('resize', this.calcHeight);
+    }
+  },
+
 
   }
   

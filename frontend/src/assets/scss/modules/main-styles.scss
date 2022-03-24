@@ -26,13 +26,17 @@
 html {
   line-height: $mainLineHeight;
   // font-size: $mainFontSize;
-  font-size: calcFluidFontSize(15, 20, $xlg, $xl);
+  font-size: calcFluidFontSize(12, 20, $md, $xl);
 
   //color: $mainFontColor;
   color: var(--text-color-default);
   height: 100%;
-    @include media-max-width2($xlg) {
-      font-size: calcFluidFontSize(12, 15, $md, $xlg);
+    @include media-max-width2($md - 1) {
+      // font-size: calcFluidFontSize(12, 18, $xs, $md - 1);
+      font-size: calcFluidFontSize(15, 12, $sm, $md - 1);
+    }
+    @include media-max-width2($sm - 1) {
+      font-size: calcFluidFontSize(12, 15, $xs, $sm);
     }
 
   // @include media-max-width2($xl) {
@@ -87,6 +91,7 @@ input, textarea {
 }
 
 .site-boby {
+
   //border: 1px solid red;
   display: flex;
   flex-direction: column;
@@ -112,16 +117,21 @@ main {
   &.main-page { margin-top: 0;}
 }
 .container {
-  max-width: #{$desktopWidth};
+  // max-width: #{$xlDesktopWidth};
+  max-width: #{$xl};
   width: 100%;
   //margin: 0 auto;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 var(--p);
+  // padding: 0 var(--p);
+  // padding: 0 calcFluidFontSize(96, 115, $xlg, $xl);
+  padding: 0 var(--container-padding-side);
 
-  @include media-max-width2($lg) { max-width: #{$smDesktopWidth};}
-  @include media-max-width2($md) { max-width: #{$tableWidth};}
-  @include media-max-width2($sm) { max-width: #{$smTableWidth};}
+
+  // @include media-max-width2($xlg) { max-width: #{$xlgDesktopWidth};}
+  // @include media-max-width2($lg) { max-width: #{$lgDesktopWidth};}
+  // // @include media-max-width2($md) { max-width: #{$mdDesktopWidth};}
+  // @include media-max-width2($md - 1) { max-width: #{$smDesktopWidth};}
 
 
 

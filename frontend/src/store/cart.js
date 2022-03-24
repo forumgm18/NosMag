@@ -116,15 +116,14 @@ export const actions = {
 }
 
 export const getters = {
-  getCart: s => s.cart || null,
-  getOform: s => s.oform || null,
-  getPromo: s => s.promo || null,
+  getCart: (s) => s.cart || null,
+  getCartCount: s => s.cart && s.cart.items_q ? s.cart.items_q : 0,
+  getOform: (s) => s.oform || null,
+  getPromo: (s) => s.promo || null,
   // getCartAvailable: s => s.cart.map(item => item.active),
   cartTotalPrice: (state, getters) => {
     return getters.cartProducts.reduce((total, product) => {
       return total + product.price * product.quantity
     }, 0)
-  }
-
-
+  },
 }
