@@ -1,0 +1,12 @@
+version: '3.3'
+# version: '3.9'
+
+services:
+  frontend:
+    environment:
+      - BROWSER_BASE_URL=${BROWSER_BASE_URL_LOCAL}
+
+  nginx:
+    volumes:
+      - ./nginx/nginx.conf.prod.local:/etc/nginx/conf.d/nginx.conf
+
