@@ -56,11 +56,12 @@
                     .product-slider-item-content
                       .img-box
                         .test
-                          inner-image-zoom(
-                            :src="imgPath + item"
-                            :zoomSrc="imgPath + item"
-                            :fullscreenOnMobile="true"
-                            :fullscreen="true"
+                          vue-photo-zoom-pro(
+                              :url="imgPath + item"
+                              :highUrl="imgPath + item"
+                              :width="imgWidth"
+                              :height="imgHeight"
+                              @update="imgUpdate"
                             )
 
 
@@ -210,16 +211,23 @@
 import {mapState} from 'vuex'
 
 import VueSlickCarousel from 'vue-slick-carousel'
-import InnerImageZoom from 'vue-inner-image-zoom'
-import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
+// import InnerImageZoom from 'vue-inner-image-zoom'
+// import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
+
+import VuePhotoZoomPro from 'vue-photo-zoom-pro'
+import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
+
 export default {
   name:'product-page',
   components:{
     VueSlickCarousel,
-    InnerImageZoom,
+    // InnerImageZoom,
+    VuePhotoZoomPro,
   },
   data: function () {
     return {
+      imgWidth: 0,
+      imgHeight: 0,
       // loading: false,
       onlyWithFoto: false,
       settingsProductSlider: {
@@ -409,6 +417,10 @@ export default {
 
   },
   methods : {
+    imgUpdate(e){
+      this.imgWidth = e.width
+      this.imgHeight = e.height
+    },
     showMoreFeedback() {
       this.feedbackCount += this.feedbackLoadingStep
       this.feedbackVisible = this.feedbacks.slice(0, this.feedbackCount)  

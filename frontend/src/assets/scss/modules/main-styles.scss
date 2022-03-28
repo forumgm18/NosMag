@@ -117,15 +117,15 @@ main {
   &.main-page { margin-top: 0;}
 }
 .container {
-  // max-width: #{$xlDesktopWidth};
-  max-width: #{$xl};
+  max-width: #{$xlDesktopWidth};
+  // max-width: #{$xl};
   width: 100%;
   //margin: 0 auto;
   margin-left: auto;
   margin-right: auto;
-  // padding: 0 var(--p);
+  padding: 0 var(--p);
   // padding: 0 calcFluidFontSize(96, 115, $xlg, $xl);
-  padding: 0 var(--container-padding-side);
+  // padding: 0 var(--container-padding-side);
 
 
   // @include media-max-width2($xlg) { max-width: #{$xlgDesktopWidth};}

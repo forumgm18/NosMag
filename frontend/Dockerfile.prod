@@ -6,7 +6,7 @@ RUN apk add --update python3 autoconf automake libtool make tiff jpeg zlib zlib-
 WORKDIR /usr/src/app
 # Копируем файлы настроек рабочего окружения проекта
 COPY ./package*.json .
-# COPY ./yarn.lock .
+COPY ./yarn.lock .
 
 # Копируем файлы проекта
 COPY ./src .
