@@ -1,15 +1,22 @@
 <template lang="pug">
-  div
+  main.container
     v-preloader.in-page(v-if="$fetchState.pending")
-    main.container(v-else-if="content")
-      //- section
-        v-breadcrumbs(v-if="breadcrumbs"  :items="breadcrumbs")
-      loading.center(v-if="loading")
-      section.content-section.product-page(v-else)
+    template(v-else)
+      h1.product-title {{title}}
+      .product-additional
+        .product-additional_item
+          span.el-label Артикул:
+          span.el-text {{art}}
+        .product-rating-block
+          v-stars(:rating="stars || 0" )
+          nuxt-link.product-feedbacks.link(to="#feedbacks") {{feedBack}} 
+        .product-additional_item 
+          span.el-text Купили {{kupili}} раз
+
+      section.content-section.product-page
         .product-page-column.slider
           .product-page-row
             .product-slider-block.thumbs
-              .product-additional
               .thumbs-layout
                 .thumbs-body
                   vue-slick-carousel(
@@ -19,7 +26,7 @@
                     :key="thumbsSliderKey"
                   )
                     .thumbs-item(
-                      v-for="(itm, ind ) in content.images"
+                      v-for="(itm, ind ) in images"
                       :key="`thumbs-${ind}`"
                     ) 
                       .thumbs-item_content
@@ -35,29 +42,26 @@
 
 
             .product-slider-block
-              .product-additional
-                product-tags(:tags="labels" :pos-absolute='false')
-                .product-rating-block
-                  nuxt-link.product-feedbacks(to="#feedbacks") {{feedBack}} 
-                  v-stars(:rating="content.stars || 0" )
-
               .product-slider
                 vue-slick-carousel(
                   v-bind="settingsProductSlider"
                   ref="productSlider"
                   :asNavFor="$refs.productSliderThumbs"
                   :key="productSliderKey"
-                )
+                  )
                   .product-slider-item(
-                    v-for="(item, index ) in content.images"
+                    v-for="(item, index ) in images"
                     :key="`slider-${index}`"
-                  ) 
+                    ) 
                     .product-slider-item-content
                       .img-box
-                        //- img(:src="item")
                         .test
-                          inner-image-zoom(:src="imgPath + item")
-
+                          inner-image-zoom(
+                            :src="imgPath + item"
+                            :zoomSrc="imgPath + item"
+                            :fullscreenOnMobile="true"
+                            :fullscreen="true"
+                            )
 
 
           .product-page-row.show-desktop(v-if="info_table && info_table.length")
@@ -69,36 +73,36 @@
 
         
         .product-page-column.right
-          h1.product-title {{title}}
+          //- h1.product-title {{title}}
           .product-page-price-block
-            .actual {{content.price}} {{$options.RUB}}
-            .old {{content.oldprice}} {{$options.RUB_OLD}}
+            .actual {{price}} {{$options.RUB}}
+            .old {{oldprice}} {{$options.RUB_OLD}}
           .product-info-block.right
             .product-info-row(
-              v-for="(p, i) in content.params"
+              v-for="(p, i) in params"
               :key="`param-${i}`"
             )
               .product-info-label {{p.name}}:
               .product-info-text {{p.value}}
           
           .product-other-block(
-            v-if="content.sameart && content.sameart.length"
+            v-if="sameart && sameart.length"
             ref="otherBlock"
             
             )  
             vue-slick-carousel.product-other-slider(
               v-bind="settingsProductOtherSlider"
               ref="prOtherSlider"
-              :class="{ hide: content.sameart.length <= otherSliderItemsShow }"
+              :class="{ hide: sameart.length <= otherSliderItemsShow }"
               )
               .other-slider-item(
-                v-for="(it, i ) in content.sameart"
+                v-for="(it, i ) in sameart"
                 :key="`os-${i}`"
               ) 
                 nuxt-link.other-slider-item-content(
                   :to="it.alias"
                   :title="it.comment"
-                  :class="{current: it.alias === content.alias}"
+                  :class="{current: it.alias === alias}"
                   
                   )
                   .img-box
@@ -161,7 +165,7 @@
             .product-slider-block(v-if="feedbacks")
               .feedbacks-title
                 .title {{$options.FEEDBACK_TITLE_TEXT}}
-                v-stars(:rating="content.stars || 0" )
+                v-stars(:rating="stars || 0" )
                 .product-feedbacks(
                   v-if="feedbacks.length > 0"
                   @click="feedbackAllShow"  
@@ -203,17 +207,20 @@
     
 </template>
 <script>
+import {mapState} from 'vuex'
+
 import VueSlickCarousel from 'vue-slick-carousel'
 import InnerImageZoom from 'vue-inner-image-zoom'
 import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
 export default {
+  name:'product-page',
   components:{
     VueSlickCarousel,
     InnerImageZoom,
   },
   data: function () {
     return {
-      loading: false,
+      // loading: false,
       onlyWithFoto: false,
       settingsProductSlider: {
         lazyLoad: 'ondemand',
@@ -342,27 +349,27 @@ export default {
     576: {count: 7, width: 43}
   },
   async fetch() {
-    await this.$store.dispatch('product/fetchProduct', this.$route.params.alias)
-    if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
+    const res = await this.$store.dispatch('product/fetchProduct', this.$route.params.alias)
+    if (res ==='error') return this.$nuxt.error({ statusCode: 404, message: 'Раздел не найден' })
   },
 
   computed: {
+    ...mapState('product', [
+      'alias', 'art', 'case', 'caseq', 'category', 'category_id', 'comment', 
+      'daytoday', 'delivery', 'econom', 'feedbacks', 'filters', 'hit', 'id', 
+      'images', 'info_table', 'kupili', 'labels', 'menuItems', 'new', 'oldprice', 
+      'otzyvov', 'params', 'price', 'prices', 'prices_table', 'prodano', 'qsign', 
+      'razdel', 'razdel_id', 'razdel_id1', 'sameart', 'sizes', 'socks', 'stars', 
+      'status', 'thumbs', 'title', 'tu'
+    ]),    
     feedBack() {
       // const arr = ['отзыв','отзыва','отзывов']
-      if (this.content) {
-        // return `${this.content.otzyvov} ${this.$numWord(this.content.otzyvov, arr)}`
-        return `${this.content.otzyvov} ${this.$numFeedbacks(this.content.otzyvov)}`
-      }
+      return `${this.otzyvov} ${this.$numFeedbacks(this.otzyvov)}`
+
     },
-    sale() { return this.$sale(this.content.price, this.content.oldprice) || 0},
+    sale() { return this.$sale(this.price, this.oldprice) || 0},
     title() {return this.$store.getters['getPageTitle']},
     imgPath() {return this.$store.getters['settings/imgPath']},
-    // imgPath() {return this.$store.state.settings.imgPath || ''},
-    content() { return this.$store.getters['product/getProduct']},
-    feedbacks() { return this.$store.getters['product/getFeedbacks']},
-    sizes() { return this.content.sizes || null},
-    info_table() { return this.content.info_table || null},
-    labels() { return this.content.labels || null},
     otherSliderItemsShowSettings() {
       if (!process.browser) return 1
       const innerW = window.innerWidth
@@ -377,31 +384,24 @@ export default {
 
     getOtherSliderWidth(){
       // Если функция вызвана на сервере или если нет других цветов товара
-      if ( !process.browser || !this.content.sameart ) return 'auto'
+      if ( !process.browser || !this.sameart ) return 'auto'
       // Определяем количество видимых слайдов
       const tmp = this.otherSliderItemsShowSettings
-      const sliderVisibleItems = Math.min(this.content.sameart.length, tmp.count)
+      const sliderVisibleItems = Math.min(this.sameart.length, tmp.count)
       // Возвращаем ширину слайдера    
       return `${tmp.width * sliderVisibleItems}px`
     },
     otherSliderItemsShow() {
       const tmp = this.otherSliderItemsShowSettings
-      return Math.min(this.content.sameart.length, tmp.count)
+      return Math.min(this.sameart.length, tmp.count)
     },
 
   },
   mounted(){
     this.$nextTick( this.$forceUpdate )
 
-    // if (this.content.sameart.length <= this.otherSliderItemsShow){
-    //   // debugger
-    //  this.$refs.prOtherSlider.$el.classList.add('hide')
-    //  } else {
-    //   //  debugger
-    //  this.$refs.prOtherSlider.$el.classList.remove('hide')
-    //  }
     if (this.feedbacks && this.feedbacks.length) this.feedbackVisible = this.feedbacks.slice(0, this.feedbackCount)
-    if (process.browser) {
+    if (process.browser && this.sizes) {
       const currentSize = this.sizes.find(sz => sz.active && sz.ostatok)
       if (currentSize) this.selectSize({value: currentSize, toggle:true})
     }

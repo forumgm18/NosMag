@@ -145,20 +145,19 @@
     // goToOrder() { this.showOrder = true },
     goToOrder(id) {
       // const el = document.getElementById(id)
-      const el = this.$refs.pageOrder.$el
-      // debugger
-      if (el) {
-        // if (!this.showOrder || !this.orderClick) {
-          // el.scrollIntoView({behavior: "smooth", inline: "nearest"})
-          el.scrollIntoView({behavior: "smooth"})
-          console.log('to order')
-          // el.scrollIntoView()
-          this.showOrder = true
-        // }
-        this.orderClick++
-        // this.orderSteps.currentStep = 
-        //   this.orderSteps.steps.length < this.orderSteps.currentStep ? this.orderSteps.currentStep++ : 0
-      }
+      // const el = this.$refs.pageOrder.$el
+      // // debugger
+      // if (el) {
+      //     el.scrollIntoView({behavior: "smooth"})
+      //     console.log('to order')
+      //     this.showOrder = true
+      //   // }
+      //   this.orderClick++
+      //   // this.orderSteps.currentStep = 
+      //   //   this.orderSteps.steps.length < this.orderSteps.currentStep ? this.orderSteps.currentStep++ : 0
+      // }
+      this.orderClick++
+
     },
     async updateSelcomm() {
       let paramsIsUpdate = false // Изменились данные или нет

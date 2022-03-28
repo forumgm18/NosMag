@@ -761,7 +761,7 @@ section
       },
       async orderClick(val) {
         console.log('orderClick', val)
-        if (val === 1) return
+        // if (val === 1) return
         // setErrorState
         if (this.orderFormIsValid) {
             let param = {
@@ -783,6 +783,7 @@ section
           const orderRes = await this.$store.dispatch('order/newOrder', param)
           if (orderRes === 'ok') {
             // console.log('order success', orderRes)
+            this.$store.commit('cart/CLEAR_CART',this.$store.state)
             const formUrl = this.$store.getters['order/getPrepayFormUrl']
             if (formUrl && formUrl.length && process.browser) {
               window.location.href = formUrl

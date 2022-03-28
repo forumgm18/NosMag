@@ -30,13 +30,16 @@ export const mutations = {
   },
   // ADD_TO_CART(state, val) {
   ADD_TO_CART(state, val) {
-    val.rootCart.items_q = val.items_q  
+    // val.rootCart.items_q = val.items_q  
+    val.rootState.settings.header.cart.items_q = val.items_q  
   },
   CHANGE_CART(state, value) {},
   REMOVE_FROM_CART(state, val) {
     val.rootCart.items_q = val.items_q  
   },
-  CLEAR_CART(state) {},
+  CLEAR_CART(state, val) {
+    val.settings.header.cart.items_q = 0  
+  },
 }
 
 export const actions = {
@@ -75,7 +78,7 @@ export const actions = {
     // if (cart.status ==='ok') dispatch('getCart')
     if (cart.status ==='ok') {
       console.log('Добавлено в корзину', val)
-      commit('ADD_TO_CART', {items_q: parseInt(cart.items_q, 10), rootCart:rootState.settings.header.cart })
+      commit('ADD_TO_CART', {items_q: parseInt(cart.items_q, 10), rootState })
     } else {
       console.log('Ошибка добавления в корзину', val)
     }

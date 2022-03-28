@@ -164,14 +164,19 @@ export default {
   created() {
     // this.canMonitor = false
     if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0]
+
   },
   mounted(){
     this.canMonitor = false // Запрещаем следить за Переменными
     this.queryFiltersChange = 0
-    // Подготавливаем объект выбранных фильтров и делаем его реактивным
-    this.filters.filter(v => v.type != 'price')
-                .forEach( v => this.$set(this.selectedFilters, v.id, []) )
-    this.$nextTick(() => { this.canMonitor = true  })
+    this.$nextTick(() => { 
+      this.canMonitor = true  
+      // Подготавливаем объект выбранных фильтров и делаем его реактивным
+      if ( this.filters ) {
+          this.filters.filter(v => v.type != 'price')
+                      .forEach( v => this.$set(this.selectedFilters, v.id, []) )
+      }
+    })
     // console.log('catalog selectedFilters', this.selectedFilters)
     // debugger
   },
