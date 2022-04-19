@@ -14,6 +14,7 @@ export const state = () => ({
   imgRetinaPrefix: 'x2_',
   yandexApiKey: null,
   TEL_MASK: '+7 (###) ###-##-##',
+  serchStrMinLength: 3,
 
 })
 

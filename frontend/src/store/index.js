@@ -5,9 +5,12 @@ export const state = () => ({
 })
 
 export const mutations = {
-  // setContent (state, content) {
-  //   state.content = content
-  // },
+  setStatus (state, val) {
+    state.status = val
+  },
+  setType (state, val) {
+    state.Type = val
+  },
   setContent (state, val) {
     console.log('setContent Root', val)
 
@@ -21,6 +24,9 @@ export const mutations = {
       Vue.set(state, key, v)
     }
     console.log('setContent Root state', state)
+  },
+  setBreadcrumbs (state, val) {
+    state.breadcrumbs = val
   },
 
 }

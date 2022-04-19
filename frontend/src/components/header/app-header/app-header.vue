@@ -4,17 +4,12 @@
       .container
         //-.header-block
 
-        .header-row.bottom
+        .header-row.top
           .header-menu-block
             menu-top
 
           nuxt-link.header-logo(to="/")
             svg.icon.icon-logo <use href="#icon-logo"/>
-
-          //-nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
-            svg.icon.icon-location <use href="#icon-location"/>
-            span(v-if="header.city.name" ) {{header.city.name}}
-            span(v-else) ваш город
 
           .header-search(data-header-search-panel)
             .header-search-input
@@ -22,44 +17,12 @@
               span.header-loupe
                 svg.icon.icon-loupe <use href="#icon-loupe"/>
 
-
-          .header-row.top
-            .header-menu-block.burger
-            nuxt-link.header-link.oplata(:to="`/${header.oplata.alias}`" )
-              svg.icon.icon-pay <use href="#icon-pay"/>
-              span {{header.oplata.name}}
-
-            nuxt-link.header-link.delivery(:to="`/${header.dostavka.alias}`" )
-              svg.icon.icon-box <use href="#icon-box"/>
-              span {{header.dostavka.name}}
-            .header-info-block    
-              v-dropdown( theme="header_menu" popper-class="popup-header-container" )
-                .header-link.learn-more( @click.prevent="showTopInfoPopup")
-                  svg.icon.icon-learn-more <use href="#icon-learn-more"/>
-                  span.desktop {{header.info.header}}
-                  span.tablet {{header.info.header_m}}
-                template(#popper)
-                  nuxt-link.header-info-link(
-                    v-for="(lnk, l) in header.info.links"
-                    :key="l"
-                    :to="`/${lnk.alias}`"
-                    @click.native="closeTopInfoPopup(false)"
-                  ) {{lnk.name}}
-
-
-            //- nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
-              svg.icon.icon-location <use href="#icon-location"/>
-              span(v-if="header.city.name" ) {{header.city.name}}
-              span(v-else) ваш город
-            
-            v-city-select(v-model="header.city")  
-
           .header-phone-block
             v-dropdown( theme="header_menu" popper-class="header-phone-block_popup-container" )
               .header-link.header-feedback
                 svg.icon.icon-phone <use href="#icon-phone"/>
-                span.desktop обратный звонок
-                span.tablet телефон
+                span.header-link_text.desktop обратный звонок
+                span.header-link_text.tablet телефон
 
               template(#popper)
                 .header-feedback-popup
@@ -73,14 +36,46 @@
 
             .header-phone
               a.header-phone-link(:href="header.phone.link") {{header.phone.name}}
-            //-  .header-phone-label {{header.phone.info}}
+              .header-phone-label {{header.phone.info}}
 
-          //- nuxt-link.header-login(:to="`/${header.auth.alias}`")
-            svg.icon.icon-user <use href="#icon-user"/>
-            span {{header.auth.name}}
-          login-form(:title="header.auth.name")  
+          nuxt-link.header-link.column.delivery(:to="`/${header.dostavka.alias}`" )
+            svg.icon.icon-box <use href="#icon-box"/>
+            span.header-link_text {{header.dostavka.name}}
+
           top-basket(:cart="header.cart")
+          login-form(:title="header.auth.name")  
 
+        .header-row.bottom
+          //- .header-menu-block.burger
+          //- nuxt-link.header-link.oplata(:to="`/${header.oplata.alias}`" )
+            svg.icon.icon-pay <use href="#icon-pay"/>
+            span {{header.oplata.name}}
+
+          //- nuxt-link.header-link.delivery(:to="`/${header.dostavka.alias}`" )
+            svg.icon.icon-box <use href="#icon-box"/>
+            span {{header.dostavka.name}}
+          //- .header-info-block    
+            v-dropdown( theme="header_menu" popper-class="popup-header-container" )
+              .header-link.learn-more( @click.prevent="showTopInfoPopup")
+                svg.icon.icon-learn-more <use href="#icon-learn-more"/>
+                span.desktop {{header.info.header}}
+                span.tablet {{header.info.header_m}}
+              template(#popper)
+                nuxt-link.header-info-link(
+                  v-for="(lnk, l) in header.info.links"
+                  :key="l"
+                  :to="`/${lnk.alias}`"
+                  @click.native="closeTopInfoPopup(false)"
+                ) {{lnk.name}}
+
+
+          //- nuxt-link.header-link.location(to="#" :data-selectes-city-id="header.city.id")
+            svg.icon.icon-location <use href="#icon-location"/>
+            span(v-if="header.city.name" ) {{header.city.name}}
+            span(v-else) ваш город
+          
+          //- v-city-select(v-model="header.city")  
+          v-city-select(:value="header.city")  
 
 
 
@@ -172,10 +167,10 @@ export default {
     //
   },
   beforeMount () {
-    if (process.client) window.addEventListener('scroll', this.winScroll)
+    if (process.browser) window.addEventListener('scroll', this.winScroll, {passive: true})
   },
   beforeDestroy() {
-    if (process.client) window.removeEventListener('scroll', this.winScroll)
+    if (process.browser) window.removeEventListener('scroll', this.winScroll)
   }
 }
 

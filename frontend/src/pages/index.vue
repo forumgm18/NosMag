@@ -1,49 +1,47 @@
 <template lang="pug">
   div
     v-preloader.in-page(v-if="$fetchState.pending")
-    main.main-page(v-else)
+    main.container.main-page(v-else)
       section.main-top-section
-        .container
-          vue-slick-carousel.main-slider(
-            id="product-slider"
-            v-bind="settingsTopSlider"
-            ref="c1"
-            :asNavFor="$refs.c2"
-            :focusOnSelect="true"
+        vue-slick-carousel.main-slider(
+          id="product-slider"
+          v-bind="settingsTopSlider"
+          ref="c1"
+          :asNavFor="$refs.c2"
+          :focusOnSelect="true"
           )
-            .main-slider-item
-              div.main-slider-content Рекламный баннер 100
-            .main-slider-item
-              div.main-slider-content Рекламный баннер 2
-            .main-slider-item
-              div.main-slider-content Рекламный баннер 3
+          .main-slider-item
+            div.main-slider-content Рекламный баннер 100
+          .main-slider-item
+            div.main-slider-content Рекламный баннер 2
+          .main-slider-item
+            div.main-slider-content Рекламный баннер 3
 
-            template( v-slot:prevArrow)
-              button.main-slider-arrow.prev
-            template( v-slot:nextArrow)
-              button.main-slider-arrow.next
-
-
-
-          .main-tile(v-if="links")
-            nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :key="iLnk" :to="`catalog/${lnk.link}`")
-              .main-tile-item-img
-                .img-box.hover
-                  .button-select {{$options.SELECT_LINK_TEXT}}
-                .img-box
-                  picture
-                    source( media="(min-width: 993px)" :srcset="`${lnk.images.xl}, ${lnk.images.xl_x2} x2`")
-                    source( media="(max-width: 992px)" :srcset="`${lnk.images.lg}, ${lnk.images.lg_x2} x2`")
-                    source( media="(max-width: 576px)" :srcset="`${lnk.images.sm}, ${lnk.images.sm_x2} x2`")
-                    img(:src="lnk.images.sm" :alt="lnk.name")
-              .main-tile-item-title {{lnk.name}}
+          template( v-slot:prevArrow)
+            button.main-slider-arrow.prev
+          template( v-slot:nextArrow)
+            button.main-slider-arrow.next
 
 
 
-      section.main-popular.container
+      section.main-tile(v-if="links")
+        nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :key="iLnk" :to="`catalog/${lnk.link}`")
+          .main-tile-item-img
+            .img-box.hover
+              .button-select {{$options.SELECT_LINK_TEXT}}
+            .img-box
+              picture
+                source( media="(min-width: 993px)" :srcset="`${lnk.images.xl}, ${lnk.images.xl_x2} x2`")
+                source( media="(max-width: 992px)" :srcset="`${lnk.images.lg}, ${lnk.images.lg_x2} x2`")
+                source( media="(max-width: 576px)" :srcset="`${lnk.images.sm}, ${lnk.images.sm_x2} x2`")
+                img(:src="lnk.images.sm" :alt="lnk.name")
+          .main-tile-item-title {{lnk.name}}
+
+
+
+      section.main-popular(v-if="showcase")
         h2.main-section-title {{$options.SECTION_POPULAR_TITLE}}
         vue-slick-carousel.main-popular-slider(
-          v-if="showcase"
           id="main-popular-slider"
           v-bind="settingsPopularSlider"
           ref="c1"
@@ -65,7 +63,7 @@
 
 
 
-      section.main-popular.container
+      section
         h2.main-section-title {{$options.SECTION_LINK1_TITLE}}
         .main-tile(v-if="links1")
           nuxt-link.main-tile-item(v-for="(lnk1, iLnk1) in links1" :key="iLnk1" :to="`catalog/${lnk1.link}`")
@@ -82,7 +80,7 @@
 
 
 
-      section.main-reclama.container
+      section.main-reclama
         .main-slider-item
           div.main-slider-content Рекламный баннер
 
@@ -121,6 +119,8 @@ export default {
         // focusOnSelect: true,
       },
       settingsPopularSlider: {
+        centerMode: true,
+        centerPadding: '10px',        
         dots: false,
         // dotsClass: "slick-dots main-slider-dots",
         arrows: true,
@@ -149,12 +149,12 @@ export default {
               slidesToShow: 2,
             }
           },
-          {
-            breakpoint: 480,
-            settings: {
-              slidesToShow: 1,
-            }
-          }
+          // {
+          //   breakpoint: 480,
+          //   settings: {
+          //     slidesToShow: 1,
+          //   }
+          // }
         ]
       },
       loading: true
@@ -238,7 +238,7 @@ export default {
 
 <style lang="scss">
 @import 'main-page';
-.main-popular-slider .slick-slide {padding: 0 30px;}
+// .main-popular-slider .slick-slide {padding: 0 30px;}
 
 /*.product-card {*/
 /*  !*border: 1px solid red;*!*/

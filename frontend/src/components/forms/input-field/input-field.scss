@@ -24,14 +24,6 @@
       height: var(--input-height);
       padding: 1rem .5rem 1rem 1rem;
     }
-    &.is-error {
-      border-color: var(--input-error)!important;
-      & + .input-field-error {
-        opacity: 1;
-        visibility: visible;
-      }
-
-    }
     &-container {
       padding-bottom: 1.5rem;
       position: relative;
@@ -39,6 +31,20 @@
       height: 100%;
       // font-size: 1rem;
       font-size: .85rem;
+        &.is-error {
+          border-color: var(--input-error)!important;
+          .error {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
+        &.is-success {
+          // border-color: var(--input-error)!important;
+          .success {
+            opacity: 1;
+            visibility: visible;
+          }
+        }
 
     }
     &-textarea {
@@ -73,12 +79,11 @@
       color: inherit;
       transition: .3s;
     }
-    &-error {
+    &-text {
       position: absolute;
       width: 100%;
       font-size: .7rem;
       line-height: 1;
-      color: var(--input-error);
       left: 0;
       top: var(--input-height);
       // margin-top: 10px;
@@ -86,8 +91,11 @@
       opacity: 0;
       visibility: hidden;
       transition: .3s;
+      &.error {color: var(--input-error);}
+      &.success {color: var(--base-color1);}
 
     }
+
     &-clear{
       cursor: pointer;
       transition: .3s;

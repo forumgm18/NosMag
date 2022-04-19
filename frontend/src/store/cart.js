@@ -1,11 +1,5 @@
 import Vue from 'vue'
-
 export const state = () => ({
-  // items: null,        //  массив с данными о товарах в корзине
-  // oldsum: null,       //	int	может отсутств	старая (зачеркн) сумма цен
-  // sum: 0,             //	int		сумма товаров в корзине
-  // comment: '',        //	string		комментарий к заказу
-  // order_allow: null   //  =0 оформление запрещено,=1 оформление разрешено
 })
 
 export const mutations = {
@@ -14,7 +8,6 @@ export const mutations = {
     for (let [key, v] of Object.entries(val.cart)) {
       // state[key] = v 
       Vue.set(state, key, v)
-
     }
     if (state.oform && state.oform.prices) {
       state.oform.prices = state.oform.prices.map(v => {
@@ -43,17 +36,6 @@ export const mutations = {
 }
 
 export const actions = {
-  // async getCart({ state, commit, rootState}, prepay = 1) {
-  //   const cart = await this.$axios.$get('/get_cart', {
-  //       params: {
-  //         prepay: 1,
-  //         session_id: rootState.token.session_id
-  //       }
-  //     }
-  //   )
-  //   // console.log('cart: ', cart.cart.items)
-  //   if (cart.status ==='ok') commit('SET_CART', {cart, rootState})
-  // },
   async getCart({ state, commit, rootState}, paramsCart) {
     const cart = await this.$axios.$get('/get_cart', {
         params: {

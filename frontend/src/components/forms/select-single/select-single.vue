@@ -36,7 +36,6 @@
                 @keydown.prevent="optionListKeyDown($event, opt)"
               ) 
                 slot(name="dd-option-item")
-                  //- sapn {{opt}}
                   span(v-if="optionKey && optionKey.length" v-html="$searchHighlight(searchStr, opt[optionKey])")
 
 </template>

@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   // flex-wrap: wrap;
-  font-size: 20px;
+  font-size: 1rem;
   margin-bottom: 1em;
   // margin-top: 100px;
   overflow-x: auto;
@@ -20,16 +20,37 @@
       color: inherit;
       transition: .3s;
       white-space: nowrap;
-        &:after {
-          content: '/';
-          color: var(--text-color-light);
-          padding: 0 .3em;
-        }
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-flex;
+      align-items: center;
+      
+      .icon {
+        font-size: 1.5em;
+        padding: 0 .16666em;
+        flex-shrink: 0;
+        transform: rotate(-90deg);
+
+      }
+        // &:after {
+          
+        //   content: '/';
+        //   color: var(--text-color-light);
+        //   padding: 0 .3em;
+        // }
         
     }
-    span {white-space: nowrap;}
+    span {
+      display: inline-block;
+      white-space: nowrap;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+    }
     &:hover {
-      a {color: var(--text-color-default)}
+      color: var(--text-color-default);
     }
   }
 }

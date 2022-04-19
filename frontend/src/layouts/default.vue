@@ -1,8 +1,8 @@
 <template lang="pug">
   .site-boby
     //- v-app-icons
-    //- v-app-icons(:show-all-icons="true")
-    v-app-icons(:show-all-icons="false")
+    v-app-icons(:show-all-icons="true")
+    //- v-app-icons(:show-all-icons="false")
     app-header
     client-only
       section.container(v-if="breadcrumbs && breadcrumbs.length")
@@ -26,4 +26,8 @@ export default {
 </script>
 <style lang="scss">
 // @import '@/assets/scss/global-styles.scss';
+.ttt {
+  height: 200px;
+  width: 300px;
+}
 </style>

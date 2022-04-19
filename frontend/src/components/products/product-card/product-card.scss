@@ -77,6 +77,9 @@
 }
 .product {
   &-card {
+    --m: 15px;
+    // --col: 4;
+
     // border: 1px solid red;
     background-color: #fff;
     //padding: 10px;

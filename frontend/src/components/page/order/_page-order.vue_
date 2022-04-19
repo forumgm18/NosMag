@@ -10,6 +10,7 @@ section
         .order-form-row
           .order-form-item.col-2.mb-1_5rem
             v-select-single2(
+              :options="cities"  
               option-key="full_name"
               :placeholder="$options.PLACEHOLDERS.TOWN"
               :search-string.sync="citiesSearchStr"
@@ -24,7 +25,7 @@ section
             v-model="delivery" 
             :value="dt"
             ) {{dt.name}}
-          .order-form-item.has-note(v-if="deliveryTarifs && deliveryTarifs.comment")
+          .order-form-item.has-note(v-if="deliveryTarifs.comment")
             v-note(:note="deliveryTarifs.comment" :link="deliveryTarifs.comment_link")
         
 
@@ -184,7 +185,7 @@ section
         .order-form-row.order-toggle-btn
           v-check-btn.order-form-item(v-model="prePay" :value="1" :is-checked="true") {{$options.PREPAY_CARD_TEXT}}
           v-check-btn.order-form-item(v-model="prePay" :value="0") {{$options.PREPAY_MONEY_TEXT}}
-          .order-form-item.has-note(v-if="payments && payments.comment")
+          .order-form-item.has-note(v-if="payments.comment")
             v-note(:note="payments.comment" :link="payments.comment_link")
       
         template(v-if="prePay === 1 && payments")
@@ -346,8 +347,6 @@ section
           zip: ''
         },
         orderComment: '',
-        deliveryOptions: {}, // Для хранения результата запроса к api
-        pvz: {},   // Для хранения результата запроса к api
         delivery: '',
         deliveryService: '',
         deliveryInfo: null,
@@ -355,7 +354,12 @@ section
         prePay: 1,   // 1 - Предоплата; 0 - Оплата при получении
         prePayType: '',
         citiesSearchStr: '',
+        cityFocuse: false,
+        cityInputOpened: false,
+        orderFormError: true,
+        // documentWidth: 0,
         selectedMarker: null,
+        // showMapLinkVisible: 'hidden',
         showMapLinkVisible: false,
         fieldsIsRequired: {
           town:{ req: true, valid: false, order: 1 },
@@ -377,8 +381,7 @@ section
     },
     async fetch() {
       const params = {city_id: this.userDefaultCity.id, prepay: this.prePay}
-      // await this.$store.dispatch('delivery/getDeliveryOptions', params)
-      await this.getDeliveryOptions(params)
+      await this.$store.dispatch('delivery/getDeliveryOptions', params)
       const payments = await this.$axios.$get('/get_payments', { session_id: this.session_id })
       if (payments.status === 'ok') this.payments = payments.payments
       if (this.deliveryTarifs && this.deliveryTarifs.types && this.deliveryTarifs.types.length) {
@@ -393,30 +396,10 @@ section
       ...mapState('settings', ['currency', 'currencyShort', 'yandexApiKey' ]),
       ...mapGetters('settings', ['userDefaultCity', 'phoneMask' ]),
 
-      // pvzList() { return this.$store.getters['pvz/pvzList'] },
-      pvzList() { 
-        if (this.pvz && this.pvz.pvzs) {
-          return this.pvz.pvzs.map(pvz => {
-            return {
-              id: pvz.id,
-              coord: [+pvz.location_latitude, +pvz.location_longitude],
-              data: {
-                active: pvz.active,
-                code: pvz.code,
-                name: pvz.name,
-                addr: pvz.location_address,
-              }
-            }
-          })
-        } else {
-          return null
-        }
+      pvzList() { return this.$store.getters['pvz/pvzList'] },
+      deliveryTarifs() { return this.$store.getters['delivery/getTarifs'] },
 
-      },
-      // deliveryTarifs() { return this.$store.getters['delivery/getTarifs'] },
-      deliveryTarifs() { return this.deliveryOptions.delivery || null},
-
-      // cities() {  return this.$store.state.cities.cities || null },
+      cities() {  return this.$store.state.cities.cities || null },
       showMapText() { return this.showMap ? 'Скрыть карту' : 'Выбрать пункт выдачи' },
       orderFormIsValid() {
         const requiredFields = Object.values(this.fieldsIsRequired).filter(item => item.req)
@@ -435,48 +418,38 @@ section
 
     },
     methods: {
-      async getDeliveryOptions(paramDO) {
-        const data = await this.$axios.$get('/get_delivery', {
-          params: {
-            ...paramDO,
-            session_id: this.session_id
-          }
-        })
-        console.log('page-order get_delivery: ', data)
-        for (let [key, v] of Object.entries(data)) { 
-          this.$set(this.deliveryOptions, key, v)
-        }
-        return data.status
-      },
-      async setDeliveryType(deliveryType) {
-        const c = await this.$axios.$post('/set_delivery_type', {
-            delivery_type: deliveryType,
-            session_id: this.session_id
-        })
-        return c.status 
-      },
-      async getPvzList( pvzParams) {
-        // console.log('pvzParams: ', pvzParams)
-        const data = await this.$axios.$get(`/get_pvz_list`, {
-          params: {
-            ...pvzParams,
-            session_id: this.session_id
-          }
-        })
-        // commit('setPvzList', c)
-        for (let [key, v] of Object.entries(data)) { 
-          this.$set(this.pvz, key, v)
-        }
 
-      },
-      async setPvz(codePvz) {
-        const c = await this.$axios.$post(`/set_pvz`, {
-            pvz_code: codePvz,
-            session_id: this.session_id
-        })
-        return c.status 
-      },
+      // async getDeliveryOptions(paramDO) {
+      //   const data = await this.$axios.$get('/get_delivery', {
+      //     params: {
+      //       ...paramDO,
+      //       session_id: this.session_id
+      //     }
+      //   })
+      //   commit('setDeliveryOptions', data)
+      //   console.log('getDeliveryStatus: ', data.status)
+      //   return data.status || undefined
+      // },
+      // setDeliveryOptions(state, val) {
+      // // цикл по ключам и значениям
+      //   for (let [key, v] of Object.entries(val)) { 
+      //     // state[key] = v 
+      //     Vue.set(state, key, v)
+      //   }
+      // },
 
+      inputKeyDown(e) {
+        if( !this.cityInputOpened) this.cityInputOpened = true
+        if (e.key === 'ArrowDown') {
+          e.preventDefault()
+          // console.log('inputKeyDown', this.$refs.cityList)
+          if (this.$refs.cityList.childNodes && this.$refs.cityList.childNodes.length) {
+            this.$refs.cityList.childNodes[0].focus()
+            this.$refs.cityList.childNodes[0].classList.add('focus')
+          } 
+          if (!this.cityInputOpened) this.cityInputOpened = true
+        }
+      },
       async inputSetFocus(refName) {
         await this.$nextTick();
         const el = this.$refs[refName]
@@ -489,6 +462,40 @@ section
         }
       },
 
+      cityListKeyDown(e, val){
+        let el = e.target
+        switch(e.key) {
+          case 'ArrowDown':
+            if ( el.nextSibling ) {
+              el.classList.remove('focus')
+              el.nextSibling.focus()
+              el.nextSibling.classList.add('focus')
+            }  
+            break
+          case 'ArrowUp' :  
+            if ( el.previousSibling ) {
+              el.classList.remove('focus')
+              el.previousSibling.focus()
+              el.previousSibling.classList.add('focus')
+            } else {
+              this.$refs.cityInput.focus()
+              this.$refs.cityInput.selectionStart = this.$refs.cityInput.value.length
+            } 
+          break
+          case 'Enter' :  
+            this.citySelected(val)
+            this.cityInputOpened = false
+          break
+
+        }
+        // console.log('cityListKeyDown', e)
+      },
+
+      cityFocused() { 
+        this.cityFocuse = true 
+        this.cityInputOpened = true
+        },
+      cityBlur() { this.cityFocuse = false },
       citySelected(val) {this.address.town = val},
       formatDeliveryProp(key, val) {
         let s = ''
@@ -550,8 +557,7 @@ section
       // },
       async pvzSelect(val) {
         this.selectedMarker = null
-        // const res = await this.$store.dispatch('pvz/setPvz', val.code)
-        const res = await this.setPvz(val.code)
+        const res = await this.$store.dispatch('pvz/setPvz', val.code)
         // console.log('pvz installed: ', res)
       },
       markerSelectClear(val) {
@@ -753,12 +759,10 @@ section
         this.citiesSearchStr = val.name
         this.lastDeliveryInfo = null
         if (val.id) {
-          // await this.$store.dispatch('pvz/getPvzList', {city_id: val.id} )
-          await this.getPvzList( {city_id: val.id} )
+          await this.$store.dispatch('pvz/getPvzList', {city_id: val.id} )
           // this.markers = this.pvzList 
           this.showAllMarkers = true 
-          // await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: this.prePay} )
-          await this.getDeliveryOptions({city_id: val.id, prepay: this.prePay})
+          await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: this.prePay} )
   
           this.fieldsIsRequired.town.valid = true // Тип Доставки выбран
 
@@ -780,14 +784,16 @@ section
 
         if (!isEqual(val, oldVal)) {
           // console.log('set_delivery_type', val, oldVal)
-          // await this.$store.dispatch('delivery/setDeliveryType', val.type)
-          await this.setDeliveryType(val.type)
+          await this.$store.dispatch('delivery/setDeliveryType', val.type)
           const cartParams = {
             prepay: this.prePay,
             city_id: this.address.town.id,
             delivery_type: val.type  
           }
           this.$emit('need-update-cart', cartParams)
+          // const params = {city_id: this.address.town.id, prepay: this.prePay}
+          // const getDeliveryStatus = await this.$store.dispatch('delivery/getDeliveryOptions', params)
+          // console.log('getDeliveryStatus: ', getDeliveryStatus)
         }  
         if (val.type != 'samovyvoz') this.inputSetFocus('addr')
       },
@@ -812,8 +818,7 @@ section
         this.fieldsIsRequired.pvz.req =  (!!val && val.length ) 
       },
       async prePay(val) {
-        // await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: val} )
-        await this.getDeliveryOptions( {city_id: val.id, prepay: val} )
+        await this.$store.dispatch('delivery/getDeliveryOptions', {city_id: val.id, prepay: val} )
         this.$emit('select-delivery-type', this.getTarif(this.delivery))
       },
       async orderClick(val) {
@@ -866,6 +871,12 @@ section
           }
         }  
       },
+      citiesSearchStr: debounce(
+                        function(val) {
+                          this.$store.dispatch('cities/searchCity', val )
+                        }, 
+                        300 )
+        
       
     },
     

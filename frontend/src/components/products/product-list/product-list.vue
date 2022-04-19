@@ -1,8 +1,8 @@
 <template lang="pug">
   .product-list(v-if="items")
     product-card(
-      v-for="prod of items"
-      :key="prod.id"
+      v-for="(prod, ind) in items"
+      :key="ind"
       :product="prod"
       :is-btn="isBtn"
       :is-sizes="isSizes"
@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import ProductCard from '~/components/products/product-card/product-card'
+// import ProductCard from '~/components/products/product-card/product-card'
 export default {
   name: 'ProductList',
-  components: { ProductCard },
+  // components: { ProductCard },
   props: {
     items: { 
       type: Array, 

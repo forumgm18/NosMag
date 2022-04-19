@@ -105,10 +105,21 @@
 
 <style lang="scss" >
 .map-sidebar {
+  // width: 430px;
+  flex-shrink: 0;
+  // flex-basis: 25.44%;
+  flex-basis: 21rem;
+  min-width: 260px;
+      @include media-max-width2($md - 1){
+        flex-grow: 1;
+        flex-basis: auto;
+        width: 100%;
+        height: 50%;
+      }
+
   &-panel {
-    width: 430px;
     background-color: #fff;
-    font-size: 20px;
+    font-size: 1rem;
     padding: 0 0 0 .5em;
     height: 100%;
     flex-shrink: 0;
@@ -124,7 +135,7 @@
   &-title {
     display: flex;
     align-items: center;
-    font-size: 1.5em;
+    font-size: 1.5rem;
     font-weight: 5;
     line-height: 1.1;
     padding: 1em .6666em;

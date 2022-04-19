@@ -217,16 +217,38 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 40px;
-    font-size: 40px;
+    margin-bottom: 1em;
+    font-size: 2.5rem;
     font-weight: bold;
   }
 
   &-popular {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    // padding-top: 40px;
+    // padding-bottom: 40px;
 
     &-slider {
+      --m-slider: 15px;
+      .slick-list {
+        // border: 1px solid red;
+        padding-bottom: 8rem!important;
+        padding-top: var(--m-slider)!important;
+
+      }
+      .slick-slide {
+        // border: 1px solid green;
+        // padding: calc( var(--m-slider) / 2 );
+        padding: var(--m-slider);
+      }
+      .product-card {
+        // --m: var(--m-slider);
+        --m: calc((2*var(--m-slider))*2/3);
+        // border: 1px solid green;
+        padding: 0;
+        margin: 0;
+        &:hover .product-card_bottom-hover-block {
+          padding: var(--m);
+        }
+      }
       &-arrow {
         /*border: 1px solid red;*/
         font-size: 50px;

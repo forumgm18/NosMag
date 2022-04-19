@@ -1,24 +1,21 @@
 <template lang="pug">
-  div.listbox(
-    ref="listBox"
-    :style="{ maxHeight: lbHeight }"
-    )
+  div.listbox( ref="listBox" :style="{ maxHeight: lbHeight }" )
     slot(name="select-all")
       label.filter-item_select-all(
         v-if="hasSelectAll"
         ref="selectAll"
-        :tabindex="1"
+        :tabindex="1 + tabIndex"
         :class="{ checked: selectAllLocal }"
         @keydown.down.stop.prevent="listBoxSetFocus"
         @keydown.space.stop.prevent="selectAllLocal = !selectAllLocal"
         @mouseenter="selectAllHover = true"
         @mouseleave="selectAllHover = false"
+        @keydown.up.stop.prevent="$emit('update:is-focused', 0)"
         )
         input(type="checkbox" v-model="selectAllLocal" hidden ref="selectAllInput")
         v-icon-check.filter-item_select-all_icon(
                 :is-checked="selectAllLocal"
                 :is-hover="selectAllHover"
-
                 )
         span.filter-item_select-all_text Выбрать все
 
@@ -26,20 +23,20 @@
     client-only
       perfect-scrollbar.listbox_scroll( 
         v-if="options && options.length"
-        v-once :options="scrollbarSettings"
+        :options="scrollbarSettings"
         ref="listBoxScroll" 
         )
         .listbox_scroll-body(
           ref="listBoxScrollBody" 
-          :tabindex="2" 
+          
           @keydown.stop.prevent
           )
           label.listbox-item(
             v-for="(opt, i) in listOpt"
             :key="i"
-            :tabindex="i + 3"
+            :tabindex="i + 2 + tabIndex"
             :ref="`lbl${i}`"
-            :class="{checked1: opt.checked}"
+            :class="{checked: opt.checked}"
             @mouseenter="mouseEnter(`icon${i}`)"
             @mouseleave="mouseLeave(`icon${i}`)"
             @keydown.up.stop.prevent="keyUp"
@@ -49,11 +46,10 @@
             input(
               hidden 
               type="checkbox"
-              :name="inpName"
               :value="opt.value"
               :checked="inModelValues(opt.value)"
               v-model="modelValue"
-              @change.stop.prevent="updateClass(i, $event.target.checked)"
+              
               )
             span.listbox-item_body
               slot(name="icon")
@@ -81,6 +77,12 @@
       value: {
         type: Array,
         default() {return []}
+      },
+      isFocused: {
+        // type: Boolean,
+        // default: false  
+        type: Number,
+        default: 0
       },
       selectAll: {
         type: Boolean,
@@ -110,13 +112,14 @@
         listOpt:[],
         selectAllHover: false,
         selectAllLocal: false,
-        inpName: ''
+        tabIndex: 0
+        // inpName: ''
         
       }
     },
     created() {
-      this.inpName = `checkbox-${(100000 * Math.random()).toFixed()}`
-
+      // this.inpName = `checkbox-${(100000 * Math.random()).toFixed()}`
+      if (this.$attrs && this.$attrs.tabindex) this.tabIndex = this.$attrs.tabindex
       this.options.forEach((v,index) => {
         this.listOpt.push({
           checked: this.inValues(v),
@@ -131,6 +134,13 @@
         if(this.$refs.listBoxScroll) {
           this.$refs.listBoxScroll.$el.style.maxHeight = this.listboxScrollBodyHeight()
         }
+        // console.log('listBox isFocused selectAll',this.isFocused, this.$refs.selectAll)
+
+        if (this.isFocused && this.$refs.selectAll) {
+          // console.log('2-listBox isFocused selectAll',this.isFocused, this.$refs.selectAll)
+          this.$refs.selectAll.focus()
+          }
+
       })
     },
     computed: {
@@ -164,15 +174,24 @@
         this.$emit('update:select-all', val)
         if (val) {
           this.modelValue = this.options
-          this.updateAllItemsState(val)
+          // this.updateAllItemsState(val)
         } else {
           if (this.selectedCount === this.options.length) {
             this.modelValue = []
-            this.updateAllItemsState(val)
+            // this.updateAllItemsState(val)
           }
         }
       },
-      selectAll() {this.selectAllLocal = this.selectAll}
+      selectAll() {this.selectAllLocal = this.selectAll},
+      isFocused(val, oldVal) {
+        // console.log('listBox isFocused val oldVal $refs',val, oldVal, this.$refs)
+        if (val === oldVal) return
+        this.$emit('update:is-focused', val)
+        if (val && process.browser && this.$refs.selectAll) {
+          // console.log('listBox isFocused', this.$refs.selectAll)
+          this.$refs.selectAll.focus()
+        }
+      }
     },
     methods: {
       listboxScrollBodyHeight(){
@@ -194,51 +213,8 @@
         return !!this.modelValue.find(el => isEqual(v, el))
       },
 
-      updateClass(ind, e){
-        // debugger
-        // console.log('updateClass', ind, e)
-
-        if (e) {
-          if (this.$refs[`lbl${ind}`] && this.$refs[`lbl${ind}`][0]) {
-            this.$refs[`lbl${ind}`][0].classList.add('checked')
-          }
-          if (this.$refs[`icon${ind}`] && this.$refs[`icon${ind}`][0]){
-            this.$refs[`icon${ind}`][0].checked = true
-          }
-        } else {
-          if (this.$refs[`lbl${ind}`] && this.$refs[`lbl${ind}`][0]) {
-            this.$refs[`lbl${ind}`][0].classList.remove('checked')
-          }
-          if (this.$refs[`icon${ind}`] && this.$refs[`icon${ind}`][0]){
-            this.$refs[`icon${ind}`][0].checked = false
-          }
-        }
-
-
-        // const lbl = this.$refs[`lbl${ind}`]  
-        // const icn = this.$refs[`icon${ind}`]
-        // if (e) {
-        //   if ( lbl && lbl[0] ) lbl[0].classList.add('checked')
-        //   if ( icn && icn[0] ) icn[0].checked = true
-        // } else {
-        //   if ( lbl && lbl[0] ) lbl[0].classList.remove('checked')
-        //   if ( icn && icn[0] ) icn[0].checked = false
-        // }
-
-      },
-      updateAllItemsState(v = true) {
-        for (let i = 0; i < this.listOpt.length; i++) {
-          const lbl = this.$refs[`lbl${i}`] 
-          const chbx = lbl && lbl[0] ? lbl[0].getElementsByTagName('input')[0] : null
-          if (chbx) chbx.checked = v
-          this.updateClass(i, v)
-        }
-        
-      },
-      clearAll() {
-        this.updateAllItemsState(false)
-      },
       keyUp(evnt) {
+        // console.log('list-box keyUp')
         if (evnt.target.previousSibling) {
           evnt.target.previousSibling.focus()
         } else {
@@ -248,22 +224,23 @@
         }
       },
       keyDown(evnt) {
+        // console.log('list-box keyDown')
+
         evnt.target.nextSibling && evnt.target.nextSibling.focus()
       },
       listBoxSetFocus(evnt) {
+        // console.log('list-box setFocus',this.$refs.lbl0[0])
         this.$refs.lbl0[0].focus()
       },
 
       selectCurrent(ind, val) {
-        console.log('current', val)
+        // console.log('current', val)
         if (this.inModelValues(val)) {
-          console.log('inModelValues', true)
+          // console.log('inModelValues', true)
           this.modelValue.splice(this.modelValue.indexOf(val), 1)
-          this.updateClass(ind,false)
         } else {
-          console.log('inModelValues', false)
+          // console.log('inModelValues', false)
           this.modelValue.push(val)
-          this.updateClass(ind,true)
         }
       }
 

@@ -1,9 +1,9 @@
 .product {
   &-list {
     // --m: 8px;
-    --m: 15px;
+    --m-list: 15px;
     --col: 4;
-    margin: 0 calc(-1*var(--m));
+    margin: 0 calc(-1*var(--m-list));
     display: flex;
     align-items: stretch;
     flex-wrap: wrap;
@@ -12,6 +12,9 @@
       @include media-max-width2(768) {--col: 3;}
       @include media-max-width2(576) {--col: 2;}
       @include media-max-width2(400) {--col: 1;}
+      .product-card {
+        --m: var(--m-list);
+      }
   }
 }
 

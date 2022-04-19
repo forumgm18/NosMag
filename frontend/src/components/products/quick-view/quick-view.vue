@@ -41,7 +41,7 @@
 
           .product-slider-block
             .product-additional
-              v-stars(:rating="product.stars || 0" )
+              v-stars(:value="product.stars || 0" )
               product-tags(:tags="labels" :pos-absolute='false')
 
             .product-slider
@@ -59,7 +59,14 @@
                     .product-slider-item-content
                       .img-box
                         //- img(:src="imgPath + item")
-                        inner-image-zoom(:src="imgPath + item")
+                        //- inner-image-zoom(:src="imgPath + item")
+                        vue-photo-zoom-pro(
+                          :url="imgPath + item"
+                          :highUrl="imgPath + item"
+                          :width="imgWidth"
+                          :height="imgHeight"
+                          @update="imgUpdate"
+                          )
 
 
         .quick-view-col.info
@@ -85,7 +92,8 @@
                 :val="selectedSizeCount"
                 v-model="selectedSizeCount"
                 border-color="currentColor"
-              )  
+                )  
+
               .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
           
           .product-order-block
@@ -106,8 +114,10 @@ import productTabSizes from '~/components/products/product-tab-sizes/product-tab
 import VueSlickCarousel from 'vue-slick-carousel'
 import productTags from '~/components/products/product-tags/product-tags'
 import inputNumber from '~/components/forms/input-number/input-number'
-import InnerImageZoom from 'vue-inner-image-zoom'
-import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
+// import InnerImageZoom from 'vue-inner-image-zoom'
+// import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
+import VuePhotoZoomPro from 'vue-photo-zoom-pro'
+import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
 
 export default {
   name: 'quick-view',
@@ -117,7 +127,7 @@ export default {
     VueSlickCarousel,
     productTags,
     inputNumber,
-    InnerImageZoom
+    VuePhotoZoomPro
   },
   props: {
     product: {
@@ -132,6 +142,9 @@ export default {
   },
   data: function() {
     return {
+      imgWidth: 0,
+      imgHeight: 0,
+
       settingsProductSlider: {
         lazyLoad: 'ondemand',
         dots: false,
@@ -218,6 +231,11 @@ export default {
     this.$refs.quickView.remove()  
   },
   methods: {
+    imgUpdate(e){
+      this.imgWidth = e.width
+      this.imgHeight = e.height
+    },
+
     close() {
       this.$emit('close-quick-view', false)
     },

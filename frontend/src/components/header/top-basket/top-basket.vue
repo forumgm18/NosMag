@@ -1,10 +1,10 @@
 <template lang="pug">
-  nuxt-link.header-basket(:to="`/${cart.alias}`")
+  nuxt-link.header-link.column.header-basket(:to="`/${cart.alias}`")
     .header-basket-icon
       svg.icon.icon-cart <use href="#icon-cart"/>
       span.header-basket-count
         span {{cartCount}}
-    span.header-basket-title {{cart.name}}
+    span.header-link_text.header-basket-title {{cart.name}}
 
 </template>
 
@@ -14,7 +14,6 @@ export default {
   props: ['cart'],
   computed: {
     cartCount() { 
-      // return this.$store.getters['cart/getCartCount']
       return this.cart.items_q
     }
   }

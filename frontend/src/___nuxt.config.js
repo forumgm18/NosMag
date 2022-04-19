@@ -1,4 +1,5 @@
 const isDev = process.env.NODE_ENV !== 'production'
+// const srcPath = 'src/'
 export default {
   publicRuntimeConfig: {
     // baseURL: process.env.NODE_ENV === 'production' ? '78.24.223.226' : 'http://nosmag-new.local',
@@ -9,24 +10,47 @@ export default {
       // baseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX
       // browserBaseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX,
       browserBaseURL: process.env.BROWSER_BASE_URL + process.env.API_PREFIX,
-      baseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX,
-    },
+      baseURL: process.env.SERVER_BASE_URL + process.env.API_PREFIX
+
   },
 
-  // Global page headers: https://go.nuxtjs.dev/config-head
+  },
+  privateRuntimeConfig: {
+    // apiSecret: process.env.API_SECRET
+  },
   head: {
-    // title: 'ttt2',
+    title: 'nosmag-site',
     htmlAttrs: {
       lang: 'ru',
     },
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      // { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1 shrink-to-fit=no' },
       { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
+  rootDir: __dirname,
+  serverMiddleware: [],
+  router: {
+    // prefetchLinks: false,
+  },
+  // Customize the progress-bar color
+  // loading: {
+  //   // color: 'blue',
+  //   continuous: true,
+  // },
+  // loading: '~/components/common/loading.vue',
+  // loadingIndicator: {
+  //   name: 'circle',
+  //   color: '#3B8070',
+  //   background: 'white'
+  // },
+
+  // Global CSS: https://go.nuxtjs.dev/config-css
+
+
 
   styleResources: {
     scss: ['./assets/scss/utils/vars.scss', './assets/scss/utils/mixins.scss'], // alternative: scss
@@ -39,10 +63,11 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/yamap.js', mode: 'client' },
+    { src: '~/plugins/yamap.js',  mode: 'client' },
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
     { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
+    // { src: '~/plugins/vue-clamp.js', mode: 'client' },
     '~/plugins/vue-clamp.js',
     '~/plugins/vue-gallery.js',
     '~/plugins/vuelidate.js',
@@ -50,8 +75,10 @@ export default {
     '~/plugins/loading.js',
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
-    '~/plugins/teleport.js',
     '~/plugins/directives/auto-min-width.client.js',
+
+    // '~/plugins/v-mask.js',
+    // '~/plugins/v-select.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -70,19 +97,19 @@ export default {
     {
       path: '~/components/forms/',
       prefix: 'v',
-      ignore: ['-*', '-*.vue'],
+      ignore: ['-*','-*.vue'],
     },
     {
       path: '~/components/header/',
-      prefix: '',
+      prefix: ''
     },
     {
       path: '~/components/footer/',
-      prefix: '',
+      prefix: ''
     },
     {
       path: '~/components/filters/',
-      prefix: 'v',
+      prefix: 'v'
     },
     {
       path: '~/components/products/',
@@ -115,16 +142,30 @@ export default {
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
-
+  buildModules: [
+    // https://go.nuxtjs.dev/eslint
+    // '@nuxtjs/eslint-module',
+    // https://go.nuxtjs.dev/stylelint
+    // '@nuxtjs/stylelint-module',
+    '@nuxtjs/date-fns'
+  ],
+  dateFns: {
+    locales: ['ru'],
+    defaultLocale: 'ru'
+  },
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+    'nuxt-trailingslash-module',
     'nuxt-webfontloader',
+    // 'cookie-universal-nuxt',
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
     '@nuxtjs/style-resources',
-    // 'portal-vue/nuxt',
+    // '@nuxtjs/router',
+    // '@nuxtjs/universal-storage',
+
   ],
   webfontloader: {
     events: false,
@@ -133,8 +174,8 @@ export default {
     },
     timeout: 5000,
   },
+  // Axios module configuration: https://go.nuxtjs.dev/config-axios
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     optimizeCss: false,
     filenames: {
@@ -148,20 +189,11 @@ export default {
       video: ({ isDev }) =>
         isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]',
     },
-    // babel: {
-    //   plugins: [
-    //     ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
-    //   ],
-    // },
-    splitChunks: {
-      layouts: true,
-      pages: true,
-      commons: true,
-    },
-    optimization: {
-      minimize: !isDev,
-      // minimize: false,
-    },
+    babel: {
+      plugins: [
+        ['@babel/plugin-proposal-private-property-in-object', { loose: true }]
+      ],
+    },    
     ...(!isDev && {
       html: {
         minify: {
@@ -169,8 +201,7 @@ export default {
           decodeEntities: true,
           minifyCSS: true,
           // minifyJS: true,
-          // minifyJS: false,
-          minifyJS: !isDev,
+          minifyJS: false,
           processConditionalComments: true,
           removeEmptyAttributes: true,
           removeRedundantAttributes: true,
@@ -179,12 +210,48 @@ export default {
         },
       },
     }),
-
+    splitChunks: {
+      layouts: true,
+      pages: true,
+      commons: true,
+    },
+    optimization: {
+      // minimize: !isDev,
+      minimize: false,
+    },
     ...(!isDev && {
       extractCSS: {
         ignoreOrder: true,
       },
     }),
+    transpile: ['vue-lazy-hydration', 'intersection-observer'],
+    postcss: {
+      plugins: {
+        ...(!isDev && {
+          cssnano: {
+            preset: [
+              'advanced',
+              {
+                autoprefixer: false,
+                cssDeclarationSorter: false,
+                zindex: false,
+                discardComments: {
+                  removeAll: true,
+                },
+              },
+            ],
+          },
+        }),
+      },
+      ...(!isDev && {
+        preset: {
+          browsers: 'cover 99.5%',
+          autoprefixer: true,
+        },
+      }),
+
+      order: 'cssnanoLast',
+    },
     extend(config, ctx) {
       // config.resolve.alias['vue'] = 'vue/dist/vue.common'
       config.resolve.alias.vue = 'vue/dist/vue.common'

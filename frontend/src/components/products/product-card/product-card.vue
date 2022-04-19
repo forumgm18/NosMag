@@ -29,7 +29,7 @@
               span(v-html="currency")
             product-tag(v-if="sale && !product.price_min" name="SALE" type="sale" bgr-color="var(--product-tag-sale-bgr)")
               
-        v-stars.product-rating(:rating="product.rating_stars || 0" )
+        v-stars.product-rating(:value="product.rating_stars || 0" )
         nuxt-link.product-card_descr(:to="`${mocCatalogLink}${product.alias}`" itemprop="url")
           v-clamp(autoresize :max-lines="2" itemprop = "name") {{ product.name }}
             template(#after="{ expand, clamped }")

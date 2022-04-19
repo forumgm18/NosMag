@@ -2,14 +2,13 @@
   main.container.clarifying-page
     v-preloader.in-page(v-if="$fetchState.pending")
     section.content-section(v-else)
-      aside.sidebar-left(v-if="sublinks_menu")
+      aside.sidebar-left(v-if="data.sublinks_menu")
         .sidebar-scroll
-          v-sublinks-menu(:items="sublinks_menu.items")
-
+          v-sublinks-menu(:items="data.sublinks_menu.items")
 
       article.main-content
-        .main-tile(v-if="links")
-          nuxt-link.main-tile-item(v-for="(lnk, iLnk) in links" :key="iLnk" :to="lnk.link")
+        .main-tile(v-if="data.sublinks")
+          nuxt-link.main-tile-item(v-for="(lnk, iLnk) in data.sublinks" :key="iLnk" :to="lnk.link")
             .main-tile-item-img
               .img-box.hover
                 .button-select Выбрать
@@ -26,14 +25,29 @@
 <script>
 export default {
   name: 'clarifying-selection-page',
-  async fetch() {
-    const res = await this.$store.dispatch('fetchContent', this.$route.params.alias)
-    if (res ==='error') return this.$nuxt.error({ statusCode: 404, message: '' })
+  data() {
+    return {
+      data:{}
+    }
   },
-  computed: {
-    breadcrumbs() {return this.$store.getters['getBreadcrumbs']},
-    sublinks_menu() {return this.$store.getters['getSublinksMenu']},
-    links() { return this.$store.getters['getSublinks']},
+  async fetch() {
+    const res = await this.$axios.$get(`/get_content`, {
+      params: {
+        alias: this.$route.params.alias,
+        // session_id: rootState.token.session_id
+      }
+    })
+    console.log('fetch res', res)
+    if (!res.status ) return this.$nuxt.error({ statusCode: 404, message: 'Раздел Каталога не найден' })
+      // цикл по ключам и значениям
+    for (let [key, v] of Object.entries(res.data)) {
+      if (key==='breadcrumbs') {
+        this.$store.commit('setBreadcrumbs', v)
+      } else {
+        this.$set(this.data, key, v)
+      }
+
+    }
   },
 }
 </script>

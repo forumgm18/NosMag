@@ -11,6 +11,7 @@
           :name="f.name"
           :type="f.type"
           v-model='model[f.id]'
+          :tabIndex="i+1"
         )
       slot(name="price")
       
@@ -26,13 +27,16 @@ export default {
     name: 'desktop-filter',
     props: {
       filters: {
-        type: [Array, Object],
+        // type: [Array, Object],
+        type: Array,
         required: true,
-        default: null
+        default() {return null}
       },
       value: {
-        type: [Array, Object]
-        // type: [Array]
+        // type: [Array, Object]
+        type: Array,
+        default() {return []}
+
       }
     },
 
@@ -58,8 +62,8 @@ export default {
       // Подготавливаем объект выбранных фильтров и делаем его реактивным
       this.filters.forEach(el => {
         if (el.type!=this.$options.FILTER_PRICE) {
-          // this.$set(this.model, `"${el.id}"`, [])
-          this.$set(this.model, el.id, [])
+          this.$set(this.model, `"${el.id}"`, [])
+          // this.$set(this.model, el.id, [])
         } else {
           this.$set(this.model, `"${el.id}"`, {active_min : el.values.min, active_max : el.values.max})
         }
@@ -82,7 +86,7 @@ export default {
       if (process.browser) {
         this.setFilterMaxColumns()  
       }
-      this.model = this.value
+      if (this.value && this.value.length) this.model = this.value
     },
     computed: {
     //   model: {

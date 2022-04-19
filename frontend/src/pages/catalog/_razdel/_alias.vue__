@@ -6,7 +6,7 @@
         h1.page-title {{pageTitle}}
       section.content-section
         aside.sidebar-left
-          sublinks-menu(v-if="data.sublinks_menu" :items="data.sublinks_menu.items")
+          sublinks-menu(v-if="sublinks_menu" :items="sublinks_menu.items")
           //- v-listbox2(
             :options="testOpt" 
             v-model="test" 
@@ -47,8 +47,8 @@
               
               )
             v-desktop-filter2(
-              v-if="data.filters"
-              :filters="data.filters"            
+              v-if="filters"
+              :filters="filters"            
               :class="{open: isFilterOpen}" 
               v-model="selectedFilters"
               )
@@ -65,7 +65,7 @@
                       svg.icon.icon-arrow-down <use href="#icon-arrow-down"/>
                   template(#popper)
                     v-radio-set(
-                      :options="data.sortmodes" 
+                      :options="sortmodes" 
                       v-model="sortBy" 
                       container-class="listbox"
                     )
@@ -109,12 +109,12 @@
           section.razdel-content(v-else)
 
             product-list.noselect(
-              v-if="data.items" 
-              :items="data.items" 
+              v-if="products" 
+              :items="products" 
               :is-btn="true" 
               :is-sizes="true"
               )
-            .pagination(v-if="data.items && data.items.length < itemsTotal")
+            .pagination(v-if="products && products.length < itemsTotal")
               v-preloader.in-page(v-if="loading")
               template(v-if="!loading")
                 .pagination-descr {{getPaginateText}}
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Catalog',
   data() {
@@ -133,12 +133,8 @@ export default {
       // test:[{id:387,name:'зима'},{id:413,name:'лето'}],
       
       test2:[],
-
-      data: {},
-
       priceFilter: {active_min: 0, active_max: 0},
-      // selectedFilters: {},
-      selectedFilters: [],
+      selectedFilters: {},
       sortBy: null,
       // loading: true,
       loading: false,
@@ -148,9 +144,8 @@ export default {
       isSortOpen: false,
       //=========================
       items_only: 0,
-      limitDefault: 8, // количество товаров на страницу
-      // limit: 24, // количество товаров на страницу
-      // offset: 0, // Странца пагинации
+      limit: 24, // количество товаров на страницу
+      offset: 0, // Странца пагинации
       // queryFilters: [],
       queryFiltersChange: 0,
       isNewFilter: 0,
@@ -158,40 +153,42 @@ export default {
       // selModel: [],
       // selModel: [{id:1519, name: 'AROS' },{id:428, name: 'Atlantic' },],
 
-    }
+      }
   },
   SHOW_MORE_BTN: 'Показать далее',
   PRICE_STEP: 100,
   async fetch() {
-    let queryParams = {
-      alias: this.$route.params.alias,
-      items_only: this.items_only,
-      limit: this.data.limit || this.limitDefault,
-      offset: this.data.offset || 0,
-    }
-    const res = await this.loadData(queryParams)
-    if (res && res !='error') this.setData(res)
+    const res = await this.loadProducts()
     if (res ==='error') return this.$nuxt.error({ statusCode: 404, message: 'Раздел не найден' })
   },
   created() {
-    if (this.data.sortmodes) this.sortBy = this.data.sortmodes.filter(el => el.active)[0]
+    // this.canMonitor = false
+    if (this.sortmodes) this.sortBy = this.sortmodes.filter(el => el.active)[0]
+
   },
   mounted(){
     this.canMonitor = false // Запрещаем следить за Переменными
+    this.queryFiltersChange = 0
     this.$nextTick(() => { 
+      this.canMonitor = true  
       // Подготавливаем объект выбранных фильтров и делаем его реактивным
-      if ( this.data.filters ) {
-          this.data.filters.filter(v => v.type != 'price')
+      if ( this.filters ) {
+          this.filters.filter(v => v.type != 'price')
                       .forEach( v => this.$set(this.selectedFilters, v.id, []) )
       }
-      this.queryFiltersChange = -1
-      this.canMonitor = true  
     })
+    // console.log('catalog selectedFilters', this.selectedFilters)
+    // debugger
   },
   computed: {
-    pageTitle() {return this.data.name || null},
+    ...mapGetters('settings',['sortmodes']),
+    // pageTitle() {return this.$store.getters['productList/getPageTitle']},
+    pageTitle() {return this.$store.getters['getPageTitle']},
+    products() { return this.$store.getters['productList/getProductList']},
+    filters() { return this.$store.getters['productList/getFilters']},
     filtersPrice() { 
-      return this.data.filters ? this.data.filters.find(f => f.type === 'price') : null
+      // return null
+      return this.filters ? this.filters.find(f => f.type === 'price') : null
       },
     // priceRange() {
     //   if (this.filters) {
@@ -204,10 +201,11 @@ export default {
     isFilter() { // Если выбран какой-либо фильтр
       return this.queryFilters && this.queryFilters.length 
       },
-    itemsTotal() {return this.data.items_total_q || 0},
+    sublinks_menu() { return this.$store.getters['productList/getSublinksMenu'] },
+    itemsTotal() {return this.$store.getters['productList/getProductsTotal']},
     getPaginateText() { 
       return `Отображается 
-        ${Math.min(this.data.limit + this.data.offset, this.itemsTotal)} из ${this.itemsTotal}` 
+        ${Math.min(this.limit + this.offset, this.itemsTotal)} из ${this.itemsTotal}` 
     },
     queryFilters(){
       const res = Object.entries(this.selectedFilters)
@@ -237,37 +235,6 @@ export default {
     if (process.client) document.removeEventListener('click', this.hideSort)
   },
   methods: {
-  setData (val) {
-    console.log('alias setProductList', val)
-    if (val.status) this.$store.commit('setStatus', val.status)
-    if (val.type) this.$store.commit('setType', val.type)
-    // цикл по ключам и значениям
-    for (let [key, v] of Object.entries(val.data)) {
-      if (key==='breadcrumbs' ) {
-        this.$store.commit('setBreadcrumbs', v)
-      } else {
-        this.$set(this.data, key, v)
-      }
-        
-    }
-  },
-
-  updateItems (val) {
-    console.log('alias updateProductList', val)
-    if (this.data.items) {
-      this.data.items.push(...val.items)
-    } else {
-      this.$set(this.data, 'items', val.items)
-    }
-    val.limit ? this.data.limit = val.limit : this.$set(this.data, 'limit', val.limit)
-    val.offset ? this.data.offset = val.offset : this.$set(this.data, 'offset', val.offset)
-    val.items_page_q ? this.data.items_page_q = val.items_page_q : this.$set(this.data, 'items_page_q', val.items_page_q)
-    val.items_total_q ? this.data.items_total_q = val.items_total_q : this.$set(this.data, 'items_total_q', val.items_total_q)
-  // debugger
-},
-
-
-
     hideSort(e){
       if (e.target.closest('[data-mobile-sort]')) return
       this.isSortOpen = false
@@ -282,45 +249,12 @@ export default {
     sortOpen() {
       this.isSortOpen = !this.isSortOpen
     },
-
-
-
-    async loadData(queryParam) {
-      const c = await this.$axios.$get(`/get_content`, {
-        params: {
-          ...queryParam,
-          // session_id: this.$store.state.token.session_id
-          session_id: this.$store.getters['token/getSessionId']
-        }
-      })
-      // console.log('fetchProductList (content): ',c)
-
-      if (c.status === 'ok') {
-        if (c.type != 'razdel') return 'error'
-        // Преобразуем строковые числа в числа
-        const content = this.$parseJsonStrToNumbers(c)
-        // добавляем поле active в фильтры
-        if (content.data.filters && content.data.filters.length) { 
-          content.data.filters.forEach(t => {
-            if (Array.isArray(t.values)) {
-              t.values = t.values.map((item) => {
-                return item.hasOwnProperty('active') // если поле active уже есть
-                  ? item                             // возвращаем как есть
-                  : { ...item, active: 0 }           // если поля active нет то добавляем
-              })
-            }
-          })
-        }
-        return content
-      }
-
-    },
     async loadProducts() {
       let queryParams = {
         alias: this.$route.params.alias,
         items_only: this.items_only,
-        limit: this.data.limit || this.limitDefault,
-        offset: this.data.offset || 0,
+        limit: this.limit,
+        offset: this.offset,
       }
       if (this.isFilter) queryParams['filters'] = this.queryFilters
       // Проверяем Обновился фильтр или нет
@@ -331,19 +265,11 @@ export default {
         this.isNewFilter = this.queryFiltersChange
       }
 
-      // return await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter: this.isFilter, isNewFilter})
-      const data = await this.loadData(queryParams)
-
-      if (this.isFilter && isNewFilter) {
-        this.setData(data)
-      } else {
-        this.updateItems(data.data)
-      }
-
+      return await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter: this.isFilter, isNewFilter})
     },
     async showMore() {
       this.loading = true
-      this.data.offset += this.data.limit
+      this.offset += this.limit
       this.items_only = 1
       // await this.loadProducts(this.offset, 1)
       await this.loadProducts()
@@ -353,7 +279,7 @@ export default {
     async showFilteredProducts() {
       console.log('showFilteredProducts')
       this.loadingFiltered = true
-      this.data.offset = 0 
+      this.offset = 0 
       await this.loadProducts(this.offset, 1, true)
       this.loadingFiltered = false
     },
@@ -363,8 +289,6 @@ export default {
       handler(val) {
         if (!process.browser || !this.canMonitor) return
         this.queryFiltersChange++ 
-        console.log('wach selectedFilters', this.queryFiltersChange, this.canMonitor)
-
       },
       deep: true
     },
@@ -372,14 +296,11 @@ export default {
       handler(val){
         if (!process.browser || !this.canMonitor) return
         this.queryFiltersChange++ 
-        console.log('wach priceFilters', this.queryFiltersChange, this.canMonitor)
       },
       deep: true
     },
     queryFiltersChange(val){
       if (!process.browser) return
-      console.log('wach queryFiltersChange', this.queryFiltersChange,this.canMonitor)
-
       if (val) this.showFilteredProducts()
     }
 

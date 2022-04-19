@@ -1,9 +1,8 @@
 <template lang="pug">
   v-dropdown( theme="header_menu" popper-class="login" placement="bottom-end")
-    .header-login
-      .header-login-btn
-        svg.icon.icon-user <use href="#icon-user"/>
-        span {{title}}
+    .header-link.column.header-login
+      svg.icon.icon-user <use href="#icon-user"/>
+      span.header-link_text {{title}}
       
     template(#popper)
       template(v-if="isLoginPopupShow")

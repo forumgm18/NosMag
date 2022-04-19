@@ -1,5 +1,5 @@
 <template lang="pug">
-  .input-field-container
+  .input-field-container(:class="{textarea: type==='textarea', 'is-error': $v.locValue.$error || setErrorStateFinal,'is-success': !$v.locValue.$error, focus: isFocus}")
     .input-field(
       :class="{textarea: type==='textarea', 'is-error': $v.locValue.$error || setErrorStateFinal,'is-success': !$v.locValue.$error && showSuccessText, focus: isFocus}")
       template(v-if="type==='textarea'")
@@ -16,7 +16,6 @@
                 @blur="isFocus=false"
                 @keyup="calcHeight"
                 v-on="inputListeners"
-
               )
       input(
         ref="input"
@@ -28,14 +27,15 @@
         @focus="isFocus=true"
         @blur="isFocus=false"
         v-on="inputListeners"
-      )
+        )
       .input-field-clear(v-if="hasClear" @click="clearInput")
         slot(name="field-clear") Удалить
 
     slot(name="error")
-      .input-field-error(v-if="errorText.length" v-html="errorText") 
+      .input-field-text.error(v-if="errorText.length" v-html="errorText") 
     slot(name="success")
-      .input-field-success(v-if="showSuccessText && successText.length" v-html="successText") 
+      //- .input-field-text.success(v-if="showSuccessText && successText.length" v-html="successText") 
+      .input-field-text.success(v-if="successText.length" v-html="successText") 
 
 
 </template>
@@ -79,6 +79,10 @@ export default {
       default: false
     },
     isValid: {
+      type: Boolean,
+      default: false
+    },
+    setFocus: {
       type: Boolean,
       default: false
     },
@@ -169,14 +173,27 @@ export default {
             },
           }
         )
-      }
+      },
+      inputRefName() {return this.type === 'textarea' ? 'textarea' : 'input' }
   },  
   mounted() {
-    this.$nextTick(function() {
+    // console.log('setFofus', this.setFocus)
+    this.isFocus = !!this.setFocus
+    this.$nextTick(() => {
       this.$forceUpdate()
       // Обновляем высоту textarea 
       if (this.type === 'textarea') this.calcHeight()
+      
+      // Устанавливаем фокус ввода если надо
+      if (this.setFocus) {
+        setTimeout(() => { // Это для того чтобы работал во всплывашках
+          const inp = this.$refs[this.inputRefName]
+          if (inp) inp.focus()
+          })
+      }
     })
+
+
   },
 
   watch: {
@@ -189,7 +206,7 @@ export default {
       value(val) { this.locValue = val},
       setErrorState(val){
         if (val) this.$v.$touch()
-      }
+      },
     },
   methods: {
     clearInput() {

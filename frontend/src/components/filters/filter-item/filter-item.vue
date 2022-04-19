@@ -1,24 +1,25 @@
 <template lang="pug">
   v-dropdown.filter-item.scrollbar-size-2(
+    ref="dropDown"
     :distance="0"
     placement="bottom-start"
     auto-min-size
     popper-class="filter-item_popper-container"
     :class="{ 'is-selected': locValue && locValue.length}"
-    :tabindex="0"
+    :tabindex="tabIndex"
+    :container="$refs.filterItemTitle"
     )
-    .filter-item_title(:class="{ 'is-selected': locValue && locValue.length}" :tabindex="1")
+    .filter-item_title(
+      ref="filterItemTitle"
+      :class="{ 'is-selected': locValue && locValue.length}" 
+      :tabindex="tabIndex + 2"
+      @keydown.down.prevent.stop="keyDown"
+      )
       span.text {{name}}
       span.count(v-if="locValue && locValue.length") {{locValue.length}}
-      .filter-item_close(
-        v-close-popper
-        v-if="locValue && locValue.length === 0"
-        )
+      .filter-item_close( v-if="locValue && locValue.length === 0" v-close-popper )
         svg.icon.icon-arrow-down <use href="#icon-arrow-down"/>
-      .filter-item_close(
-        v-else
-        @click.stop.prevent="clearAll()"
-      )
+      .filter-item_close( v-else @click.stop.prevent="clearAll()" )
         svg.icon.icon-btn-close <use href="#icon-btn-close"/>
 
     template( #popper )
@@ -29,8 +30,11 @@
         :select-all.sync="selectAll"
         :has-select-all="true"
         :list-box-height="options && options.length > 9 ? '20em': false"
+        :is-focused.sync="listBoxFocused"
         v-model="locValue"
-        :tabindex="3"
+        :tabindex="tabIndex + 3"
+        @keydown.down.prevent.stop="keyDown"
+        @keydown.up.prevent.stop="listboxKeyUp"
         )
         template(#text="{opt}" ) 
           span.filter-option_item-color(
@@ -59,7 +63,11 @@
       name:{},
       value: {
         type: Array,
-        default() {return null}
+        default() {return []}
+      },
+      tabIndex: {
+        type: Number,
+        default: 1
       }
     },
     FILTER_LIST: 'list',
@@ -68,7 +76,10 @@
     data() {
       return {
         selectAll: false,
-        selectAllHover: false
+        selectAllHover: false,
+        // listBoxFocused: false,
+        listBoxFocused: 0,
+        shown: false
       }
     },
     computed: {
@@ -83,7 +94,6 @@
       clearAll(){ 
         this.locValue = []
         this.selectAll = false
-        this.$refs.listBox && this.$refs.listBox.clearAll()
         },
       selectAllMouseEnter(){ this.selectAllHover = true },
       selectAllMouseLeave(){ this.selectAllHover = false },
@@ -93,11 +103,38 @@
       keyDownSelectAll() {
 
       },
+      keyDown() {
+        // this.listBoxFocused = true
+        this.listBoxFocused++
+        // console.log('filter-item keyDown', this.listBoxFocused)
+      },
+      listboxKeyUp() {
+        // this.listBoxFocused = false
+        this.listBoxFocused--
+        this.$refs.dropDown.hide()
+        this.$refs.filterItemTitle.focus()
+        // console.log('filter-item listboxKeyUp', this.listBoxFocused)
+
+      },
+
       selectAllSetFocus() {
         // debugger
-        console.log('selectAllSetFocus')
+        // console.log('selectAllSetFocus')
         // this.$refs.selectAll.focus()
         this.$refs.selectAllInput.focus()
+      }
+    },
+    watch: {
+      listBoxFocused(val) {
+        // console.log('filterItem listBoxFocused', val)
+        // this.shown = val
+        if(val) this.$refs.dropDown.show()
+        if (!val) {
+          this.$refs.dropDown.hide()
+          this.$refs.filterItemTitle.focus()
+
+          
+        }
       }
     }
   }
@@ -145,4 +182,5 @@
 </style>
 <style lang="scss" >
 @import "filter-item.scss";
+// *:focus {color: red}
 </style>
