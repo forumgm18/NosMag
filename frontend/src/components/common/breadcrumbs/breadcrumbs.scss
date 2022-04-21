@@ -53,4 +53,25 @@
       color: var(--text-color-default);
     }
   }
+  &-mobile {
+    display: flex;
+    align-items: center;
+    margin: 3rem 0;
+    &_back{
+      flex-shrink: 0;  
+      cursor: pointer;
+      font-size: 1.95rem;
+      margin-right: 1rem;
+      border: 1px solid var(--text-color-default);
+      border-radius: 5px;
+      color: var(--text-color-default);
+    }
+    &_title{
+      flex-grow: 1;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+  }
 }

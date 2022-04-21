@@ -8,7 +8,12 @@
       @change="updateInput"      
       )
     span.checkbox_text-block
-      v-icon-check(:is-checked="shouldBeChecked")
+      v-icon-check(
+        :is-checked="shouldBeChecked"
+        :base-checked-color="baseCheckedColor"
+        :base-not-checked-color="baseNotCheckedColor"
+        :base-hover-color="baseHoverColor"
+        )
       span.checkbox_text
         slot
 </template>
@@ -22,26 +27,23 @@ export default {
     event: 'change'
   },
   props: {
-    value: {
-      // type: String,
+    value: { },
+    modelValue: {  default: false },
+    trueValue: { default: true },
+    falseValue: { default: false },
+    baseCheckedColor: {
+      type: String,
+      default: 'var(--base-color1)'
     },
-    modelValue: {
-      default: false
+    baseNotCheckedColor: {
+      type: String,
+      default: 'var(--base-color4)'
     },
-    // label: {
-    //   type: String,
-    //   required: true
-    // },
-    // Мы установили `true-value` и `false-value` в true и false по-умолчанию, таким образом
-    // мы всегда можем использовать их вместо проверки на то, установлены они или нет.
-    // Также здесь мы можем использовать camelCase, дефис разделяющий имя атрибута
-    // все равно будет работать
-    trueValue: {
-      default: true
+    baseHoverColor: {
+      type: String,
+      default: 'var(--base-color3)'
     },
-    falseValue: {
-      default: false
-    }
+
   },
   computed: {
     shouldBeChecked() {

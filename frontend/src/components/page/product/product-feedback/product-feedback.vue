@@ -37,7 +37,7 @@
                 span Nosmag
               .feedback-answer-text {{f.otvet}}
 
-        .feedbacks-show-more(
+        .feedbacks-show-more.link(
             v-if="feedbackCount < feedbacks.length"
             @click="showMoreFeedback"
 

@@ -41,7 +41,8 @@ export default {
 <style lang="scss" scoped>
   .stars {
     display: inline-flex;
-    align-items: center;  
+    align-items: center;
+    justify-content: space-between;  
     line-height: 1;
     .icon-star {
       line-height: inherit;

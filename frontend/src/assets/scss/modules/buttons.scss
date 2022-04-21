@@ -47,6 +47,14 @@
     --btn-border-color: var(--base-color4); 
     &:hover {
       --btn-text-color: #fff;
+    }
+    &.btn-transparent {
+      --btn-bgr-color-hover: var(--base-color4-hover); 
+      --btn-border-color: #{baseColorOpacity3(.4)}; 
+      --btn-border-color-hover: #{baseColorOpacity3(1)}; 
+      &:hover {
+        --btn-text-color: var(--text-color-default);
+      }
 
     }
   }

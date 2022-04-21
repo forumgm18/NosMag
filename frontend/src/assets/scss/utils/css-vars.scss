@@ -98,31 +98,31 @@
   --menu-max-width: 720px;
   //--p : 24px;
   //@include media-max-width2(1200) { --p: 16px;}
-  --p: 16px;
+  --p: 1rem;
 
 
-  @include media-max-width2($xlg) { 
-  //========= Поля контейнера (левое/правое) ===================
-  --container-padding-side: 96px;
-  //========= / Поля контейнера (левое/правое) ===================
-  }
-  @include media-max-width2($lg) { 
-  //========= Поля контейнера (левое/правое) ===================
-  --container-padding-side: #{calcFluidFontSize(40, 96, $md, $lg)};
-  //========= / Поля контейнера (левое/правое) ===================
-  }
-  @include media-max-width2($md) { 
-  //========= Поля контейнера (левое/правое) ===================
-  --container-padding-side: #{calcFluidFontSize(20, 40, $sm, $md)};
-  //========= / Поля контейнера (левое/правое) ===================
-  }
-  @include media-max-width2($sm) { 
-  //========= Поля контейнера (левое/правое) ===================
-  --container-padding-side: #{calcFluidFontSize(12, 20, $xs, $sm)};
-  //========= / Поля контейнера (левое/правое) ===================
-  }
+  // @include media-max-width2($xlg) { 
+  // //========= Поля контейнера (левое/правое) ===================
+  // --container-padding-side: 96px;
+  // //========= / Поля контейнера (левое/правое) ===================
+  // }
+  // @include media-max-width2($lg) { 
+  // //========= Поля контейнера (левое/правое) ===================
+  // --container-padding-side: #{calcFluidFontSize(40, 96, $md, $lg)};
+  // //========= / Поля контейнера (левое/правое) ===================
+  // }
+  // @include media-max-width2($md) { 
+  // //========= Поля контейнера (левое/правое) ===================
+  // --container-padding-side: #{calcFluidFontSize(20, 40, $sm, $md)};
+  // //========= / Поля контейнера (левое/правое) ===================
+  // }
+  // @include media-max-width2($sm) { 
+  // //========= Поля контейнера (левое/правое) ===================
+  // --container-padding-side: #{calcFluidFontSize(12, 20, $xs, $sm)};
+  // //========= / Поля контейнера (левое/правое) ===================
+  // }
 
-  @include media-min-width2($sm) { --p: 24px;}
+  // @include media-min-width2($sm) { --p: 24px;}
 
 //  box-shadow: 0 0 0 2px #fff,0 0 0 4px var(--base-color1); // Окантовка выбранного слайда
 

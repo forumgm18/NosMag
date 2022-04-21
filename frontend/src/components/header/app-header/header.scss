@@ -535,6 +535,7 @@ header {
     top: initial;
     width: 100%;
     z-index: 1100;
+    display: none;
       @include media-min-width2(769) {display: none}
 
       .header-link {

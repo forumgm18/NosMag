@@ -22,7 +22,7 @@
   }
   .stars {margin-right: 11px;}
   &-block {
-
+    @include media-max-width2($md - 1) {margin-bottom: 1.5rem;}
   }
   &-title {
     display: flex;
@@ -53,14 +53,12 @@
   }
   &-show-more {
     font-weight: bold;
-    font-size: 16px;
+    font-size: .8rem;
     line-height: 1;
     cursor: pointer;
     margin: 0 auto;
     width: fit-content;
-      @include media-max-width2($lg) {font-size: 14px;}
-      @include media-max-width2($md) {font-size: 12px;}
-      @include media-max-width2($sm) {font-size: 10px;}
+    color: var(--base-color1);
 
 
   }
@@ -74,12 +72,12 @@
   }
   &-user {
     &-avatar{
-      font-size: 60px;
-      margin-right: 25px;
-      @include media-max-width2($lg) {font-size: 50px;margin-right: 18px;}
-      @include media-max-width2($md) {font-size: 43px;margin-right: 10px;}
-      @include media-max-width2($sm) {font-size: 36px;}
-      @include media-max-width2($xsm) {font-size: 26px;margin-right: 8px;}
+      font-size: 3rem;
+      margin-right: 1rem;
+      // @include media-max-width2($lg) {font-size: 50px;margin-right: 18px;}
+      // @include media-max-width2($md) {font-size: 43px;margin-right: 10px;}
+      // @include media-max-width2($sm) {font-size: 36px;}
+      // @include media-max-width2($xsm) {font-size: 26px;margin-right: 8px;}
 
       svg {
         font-size: inherit;
@@ -88,34 +86,34 @@
     }
     &-body {
       border-bottom: 1px solid var(--base-color4);
-      margin-bottom: 25px;
+      margin-bottom: 1.5rem;
       width: 100%;
     }
     &-name {
       font-weight: 500;
-      font-size: 12px;
+      font-size: .8rem;
       line-height: 1.4;
-      margin-bottom: 0.1em;
-      @include media-max-width2($sm) {font-size: 10px;}
-      @include media-max-width2($xsm) {font-size: 8px;}
+      // margin-bottom: 0.1em;
+      // @include media-max-width2($sm) {font-size: 10px;}
+      // @include media-max-width2($xsm) {font-size: 8px;}
     }
     &-text {
       font-weight: 400;
-      font-size: 12px;
+      font-size: .7rem;
       line-height: 1.4;
       margin-bottom: 2em;
-      @include media-max-width2($sm) {font-size: 8px;}
-      @include media-max-width2($xsm) {font-size: 6px;}
+      // @include media-max-width2($sm) {font-size: 8px;}
+      // @include media-max-width2($xsm) {font-size: 6px;}
 
     }
     &-rating {
-      margin-bottom: 10px;
-      font-size: 12px;
-      @include media-max-width2($xsm) {font-size: 6px;}
+      margin-bottom: .5rem;
+      font-size: .6rem;
+      // @include media-max-width2($xsm) {font-size: 6px;}
 
     }
     &-foto {
-      margin-bottom: 20px;
+      margin-bottom: 1rem;
     }
 
   }
@@ -125,18 +123,18 @@
       display: flex;
       align-items: center;
       font-weight: 500;
-      font-size: 12px;
+      font-size: .8rem;
       line-height: 1.4;
       margin-bottom: 0.5em;
       svg {
-        margin-right: 5px;
-        font-size: 30px;
+        margin-right: .4rem;
+        font-size: 1.5rem;
       }
 
     }
     &-text {
       font-weight: 400;
-      font-size: 12px;
+      font-size: .7rem;
       line-height: 1.4;
       margin-bottom: 2em;
 

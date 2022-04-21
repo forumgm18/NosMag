@@ -43,6 +43,7 @@ export default {
     { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
     { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
+    // { src: '~/plugins/swiper.js', mode: 'client' },
     '~/plugins/vue-clamp.js',
     '~/plugins/vue-gallery.js',
     '~/plugins/vuelidate.js',
@@ -129,7 +130,7 @@ export default {
   webfontloader: {
     events: false,
     google: {
-      families: ['Roboto:wght@400;500;700;900&display=swap'],
+      families: ['Roboto:wght@400;500;600;700;900&display=swap'],
     },
     timeout: 5000,
   },
@@ -148,6 +149,7 @@ export default {
       video: ({ isDev }) =>
         isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]',
     },
+    analyze: true,
     // babel: {
     //   plugins: [
     //     ['@babel/plugin-proposal-private-property-in-object', { loose: true }],

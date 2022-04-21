@@ -26,17 +26,26 @@
 html {
   line-height: $mainLineHeight;
   // font-size: $mainFontSize;
-  font-size: calcFluidFontSize(12, 20, $md, $xl);
+
+// 1920 - 20
+// 992 - lg - 13.56
+// 768 - md - 12
+// 576 - sm - 15,44
+// 320 - xs - 12
+
+  font-size: calcFluidFontSize(13.56, 20, $lg, $xl);
 
   //color: $mainFontColor;
   color: var(--text-color-default);
   height: 100%;
+    @include media-max-width2($lg - 1) {
+      font-size: calcFluidFontSize(12, 13.56, $md, $lg - 1);
+    }
     @include media-max-width2($md - 1) {
-      // font-size: calcFluidFontSize(12, 18, $xs, $md - 1);
-      font-size: calcFluidFontSize(15, 12, $sm, $md - 1);
+      font-size: calcFluidFontSize(15.44, 12, $sm, $md - 1);
     }
     @include media-max-width2($sm - 1) {
-      font-size: calcFluidFontSize(12, 15, $xs, $sm);
+      font-size: calcFluidFontSize(12, 15.44, $xs, $sm);
     }
 
   // @include media-max-width2($xl) {

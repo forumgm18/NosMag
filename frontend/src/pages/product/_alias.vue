@@ -2,9 +2,9 @@
   main.container
     v-preloader.in-page(v-if="$fetchState.pending")
     template(v-else)
-      h1.product-title {{data.name}}
+      h1.product-title.show-desktop {{data.name}}
       //- ============= Строка информации о рейтинге и кол-ве покупок ===============
-      .product-additional
+      .product-additional.show-desktop
         .product-additional_item
           span.el-label Артикул:
           span.el-text {{data.art}}
@@ -43,30 +43,30 @@
 
             //- ============= Главный Слайдер ===============
             .product-slider-block
-              .product-slider
-                vue-slick-carousel(
-                  v-bind="settingsProductSlider"
-                  ref="productSlider"
-                  :asNavFor="$refs.productSliderThumbs"
-                  :key="productSliderKey"
-                  )
-                  .product-slider-item(
-                    v-for="(item, index ) in data.images"
-                    :key="`slider-${index}`"
-                    ) 
-                    .product-slider-item-content
-                      .img-box
-                        vue-photo-zoom-pro(
-                            :url="imgPath + item"
-                            :highUrl="imgPath + item"
-                            :width="imgWidth"
-                            :height="imgHeight"
-                            @update="imgUpdate"
-                          )
+              //- .product-slider
+              vue-slick-carousel.product-slider(
+                v-bind="settingsProductSlider"
+                ref="productSlider"
+                :asNavFor="$refs.productSliderThumbs"
+                :key="productSliderKey"
+                )
+                .product-slider-item(
+                  v-for="(item, index ) in data.images"
+                  :key="`slider-${index}`"
+                  ) 
+                  .product-slider-item-content
+                    .img-box
+                      //- img(:src="imgPath + item" )
+                      vue-photo-zoom-pro(
+                        :url="imgPath + item"
+                        :highUrl="imgPath + item"
+                        :width="imgWidth"
+                        :height="imgHeight"
+                        @update="imgUpdate"
+                        )
 
           //- ============= Блок инфы под Главным Слайдером ===============
-          .product-page-row.show-desktop(v-if="data.info_table && data.info_table.length")
-            //- .product-slider-block.thumbs
+          .product-page-row.show-desktop.show-info(v-if="data.info_table && data.info_table.length")
             .product-description-block(v-if="data.info && data.info.length")
               .product-title {{$options.DESCRIPTION}}
               v-clamp.product-description-info(autoresize :max-lines="5" ) {{data.info}}
@@ -82,6 +82,18 @@
               .product-info-row( v-for="(item, index) in data.info_table" :key="index" )
                 .el-label {{item.name}}:
                 .el-text {{item.value}}
+          .product-page-row.show-mobile
+            h1.product-title {{data.name}}
+            //- ============= Строка информации о рейтинге и кол-ве покупок ===============
+            .product-additional
+              .product-additional_item
+                span.el-label Артикул:
+                span.el-text {{data.art}}
+              .product-rating-block
+                v-stars(:value="data.stars || 0" )
+                nuxt-link.product-feedbacks.link(to="#feedbacks") {{declensionEndings(data.otzyvov,'otzyv')}} 
+              .product-additional_item(v-if="data.prodano") 
+                span.el-text Купили {{declensionEndings(data.prodano,'raz')}}
 
         //- ============= Правый столбец. Основная инфа ===============
         .product-page-column.right
@@ -96,8 +108,8 @@
           //- ====== Лого производителя =======
           .product-page_brand-block
             .product-page_brand-logo(v-if="data.category.logo && data.category.logo.length")
-              .img-box
-                img(:src="data.category.logo")
+              //- .img-box
+              img(:src="data.category.logo")
             .product-page_brand-text
               span(v-if="data.category.manufacturer && data.category.manufacturer.length") {{data.category.manufacturer}}
               span(v-if="data.category.country_of_origin && data.category.country_of_origin.length") {{data.category.country_of_origin}}
@@ -117,32 +129,10 @@
             ref="otherBlock"
             )
             .el-label {{$options.SAMEART_LABEL}} {{data.sameart.length}}
-            .product-other-slider(
-              :class="{ 'has-arrows': hasArrows }"
-              :style="{ '--item-visible-count': getVisibleSlidersCount}"
+            product-other-slider(
+              :items="data.sameart"
+              :current-alias="data.alias"
               )
-              vue-slick-carousel(
-                v-bind="settingsProductOtherSlider"
-                ref="prOtherSlider"
-                )
-                .other-slider-item( 
-                  v-for="(it, i ) in data.sameart" :key="`os-${i}`" 
-                  :class="{current: it.alias === data.alias}"
-                  ) 
-                  nuxt-link.other-slider-item-content(
-                    :to="it.alias"
-                    :title="it.comment"
-                    )
-                    .img-box
-                      img(:src="imgPath + it.image")  
-
-                template(#prevArrow)
-                  button.slider-arrow
-                    svg.icon.icon-slider-arrow <use href="#icon-slider-arrow"/>
-                template(#nextArrow)
-                  button.slider-arrow
-                    svg.icon.icon-slider-arrow <use href="#icon-slider-arrow"/>
-
           //- ============= Размер ===============
           .product-sizes-block
             .el-label {{$options.SELECT_SIZE}}
@@ -251,37 +241,19 @@
             ref="casesBlock"
             )
             .el-label {{$options.CASES_LABEL}} {{data.cases.length}}
-            .product-other-slider(
-              :class="{ 'has-arrows': hasCasesArrows }"
-              :style="{ '--item-visible-count': getVisibleSlidersCount}"
+
+            product-other-slider(
+              :items="data.cases"
+              :is-link="false"
+              v-model="selectedCase"
               )
-              vue-slick-carousel(
-                v-if="data.cases && data.cases.length"
-                v-bind="settingsProductOtherSlider"
-                ref="prCasesSlider"
-                )
-                .other-slider-item( 
-                  v-for="(cs, i ) in data.cases" :key="`cs-${i}`" 
-                  :class="{ current: selectedCase && selectedCase.scode === cs.scode}"
-                  ) 
-                  label.other-slider-item-content( )
-                    input(type="radio" hidden v-model="selectedCase" :value="cs")
-                    .img-box
-                      img(:src="imgPath + cs.photo")  
-
-                template(#prevArrow)
-                  button.slider-arrow
-                    svg.icon.icon-slider-arrow <use href="#icon-slider-arrow"/>
-                template(#nextArrow)
-                  button.slider-arrow
-                    svg.icon.icon-slider-arrow <use href="#icon-slider-arrow"/>
-
-
-
-
           //- ============= Кнопка Добавить в корзину ===============
-          .product-order-block
-            .btn(@click.prevent="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
+          .product-add2cart_panel
+            .product-add2cart_row
+              div Итого
+              div( v-html="`${data.price * selectedSizeCount} ${currencyShort}`") 
+
+            .btn.product-add2cart(@click.prevent="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
 
           //- ============= Блок инфы о доставке ===============
           .product-delivery-info
@@ -294,9 +266,21 @@
 
           //- ============= Блок инфы под Главным Слайдером для варианта мобилки ===============
           .product-info-block.show-mobile(v-if="data.info_table && data.info_table.length")
-            .product-info-row( v-for="(item, index) in data.info_table" :key="index" )
-              .product-info-label {{item.name}}:
-              .product-info-text {{item.value}}
+            .product-description-block(v-if="data.info && data.info.length")
+              .product-title {{$options.DESCRIPTION}}
+              v-clamp.product-description-info(autoresize :max-lines="5" ) {{data.info}}
+                template(#after="{ expand, clamped }")
+                  span( 
+                    v-if="clamped" 
+                    @click="expand" 
+                    class="show-more link"
+                    v-html="`${$options.SHOW_MORE}`"
+                    ) 
+
+            .product-info-block
+              .product-info-row( v-for="(item, index) in data.info_table" :key="index" )
+                .el-label {{item.name}}:
+                .el-text {{item.value}}
 
       //- ============= Форма Отзыва ===============
       h2.product-title {{$options.FEEDBACK.FORM_TITLE}}
@@ -310,44 +294,61 @@
           )
           .btn {{$options.FEEDBACK.FORM_BTN}}
 
-        .product-page-column.right
-          .feedback-form_label {{$options.FEEDBACK.FORM_STARS_LABEL}}
-          v-stars.feedback-form_stars( v-model="userFeedback.stars" )
-          .feedback-form_label {{$options.FEEDBACK.FORM_FOTO_LABEL}}
-          .feedback-form_files
-            svg.icon.icon-attach <use href="#icon-attach"/>
-            .feedback-form_files-link {{$options.FEEDBACK.FORM_FOTO_LINK_TEXT}}
+        .product-page-column.right.feedback-mobile
+          div
+            .feedback-form_label {{$options.FEEDBACK.FORM_STARS_LABEL}}
+            v-stars.feedback-form_stars( v-model="userFeedback.stars" )
+          div  
+            .feedback-form_label {{$options.FEEDBACK.FORM_FOTO_LABEL}}
+            .feedback-form_files
+              svg.icon.icon-attach <use href="#icon-attach"/>
+              .feedback-form_files-link {{$options.FEEDBACK.FORM_FOTO_LINK_TEXT}}
 
       //- ============= Блок Отзывов ===============
       template(v-if="data.feedbacks && data.feedbacks.length")
         h2.product-title {{$options.FEEDBACK.USER_TITLE}}
-        section.content-section.feedback-form
+        section.content-section.feedback-form1
           .product-page-column.slider
             page-product-feedback(
               :feedbacks="filteredFeedbacks" 
               :stars="data.stars" 
               :otzyvov="data.otzyvov"
-              :key="feedbackFilter"
+              :key="feedbackFilterKey"
               )
           .product-page-column.right
             .feedback-form_label {{$options.FEEDBACK.FORM_STARS_COUNT_LABEL}}
-            .feedback-filter_item(
+            v-check-box2.feedback-filter_item(
               v-for="st in feedbackFilterArr" 
               :key="st"
-              @click="feedbackFilter = st"
-              ) 
+              :base-checked-color="'var(--base-color3)'"
+              :value="st"
+              v-model="feedbackFilter" 
+              
+              )
               v-stars.feedback-filter_stars( :value="st" )
               .feedback-filter_text( ) {{declensionEndings(getFilteredFeedbacks(st).length,'otzyv')}}
-
+            .btn.btn-4.btn-transparent.feedback-filter_btn(@click="feedbackFilterToggle") {{feedbackFilterBtnText}}
 
 </template>
 <script>
 import {mapState} from 'vuex'
 
 import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'  
 
 import VuePhotoZoomPro from 'vue-photo-zoom-pro'
 import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
+
+
+
+const otherSliderResponsive = [
+  { breakpoint: Infinity, slidesToShow: 6, },
+  { breakpoint: 1600, slidesToShow: 6, },
+  { breakpoint: 1300, slidesToShow: 5, },
+  { breakpoint: 1100, slidesToShow: 3, },
+  { breakpoint: 767,  slidesToShow: 7, },
+  { breakpoint: 0,    slidesToShow: 7, },
+]
 
 export default {
   name:'product-page',
@@ -355,13 +356,13 @@ export default {
     VueSlickCarousel,
     VuePhotoZoomPro,
   },
-  data: function () {
+  data() {
     return {
       data: {},
       imgWidth: 0,
       imgHeight: 0,
-      hasArrows: false,
-      hasCasesArrows: false,
+      // hasArrows: false,
+      // hasCasesArrows: false,
       reportEmail: '',
       reportEmailIsValid: 0,
       onlyWithFoto: false,
@@ -379,9 +380,9 @@ export default {
           {
             breakpoint: 767,
             settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
+              // slidesToShow: 2,
+              // slidesToScroll: 1,
+              // infinite: true,
               dots: true,
               variableWidth: true,
               dotsClass: "slick-dots product-slider-dots",
@@ -390,9 +391,9 @@ export default {
           {
             breakpoint: 480,
             settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-              infinite: true,
+              // slidesToShow: 1,
+              // slidesToScroll: 1,
+              // infinite: true,
               dots: true,
               variableWidth: false,
               dotsClass: "slick-dots product-slider-dots",
@@ -412,43 +413,44 @@ export default {
         focusOnSelect: true,
       },
       settingsProductOtherSlider: {
-        lazyLoad: 'ondemand',
+        // lazyLoad: 'ondemand',
         dots: false,
         arrows: true,
         infinite: true,
-        // infinite: false,
+        infinite: false,
         variableWidth: true,
-        // slidesToShow: 7,
-        slidesToShow: 6,
+        // slidesToShow: 6,
+        slidesToShow: 1,
         slidesToScroll: 1,
+        rows: 1,
         // centerMode: true,
         // centerPadding: '0',
-        responsive: [
-          {
-            breakpoint: 1600,
-            settings: {
-              slidesToShow: 6,
-            }
-          },
-          {
-            breakpoint: 1300,
-            settings: {
-              slidesToShow: 5,
-            }
-          },
-          {
-            breakpoint: 1100,
-            settings: {
-              slidesToShow: 4,
-            }
-          },
-          {
-            breakpoint: 767,
-            settings: {
-              slidesToShow: 7,
-            }
-          },
-        ]
+        // responsive: [
+        //   {
+        //     breakpoint: 1600,
+        //     settings: {
+        //       slidesToShow: 6,
+        //     }
+        //   },
+        //   {
+        //     breakpoint: 1300,
+        //     settings: {
+        //       slidesToShow: 5,
+        //     }
+        //   },
+        //   {
+        //     breakpoint: 1100,
+        //     settings: {
+        //       slidesToShow: 3,
+        //     }
+        //   },
+        //   {
+        //     breakpoint: 767,
+        //     settings: {
+        //       slidesToShow: 7,
+        //     }
+        //   },
+        // ]
 
 
       },
@@ -464,7 +466,9 @@ export default {
         stars: 0,
         foto: []
       },
-      feedbackFilter: -1,
+      feedbackFilter: [],
+      feedbackFilterKey: 1,
+      feedbackFilterBtnText: this.$options.FEEDBACK.SHOW_ALL_BTN,
       // feedbackFilterArr: [5, 4, 3, 2, 1],
     }
   },
@@ -498,6 +502,8 @@ export default {
     FORM_FOTO_LABEL: 'Добавьте фото',
     FORM_FOTO_LINK_TEXT: 'Нажмите, чтобы прикрепить фотографии',
     USER_TITLE: 'Отзывы покупателей',
+    SHOW_ALL_BTN: 'Выделить все',
+    SHOW_CLEAR_BTN: 'Снять выделение',
   },
   RUB: 'руб.',
   RUB_OLD: 'р.',
@@ -554,14 +560,15 @@ export default {
     getVisibleSlidersCount(){
       if (process.server) return 7
       const w = window.innerWidth
-      const responsive = [
-        { breakpoint: Infinity, slidesToShow: 6, },
-        { breakpoint: 1600, slidesToShow: 6, },
-        { breakpoint: 1300, slidesToShow: 5, },
-        { breakpoint: 1100, slidesToShow: 4, },
-        { breakpoint: 767,  slidesToShow: 7, },
-        { breakpoint: 0,    slidesToShow: 7, },
-      ]
+      const responsive = otherSliderResponsive
+      // const responsive = [
+      //   { breakpoint: Infinity, slidesToShow: 6, },
+      //   { breakpoint: 1600, slidesToShow: 6, },
+      //   { breakpoint: 1300, slidesToShow: 5, },
+      //   { breakpoint: 1100, slidesToShow: 4, },
+      //   { breakpoint: 767,  slidesToShow: 7, },
+      //   { breakpoint: 0,    slidesToShow: 7, },
+      // ]
       let arr = responsive.filter(v => v.breakpoint > w)
       if (arr && arr.length) {
         return arr.sort((a,b) => a.breakpoint - b.breakpoint)[0].slidesToShow
@@ -572,8 +579,18 @@ export default {
       return Array.from(new Array(6), (x,i) => 5 - i)
     },
     filteredFeedbacks(){
-      return this.getFilteredFeedbacks(this.feedbackFilter)
+      // return this.getFilteredFeedbacks(this.feedbackFilter)
+      return this.feedbackFilter.length === 0 ? this.data.feedbacks 
+              : this.data.feedbacks.filter(item => this.feedbackFilter.includes(item.stars))
+
     },
+    hasArrows(){
+      return this.setHasArrows(this.data.sameart)
+    },
+    hasCasesArrows(){
+      return this.setHasArrows(this.data.cases)
+    },
+
 
   },
   beforeMount(){
@@ -598,19 +615,33 @@ export default {
     this.setHasArrows()
   },
   methods : {
+    // reInit(e){console.log('reInit', e)},
     declensionEndings(v, type) {
       // type = 'otzyv' === ['отзыв','отзыва','отзывов']
       // type = 'raz' === ['раз','раза','раз']
       // type = Array(3) === [,,] Массив величин числительного v в соотв. падежах
       return `${v} ${this.$declensionEndings(v, type)}`
     },
-    setHasArrows() {
-      console.log('setHasArrows')
-      if (process.browser && this.data.sameart) {
-        this.hasArrows = this.getVisibleSlidersCount < this.data.sameart.length
-      }
-      if (process.browser && this.data.sameart) {
-        this.hasCasesArrows = this.getVisibleSlidersCount < this.data.cases.length
+    setHasArrows(arr) {
+      return (process.browser && arr) ? this.getVisibleSlidersCount < arr.length : false
+    },
+    // setHasArrows() {
+    //   console.log('setHasArrows')
+    //   if (process.browser && this.data.sameart) {
+    //     this.hasArrows = this.getVisibleSlidersCount < this.data.sameart.length
+    //   }
+    //   if (process.browser && this.data.cases) {
+    //     this.hasCasesArrows = this.getVisibleSlidersCount < this.data.cases.length
+    //   }
+    // },
+    feedbackFilterToggle() {
+      // debugger
+      if (this.feedbackFilter.length) {
+        this.feedbackFilter = []
+        this.feedbackFilterBtnText = this.$options.FEEDBACK.SHOW_ALL_BTN
+      } else {
+        this.feedbackFilterBtnText = this.$options.FEEDBACK.SHOW_CLEAR_BTN
+        this.feedbackFilter = Array.from(new Array(6), (x,i) => i)
       }
     },
     imgUpdate(e){
@@ -644,6 +675,14 @@ export default {
     },
 
 
+  },
+  watch: {
+    feedbackFilter(v) {
+      this.feedbackFilterKey++
+      this.feedbackFilterBtnText = v.length 
+        ? this.$options.FEEDBACK.SHOW_CLEAR_BTN
+        : this.$options.FEEDBACK.SHOW_ALL_BTN
+    },
   }
 
 
