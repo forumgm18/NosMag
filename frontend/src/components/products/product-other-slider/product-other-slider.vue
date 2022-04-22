@@ -7,6 +7,7 @@
     vue-slick-carousel(
       v-bind="settingsProductOtherSlider"
       ref="Slider"
+      @reInit="getElementsWidth"
       )
       .other-slider-item(
         ref="sliderSlide" 
@@ -128,23 +129,8 @@
     },
     mounted() {
       this.model = this.value
-      this.$nextTick(this.$forceUpdate)
-      this.getElementsWidth()
-      // if (process.browser) {
-      //   let fz = 1
-      //   // this.rootElWidth = parseFloat(window.getComputedStyle(this.$refs.rootEl).width)
-      //   switch(this.itemsWidthUnits) {
-      //     case 'rem': 
-      //       fz = parseFloat(window.getComputedStyle(document.documentElement).fontSize)
-      //       break
-      //     case 'em': 
-      //       fz = parseFloat(window.getComputedStyle(this.$refs.rootEl).fontSize)
-      //       break
-      //   }
-      //   // this.slideWidth = this.itemsWidth * fz
-      //   // this.slideWidth = this.$refs.sliderSlide.offsetWidth
-      //   this.slideWidth = this.$refs.Slider.$el.querySelector('.slick-active').offsetWidth
-      // }
+      // this.$nextTick(this.$forceUpdate)
+      // this.getElementsWidth()
     },
     beforeMount() {
       window.addEventListener('resize', this.getElementsWidth)
@@ -159,7 +145,7 @@
       },
       isCurrent(v) {
         if (this.isLink){
-         return this.currentAlias === v[this.currentClassField]
+          return this.currentAlias === v[this.currentClassField]
         } else {
           return this.model && this.model[this.currentClassField] && this.model[this.currentClassField] === v[this.currentClassField]
         }  

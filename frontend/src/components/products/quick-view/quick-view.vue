@@ -74,7 +74,7 @@
             span.actual {{product.price}} {{$options.RUB}}
             span.old {{product.oldprice}} {{$options.RUB_OLD}}
 
-          product-tab-sizes(
+          //- product-tab-sizes(
             :sizes="product.sizes"
             :in-fixed-block="true"
             :selected-size="selectedSize"
@@ -110,7 +110,7 @@
 
 <script>
 import vStars from '~/components/common/stars/stars'
-import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
+// import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
 import VueSlickCarousel from 'vue-slick-carousel'
 import productTags from '~/components/products/product-tags/product-tags'
 import inputNumber from '~/components/forms/input-number/input-number'
@@ -123,7 +123,7 @@ export default {
   name: 'quick-view',
   components: {
     vStars,
-    productTabSizes,
+    // productTabSizes,
     VueSlickCarousel,
     productTags,
     inputNumber,

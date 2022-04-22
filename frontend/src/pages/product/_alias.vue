@@ -410,7 +410,7 @@ export default {
         vertical: true,
         slidesToShow: 4,
         slidesToScroll: 1,
-        focusOnSelect: true,
+        // focusOnSelect: true,
       },
       settingsProductOtherSlider: {
         // lazyLoad: 'ondemand',
@@ -613,6 +613,7 @@ export default {
       if (currentCase) this.selectedCase = currentCase
     }
     this.setHasArrows()
+    if (this.$refs.productSliderThumbs) this.$refs.productSliderThumbs.goTo(0)
   },
   methods : {
     // reInit(e){console.log('reInit', e)},

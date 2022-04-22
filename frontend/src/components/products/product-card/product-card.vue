@@ -183,7 +183,6 @@ export default {
 
 <style lang="scss">
 @import 'product-card';
-@import '~/components/products/product-tab-sizes/product-tab-sizes';
 .psz-popup {
   font-size: 14px;
 
