@@ -17,7 +17,7 @@
       //- ============= Блок основного слайдера ===============
       section.content-section.product-page
         .product-page-column.slider
-          .product-page-row
+          .product-page-row.main-slider
             //- ============= Слайдер thumbs ===============
             .product-slider-block.thumbs(:class="{ 'has-arrow' : data.images && data.images.length > 4 }")
               vue-slick-carousel.thumbs-slider(
@@ -208,14 +208,18 @@
                     name="tb-size"
                     :adaptive="true"
                     :reset="true"
-                    :maxWidth="400" 
-                    :maxHeight="280"
+                    :minWidth="400" 
+                    :minHeight="280"
+                    :maxWidth="tabSizeMaxWidth" 
+                    :maxHeight="tabSizeMaxHeight"
+                    :scrollable="true"
+                    :resizable="true"
                     )
-                    .modal-window
+                    .modal-window.default
                       .modal-close(@click="$modal.hide('tb-size')")
                         svg.icon.icon-btn-close <use href="#icon-btn-close"/>
-                      perfect-scrollbar()  
-                        .modal-body(v-html="data.sizes_table")
+                      perfect-scrollbar.modal-body.default  
+                        .sizes-table(v-html="data.sizes_table")
 
 
           //- ============= Количество ===============
@@ -383,9 +387,9 @@ export default {
               // slidesToShow: 2,
               // slidesToScroll: 1,
               // infinite: true,
-              dots: true,
+              // dots: true,
               variableWidth: true,
-              dotsClass: "slick-dots product-slider-dots",
+              // dotsClass: "slick-dots product-slider-dots",
             }
           },
           {
@@ -394,9 +398,9 @@ export default {
               // slidesToShow: 1,
               // slidesToScroll: 1,
               // infinite: true,
-              dots: true,
+              // dots: true,
               variableWidth: false,
-              dotsClass: "slick-dots product-slider-dots",
+              // dotsClass: "slick-dots product-slider-dots",
             }
           }
         ]
@@ -410,50 +414,50 @@ export default {
         vertical: true,
         slidesToShow: 4,
         slidesToScroll: 1,
-        // focusOnSelect: true,
+        focusOnSelect: true,
       },
-      settingsProductOtherSlider: {
-        // lazyLoad: 'ondemand',
-        dots: false,
-        arrows: true,
-        infinite: true,
-        infinite: false,
-        variableWidth: true,
-        // slidesToShow: 6,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        rows: 1,
-        // centerMode: true,
-        // centerPadding: '0',
-        // responsive: [
-        //   {
-        //     breakpoint: 1600,
-        //     settings: {
-        //       slidesToShow: 6,
-        //     }
-        //   },
-        //   {
-        //     breakpoint: 1300,
-        //     settings: {
-        //       slidesToShow: 5,
-        //     }
-        //   },
-        //   {
-        //     breakpoint: 1100,
-        //     settings: {
-        //       slidesToShow: 3,
-        //     }
-        //   },
-        //   {
-        //     breakpoint: 767,
-        //     settings: {
-        //       slidesToShow: 7,
-        //     }
-        //   },
-        // ]
+      // settingsProductOtherSlider: {
+      //   // lazyLoad: 'ondemand',
+      //   dots: false,
+      //   arrows: true,
+      //   infinite: true,
+      //   infinite: false,
+      //   variableWidth: true,
+      //   // slidesToShow: 6,
+      //   slidesToShow: 1,
+      //   slidesToScroll: 1,
+      //   rows: 1,
+      //   // centerMode: true,
+      //   // centerPadding: '0',
+      //   // responsive: [
+      //   //   {
+      //   //     breakpoint: 1600,
+      //   //     settings: {
+      //   //       slidesToShow: 6,
+      //   //     }
+      //   //   },
+      //   //   {
+      //   //     breakpoint: 1300,
+      //   //     settings: {
+      //   //       slidesToShow: 5,
+      //   //     }
+      //   //   },
+      //   //   {
+      //   //     breakpoint: 1100,
+      //   //     settings: {
+      //   //       slidesToShow: 3,
+      //   //     }
+      //   //   },
+      //   //   {
+      //   //     breakpoint: 767,
+      //   //     settings: {
+      //   //       slidesToShow: 7,
+      //   //     }
+      //   //   },
+      //   // ]
 
 
-      },
+      // },
       quantity: 1,           // Количество выбранных товаров текущего вида 
       selectedSize: null,
       selectedSizeCount: 1,
@@ -533,6 +537,13 @@ export default {
         // Добавляем статус и тип страницы в $store (не сильно надо, но пусть будут)
         if (content.status) this.$store.commit('setStatus', content.status)
         if (content.type) this.$store.commit('setType', content.type)
+        // Меняем в html - Таблицы размеров <h1> на <h2>
+        if (content.data.sizes_table && content.data.sizes_table.length) {
+          let s = content.data.sizes_table
+          s = s.split('<h1').join('<h2')
+          s = s.split('h1/>').join('h2/>')
+          content.data.sizes_table = s
+        }
         // Добавляем полученные данные в data
         // цикл по ключам и значениям
         for (let [key, v] of Object.entries(content.data)) {
@@ -591,7 +602,18 @@ export default {
       return this.setHasArrows(this.data.cases)
     },
 
-
+    tabSizeMaxWidth(){
+      if (process.browser){
+        return document.documentElement.clientWidth * .8
+      }
+      return 300
+    },
+    tabSizeMaxHeight(){
+      if (process.browser){
+        return document.documentElement.clientHeight * .8
+      }
+      return 300
+    },
   },
   beforeMount(){
     window.addEventListener('resize', this.setHasArrows)

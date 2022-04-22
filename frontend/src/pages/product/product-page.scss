@@ -146,7 +146,29 @@
 
   }
 }
-
+.sizes-table {
+  h2 {
+    font-size: 1rem;
+    margin-bottom: .5rem;
+    color: var(--text-color-default);
+  }
+  table {
+    color: var(--text-color-default);
+    border-collapse: collapse;
+    border: 1px solid baseColorOpacity3(.4);  
+    margin-bottom: .5rem;  
+  }
+  td, th {
+    text-align: center;
+    border: 1px solid baseColorOpacity3(.4);
+    padding: 1rem;
+    div {
+      width: max-content;
+      width: fit-content;
+      display: inline-block;
+    }
+  }
+}
 .product {
   &-page {
     &-column{
@@ -193,8 +215,9 @@
 
       &.show-info {
         display: block;
-        padding-top: 5.75rem;
-      }  
+        padding-top: 3.75rem;
+      } 
+      &.main-slider{ margin-bottom: 2rem;} 
       }
     &_price-block{
       display: flex;
@@ -298,18 +321,18 @@
     display: flex; 
     align-items: center;
     // justify-content: space-between;
-    margin-bottom: 2rem;
-    font-size: 22px;
-    height: 1em;
+    margin-bottom: 1.75rem;
+    // font-size: 2.2rem;
+    // height: 1em;
 
-      @include media-max-width2($lg) { font-size: 18px; }
-      @include media-max-width2($md) { font-size: 14px; }
-      @include media-max-width2($md - 1) { max-width: var(--slide-width); }
-      @include media-max-width2($sm) { font-size: 12px;}
-      @include media-max-width2($xsm) {max-width: unset;}
+      // @include media-max-width2($lg) { font-size: 18px; }
+      // @include media-max-width2($md) { font-size: 14px; }
+      // @include media-max-width2($md - 1) { max-width: var(--slide-width); }
+      // @include media-max-width2($sm) { font-size: 12px;}
+      // @include media-max-width2($xsm) {max-width: unset;}
         .product-tag {
           width: fit-content;
-          font-size: 12px;
+          font-size: .6rem;
           margin-right: .6em;
             @include media-max-width2($lg) { font-size: 10px; }
             @include media-max-width2($md) { font-size: 8px; }
@@ -346,35 +369,43 @@
     // border: 1px solid purple;
     overflow: hidden;      
     // width: 32.9rem;
-    width: calcFluidFontSize(395, 660, $md, $xl);
+    // width: calcFluidFontSize(395, 660, $md, $xl);
+    width: var(--slider-size);
+    
 
       @include media-max-width2($md - 1) { 
         width: calc(100vw - var(--p)); 
         // width: 100%;
       }
       @include media-max-width2($xsm) { 
-        width: 100vw; 
-        margin-left: calc(-1 * var(--p));
+        // width: 100vw; 
+        // margin-left: calc(-1 * var(--p));
+        width: auto;
       }
       .slick-track {display: flex!important;}
 
     &-block{
       // border: 1px solid green;
-      // max-width: 654px;
+      --slider-size: #{calcFluidFontSize(395, 660, $md, $xl)};
       flex-grow: 1;
       // margin-bottom: 25px;
       // padding-right: 18px;
       // padding-right: 2.18%;
       // width: 1%;
       // --slide-width: 300px;
-        @include media-max-width2($md - 1) { --slide-width: 300px; margin-bottom: 30px;}
-        @include media-max-width2($sm - 1) { --slide-width: 270px;}
-        @include media-max-width2($xsm) { --slide-width: 245px;}
+        // @include media-max-width2($md - 1) { --slide-width: 300px; margin-bottom: 30px;}
+        // @include media-max-width2($sm - 1) { --slide-width: 270px;}
+        // @include media-max-width2($xsm) { --slide-width: 245px;}
 
         @include media-max-width2($md - 1) {
           padding-right: 0;
           width: 100%;   
           max-width: unset;
+        }
+        @include media-max-width2($sm) { 
+          // width: 100vw;  
+          width: auto;  
+          margin: 0 calc(-1*var(--p));
         }
 
       // &:not(.thumbs){flex-grow: 1;}
@@ -384,8 +415,10 @@
         // max-width: 168px;
         // width: 20.38%;
         // width: 7.1rem;
+        
         width: calcFluidFontSize(85, 142, $md, $xl);
         // height: 32.9rem;
+        height: var(--slider-size);
         flex-shrink: 0;
         flex-grow: 0;
         margin-right: 1.3rem;
@@ -405,7 +438,10 @@
               padding-right: 1rem;
               min-width: calcFluidFontSize(320, 508, $xs, $md - 1);
             }
-            // @include media-max-width2($xsm) {padding-right: 0;}
+            @include media-max-width2($xsm) {
+              padding-right: 0;
+              min-width: unset;
+            }
 
         &-content {
           // border: 1px solid purple;
@@ -703,8 +739,10 @@
         border-radius: 3px;
         background-color: #fff;
         position: fixed;
-        width: calc(100vw - 2 * var(--p));
-        left: var(--p);
+        // width: calc(100vw - 2 * var(--p));
+        width: 100vw;
+        // left: var(--p);
+        left: 0;
         bottom: 0;
         z-index: 9999;
 

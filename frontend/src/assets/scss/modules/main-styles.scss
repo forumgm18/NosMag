@@ -33,20 +33,24 @@ html {
 // 576 - sm - 15,44
 // 320 - xs - 12
 
-  font-size: calcFluidFontSize(13.56, 20, $lg, $xl);
+  // font-size: calcFluidFontSize(13.56, 20, $lg, $xl);
+  font-size: calcFluidFontSize(16, 20, $md, $xl);
 
   //color: $mainFontColor;
   color: var(--text-color-default);
   height: 100%;
-    @include media-max-width2($lg - 1) {
-      font-size: calcFluidFontSize(12, 13.56, $md, $lg - 1);
-    }
+    // @include media-max-width2($lg - 1) {
+    //   // font-size: calcFluidFontSize(12, 13.56, $md, $lg - 1);
+    //   font-size: calcFluidFontSize(12, 13.56, $md, $lg - 1);
+    // }
     @include media-max-width2($md - 1) {
-      font-size: calcFluidFontSize(15.44, 12, $sm, $md - 1);
+      // font-size: calcFluidFontSize(15.44, 12, $sm, $md - 1);
+      font-size: 16px;
     }
-    @include media-max-width2($sm - 1) {
-      font-size: calcFluidFontSize(12, 15.44, $xs, $sm);
-    }
+    // @include media-max-width2($sm - 1) {
+    //   // font-size: calcFluidFontSize(12, 15.44, $xs, $sm);
+    //   font-size: calcFluidFontSize(15, 16, $xs, $sm);
+    // }
 
   // @include media-max-width2($xl) {
   //   font-size: 16px;

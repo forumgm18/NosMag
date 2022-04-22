@@ -402,6 +402,7 @@ header {
   &-search {
     flex-grow: 1;
     padding: 0 2rem 0 2.5rem;
+      @include media-max-width2($sm) {display: none;}
       // @include media-max-width2(1300) {padding: 0 15px;}
       // @include media-max-width2($xlg) {
       //   position: absolute;
