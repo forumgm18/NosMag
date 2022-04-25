@@ -10,19 +10,29 @@
 
 // }
 
-.ps__thumb-y {
+.ps__thumb-y, .ps__thumb-x {
     background-color: var(--scrollbar-thumbs)!important;
     border-radius: var(--scrollbar-width)!important;
+}
+.ps__rail-y, .ps__rail-x {
+    background-color: var(--scrollbar-track)!important;
+    border-radius: var(--scrollbar-width)!important;
+}
+.ps__thumb-y {
     width: var(--scrollbar-width)!important;
     right: 0!important;
 }
 .ps__rail-y {
-    background-color: var(--scrollbar-track)!important;
-    border-radius: var(--scrollbar-width)!important;
     width: var(--scrollbar-width)!important;
-    right: 0!important;
     &.ps--clicking, &:hover, &:focus {width: calc(2 * var(--scrollbar-width))!important;}
-
+}
+.ps__thumb-x {
+    height: var(--scrollbar-width)!important;
+    bottom: 0!important;
+}
+.ps__rail-x {
+    height: var(--scrollbar-width)!important;
+    &.ps--clicking, &:hover, &:focus {height: calc(2 * var(--scrollbar-width))!important;}
 }
 
 .ps__rail-y:hover > .ps__thumb-y, 
@@ -30,18 +40,31 @@
 .ps__rail-y.ps--clicking .ps__thumb-y {
     width: calc(2 * var(--scrollbar-width))!important;
 }
+
+.ps__rail-x:hover > .ps__thumb-x, 
+.ps__rail-x:focus > .ps__thumb-x, 
+.ps__rail-x.ps--clicking .ps__thumb-x {
+    height: calc(2 * var(--scrollbar-width))!important;
+}
+
 .ps__rail-y:hover > .ps__thumb-y, 
-.ps__rail-y:focus > .ps__thumb-y {
+.ps__rail-y:focus > .ps__thumb-y 
+.ps__rail-x:hover > .ps__thumb-x, 
+.ps__rail-x:focus > .ps__thumb-x {
     background-color: var(--scrollbar-thumbs-hover)!important;
 }
+.ps__rail-x.ps--clicking .ps__thumb-x, 
 .ps__rail-y.ps--clicking .ps__thumb-y {
     background-color: var(--scrollbar-thumbs-drag)!important;
 }
 
+.ps__rail-x:hover, 
+.ps__rail-x:focus, 
 .ps__rail-y:hover, 
 .ps__rail-y:focus {
     background-color: var(--scrollbar-track-hover)!important;
 }
+.ps__rail-x.ps--clicking, 
 .ps__rail-y.ps--clicking {
     background-color: var(--scrollbar-track-drag)!important;
 }

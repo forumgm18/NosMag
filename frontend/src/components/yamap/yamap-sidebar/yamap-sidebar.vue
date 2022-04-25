@@ -137,7 +137,7 @@
     align-items: center;
     font-size: 1.5rem;
     font-weight: 5;
-    line-height: 1.1;
+    line-height: 1;
     padding: 1em .6666em;
     margin-right: .3333em;
     // margin: 0 .6666em;

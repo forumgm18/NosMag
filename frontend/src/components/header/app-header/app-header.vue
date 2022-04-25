@@ -163,8 +163,6 @@ export default {
       }
       this.pageScrollPosition = window.scrollY
     },
-    // showModal() { this.$modal.show('tab-size') }
-    //
   },
   beforeMount () {
     if (process.browser) window.addEventListener('scroll', this.winScroll, {passive: true})

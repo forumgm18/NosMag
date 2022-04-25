@@ -168,58 +168,13 @@
                           .product-sizes_popper_item-value {{tbProp.value}}
                         .product-sizes_popper_item.report(
                           v-if="!tb.active"
-                          @click="$modal.show('tb-size-report')"
+                          @click="$vfm.show('tb-size-report')"
                           ) {{$options.TAB_SIZES_REPORT}}
-                //- teleport(to="body")
-                client-only
-                  modal(
-                    name="tb-size-report"
-                    :adaptive="true"
-                    :reset="true"
-                    :maxWidth="400" 
-                    :maxHeight="280"
-                    )
-                    .modal-window.report-email
-                      .modal-close(@click="$modal.hide('tb-size-report')")
-                        svg.icon.icon-btn-close <use href="#icon-btn-close"/>
-                      .modal-body
-                        .order-item-label
-                          span {{$options.EMAIL}}
-                          span.req *
-                        v-input-field(
-                          ref="email"
-                          v-model="reportEmail"
-                          type="email"
-                          :placeholder="$options.EMAIL_PLACEHOLDER"
-                          :error-text="$options.EMAIL_ERROR"
-                          :required="true"
-                        )
-                        .report-text.success {{$options.EMAIL_SUCCESS}}
-                        .btn() {{$options.TAB_SIZES_REPORT}}
-
-
 
               .product-sizes_tab-link.link(
                 v-if="data.sizes_table && data.sizes_table.length"
-                @click="$modal.show('tb-size')"
+                @click="$vfm.show('tb-size')"
                 ) {{$options.TAB_SIZES}}
-                client-only
-                  modal(
-                    name="tb-size"
-                    :adaptive="true"
-                    :reset="true"
-                    :minWidth="400" 
-                    :minHeight="280"
-                    :maxWidth="tabSizeMaxWidth" 
-                    :maxHeight="tabSizeMaxHeight"
-                    :scrollable="true"
-                    :resizable="true"
-                    )
-                    .modal-window.default
-                      .modal-close(@click="$modal.hide('tb-size')")
-                        svg.icon.icon-btn-close <use href="#icon-btn-close"/>
-                      perfect-scrollbar.modal-body.default  
-                        .sizes-table(v-html="data.sizes_table")
 
 
           //- ============= Количество ===============
@@ -333,8 +288,59 @@
               .feedback-filter_text( ) {{declensionEndings(getFilteredFeedbacks(st).length,'otzyv')}}
             .btn.btn-4.btn-transparent.feedback-filter_btn(@click="feedbackFilterToggle") {{feedbackFilterBtnText}}
 
+
+    client-only  
+      vue-final-modal(
+        name="tb-size" 
+        v-slot="{ close }" 
+        v-model="tabSizesModalShow"
+        :resize="false"
+        :classes="['modal-container', 'default']"
+        :content-class="['modal-content', 'default']"
+        :overlay-class="['modal-overlay']"
+        :max-width="tabSizeMaxWidth" 
+        :max-height="tabSizeMaxHeight"
+        :fit-parent="true"
+        @opened="tabSizesModalOpened"
+        )
+        .modal-close(@click="close")
+          svg.icon.icon-btn-close <use href="#icon-btn-close"/>
+        perfect-scrollbar.modal-body( ref="tabSizesModalPs" )  
+          .sizes-table(v-html="data.sizes_table")
+
+    client-only
+      vue-final-modal(
+        name="tb-size-report" 
+        v-slot="{ close }" 
+        v-model="tabSizesReportModalShow"
+        :resize="false"
+        :classes="['modal-container', 'report-email']"
+        :content-class="['modal-content', 'default']"
+        :overlay-class="['modal-overlay']"
+        :fit-parent="true"
+        
+        )
+
+        .modal-close(@click="close")
+          svg.icon.icon-btn-close <use href="#icon-btn-close"/>
+        .modal-body
+          .order-item-label
+            span {{$options.EMAIL}}
+            span.req *
+          v-input-field(
+            ref="email"
+            v-model="reportEmail"
+            type="email"
+            :placeholder="$options.EMAIL_PLACEHOLDER"
+            :error-text="$options.EMAIL_ERROR"
+            :required="true"
+          )
+          .report-text.success {{$options.EMAIL_SUCCESS}}
+          .btn() {{$options.TAB_SIZES_REPORT}}
+
 </template>
 <script>
+import {getInnerSize} from '@/utils/main-scripts'
 import {mapState} from 'vuex'
 
 import VueSlickCarousel from 'vue-slick-carousel'
@@ -365,6 +371,8 @@ export default {
       data: {},
       imgWidth: 0,
       imgHeight: 0,
+      tabSizesModalShow: false,
+      tabSizesReportModalShow: false,
       // hasArrows: false,
       // hasCasesArrows: false,
       reportEmail: '',
@@ -604,13 +612,13 @@ export default {
 
     tabSizeMaxWidth(){
       if (process.browser){
-        return document.documentElement.clientWidth * .8
+        return Math.floor(document.documentElement.clientWidth * .6)
       }
       return 300
     },
     tabSizeMaxHeight(){
       if (process.browser){
-        return document.documentElement.clientHeight * .8
+        return Math.floor(document.documentElement.clientHeight * .6)
       }
       return 300
     },
@@ -676,6 +684,12 @@ export default {
               ? this.data.feedbacks 
               : this.data.feedbacks.filter(item => item.stars === v )
     },
+    tabSizesModalOpened(e) {
+      const sz = getInnerSize(e.ref.$refs.vfmContent)   
+      this.$refs.tabSizesModalPs.$el.style.width = sz.w + 'px'
+      this.$refs.tabSizesModalPs.$el.style.height = sz.h + 'px'
+      this.$refs.tabSizesModalPs.update()
+    },
     // reportEmailSetValid(v) {
     //   // debugger
     //   this.reportEmailIsValid = v ? 1 : -1
@@ -686,6 +700,7 @@ export default {
     //     this.selectedSize = v.value
     //   }
     // },
+
     async addToCart() {
       const val = []
       val.push({scode: this.selectedSize.scode, q: this.selectedSizeCount })

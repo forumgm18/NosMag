@@ -2,8 +2,8 @@
   .map-sidebar-panel(ref="sidebarPanel")
     .map-sidebar-title(v-if="title && title.length")
       span {{title}}
-    div(ref="scrollPanel")
-      client-only(v-if="pvzList && pvzList.length")
+    div(ref="scrollPanel" v-if="pvzList && pvzList.length")
+      client-only
         perfect-scrollbar.map-sidebar-scroll(
           ref="ps"
           :options="$options.scrollbarOptions" 
@@ -48,27 +48,13 @@
           this.$emit('marker-select', val)
           }
       },
-      // scrollPanelTop() {
-      //   return this.$refs.scrollPanel ? this.$refs.scrollPanel.offsetTop : 0
-      // },
-      // sidebarPanelHeight() {
-      //   return this.$refs.sidebarPanel ? this.$refs.sidebarPanel.clientHeight : 0
-      // },
-      // scrollbarHeight() {
-      //   // debugger
-      //   // const h = this.$refs.sidebarPanel ? this.$refs.sidebarPanel.clientHeight : 0
-      //   // const t = this.$refs.scrollPanel ? this.$refs.scrollPanel.offsetTop : 0
-      //   const h = this.sidebarPanelHeight
-      //   const t = this.scrollPanelTop
-      //   return (h - t) ? `${ h - t }px` : 'auto'
-      // }
-
     },
     mounted() {
       this.$nextTick(this.$forceUpdate())
       const h = this.$refs.sidebarPanel.clientHeight
       const t = this.$refs.scrollPanel ? this.$refs.scrollPanel.offsetTop : 0
       this.scrollbarHeight = `${ h - t }px`
+      debugger
       this.$nextTick( function() {
         // debugger
         const li = !!this.$refs.itemsList ? this.$refs.itemsList.querySelector('.pre-select') : false

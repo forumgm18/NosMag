@@ -258,8 +258,6 @@ export default {
       console.log('val: ', val)
       this.$store.dispatch('cart/addToCart', val)
       await this.$nuxt.refresh()
-      // this.$modal.hide(`select-size-modal-${this.product.id}`, )
-      // this.closeAddToCartPopup(false)
     },
 
 

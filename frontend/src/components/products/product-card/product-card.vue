@@ -53,33 +53,39 @@
       @close-quick-view="quickViewShow"
       )
 
-    modal(
-      :name="`select-size-modal-${product.id}`"
-      height="auto"
-      width="250px"
-      classes="psz-popup"
-      v-if="sizes && selectedSize"
-      )
-      .psz-popup-title
-        span.text Выберите размер
-        span.psz-popup-close(@click="$modal.hide(`select-size-modal-${product.id}`)")
-          svg.icon.icon-close <use href="#icon-close"/>
-      .psz-table-content-title(v-if="selectedSize.table && selectedSize.table.length")
-        .psz-item.title
-          .col {{selectedSize.table[0].name}}
-          .col(v-if="selectedSize.table[1]") {{selectedSize.table[1].name}}
-      .psz-table-content(v-if="sizes" ref="pszTc")
-        template(v-for="(item, index) in sizes")
-          .psz-item(
-            :key="index"
-            :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
-            @click="selectSize(item, item.active && item.ostatok > 0)"
-            v-if="item.table && item.table.length"
-            ) 
-            .col {{item.table[0].value}}
-            .col(v-if="item.table[1]") {{item.table[1].value}}
-      .btn(@click.stop.prevent="addToCart") {{$options.BTN_ADD2BASKET_TEXT_2}}
-          
+    client-only  
+      vue-final-modal(
+        :name="`select-size-modal-${product.id}`" 
+        v-slot="{ close }" 
+        v-model="tabSizesModalShow"
+        :resize="false"
+        :classes="['modal-container', 'report-email']"
+        :content-class="['modal-content', 'default']"
+        :overlay-class="['modal-overlay']"
+        :fit-parent="true"
+        
+        )
+
+        .psz-popup-title
+          span.text Выберите размер
+          span.psz-popup-close(@click="close")
+            svg.icon.icon-close <use href="#icon-close"/>
+        .psz-table-content-title(v-if="selectedSize.table && selectedSize.table.length")
+          .psz-item.title
+            .col {{selectedSize.table[0].name}}
+            .col(v-if="selectedSize.table[1]") {{selectedSize.table[1].name}}
+        .psz-table-content(v-if="sizes" ref="pszTc")
+          template(v-for="(item, index) in sizes")
+            .psz-item(
+              :key="index"
+              :class="{'in-stock' : item.active && item.ostatok > 0, active: item === selectedSize }"
+              @click="selectSize(item, item.active && item.ostatok > 0)"
+              v-if="item.table && item.table.length"
+              ) 
+              .col {{item.table[0].value}}
+              .col(v-if="item.table[1]") {{item.table[1].value}}
+        .btn(@click.stop.prevent="addToCart") {{$options.BTN_ADD2BASKET_TEXT_2}}
+
 </template>
 
 <script>
@@ -118,7 +124,8 @@ export default {
       mocCatalogLink: '/',
       selectedSize: null,
       selectedSizeCount: 1,
-      addToCartPopup: false
+      addToCartPopup: false,
+      tabSizesModalShow: false,
     }  
   },
   BTN_QUICK_VIEW_TEXT: 'Быстрый просмотр',
@@ -155,7 +162,7 @@ export default {
   },
   methods: {
     showModal() {
-      this.$modal.show(`select-size-modal-${this.product.id}`, )
+      this.$vfm.show(`select-size-modal-${this.product.id}`, )
     },
     quickViewShow(v) { this.isQuickView = v },
     async addToCart() {
@@ -164,7 +171,7 @@ export default {
       // val.push({scode: this.selectedSize.scode, q: 1 })
       console.log('val: ', val)
       this.$store.dispatch('cart/addToCart', val)
-      this.$modal.hide(`select-size-modal-${this.product.id}`, )
+      this.$vfm.hide(`select-size-modal-${this.product.id}`, )
       // await this.$nuxt.refresh()
       // this.closeAddToCartPopup(false)
     },

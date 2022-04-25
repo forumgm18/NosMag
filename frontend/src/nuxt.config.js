@@ -40,7 +40,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/yamap.js', mode: 'client' },
-    { src: '~/plugins/vue-modal.js', mode: 'client' },
+    // { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
     { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
     // { src: '~/plugins/swiper.js', mode: 'client' },
@@ -53,6 +53,7 @@ export default {
     '~/plugins/filters.js',
     '~/plugins/teleport.js',
     '~/plugins/directives/auto-min-width.client.js',
+    '~plugins/vue-final-modal.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -138,6 +139,7 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     optimizeCss: false,
+    transpile: ['vue-final-modal'],
     filenames: {
       app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
       chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),

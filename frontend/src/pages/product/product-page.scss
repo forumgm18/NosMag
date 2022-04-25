@@ -147,9 +147,15 @@
   }
 }
 .sizes-table {
+
+  // width: max-content;
+  // min-width: fit-content;
+  // height: max-content;
+  // min-height: fit-content;
   h2 {
-    font-size: 1rem;
-    margin-bottom: .5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
     color: var(--text-color-default);
   }
   table {
@@ -157,12 +163,17 @@
     border-collapse: collapse;
     border: 1px solid baseColorOpacity3(.4);  
     margin-bottom: .5rem;  
+    width: max-content!important;
+    width: fit-content!important;
+    margin: 0 auto;
   }
   td, th {
     text-align: center;
     border: 1px solid baseColorOpacity3(.4);
     padding: 1rem;
+    font-size: 1rem;
     div {
+      font-size: inherit;
       width: max-content;
       width: fit-content;
       display: inline-block;

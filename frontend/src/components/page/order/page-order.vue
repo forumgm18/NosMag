@@ -213,7 +213,7 @@ section
         span Форма Валидна: 
         span {{orderFormIsValid}}
     client-only
-      modal(
+      //- modal(
         name="pvz-select"
         :adaptive="true"
         :reset="true"
@@ -224,51 +224,60 @@ section
         :minHeight="pvzModalSize.mih"
         @closed="pvzModalClose"
         )
-        //- template(#top-right)
-          .modal-close(@click="$modal.hide('pvz-select')")
-            svg.icon.icon-btn-close <use href="#icon-btn-close"/>
+      vue-final-modal(
+        name="pvz-select" 
+        v-slot="{ close }" 
+        v-model="pvzSelectModalShow"
+        :resize="false"
+        :classes="['modal-container', 'modal-pvz-select']"
+        :content-class="['modal-content', 'modal-pvz-select']"
+        :overlay-class="['modal-overlay']"
+        :max-width="pvzModalSize.maw" 
+        :max-height="pvzModalSize.mah"
+        :fit-parent="true"
+        @closed="pvzModalClose"
+        )
 
-        .modal-window
-          .modal-close(@click="$modal.hide('pvz-select')")
-            svg.icon.icon-btn-close <use href="#icon-btn-close"/>
-          .modal-body
-            .pvz-select(@wheel.prevent.stop)
-              v-yamap-sidebar.pvz-select-sidebar(
-                :pvz-list="markers"
-                :show-detail-only="showPvzDetailOnly"
-                :pvz-info="deliveryInfo"
-                :marker="selectedMarker"
-                v-model="lastDeliveryInfo"
+        .modal-close(@click="close")
+          svg.icon.icon-btn-close <use href="#icon-btn-close"/>
+        .modal-body
+          .pvz-select(@wheel.prevent.stop)
+            v-yamap-sidebar.pvz-select-sidebar(
+              :pvz-list="markers"
+              :show-detail-only="showPvzDetailOnly"
+              :pvz-info="deliveryInfo"
+              :marker="selectedMarker"
+              v-model="lastDeliveryInfo"
 
-                @modal-close="$modal.hide('pvz-select')"
-                @marker-select="markerPreSelectFromList"
-                @select-pvz="pvzSelect"
+              @modal-close="close"
+              @marker-select="markerPreSelectFromList"
+              @select-pvz="pvzSelect"
+              )
+            .pvz-select-map(v-if="yandexApiKey" :class="{ show: showMap }" ref="mapContainer")
+              yandex-map.yamap(
+                :settings="$options.static.yamap.settings"  
+                :options="$options.static.yamap.options"  
+                :coords="$options.static.yamap.coords"
+                :controls="$options.static.yamap.controls"
+                :zoom="$options.static.yamap.zoom"
+                :cluster-options="$options.static.clusterOptions"
+                :cluster-callbacks="$options.static.clusterCallbacks"
+                :scroll-zoom="true"
+                :show-all-markers="showAllMarkers"
+                @map-was-initialized="mapInitialized"
                 )
-              .pvz-select-map(v-if="yandexApiKey" :class="{ show: showMap }" ref="mapContainer")
-                yandex-map.yamap(
-                  :settings="$options.static.yamap.settings"  
-                  :options="$options.static.yamap.options"  
-                  :coords="$options.static.yamap.coords"
-                  :controls="$options.static.yamap.controls"
-                  :zoom="$options.static.yamap.zoom"
-                  :cluster-options="$options.static.clusterOptions"
-                  :cluster-callbacks="$options.static.clusterCallbacks"
-                  :scroll-zoom="true"
-                  :show-all-markers="showAllMarkers"
-                  @map-was-initialized="mapInitialized"
+                ymap-marker(
+                  v-for="m in markers" :key="m.id" 
+                  :marker-id="m.id"
+                  :coords="m.coord"
+                  :icon="$options.static.marker.icon"
+                  :properties="{...m.data, ...$options.static.marker.props}"
+                  :options="$options.static.marker.options"
+                  :balloon-component-props="m.data"
+                  cluster-name="1"
+                  :hint-content="m.data.name"
+                  @click="markerPreSelect(m, $event)"
                   )
-                  ymap-marker(
-                    v-for="m in markers" :key="m.id" 
-                    :marker-id="m.id"
-                    :coords="m.coord"
-                    :icon="$options.static.marker.icon"
-                    :properties="{...m.data, ...$options.static.marker.props}"
-                    :options="$options.static.marker.options"
-                    :balloon-component-props="m.data"
-                    cluster-name="1"
-                    :hint-content="m.data.name"
-                    @click="markerPreSelect(m, $event)"
-                    )
 
 </template>
 
@@ -348,6 +357,7 @@ section
         orderComment: '',
         deliveryOptions: {}, // Для хранения результата запроса к api
         pvz: {},   // Для хранения результата запроса к api
+        pvzSelectModalShow: false,
         delivery: '',
         deliveryService: '',
         deliveryInfo: null,
@@ -511,14 +521,14 @@ section
         this.showPvzDetailOnly = false
         this.markers = this.pvzList 
         this.deliveryInfo = null
-        this.$modal.show('pvz-select',{ width: 1690, height: 820})
+        this.$vfm.show('pvz-select',{ width: 1690, height: 820})
         },
       showMapDetail(val) { 
         this.showAllMarkers = false
         this.showPvzDetailOnly = true
         this.markers = val 
         this.$options.static.yamap.coords = val[0].coord
-        this.$modal.show('pvz-select',{ width: 1690, height: 820})
+        this.$vfm.show('pvz-select',{ width: 1690, height: 820})
 
         },
         pvzModalClose() {

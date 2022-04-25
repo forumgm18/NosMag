@@ -65,6 +65,14 @@ export function parseJsonStrToNumbers(val){
           (key, value) => (value === (+value).toString()) ? +value : value )
 
 }
+export function getInnerSize(el){
+  const elStyles = getComputedStyle(el)
+  let paddingW = parseInt(elStyles.paddingLeft) + parseInt(elStyles.paddingRight)
+  let paddingH = parseInt(elStyles.paddingTop) + parseInt(elStyles.paddingBottom)
+  let w = el.clientWidth - paddingW
+  let h = el.clientHeight - paddingH
+  return { w, h }
+}
 export function getNodeElementHeight(node) {
   // in Browser only!
     const list = [
