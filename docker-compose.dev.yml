@@ -26,3 +26,7 @@ services:
       - ./nginx/dev:/etc/nginx
     # stdin_open: false
     # tty: false
+networks:
+  nosmag-network:
+    name: host
+    external: true  

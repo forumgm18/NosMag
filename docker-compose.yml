@@ -57,12 +57,7 @@ services:
 #       o: bind
 #       device: /home/store/Projects/NosMag/NosMag-app/images
 
-# networks:
-#   nosmag-network:
-#     driver: bridge
-
 networks:
   nosmag-network:
-    external: 
-      name: host
+    driver: bridge
 
