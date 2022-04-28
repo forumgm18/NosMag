@@ -39,7 +39,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/mime.types:/etc/nginx/mime.types
+      - ./nginx/prod:/etc/nginx
+      # - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
     depends_on:
       - frontend
     networks:
@@ -55,7 +57,12 @@ services:
 #       o: bind
 #       device: /home/store/Projects/NosMag/NosMag-app/images
 
+# networks:
+#   nosmag-network:
+#     driver: bridge
+
 networks:
   nosmag-network:
-    driver: bridge
+    external: 
+      name: host
 

@@ -4,10 +4,11 @@ export const state = () => ({
 
 export const mutations = {
   SET_CART(state, val) {
-  // цикл по ключам и значениям
+    // цикл по ключам и значениям
     for (let [key, v] of Object.entries(val.cart)) {
-      // state[key] = v 
-      Vue.set(state, key, v)
+      state[key] = v 
+      // Vue.set(state, key, v)
+      // this.$set(state, key, v)
     }
     if (state.oform && state.oform.prices) {
       state.oform.prices = state.oform.prices.map(v => {
@@ -64,7 +65,7 @@ export const actions = {
     } else {
       console.log('Ошибка добавления в корзину', val)
     }
-
+    return cart.status
   },
   async changeCartItem({ state, commit, rootState}, val) {
     let v = []

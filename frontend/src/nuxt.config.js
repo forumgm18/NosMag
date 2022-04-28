@@ -51,7 +51,7 @@ export default {
     '~/plugins/loading.js',
     '~/plugins/secondary-functions.js',
     '~/plugins/filters.js',
-    '~/plugins/teleport.js',
+    // '~/plugins/teleport.js',
     '~/plugins/directives/auto-min-width.client.js',
     '~plugins/vue-final-modal.js',
   ],

@@ -3,16 +3,18 @@
   .map-sidebar-title(v-if="title && title.length")
     svg.icon.icon-arrow-back(v-if="!showDetailOnly" @click="goBack") <use href="#icon-arrow-back"/>
     span {{title}}
+    resize-observer(@notify="titleResize")      
 
   v-preloader.in-page(v-if="$fetchState.pending")
-  div(v-else-if="pvz")
-    .map-sidebar-item.btn-inside
+  template(v-else-if="pvz")
+    .map-sidebar-item.btn-inside(ref="addressPanel")
       .map-sidebar-item_title Адрес
       .map-sidebar-item_text {{address}}
       button.btn( 
         v-if="!showDetailOnly"
         @click="pvzSelect" 
         ) Выбрать этот пункт
+      resize-observer(@notify="addressResize")      
     div(ref="scrollPanel")
       client-only
         perfect-scrollbar.map-sidebar-scroll(
@@ -50,14 +52,6 @@
             li.map-sidebar-item(v-if="addressComment && addressComment.length")
               .map-sidebar-item_title Как добраться
               .map-sidebar-item_clamptext 
-                //- .map-sidebar-item_text-collapse(
-                  :class="{ collapse: addrCommentCollapse }"
-                  ref="collapse"
-                  ) {{addressComment}}
-                //- .map-sidebar-show-more(
-                  v-if="addrCommentCollapse && showMoreVisible()" 
-                  @click="addrCommentShow"
-                  ) {{ $options.SHOW_MORE }}
                 v-clamp(autoresize :max-lines="3" ) {{ addressComment }}
                   template(#after="{ expand, clamped }")
                     span( 
@@ -66,11 +60,14 @@
                       class="map-sidebar-show-more"
                       v-html="`<br>${$options.SHOW_MORE}`"
                       ) 
+  resize-observer(@notify="sidebarPanelResize")      
 
 
 </template>
 
 <script>
+import { ResizeObserver } from 'vue-resize'
+
   export default {
     props: {
       pvzCode: {
@@ -84,12 +81,17 @@
         type: Boolean,
         default: false
       },
+      // isVisible: {
+      //   type: Boolean,
+      //   default: false
+      // },
       pvzInfo: {
         type: Object,
         default: undefined
       },
 
     },  
+    components: {ResizeObserver},
     scrollbarOptions: {wheelPropagation: false},  
     async fetch(){
       if (this.pvzInfo) {
@@ -117,14 +119,22 @@
       return {
         pvz: null,
         addrCommentCollapse: true,
-        scrollbarHeight: 'auto',
+        // scrollbarHeight: 'auto',
+        titleHeight: 0,
+        addressHeight: 0,
+        sidebarPanelHeight: 0,
       }
     },
     SHOW_MORE: 'Читать дальше',
     mounted() {
       this.$nextTick(this.$forceUpdate())
+      if (this.$refs.sidebarPanel) this.sidebarPanelHeight = this.$refs.sidebarPanel.clientHeight
+      if (this.$refs.addressPanel) this.addressHeight = this.$refs.addressPanel.clientHeight
     },
     computed: {
+      scrollbarHeight(){
+        return this.sidebarPanelHeight - this.titleHeight - this.addressHeight + 'px'
+      },
       address(){
         let res
         switch(this.pvz.type) {
@@ -221,10 +231,8 @@
       '$fetchState.pending': function(val) {
         if (val) return
         this.$nextTick( function () {
-          const h = this.$refs.sidebarPanel.clientHeight
-          const t = this.$refs.scrollPanel ? this.$refs.scrollPanel.offsetTop : 0
-          console.log('h: ', h, 't: ', t)
-          this.scrollbarHeight = `${ h - t }px`
+          this.$forceUpdate()
+          this.addressHeight = this.$refs.addressPanel ? this.$refs.addressPanel.clientHeight : 0
         })
       }
     },
@@ -240,6 +248,15 @@
         const clps = this.$refs.collapse 
         return clps ? clps.scrollHeight > clps.offsetHeight : true
       },
+      titleResize({ height }){
+        this.titleHeight = height
+      },
+      addressResize({ height }){
+        this.addressHeight = height
+      },
+      sidebarPanelResize({ height }){
+        this.sidebarPanelHeight = height
+      }
 
     }
 
@@ -248,5 +265,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+.map-sidebar-panel {position: relative;}
+.map-sidebar-title {position: relative;}
+.btn-inside {position: relative;}
 </style>

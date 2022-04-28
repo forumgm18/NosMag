@@ -9,6 +9,7 @@
         v-breadcrumbs(:items="breadcrumbs")
     nuxt
     app-footer
+    modals-container
 </template>
 
 <script>

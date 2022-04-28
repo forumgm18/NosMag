@@ -122,7 +122,7 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'Catalog',
   data() {
@@ -189,6 +189,7 @@ export default {
     })
   },
   computed: {
+    ...mapState('token', ['session_id']),
     pageTitle() {return this.data.name || null},
     filtersPrice() { 
       return this.data.filters ? this.data.filters.find(f => f.type === 'price') : null
@@ -289,8 +290,8 @@ export default {
       const c = await this.$axios.$get(`/get_content`, {
         params: {
           ...queryParam,
-          // session_id: this.$store.state.token.session_id
-          session_id: this.$store.getters['token/getSessionId']
+          session_id: this.session_id
+          // session_id: this.$store.getters['token/getSessionId']
         }
       })
       // console.log('fetchProductList (content): ',c)

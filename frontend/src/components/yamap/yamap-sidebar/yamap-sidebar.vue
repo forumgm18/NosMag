@@ -5,6 +5,7 @@
       :pvz-list="pvzList"
       :title="title"
       
+      
       v-model="pvzPreSelect"
       @input="showDetail"
       @marker-select="markerSelect"
@@ -16,6 +17,7 @@
       :title="pvzPreSelect.name"
       :show-detail-only="showDetailOnly"
       :pvz-info="pvzInfo"
+      
       @go-back="closeDetail"
       @select-pvz="pvzSelect"
       )
@@ -40,6 +42,10 @@
         type: Boolean,
         default: false
       },
+      // isVisible: {
+      //   type: Boolean,
+      //   default: false
+      // },
       pvzInfo: {
         type: Object,
         default: undefined

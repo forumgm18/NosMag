@@ -426,7 +426,7 @@
         // max-width: 168px;
         // width: 20.38%;
         // width: 7.1rem;
-        
+        position: relative;
         width: calcFluidFontSize(85, 142, $md, $xl);
         // height: 32.9rem;
         height: var(--slider-size);
@@ -943,10 +943,12 @@
       border-radius: 5px;
       overflow: hidden;
       margin-right: .5rem;
+      cursor: pointer;
 
         &.current {border-color: var(--base-color1);}  
       
       &-content {
+        cursor: inherit;
         display: block;
         // border: 1px solid red;
         position: relative;

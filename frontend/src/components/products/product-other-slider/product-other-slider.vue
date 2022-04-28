@@ -12,7 +12,7 @@
       .other-slider-item(
         ref="sliderSlide" 
         v-for="(cs, i ) in items" :key="`cs-${i}`" 
-        :class="{ current: isCurrent(cs)}"
+        :class="{ current: isCurrent(cs), 'not-available': isCases && !cs.active}"
         ) 
         nuxt-link.other-slider-item-content(
           v-if="isLink"
@@ -57,6 +57,10 @@
       currentAlias: {
         type: String,
         default: ''
+      },
+      isCases: {
+        type: Boolean,
+        default: false
       },
 
       value: {}
@@ -155,10 +159,15 @@
 </script>
 
 <style lang="scss" >
+  .not-available {
+    pointer-events: none;
+    opacity: .5;
+  }
   .product-other-slider{
       --padding-for-arrow : 1.2rem;
       --item-size: 5rem;
       --item-visible-count: 6;
+      position: relative;  
       // width: fit-content;
       width: 100%;
       // max-width: calc((var(--item-size) + .5rem) * var(--item-visible-count));

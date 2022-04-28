@@ -235,6 +235,7 @@ section
         :max-width="pvzModalSize.maw" 
         :max-height="pvzModalSize.mah"
         :fit-parent="true"
+        :ssr="false"
         @closed="pvzModalClose"
         )
 
@@ -247,6 +248,7 @@ section
               :show-detail-only="showPvzDetailOnly"
               :pvz-info="deliveryInfo"
               :marker="selectedMarker"
+              
               v-model="lastDeliveryInfo"
 
               @modal-close="close"

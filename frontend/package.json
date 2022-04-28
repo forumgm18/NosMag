@@ -1,5 +1,5 @@
 {
-  "name": "ttt2",
+  "name": "nosmag-new",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -18,10 +18,8 @@
     "lodash": "4.17.21",
     "nuxt": "^2.15.8",
     "nuxt-webfontloader": "1.1.0",
-    "portal-vue": "2.1.7",
     "sass": "1.49.11",
     "sass-loader": "10.1.1",
-    "swiper": "7.2",
     "uuid": "8.3.2",
     "v-mask": "2.3.0",
     "vue": "^2.6.14",
@@ -29,6 +27,7 @@
     "vue-cool-lightbox": "2.7.4",
     "vue-final-modal": "2.4.1",
     "vue-photo-zoom-pro": "2.5.0",
+    "vue-resize": "1.0.1",
     "vue-server-renderer": "^2.6.14",
     "vue-slick-carousel": "1.0.6",
     "vue-template-compiler": "^2.6.14",

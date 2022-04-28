@@ -112,8 +112,8 @@
     oform() {  return this.$store.getters['cart/getOform'] },
     selcomm() { return this.oform && this.oform.selcomm ? this.oform.selcomm : null},
     promo() {  return this.$store.getters['cart/getPromo'] },
-    cartAvailable() { return this.cart.items.filter(item => item.active)},
-    cartNotAvailable() {return this.cart.items.filter(item => !item.active)},
+    cartAvailable() { return this.cart.items.filter(item => item.active && item.ostatok)},
+    cartNotAvailable() {return this.cart.items.filter(item => !item.active || !item.ostatok )},
     currency() { return this.$store.state.settings.currency },
     showUnavailableText() {
       return this.showUnavailable ? 'Скрыть недоступные к заказу' : 'Недоступны к заказу'

@@ -1,108 +1,130 @@
 <template lang="pug">
-  .quick-view(v-if="product" ref="quickView")
-    .bgr-close.quick-view-close(@click.stop.prevent="close")
-    .quick-view-body(@click.stop)
-      .quick-view-title {{product.name}}
-      .quick-view-info
-        .quick-view-info-item(
-          v-for="(item, index) in params" 
-          :key="index"
-          :class="{ art: index === 0 }"
-          )  
-          .label {{labelFormat(item.name)}}
-          .text {{item.value.trim()}}
-      .quick-view-content
-        .quick-view-col.slider
-          .product-slider-block.thumbs
-            .product-additional
-            .thumbs-layout
-              .thumbs-body
-                vue-slick-carousel(
-                  v-bind="settingsProductSliderThumbs"
-                  ref="productSliderThumbs"
-                  :asNavFor="$refs.productSlider",
-                  
-                  )
-                  .thumbs-item(
-                    v-for="(itm, ind ) in product.images"
-                    :key="`thumbs-${ind}`"
-                  ) 
-                    .thumbs-item_content
-                      .img-box
-                        img(:src="imgPath + itm")
+  client-only
+    vue-final-modal(
+      v-slot="{ close }"
+      v-bind="$attrs"
+      v-on="$listeners"
+      :resize="false"
+      :classes="['modal-container', 'quick-view_modal']"
+      :content-class="['modal-content', 'quick-view_modal-content' ]"
+      :overlay-class="['modal-overlay']"
+      :fit-parent="true"
+      :ssr="false"
+      
+      )
 
-                  template( v-slot:prevArrow)
-                    button.thumbs-arrow.prev
-                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
-                  template( v-slot:nextArrow)
-                    button.thumbs-arrow.next
-                      svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+      .quick-view(v-if="product" ref="quickView")
+        .quick-view-close(@click="close")
+          svg.icon.icon-btn-close <use href="#icon-btn-close"/>
+        .quick-view-body
+          .quick-view-title {{product.name}}
+          .quick-view-content
+            .quick-view-col.slider
+              .product-slider-block.thumbs
+                .thumbs-layout
+                  .thumbs-body
+                    vue-slick-carousel(
+                      v-bind="settingsProductSliderThumbs"
+                      ref="productSliderThumbs"
+                      :asNavFor="$refs.productSlider",
+                      )
+                      .thumbs-item(
+                        v-for="(itm, ind ) in product.images"
+                        :key="`thumbs-${ind}`"
+                      ) 
+                        .thumbs-item_content
+                          .img-box
+                            img(:src="imgPath + itm")
 
-
-          .product-slider-block
-            .product-additional
-              v-stars(:value="product.stars || 0" )
-              product-tags(:tags="labels" :pos-absolute='false')
-
-            .product-slider
-              .product-slider-container
-                vue-slick-carousel(
-                  v-bind="settingsProductSlider"
-                  ref="productSlider"
-                  :asNavFor="$refs.productSliderThumbs"
-                  
-                  )
-                  .product-slider-item(
-                    v-for="(item, index ) in product.images"
-                    :key="`slider-${index}`"
-                  ) 
-                    .product-slider-item-content
-                      .img-box
-                        //- img(:src="imgPath + item")
-                        //- inner-image-zoom(:src="imgPath + item")
-                        vue-photo-zoom-pro(
-                          :url="imgPath + item"
-                          :highUrl="imgPath + item"
-                          :width="imgWidth"
-                          :height="imgHeight"
-                          @update="imgUpdate"
-                          )
+                      template( v-slot:prevArrow)
+                        button.thumbs-arrow.prev
+                          svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
+                      template( v-slot:nextArrow)
+                        button.thumbs-arrow.next
+                          svg.icon.icon-arrow-default <use href="#icon-arrow-default"/>
 
 
-        .quick-view-col.info
-          .quick-view-price-block
-            span.actual {{product.price}} {{$options.RUB}}
-            span.old {{product.oldprice}} {{$options.RUB_OLD}}
+              .product-slider-block
+                .product-slider
+                  .product-slider-container
+                    vue-slick-carousel(
+                      v-bind="settingsProductSlider"
+                      ref="productSlider"
+                      :asNavFor="$refs.productSliderThumbs"
+                      
+                      )
+                      .product-slider-item(
+                        v-for="(item, index ) in product.images"
+                        :key="`slider-${index}`"
+                      ) 
+                        .product-slider-item-content
+                          .img-box
+                            //- img(:src="imgPath + item")
+                            //- inner-image-zoom(:src="imgPath + item")
+                            vue-photo-zoom-pro(
+                              :url="imgPath + item"
+                              :highUrl="imgPath + item"
+                              :width="imgWidth"
+                              :height="imgHeight"
+                              @update="imgUpdate"
+                              )
 
-          //- product-tab-sizes(
-            :sizes="product.sizes"
-            :in-fixed-block="true"
-            :selected-size="selectedSize"
-            @select-size="selectSize"
-            )
-          .product-quantity-block(v-if="selectedSize")
-            .product-quantity-label {{$options.QUANTITY_LABEL}}
-            .product-quantity
-              input-number(
-                v-if="selectedSize"
-                :has-label="false"
-                :min="1"
-                :max="selectedSize.ostatok"
-                :step="1"
-                :val="selectedSizeCount"
-                v-model="selectedSizeCount"
-                border-color="currentColor"
-                )  
 
-              .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
-          
-          .product-order-block
-            .product-delivery-info
-              .product-delivery-label 
-                span.label {{$options.DELIVERY_LABEL}}
-                span.text {{product.delivery.info}}
-              .btn(@click="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
-              nuxt-link.btn.btn-4(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
+            .quick-view-col.info
+              .quick-view-price-block
+                span.actual {{product.price}} {{$options.RUB}}
+                span.old {{product.oldprice}} {{$options.RUB_OLD}}
+
+              //- .quick-view_sale-block(v-if="data.skidka")
+                .sale(v-if="data.skidka.proc") {{data.skidka.proc}}%
+                .text(v-if="data.skidka.info") {{data.skidka.info}}
+
+              //- ====== Лого производителя =======
+              .quick-view_brand-block
+                .quick-view_brand-logo(v-if="product.category.logo && product.category.logo.length")
+                  //- .img-box
+                  img(:src="product.category.logo")
+                .quick-view_brand-text
+                  span(v-if="product.category.manufacturer && product.category.manufacturer.length") {{product.category.manufacturer}}
+                  span(v-if="product.category.country_of_origin && product.category.country_of_origin.length") {{product.category.country_of_origin}}
+              //- ====== Параметры товара =========
+              .quick-view_block.right
+                .quick-view_row(
+                  v-for="(p, i) in product.params"
+                  :key="`param-${i}`"
+                )
+                  .el-label {{p.name}}:
+                  .el-text {{p.value}}
+
+              //- product-tab-sizes(
+                :sizes="product.sizes"
+                :in-fixed-block="true"
+                :selected-size="selectedSize"
+                @select-size="selectSize"
+                )
+              .product-quantity-block(v-if="selectedSize")
+                .product-quantity-label {{$options.QUANTITY_LABEL}}
+                .product-quantity
+                  input-number(
+                    v-if="selectedSize"
+                    :has-label="false"
+                    :min="1"
+                    :max="selectedSize.ostatok"
+                    :step="1"
+                    :val="selectedSizeCount"
+                    v-model="selectedSizeCount"
+                    border-color="currentColor"
+                    )  
+
+                  .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
+              
+              .product-order-block
+                .product-delivery-info
+                  .product-delivery-label 
+                    span.label {{$options.DELIVERY_LABEL}}
+                    span.text {{product.delivery.info}}
+                  .btn(@click="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
+                  nuxt-link.btn.btn-4(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
 
 
 

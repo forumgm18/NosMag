@@ -21,7 +21,8 @@ services:
 
   nginx:
     volumes:
-      - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
+      # - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
       - ./nginx/log:/var/log/nginx
+      - ./nginx/dev:/etc/nginx
     # stdin_open: false
     # tty: false

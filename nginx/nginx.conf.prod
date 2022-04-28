@@ -1,5 +1,38 @@
-  access_log /var/log/nginx/access.log;
-  error_log /var/log/nginx/error.log;
+# access_log /var/log/nginx/access.log;
+# error_log /var/log/nginx/error.log;
+# worker_processes auto;
+events {
+  worker_connections  2048;
+  multi_accept on;
+}  
+gzip on;
+gzip_disable "msie6";
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 6;
+gzip_buffers 16 8k;
+gzip_http_version 1.1;
+gzip_min_length 1100;
+gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+
+http {
+  worker_processes auto;
+
+  keepalive_timeout          45;
+  reset_timedout_connection  on;
+  client_body_timeout        35;
+  send_timeout               30;
+
+  sendfile      on;
+  aio           on;
+  tcp_nopush    on;
+
+  open_file_cache max=100000 inactive=20s;
+  open_file_cache_valid 45s;
+  open_file_cache_min_uses 2;
+  open_file_cache_errors on;
+}
+
 
 server {
   listen 80;

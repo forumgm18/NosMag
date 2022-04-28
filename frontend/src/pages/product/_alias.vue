@@ -204,6 +204,7 @@
             product-other-slider(
               :items="data.cases"
               :is-link="false"
+              :is-cases="true"
               v-model="selectedCase"
               )
           //- ============= Кнопка Добавить в корзину ===============
@@ -212,7 +213,11 @@
               div Итого
               div( v-html="`${data.price * selectedSizeCount} ${currencyShort}`") 
 
-            .btn.product-add2cart(@click.prevent="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
+            .btn.product-add2cart(
+              :class="{ disabled: startAdd2Cart }"
+              @click.prevent="addToCart"
+
+              ) {{$options.ADD_TO_BASKET_TEXT}}
 
           //- ============= Блок инфы о доставке ===============
           .product-delivery-info
@@ -251,7 +256,7 @@
             :placeholder="$options.FEEDBACK.FORM_PLACEHOLDER"
             v-model="userFeedback.text"
           )
-          .btn {{$options.FEEDBACK.FORM_BTN}}
+          .btn(@click="addFeedback") {{$options.FEEDBACK.FORM_BTN}}
 
         .product-page-column.right.feedback-mobile
           div
@@ -336,7 +341,7 @@
             :required="true"
           )
           .report-text.success {{$options.EMAIL_SUCCESS}}
-          .btn() {{$options.TAB_SIZES_REPORT}}
+          .btn {{$options.TAB_SIZES_REPORT}}
 
 </template>
 <script>
@@ -373,6 +378,7 @@ export default {
       imgHeight: 0,
       tabSizesModalShow: false,
       tabSizesReportModalShow: false,
+      startAdd2Cart: false,
       // hasArrows: false,
       // hasCasesArrows: false,
       reportEmail: '',
@@ -532,6 +538,7 @@ export default {
   // },
   async fetch() {
     try {
+      this.$store.commit('setBreadcrumbs', [])
       const c = await this.$axios.$get(`/get_content`, {
         params: {
           alias: this.$route.params.alias,
@@ -575,6 +582,7 @@ export default {
 
   computed: {
     ...mapState('settings', ['currency', 'currencyShort', 'imgPath', 'imgPrefix', 'imgRetinaPrefix' ]),
+    ...mapState('token', ['session_id']),
     sale() { return this.$sale(this.data.price, this.data.oldprice) || 0},
     getVisibleSlidersCount(){
       if (process.server) return 7
@@ -702,17 +710,33 @@ export default {
     // },
 
     async addToCart() {
+      this.startAdd2Cart = true
       const val = []
       val.push({scode: this.selectedSize.scode, q: this.selectedSizeCount })
-      if (data.cases && data.cases.length) {
-        val.push({scode: this.selectedCase.scode, q: this.selectedSizeCount })
+      if (this.selectedCase) {
+        val.push({scode: this.selectedCase.scode, q: this.selectedSizeCount, parent_scode: this.selectedSize.scode })
       }
       console.log('addToCart val: ', val)
-      this.$store.dispatch('cart/addToCart', val)
-      await this.$nuxt.refresh()
+      const res = await this.$store.dispatch('cart/addToCart', val)
+      // await this.$nuxt.refresh()
+      this.startAdd2Cart = false
     },
-
-
+    async addFeedback() {
+      if (this.userFeedback.text.length) {
+        const fb = await this.$axios.$post('/set_feedback_new', {
+              session_id: this.session_id,
+              otzyv: this.userFeedback.text.trim(),
+              stars: this.userFeedback.stars,
+              catalog_id: this.data.id,
+          })
+          if (fb.errors) {
+            console.log('Error add feedback')
+          }
+          if (fb.feedback_id) {
+            console.log('Success add feedback', fb.feedback_id)
+          }
+      }
+    },
   },
   watch: {
     feedbackFilter(v) {

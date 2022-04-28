@@ -47,13 +47,13 @@
 
 
 
-    quick-view(
+    //- quick-view(
       v-if="isQuickView" 
       :product="product"
       @close-quick-view="quickViewShow"
       )
 
-    client-only  
+    //- client-only  
       vue-final-modal(
         :name="`select-size-modal-${product.id}`" 
         v-slot="{ close }" 
@@ -162,9 +162,51 @@ export default {
   },
   methods: {
     showModal() {
-      this.$vfm.show(`select-size-modal-${this.product.id}`, )
+      let self = this
+      this.$vfm.show({ 
+        component: 'product-card-select-size',
+        bind: {
+          sizes: this.sizes,
+          selectedSize: this.selectedSize,
+          btnText: this.$options.BTN_ADD2BASKET_TEXT_2,
+        },
+        on: {
+          add2cart(close) {
+            self.addToCart()
+            close()
+          },
+          selectedSize(val) {
+            self.selectedSize = val
+            self.selectedSizeCount = 1
+          }
+        },
+      },
+    )
+
     },
-    quickViewShow(v) { this.isQuickView = v },
+    quickViewShow(v) { 
+      // this.isQuickView = v 
+      let self = this
+      this.$vfm.show({ 
+        component: 'quick-view',
+        bind: {
+          product: this.product, 
+          
+        },
+        on: {
+          add2cart(close) {
+            self.addToCart()
+            close()
+          },
+          selectedSize(val) {
+            self.selectedSize = val
+            self.selectedSizeCount = 1
+          }
+        },
+      },
+    )
+
+    },
     async addToCart() {
       const val = []
       val.push({scode: this.selectedSize.scode, q: 1 })
@@ -190,35 +232,5 @@ export default {
 
 <style lang="scss">
 @import 'product-card';
-.psz-popup {
-  font-size: 14px;
-
-  // border: 1px solid #A7A7A7;
-  border-radius: 5px; 
-  padding: 10px 16px; 
-  box-shadow: var(--box-shadow-modal);
-
-  &-title {
-    font-size: .8571em;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: .5em;
-    .text {
-      font-weight: bold;
-      text-transform: uppercase;
-      margin-right: 0.5em;
-    }
-  }
-  &-close{
-    cursor: pointer;
-  }
-  .psz-table-content {
-    font-size: 1em;
-    padding: 1.4em 0;
-    
-  }
-  .btn {font-size: 1em;}
-}
 
 </style>

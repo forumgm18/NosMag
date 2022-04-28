@@ -2,9 +2,11 @@
   .map-sidebar-panel(ref="sidebarPanel")
     .map-sidebar-title(v-if="title && title.length")
       span {{title}}
-    div(ref="scrollPanel" v-if="pvzList && pvzList.length")
+      resize-observer(@notify="titleResize")      
+    div(ref="scrollPanel" data-scroll-panel)
       client-only
         perfect-scrollbar.map-sidebar-scroll(
+          v-if="pvzList && pvzList.length"
           ref="ps"
           :options="$options.scrollbarOptions" 
           :style="`height:${scrollbarHeight}`"
@@ -22,6 +24,7 @@
 </template>
 
 <script>
+import { ResizeObserver } from 'vue-resize'
   export default {
     props: {
       pvzList: {
@@ -32,8 +35,13 @@
         type: String,
         default: ''
       },
+      // isVisible: {
+      //   type: Boolean,
+      //   default: false
+      // },
       value: {}
     },
+    components: {ResizeObserver},
     scrollbarOptions: {wheelPropagation: false},
     data() {
       return {
@@ -50,15 +58,10 @@
       },
     },
     mounted() {
-      this.$nextTick(this.$forceUpdate())
-      const h = this.$refs.sidebarPanel.clientHeight
-      const t = this.$refs.scrollPanel ? this.$refs.scrollPanel.offsetTop : 0
-      this.scrollbarHeight = `${ h - t }px`
-      debugger
+      // this.$nextTick(this.$forceUpdate())
       this.$nextTick( function() {
-        // debugger
+        this.$forceUpdate()
         const li = !!this.$refs.itemsList ? this.$refs.itemsList.querySelector('.pre-select') : false
-        // const li = this.$refs.ps.querySelector('.pre-select')  
         if (li) {
           this.$refs.ps.$el.scrollTop = li.offsetTop
         }
@@ -67,11 +70,14 @@
     methods: {
       pvzPreSelect(val) {
         this.pvzSelected = {code: val.data.code, name: val.data.name }
+      },
+      titleResize({ height }){
+        this.scrollbarHeight = this.$refs.sidebarPanel.clientHeight - height + 'px'
       }
-    }
+    },
   }
 </script>
 
 <style lang="scss" scoped>
-
+  .map-sidebar-title{position: relative;}
 </style>
