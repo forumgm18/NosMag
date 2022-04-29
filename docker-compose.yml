@@ -9,8 +9,6 @@ services:
     container_name: nosmag-frontend
     restart: unless-stopped
     command: yarn run start
-    # stdin_open: true
-    # tty: true
 
     ports:
       - "3000:3000"
@@ -22,13 +20,8 @@ services:
       - BROWSER_BASE_URL=${BROWSER_BASE_URL}
       - SERVER_BASE_URL=${SERVER_BASE_URL}
       - NODE_ENV:production
-      # - NODE_ENV:development
     volumes:
-      # - test_volume:/usr/src/app/src/static/images
-      # - test_vol:/usr/src/app/static/imag:ro
-      # - ./images:/usr/src/app/src/static/images
       - .././images:/usr/src/app/static/images
-      # - /home/store/Projects/NosMag/NosMag-app/images:/usr/src/app/src/static/images
 
     networks:
       - nosmag-network
@@ -46,16 +39,6 @@ services:
       - frontend
     networks:
       - nosmag-network
-
-# volumes:
-#   # test_volume:
-#   #   external: true
-#   test_vol:
-#     driver: local
-#     driver_opts:
-#       type: none
-#       o: bind
-#       device: /home/store/Projects/NosMag/NosMag-app/images
 
 networks:
   nosmag-network:

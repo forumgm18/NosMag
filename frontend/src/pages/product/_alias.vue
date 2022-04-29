@@ -106,7 +106,7 @@
             .text(v-if="data.skidka.info") {{data.skidka.info}}
 
           //- ====== Лого производителя =======
-          .product-page_brand-block
+          .product-page_brand-block(v-if="data.category")
             .product-page_brand-logo(v-if="data.category.logo && data.category.logo.length")
               //- .img-box
               img(:src="data.category.logo")

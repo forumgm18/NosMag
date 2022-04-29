@@ -192,6 +192,7 @@ export default {
           })
       }
     })
+    // this.locValue = this.value
 
 
   },

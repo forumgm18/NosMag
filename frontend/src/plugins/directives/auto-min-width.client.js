@@ -7,6 +7,10 @@ const calcWidth = el => {
   return el.scrollWidth + l + r
 }
 Vue.directive('auto-min-width', {
-  inserted: el => {el.style.width = calcWidth(el) + 'px'},
-  update: el => {el.style.width = calcWidth(el) + 'px'}
+  inserted: el => {
+    el.style.width = calcWidth(el) + 'px'
+  },
+  update: el => {
+    el.style.width = calcWidth(el) + 'px'
+  },
 })

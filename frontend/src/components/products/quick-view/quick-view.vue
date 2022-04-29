@@ -13,7 +13,7 @@
       
       )
 
-      .quick-view(v-if="product" ref="quickView")
+      template(v-if="product" ref="quickView")
         .quick-view-close(@click="close")
           svg.icon.icon-btn-close <use href="#icon-btn-close"/>
         .quick-view-body
@@ -52,11 +52,11 @@
                       ref="productSlider"
                       :asNavFor="$refs.productSliderThumbs"
                       
-                      )
+                        )
                       .product-slider-item(
                         v-for="(item, index ) in product.images"
                         :key="`slider-${index}`"
-                      ) 
+                        ) 
                         .product-slider-item-content
                           .img-box
                             //- img(:src="imgPath + item")
@@ -69,8 +69,8 @@
                               @update="imgUpdate"
                               )
 
-
-            .quick-view-col.info
+              resize-observer(@notify="sliderResize")
+            .quick-view-col.info(:style="{ maxWidth: infoWidth }")
               .quick-view-price-block
                 span.actual {{product.price}} {{$options.RUB}}
                 span.old {{product.oldprice}} {{$options.RUB_OLD}}
@@ -88,7 +88,7 @@
                   span(v-if="product.category.manufacturer && product.category.manufacturer.length") {{product.category.manufacturer}}
                   span(v-if="product.category.country_of_origin && product.category.country_of_origin.length") {{product.category.country_of_origin}}
               //- ====== Параметры товара =========
-              .quick-view_block.right
+              .quick-view_props-block
                 .quick-view_row(
                   v-for="(p, i) in product.params"
                   :key="`param-${i}`"
@@ -96,60 +96,90 @@
                   .el-label {{p.name}}:
                   .el-text {{p.value}}
 
-              //- product-tab-sizes(
-                :sizes="product.sizes"
-                :in-fixed-block="true"
-                :selected-size="selectedSize"
-                @select-size="selectSize"
-                )
+              //- ============= Размер ===============
+              .product-sizes-block
+                .el-label {{$options.SELECT_SIZE}}
+                .product-sizes-row
+                  .product-sizes_tab
+                    template(v-for="(tb, ind) in product.sizes")
+                      v-dropdown(
+                        v-if="tb.table && tb.table.length"
+                        :triggers="['hover']"
+                        )
+                        label.product-sizes_tab-item( 
+                          :key="ind"
+                          :class="{ selected: selectedSize && selectedSize.scode === tb.scode}"
+                          )
+                          input(
+                            type="radio" 
+                            hidden 
+                            v-model="selectedSize" 
+                            :value="tb"
+                            :disabled="!tb.active"
+                            )
+                          .product-sizes_tab-item-boby
+                            .sizes-item-text.top(
+                              v-if="tb.table[0] && tb.table[0].value"
+                              :class="{ active: tb.active }"
+                              ) {{tb.table[0].value}}
+                            .sizes-item-text.bottom(v-if="tb.table[1] && tb.table[1].value") {{tb.table[1].value}}
+
+                        template(#popper)
+                          .product-sizes_popper
+                            .product-sizes_popper_item(v-for="(tbProp, i) in tb.table" :key="i" )
+                              .product-sizes_popper_item-label {{tbProp.name}}
+                              .product-sizes_popper_item-value {{tbProp.value}}
+                            .product-sizes_popper_item.report(
+                              v-if="!tb.active"
+                              @click="$vfm.show('tb-size-report')"
+                              ) {{$options.TAB_SIZES_REPORT}}
+
+              //- ============= Количество ===============
               .product-quantity-block(v-if="selectedSize")
-                .product-quantity-label {{$options.QUANTITY_LABEL}}
+                .el-label {{$options.QUANTITY_LABEL}}
                 .product-quantity
-                  input-number(
+                  v-input-number(
                     v-if="selectedSize"
                     :has-label="false"
+                    append-text="шт"
                     :min="1"
                     :max="selectedSize.ostatok"
                     :step="1"
                     :val="selectedSizeCount"
                     v-model="selectedSizeCount"
-                    border-color="currentColor"
-                    )  
-
+                    
+                  )  
                   .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
+
+
+
               
               .product-order-block
                 .product-delivery-info
                   .product-delivery-label 
                     span.label {{$options.DELIVERY_LABEL}}
                     span.text {{product.delivery.info}}
-                  .btn(@click="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
-                  nuxt-link.btn.btn-4(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
+              .btn.quick-view_btn(@click="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
+              nuxt-link.quick-view_link.link(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
 
+          resize-observer(@notify="bobyResize")
 
 
 </template>
 
 <script>
-import vStars from '~/components/common/stars/stars'
-// import productTabSizes from '~/components/products/product-tab-sizes/product-tab-sizes'
 import VueSlickCarousel from 'vue-slick-carousel'
-import productTags from '~/components/products/product-tags/product-tags'
-import inputNumber from '~/components/forms/input-number/input-number'
-// import InnerImageZoom from 'vue-inner-image-zoom'
-// import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'  
 import VuePhotoZoomPro from 'vue-photo-zoom-pro'
 import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
+import { ResizeObserver } from 'vue-resize'
 
 export default {
   name: 'quick-view',
   components: {
-    vStars,
-    // productTabSizes,
     VueSlickCarousel,
-    productTags,
-    inputNumber,
-    VuePhotoZoomPro
+    VuePhotoZoomPro,
+    ResizeObserver
   },
   props: {
     product: {
@@ -166,7 +196,9 @@ export default {
     return {
       imgWidth: 0,
       imgHeight: 0,
-
+      bobySize: {}, 
+      sliderSize: {},
+      infoWidth: 'auto',
       settingsProductSlider: {
         lazyLoad: 'ondemand',
         dots: false,
@@ -213,7 +245,7 @@ export default {
         // infinite: false,
         vertical: true,
         // speed: 500,
-        slidesToShow: 3,
+        slidesToShow: 4,
         slidesToScroll: 1,
         focusOnSelect: true,
       },
@@ -228,6 +260,8 @@ export default {
   DELIVERY_LABEL: 'Доставка: ',
   QUANTITY_LABEL: 'Количество:',
   AVAILABLE_LABEL: 'В наличии: ',
+  SELECT_SIZE: 'Ваберите размер:',
+  TAB_SIZES_REPORT: 'Сообщить о поступлении',
 
   computed: {
     labels() { return this.product.labels || null},
@@ -238,7 +272,7 @@ export default {
 
   },
   mounted(){
-    document.body.append(this.$refs.quickView)
+    // document.body.append(this.$refs.quickView)
     this.$nextTick( this.$forceUpdate )
     if (this.sizes && this.sizes.length) {
       // let i = 0
@@ -249,18 +283,28 @@ export default {
     }
   
   },
-  beforeDestroy() {
-    this.$refs.quickView.remove()  
-  },
+  // beforeDestroy() {
+  //   this.$refs.quickView.remove()  
+  // },
   methods: {
     imgUpdate(e){
       this.imgWidth = e.width
       this.imgHeight = e.height
     },
 
-    close() {
-      this.$emit('close-quick-view', false)
+    bobyResize({width, height}){
+      this.bobySize = {w: width, h: height} 
+      this.infoWidth = this.bobySize.w - this.sliderSize.w + 'px'
     },
+    sliderResize({width, height}){
+      this.sliderSize = {w: width, h: height}
+      this.infoWidth = this.bobySize.w - this.sliderSize.w + 'px'
+    },
+
+    // close() {
+    //   this.$emit('close-quick-view', false)
+    // },
+
     labelFormat(v) {
       let s = v.trim()
       // if (s.slice(-1, 1) != ':' ) s += ':'
@@ -284,35 +328,39 @@ export default {
 
 
   },
-
+  watch: {
+    selectedSize(val) {
+      if ( this.selectedSizeCount > val.ostatok) this.selectedSizeCount = val.ostatok
+    }
+  }
 }
 </script>
 
 <style lang="scss" >
 @import "quick-view";
- .product-slider.proportional {
-   position: relative;
-   padding-bottom: 100%;
- }
- .product-slider-img-box {
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   z-index: 1; 
- }
- .product-slider-container {
-   border: 1px solid red;
-   width: 100%;
-   height: 100%;
+//  .product-slider.proportional {
+//    position: relative;
+//    padding-bottom: 100%;
+//  }
+//  .product-slider-img-box {
+//    position: absolute;
+//    width: 100%;
+//    height: 100%;
+//    z-index: 1; 
+//  }
+//  .product-slider-container {
+//    border: 1px solid red;
+//    width: 100%;
+//    height: 100%;
 
-   .slick-slider {height: 100%;}
-   .slick-list {height: 100%;}
-   .slick-track {height: 100%;}
-   .slick-slide {
-     height: 100%;
-     > div {height: 100%;}
-   }
-   .product-slider-item {height: 100%;}
+//    .slick-slider {height: 100%;}
+//    .slick-list {height: 100%;}
+//    .slick-track {height: 100%;}
+//    .slick-slide {
+//      height: 100%;
+//      > div {height: 100%;}
+//    }
+//    .product-slider-item {height: 100%;}
    
- }
+//  }
 </style>

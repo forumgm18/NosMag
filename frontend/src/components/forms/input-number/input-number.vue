@@ -7,11 +7,12 @@
           //- svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>
           svg.icon.icon-btn-plus.minus <use href="#icon-btn-plus"/>
           
-        .number-input-block  
+        .number-input-block
           input.number-input(
             v-auto-min-width
             type="text"
             ref="input"
+            :key="keyInput"
             :class="{modified: isModified}"
             :value="locValue"
             @input="inputValue"
@@ -53,47 +54,30 @@ export default {
   },
   data: function () {
     return {
+      keyInput: 1,
       isModified: false,
-      locValue: this.value
+      // locValue: this.value
     }
   },
 
   mounted() { 
     this.locValue = this.value
+    this.$nextTick(()=> this.keyInput++) // Перерисовываем компонент для правильного расчета ширины
   },
-  // updated() {
-  //   return
-  //   // debugger
-  //   // if (this.$refs.input) this.$refs.input.style.width = this.getInputWidth()
-  //   if (this.$refs.input) {
-  //     const borders = this.getInputBorders()
-  //     this.$refs.input.style.width = this.$refs.input.scrollWidth + borders.left + borders.right + 'px'
-  //   }
-  // },
   computed: {
-    // inputStyle() {
-    //   let style = this.inputBorderColor ? `border-color: ${inputBorderColor};` : ''
-    //   if (this.inputTextUnderline) style = style + 'text-decoration: underline;'
-    //   // style = style + 'width:' + this.getInputWidth() + ';'
-    //   return style
-    // },
-    // inputSize() {
-    //   return this.locValue.toString().length
-    // }
+    locValue: {
+      get() {return this.value},
+      set(val, oldVal) {
+        val = parseInt(val, 10)
+        let res = val
+        if (val <= this.min) res = parseInt(this.min)
+        if (val >= this.max) res = parseInt(this.max)
+        this.$emit('input', res, oldVal)
+      }
+    }
 
   },
   methods: {
-    // getInputBorders() {
-    //   const inputStyles = window.getComputedStyle(this.$refs.input)
-    //   let res = {}
-    //   res.left = parseInt(inputStyles.getPropertyValue("border-left-width"))
-    //   res.right = parseInt(inputStyles.getPropertyValue("border-right-width"))
-    //   res.top = parseInt(inputStyles.getPropertyValue("border-top-width"))
-    //   res.bottom = parseInt(inputStyles.getPropertyValue("border-bottom-width"))
-    //   console.log(res)
-    //   return res
-    // },
-
     inputValue(evt) {
       this.locValue = evt.target.value ? parseInt(evt.target.value) : this.min
     },
@@ -130,15 +114,15 @@ export default {
     value: function(val, oldVal) {
       this.locValue = parseInt(val, 10)
     },
-    locValue: function(val, oldVal) {
-      val = parseInt(val, 10)
-      if (val <= this.min) this.locValue = parseInt(this.min)
-      if (val >= this.max) this.locValue = parseInt(this.max)
-      if (val <= this.max && val >= this.min) {
-        // this.locValue = val
-        this.$emit('input', val, oldVal)
-      }
-    }
+    // locValue: function(val, oldVal) {
+    //   val = parseInt(val, 10)
+    //   if (val <= this.min) this.locValue = parseInt(this.min)
+    //   if (val >= this.max) this.locValue = parseInt(this.max)
+    //   if (val <= this.max && val >= this.min) {
+    //     // this.locValue = val
+    //     this.$emit('input', val, oldVal)
+    //   }
+    // }
   }
 }
 </script>

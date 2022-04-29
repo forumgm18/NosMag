@@ -8,8 +8,6 @@ services:
       context: ./frontend
     command: yarn run dev
     stdin_open: true
-    # tty: true
-    # stdin_open: false
     tty: false
     environment:
       - BROWSER_BASE_URL=${BROWSER_BASE_URL_LOCAL}
@@ -21,12 +19,11 @@ services:
 
   nginx:
     volumes:
-      # - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
       - ./nginx/log:/var/log/nginx
       - ./nginx/dev:/etc/nginx
-    # stdin_open: false
-    # tty: false
-networks:
-  nosmag-network:
-    name: host
-    external: true  
+
+# networks:
+#   nosmag-network:
+#     external: true
+#     name: host
+    # driver: host
