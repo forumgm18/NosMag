@@ -12,6 +12,8 @@
   //background-color: transparent;
   background-color: #fff;
   min-height: 34px;
+  transition: .3s;
+
     @include media-max-width2($lg) { font-size: 12px; }
     @include media-max-width2($xsm) { font-size: 8px; }
 

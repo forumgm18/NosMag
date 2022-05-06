@@ -29,7 +29,11 @@ export default {
   },
 
   styleResources: {
-    scss: ['./assets/scss/utils/vars.scss', './assets/scss/utils/mixins.scss'], // alternative: scss
+    scss: [
+      './assets/scss/utils/vars.scss',
+      './assets/scss/utils/mixins.scss',
+      './assets/scss/utils/vue-slider-vars.scss',
+    ], // alternative: scss
   },
   css: [
     '@/assets/scss/utils/reset.scss',
@@ -43,6 +47,7 @@ export default {
     // { src: '~/plugins/vue-modal.js', mode: 'client' },
     { src: '~/plugins/v-mask.js', mode: 'client' },
     { src: '~/plugins/vue-perfect-scrollbar.js', mode: 'client' },
+    { src: '~/plugins/vue-slider-component', mode: 'client' },
     // { src: '~/plugins/swiper.js', mode: 'client' },
     '~/plugins/vue-clamp.js',
     '~/plugins/vue-gallery.js',
@@ -152,6 +157,7 @@ export default {
         isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]',
     },
     analyze: true,
+    // vendor: ['vue-slider-component'],
     // babel: {
     //   plugins: [
     //     ['@babel/plugin-proposal-private-property-in-object', { loose: true }],

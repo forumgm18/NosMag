@@ -98,7 +98,9 @@
     &-logo{
       margin-right: .5rem;
       img {
-        height: 3rem;
+        max-height: 3rem;
+        max-width: 8rem;
+        height: auto;
         width: auto;
       }
     }

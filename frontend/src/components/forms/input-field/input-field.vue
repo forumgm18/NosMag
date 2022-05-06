@@ -17,19 +17,21 @@
                 @keyup="calcHeight"
                 v-on="inputListeners"
               )
-      input(
-        ref="input"
-        v-else
-        v-model="$v.locValue.$model"
-        v-mask="vMask"
-        :type="type"
-        :placeholder="placeholder"
-        @focus="isFocus=true"
-        @blur="isFocus=false"
-        v-on="inputListeners"
-        )
-      .input-field-clear(v-if="hasClear" @click="clearInput")
-        slot(name="field-clear") Удалить
+      template(v-else)
+        input(
+          ref="input"
+          v-auto-min-width="autoMinWidth"
+          :size="autoMinWidth ? 0 : 20"
+          v-model="$v.locValue.$model"
+          v-mask="vMask"
+          :type="type"
+          :placeholder="placeholder"
+          @focus="isFocus=true"
+          @blur="isFocus=false"
+          v-on="inputListeners"
+          )
+        .input-field-clear(v-if="hasClear" @click="clearInput")
+          slot(name="field-clear") Удалить
 
     slot(name="error")
       .input-field-text.error(v-if="errorText.length" v-html="errorText") 
@@ -116,6 +118,10 @@ export default {
     },
     hasClear: {
       type: Boolean,
+      default: false
+    },
+    autoMinWidth: {
+      type: [Boolean,Number],
       default: false
     },
     scrollbarSettings: {

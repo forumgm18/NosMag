@@ -15,22 +15,6 @@
 
         article.main-content
           section.razdel-filter(:class="{collapse: filterCollapse}" v-if="1==1" )
-            //- .filter-btn-block
-              .sort-block
-                .btn-icon(@click="sortOpen")
-                  svg.icon.icon-sort <use href="#icon-sort"/>
-                .mobile-sort(:class="{open: isSortOpen}" data-mobile-sort)
-                  v-radio-set(
-                    :multiple="false"
-                    item-type='radio'
-                    :options="sortmodes" 
-                    v-model="sortBy" 
-                    @input="sortOpen"
-                  )
-              .btn-icon(@click="filterToggle")
-                svg.icon.icon-filter <use href="#icon-filter"/>
-      
-
             //- mobile-filter( 
               v-if="filters"
               :filters="filters"            
@@ -38,13 +22,6 @@
               v-model="selectedFilters"
               @filters-close="isFilterOpen=false" 
               @apply-filter="applyFilter"
-              )
-            //- v-desktop-filter(
-              v-if="filters"
-              :filters="filters"            
-              :class="{open: isFilterOpen}" 
-              v-model="test2"
-              
               )
             v-desktop-filter2(
               v-if="data.filters"
@@ -74,7 +51,7 @@
                   key="price-1"
                   :distance="0"
                   placement="bottom-start"
-                  popper-class="filter-item_popper-container"
+                  popper-class="filter-item_popper-container filter-price_popper-container"
                   )
                   .filter-item_title(:tabindex="1")
                     span.text {{filtersPrice.name}}
@@ -83,25 +60,38 @@
                   template(#popper)
                     .filter-item_price
                       .filter-price-block
-                        v-input-number.price-filter(
-                          :has-label="true"
+                        v-input-number.filter-price_item(
+                          v-model="priceFilter[0]"
+                          before-text="от"
+                          :append-text="currencyShort"
+                          :has-spin-btn="false"
                           :min="filtersPrice.values.min"
-                          :max="priceFilter.active_max"
-                          :step="$options.PRICE_STEP"
-                          v-model="priceFilter.active_min"
-                          label="от"
-                          border-color="currentColor"
-                          style="margin-right: 10px;"
+                          :max="priceFilter[1]"
+                          border-color="var(--base-color4)"
+                          focus-border-color="var(--base-color1)"
+                          hover-border-color="var(--base-color3)"
                           )
-                        v-input-number.price-filter(
-                          label="до"
-                          :has-label="true"
-                          :min="priceFilter.active_min"
+                        v-input-number.filter-price_item(
+                          v-model="priceFilter[1]"
+                          before-text="до"
+                          :append-text="currencyShort"
+                          :has-spin-btn="false"
+                          :min="priceFilter[0]"
                           :max="filtersPrice.values.max"
-                          :step="$options.PRICE_STEP"
-                          v-model="priceFilter.active_max"
-                          border-color="currentColor"
-                        )
+                          border-color="var(--base-color4)"
+                          focus-border-color="var(--base-color1)"
+                          hover-border-color="var(--base-color3)"
+                          )
+                      .filter-price_slider
+                        vue-slider(
+                          v-model="priceFilter"
+                          :min="filtersPrice.values.min"
+                          :max="filtersPrice.values.max"
+                          tooltip="none"
+                          @drag-start="priceFilterChangeStart"
+                          @drag-end="priceFilterChangeEnd"
+                          )
+
 
 
           section.razdel-content(v-if="loadingFiltered")
@@ -123,29 +113,21 @@
 
 <script>
 import { mapState } from 'vuex'
+
 export default {
   name: 'Catalog',
   data() {
     return {
-      testChb: false,
-      testOpt: ['val-1', 'val-2', 'val-3', 'val-4'],
-      test:[],
-      // test:[{id:387,name:'зима'},{id:413,name:'лето'}],
-      
-      test2:[],
-
       data: {},
-
-      priceFilter: {active_min: 0, active_max: 0},
-      // selectedFilters: {},
-      selectedFilters: [],
+      priceFilter: [0, 0],
+      // priceFilter: [this.filtersPrice.values.min || 0, this.filtersPrice.values.max || 0],
+      selectedFilters: {},
       sortBy: null,
       // loading: true,
       loading: false,
       loadingFiltered: false,
       filterCollapse: true,
       isFilterOpen: false,
-      isSortOpen: false,
       //=========================
       items_only: 0,
       limitDefault: 8, // количество товаров на страницу
@@ -155,8 +137,6 @@ export default {
       queryFiltersChange: 0,
       isNewFilter: 0,
       canMonitor: false,  // Компонент инициализирован и можно следить за Переменными
-      // selModel: [],
-      // selModel: [{id:1519, name: 'AROS' },{id:428, name: 'Atlantic' },],
 
     }
   },
@@ -175,6 +155,7 @@ export default {
   },
   created() {
     if (this.data.sortmodes) this.sortBy = this.data.sortmodes.filter(el => el.active)[0]
+    console.log('created', this.filtersPrice, this.data)
   },
   mounted(){
     this.canMonitor = false // Запрещаем следить за Переменными
@@ -184,24 +165,21 @@ export default {
           this.data.filters.filter(v => v.type != 'price')
                       .forEach( v => this.$set(this.selectedFilters, v.id, []) )
       }
-      this.queryFiltersChange = -1
+      console.log('mounted', this.filtersPrice, this.data)
+      if (this.filtersPrice) this.priceFilter = [this.filtersPrice.values.min, this.filtersPrice.values.max]
+      // this.queryFiltersChange = -1
+      this.queryFiltersChange = -3
       this.canMonitor = true  
     })
   },
   computed: {
     ...mapState('token', ['session_id']),
+    ...mapState('settings', ['currencyShort']),
+
     pageTitle() {return this.data.name || null},
     filtersPrice() { 
-      return this.data.filters ? this.data.filters.find(f => f.type === 'price') : null
+      return this.data && this.data.filters ? this.data.filters.find(f => f.type === 'price') : null
       },
-    // priceRange() {
-    //   if (this.filters) {
-    //     const priceFilter = this.filters.find(v => v.type === 'price')
-    //     if (priceFilter) return priceFilter.max - priceFilter.min
-    //   }
-    //   return 0
-    // },
-
     isFilter() { // Если выбран какой-либо фильтр
       return this.queryFilters && this.queryFilters.length 
       },
@@ -221,69 +199,61 @@ export default {
                         })
       const pf = this.priceFilter
       
-      if (pf.active_min != 0 || pf.active_max != 0) {
+      // if (pf.active_min != 0 || pf.active_max != 0) {
+      //   res.push({
+      //           id: this.filtersPrice.id,
+      //           value: [pf.active_min, pf.active_max ]
+      //         })
+      // }
+      if (pf[0] != 0 || pf[1] != 0) {
         res.push({
                 id: this.filtersPrice.id,
-                value: [pf.active_min, pf.active_max ]
+                value: pf
               })
       }
       return res
 
     }
   },
-  beforeMount() {
-    if (process.client) document.addEventListener('click', this.hideSort, true)
-  },
-  beforeDestroy(){
-    if (process.client) document.removeEventListener('click', this.hideSort)
-  },
   methods: {
-  setData (val) {
-    console.log('alias setProductList', val)
-    if (val.status) this.$store.commit('setStatus', val.status)
-    if (val.type) this.$store.commit('setType', val.type)
-    // цикл по ключам и значениям
-    for (let [key, v] of Object.entries(val.data)) {
-      if (key==='breadcrumbs' ) {
-        this.$store.commit('setBreadcrumbs', v)
-      } else {
-        this.$set(this.data, key, v)
+    setData (val) {
+      console.log('alias setProductList', val)
+      if (val.status) this.$store.commit('setStatus', val.status)
+      if (val.type) this.$store.commit('setType', val.type)
+      // цикл по ключам и значениям
+      for (let [key, v] of Object.entries(val.data)) {
+        if (key==='breadcrumbs' ) {
+          this.$store.commit('setBreadcrumbs', v)
+        } else {
+          this.$set(this.data, key, v)
+        }
+          
       }
-        
-    }
-  },
-
-  updateItems (val) {
-    console.log('alias updateProductList', val)
-    if (this.data.items) {
-      this.data.items.push(...val.items)
-    } else {
-      this.$set(this.data, 'items', val.items)
-    }
-    val.limit ? this.data.limit = val.limit : this.$set(this.data, 'limit', val.limit)
-    val.offset ? this.data.offset = val.offset : this.$set(this.data, 'offset', val.offset)
-    val.items_page_q ? this.data.items_page_q = val.items_page_q : this.$set(this.data, 'items_page_q', val.items_page_q)
-    val.items_total_q ? this.data.items_total_q = val.items_total_q : this.$set(this.data, 'items_total_q', val.items_total_q)
-  // debugger
-},
-
-
-
-    hideSort(e){
-      if (e.target.closest('[data-mobile-sort]')) return
-      this.isSortOpen = false
     },
-    applyFilter(v){
-      console.log('applyFilter: ', v)
+
+    updateItems (val) {
+      console.log('alias updateProductList', val)
+      if (this.data.items) {
+        this.data.items.push(...val.items)
+      } else {
+        this.$set(this.data, 'items', val.items)
+      }
+      val.limit ? this.data.limit = val.limit : this.$set(this.data, 'limit', val.limit)
+      val.offset ? this.data.offset = val.offset : this.$set(this.data, 'offset', val.offset)
+      val.items_page_q ? this.data.items_page_q = val.items_page_q : this.$set(this.data, 'items_page_q', val.items_page_q)
+      val.items_total_q ? this.data.items_total_q = val.items_total_q : this.$set(this.data, 'items_total_q', val.items_total_q)
+    // debugger
     },
+
+
+
+    // applyFilter(v){
+    //   console.log('applyFilter: ', v)
+    // },
     
     filterToggle() {
       this.isFilterOpen = !this.isFilterOpen
     },
-    sortOpen() {
-      this.isSortOpen = !this.isSortOpen
-    },
-
 
 
     async loadData(queryParam) {
@@ -328,9 +298,9 @@ export default {
       // При изменении фильтра значение this.queryFiltersChange инкрементируется 
       let isNewFilter = this.isNewFilter != this.queryFiltersChange
 
-      if (this.filtersChange != this.queryFiltersChange) {
-        this.isNewFilter = this.queryFiltersChange
-      }
+      // if (this.filtersChange != this.queryFiltersChange) {
+      //   this.isNewFilter = this.queryFiltersChange
+      // }
 
       // return await this.$store.dispatch('productList/fetchProductList', {params: queryParams, isFilter: this.isFilter, isNewFilter})
       const data = await this.loadData(queryParams)
@@ -358,6 +328,13 @@ export default {
       await this.loadProducts(this.offset, 1, true)
       this.loadingFiltered = false
     },
+    priceFilterChangeStart() {
+      this.canMonitor = false
+    },
+    priceFilterChangeEnd() {
+      this.canMonitor = true
+      this.queryFiltersChange++ 
+    },
   },
   watch: {
     selectedFilters: {
@@ -378,8 +355,9 @@ export default {
       deep: true
     },
     queryFiltersChange(val){
-      if (!process.browser) return
-      console.log('wach queryFiltersChange', this.queryFiltersChange,this.canMonitor)
+      console.log('wach queryFiltersChange', val, val < 0,this.canMonitor)
+
+      if (!process.browser || val < 0) return
 
       if (val) this.showFilteredProducts()
     }
@@ -391,4 +369,45 @@ export default {
 <style lang="scss" >
 /*@import '~/components/products/product';*/
 @import 'razdel';
+.vue-slider-dot-handle {
+  border: 2px solid #{$themeColor};
+  box-shadow: none;
+}
+.filter {
+  &-price {
+    &_popper-container {
+      .v-popper__inner {padding: 1em;}
+    }
+    &-block {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    &_item{
+      font-size: .7rem;
+      // border-color: var(--base-color4);
+      padding: .5em .3571em;
+      min-width: 3rem;
+      &:first-child{margin-right: .5rem;}
+      &:last-child{margin-left: .5rem;}
+      .number-input-block {
+        margin: 0;
+        span {
+          &:first-child {
+            padding-left: 0;
+            padding-right: .25em;  
+            }
+        }
+      }
+      
+      // .input-field {
+      //   --input-height: 1.4rem;        
+      //   padding: 0 .3571em ;
+      //   // padding: 0;
+      // }
+      // input {padding: 0 .1em ;}
+    }
+  }
+}
+
 </style>

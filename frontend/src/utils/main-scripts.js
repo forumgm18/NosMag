@@ -73,6 +73,27 @@ export function getInnerSize(el){
   let h = el.clientHeight - paddingH
   return { w, h }
 }
+export function keyNumeric(event) {
+  if (event.keyCode == 38 || event.keyCode == 40) { // запрещаем курсору "прыгать" при нажатии стрелок up - down
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  // Разрешаем: backspace, delete, tab и escape
+  if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 ||
+    // Разрешаем: Ctrl+A
+    (event.keyCode == 65 && event.ctrlKey === true) ||
+    // Разрешаем: home, end, влево, вправо
+    (event.keyCode >= 35 && event.keyCode <= 39)
+  ) {
+    // Ничего не делаем если нажата разрешенная кнопка на клаве
+    return
+  } else {
+    // Запрещаем все, кроме цифр на основной клавиатуре, а так же Num-клавиатуре
+    if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+      event.preventDefault()
+    }
+  }
+}
 export function getNodeElementHeight(node) {
   // in Browser only!
     const list = [

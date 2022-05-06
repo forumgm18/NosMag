@@ -90,7 +90,7 @@
               //- ====== Параметры товара =========
               .quick-view_props-block
                 .quick-view_row(
-                  v-for="(p, i) in product.params"
+                  v-for="(p, i) in params"
                   :key="`param-${i}`"
                 )
                   .el-label {{p.name}}:
@@ -150,17 +150,15 @@
                     
                   )  
                   .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
-
-
-
               
               .product-order-block
                 .product-delivery-info
                   .product-delivery-label 
                     span.label {{$options.DELIVERY_LABEL}}
                     span.text {{product.delivery.info}}
-              .btn.quick-view_btn(@click="addToCart") {{$options.ADD_TO_BASKET_TEXT}}
-              nuxt-link.quick-view_link.link(:to="`${catalogLink}${product.alias}`" ) {{$options.MORE_INFO_TEXT}}
+              .btn.quick-view_btn(@click="$emit('add2cart', close)") {{$options.ADD_TO_BASKET_TEXT}}
+              nuxt-link.quick-view_link.link(:to="`${catalogLink}${product.alias}`") 
+                span(@click="close") {{$options.MORE_INFO_TEXT}}
 
           resize-observer(@notify="bobyResize")
 
@@ -173,6 +171,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import VuePhotoZoomPro from 'vue-photo-zoom-pro'
 import 'vue-photo-zoom-pro/dist/style/vue-photo-zoom-pro.css'
 import { ResizeObserver } from 'vue-resize'
+import {mapState} from 'vuex'
 
 export default {
   name: 'quick-view',
@@ -194,6 +193,7 @@ export default {
   },
   data: function() {
     return {
+      // isOpen: false,
       imgWidth: 0,
       imgHeight: 0,
       bobySize: {}, 
@@ -264,28 +264,22 @@ export default {
   TAB_SIZES_REPORT: 'Сообщить о поступлении',
 
   computed: {
-    labels() { return this.product.labels || null},
-    // info_table() { return this.product.info_table || null},
-    params() { return this.product.params || null},
-    sizes() { return this.product.sizes || null},
-    imgPath() {return this.$store.state.settings.imgPath || ''},
-
+    ...mapState('settings', ['currency', 'currencyShort', 'imgPath', 'imgPrefix', 'imgRetinaPrefix' ]),
+    // labels() { return this.product.labels || null},
+    params() { return this.product.params ? this.product.params.filter(item => item.main) : null },
   },
   mounted(){
-    // document.body.append(this.$refs.quickView)
     this.$nextTick( this.$forceUpdate )
-    if (this.sizes && this.sizes.length) {
-      // let i = 0
-      // while (i < this.sizes.length && !this.sizes[i].active && !this.sizes[i].ostatok) i++;
-      // if (i < this.sizes.length) this.selectSize({value:this.sizes[i], toggle:true})
-      const currentSize = this.sizes.find(sz => sz.active && sz.ostatok)
-      if (currentSize) this.selectSize({value: currentSize, toggle:true})
+    const sizes = this.product.sizes
+    if (sizes && sizes.length) {
+      const currentSize = sizes.find(sz => sz.active && sz.ostatok)
+      if (currentSize) {
+        this.selectedSizeCount = currentSize.count || 1
+        this.selectedSize = currentSize
+      }
     }
   
   },
-  // beforeDestroy() {
-  //   this.$refs.quickView.remove()  
-  // },
   methods: {
     imgUpdate(e){
       this.imgWidth = e.width
@@ -301,36 +295,25 @@ export default {
       this.infoWidth = this.bobySize.w - this.sliderSize.w + 'px'
     },
 
-    // close() {
-    //   this.$emit('close-quick-view', false)
+    // labelFormat(v) {
+    //   let s = v.trim()
+    //   return s.slice(-1, 1) === ':' ? s : s + ':'
     // },
-
-    labelFormat(v) {
-      let s = v.trim()
-      // if (s.slice(-1, 1) != ':' ) s += ':'
-      // return s
-      return s.slice(-1, 1) === ':' ? s : s + ':'
-    },
-    selectSize(v) {
-      if (v.toggle) {
-        this.selectedSizeCount = v.value.count || 1
-        this.selectedSize = v.value
-      }
-    },
-    async addToCart() {
-      const val = []
-      val.push({scode: this.selectedSize.scode, q: 1 })
-      // val.push({scode: this.selectedSize.scode, q: 1 })
-      console.log('val: ', val)
-      this.$store.dispatch('cart/addToCart', val)
-      await this.$nuxt.refresh()
-    },
-
-
+    // selectSize(v) {
+    //   if (v.toggle) {
+    //     this.selectedSizeCount = v.value.count || 1
+    //     this.selectedSize = v.value
+    //   }
+    // },
   },
   watch: {
     selectedSize(val) {
       if ( this.selectedSizeCount > val.ostatok) this.selectedSizeCount = val.ostatok
+      this.$emit('selectedSize', {size: val, count: this.selectedSizeCount})
+    },
+    selectedSizeCount(val) {
+      if ( this.selectedSize.ostatok < val) this.selectedSizeCount = val
+      this.$emit('selectedSize', {size: this.selectedSize, count: val})
     }
   }
 }

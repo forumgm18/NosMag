@@ -14,7 +14,8 @@
           :tabIndex="i+1"
         )
       slot(name="price")
-      
+        
+
     .desktop-filter-collapse-btn(:class="{collapse: filterCollapse}" @click="filterCollapseToggle")
       svg.icon.icon-arrow-down <use href="#icon-arrow-down"/>
 
@@ -33,20 +34,20 @@ export default {
         default() {return null}
       },
       value: {
-        // type: [Array, Object]
-        type: Array,
-        default() {return []}
+        type: [Array, Object],
+        default: () => {}
+        // type: Array,
+        // default() {return []}
 
       }
     },
 
-    // components: {
-    //   InputNumber,
-    // },
+    // components: { VueSlider,  },
     data: () => ({
       filterCollapse: true,
       filterMaxColumns : 7,
-      model: []
+      // model: []
+      model: {}
     }),
     FILTER_LIST: 'list',
     FILTER_PRICE: 'price',
@@ -62,10 +63,11 @@ export default {
       // Подготавливаем объект выбранных фильтров и делаем его реактивным
       this.filters.forEach(el => {
         if (el.type!=this.$options.FILTER_PRICE) {
-          this.$set(this.model, `"${el.id}"`, [])
-          // this.$set(this.model, el.id, [])
+          // this.$set(this.model, `"${el.id}"`, [])
+          this.$set(this.model, el.id, [])
         } else {
-          this.$set(this.model, `"${el.id}"`, {active_min : el.values.min, active_max : el.values.max})
+          // this.$set(this.model, `"${el.id}"`, {active_min : el.values.min, active_max : el.values.max})
+          this.$set(this.model, el.id, {active_min : el.values.min, active_max : el.values.max})
         }
       })
       

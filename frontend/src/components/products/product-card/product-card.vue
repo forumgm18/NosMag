@@ -199,8 +199,8 @@ export default {
             close()
           },
           selectedSize(val) {
-            self.selectedSize = val
-            self.selectedSizeCount = 1
+            self.selectedSize = val.size
+            self.selectedSizeCount = val.count
           }
         },
       },
@@ -209,11 +209,12 @@ export default {
     },
     async addToCart() {
       const val = []
-      val.push({scode: this.selectedSize.scode, q: 1 })
+      val.push({scode: this.selectedSize.scode, q: this.selectedSizeCount })
       // val.push({scode: this.selectedSize.scode, q: 1 })
       console.log('val: ', val)
       this.$store.dispatch('cart/addToCart', val)
       this.$vfm.hide(`select-size-modal-${this.product.id}`, )
+      this.selectedSizeCount = 1
       // await this.$nuxt.refresh()
       // this.closeAddToCartPopup(false)
     },

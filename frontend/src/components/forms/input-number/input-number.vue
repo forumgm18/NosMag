@@ -1,15 +1,20 @@
 <template lang="pug">
   client-only
-    .number(:style="borderColor ? `border-color: ${borderColor}` : ''")
+    //- .number(:style="borderColor ? `border-color: ${borderColor}` : ''")
+    .number(
+      :style="`border-color: ${setBorderColor}`"
+      @mouseenter="isHover=true"
+      @mouseleave="isHover=false"
+      )
       label.number-label(v-if="hasLabel" :style="`${labelColor ? 'color:'+labelColor: ''}`" v-html="label") 
       .number-block
-        .number-arrow.down(@click="arrowDown")
-          //- svg.icon.icon-number-arrow.down <use href="#icon-number-arrow"/>
+        .number-arrow.down(v-if="hasSpinBtn" @click="arrowDown")
           svg.icon.icon-btn-plus.minus <use href="#icon-btn-plus"/>
           
         .number-input-block
+          span(v-if="beforeText.length" v-html="beforeText")
           input.number-input(
-            v-auto-min-width
+            v-auto-min-width="autoMinWidth"
             type="text"
             ref="input"
             :key="keyInput"
@@ -19,15 +24,18 @@
             @keydown="keyDown"
             @keyup.up="arrowUp"
             @keyup.down="arrowDown"
+            @focus="isFocus=true"
+            @blur="isFocus=false"
+
             )
-          span(v-if="appendText.length") {{appendText}}
-        .number-arrow.up(@click="arrowUp")
-          //- svg.icon.icon-number-arrow <use href="#icon-number-arrow"/>
+          span(v-if="appendText.length" v-html="appendText") 
+        .number-arrow.up(v-if="hasSpinBtn" @click="arrowUp")
           svg.icon.icon-btn-plus <use href="#icon-btn-plus"/>
 
 </template>
 
 <script>
+import {keyNumeric} from '@/utils/main-scripts'
 export default {
   name: 'input-number',
   inheritAttrs: false,
@@ -44,18 +52,29 @@ export default {
     labelColor:{ type: String, required: false,},
     arrowColor:{ type: String, required: false },
     borderColor:{ type: String, required: false },
+    focusBorderColor:{ type: String, required: false },
+    hoverBorderColor:{ type: String, required: false },
     inputBorderColor:{ type: String, required: false },
     inputTextUnderline:{ type: Boolean, default: false },
     min: { type: Number, default: -Infinity },
     max: { type: Number, default: Infinity },
     step: {type: Number, default: 1 },
-    appendText:{type: String, default: '', required: false}
+    beforeText:{type: String, default: '', required: false},
+    appendText:{type: String, default: '', required: false},
+    hasSpinBtn: { type: Boolean, default: true },
+    autoMinWidth: {
+      type: [Boolean,Number],
+      default: true
+    },
 
   },
   data: function () {
     return {
       keyInput: 1,
       isModified: false,
+      isFocus: false,
+      isHover: false,
+
       // locValue: this.value
     }
   },
@@ -68,20 +87,32 @@ export default {
     locValue: {
       get() {return this.value},
       set(val, oldVal) {
+        // Если стерли все из input'а то надо его перерисовать иначе будет расхождение с данными.
+        if (this.$refs.input && this.$refs.input.value.length === 0) {
+          this.keyInput++ // перерисовываем Input
+          // Возвращаем фокус
+          this.$nextTick(()=> {this.$refs.input.focus()})
+        }
         val = parseInt(val, 10)
         let res = val
         if (val <= this.min) res = parseInt(this.min)
         if (val >= this.max) res = parseInt(this.max)
         this.$emit('input', res, oldVal)
       }
+    },
+    setBorderColor() {
+      if (this.isFocus && this.focusBorderColor) return this.focusBorderColor
+      if (this.isHover && this.hoverBorderColor) return this.hoverBorderColor
+      if (this.borderColor) return this.borderColor
+      return ''
     }
-
   },
   methods: {
     inputValue(evt) {
-      this.locValue = evt.target.value ? parseInt(evt.target.value) : this.min
+      this.locValue = !!evt.target.value ? parseInt(evt.target.value) : this.min
     },
     keyDown(event) {
+      // keyNumeric(event)
       if (event.keyCode == 38 || event.keyCode == 40) { // запрещаем курсору "прыгать" при нажатии стрелок up - down
         event.stopPropagation();
         event.preventDefault();
@@ -112,6 +143,7 @@ export default {
   },
   watch: {
     value: function(val, oldVal) {
+      console.log('value', val, oldVal)
       this.locValue = parseInt(val, 10)
     },
     // locValue: function(val, oldVal) {
