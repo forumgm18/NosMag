@@ -143,6 +143,8 @@ export default {
   SHOW_MORE_BTN: 'Показать далее',
   PRICE_STEP: 100,
   async fetch() {
+    this.$store.commit('setBreadcrumbs', [])
+
     let queryParams = {
       alias: this.$route.params.alias,
       items_only: this.items_only,
@@ -153,6 +155,15 @@ export default {
     if (res && res !='error') this.setData(res)
     if (res ==='error') return this.$nuxt.error({ statusCode: 404, message: 'Раздел не найден' })
   },
+  head() {
+    return {
+      title: this.data.title || 'Каталог',
+      meta: [
+        { hid: 'description', name: 'description', content: this.data.description || 'Каталог' }
+      ]
+    }
+  },
+
   created() {
     if (this.data.sortmodes) this.sortBy = this.data.sortmodes.filter(el => el.active)[0]
     console.log('created', this.filtersPrice, this.data)
@@ -176,7 +187,7 @@ export default {
     ...mapState('token', ['session_id']),
     ...mapState('settings', ['currencyShort']),
 
-    pageTitle() {return this.data.name || null},
+    pageTitle() {return this.data.h1 || this.data.name || null},
     filtersPrice() { 
       return this.data && this.data.filters ? this.data.filters.find(f => f.type === 'price') : null
       },
@@ -218,8 +229,6 @@ export default {
   methods: {
     setData (val) {
       console.log('alias setProductList', val)
-      if (val.status) this.$store.commit('setStatus', val.status)
-      if (val.type) this.$store.commit('setType', val.type)
       // цикл по ключам и значениям
       for (let [key, v] of Object.entries(val.data)) {
         if (key==='breadcrumbs' ) {

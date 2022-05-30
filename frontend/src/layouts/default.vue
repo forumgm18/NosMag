@@ -1,5 +1,5 @@
 <template lang="pug">
-  .site-boby
+  .site-boby(:class="pageClass")
     //- v-app-icons
     //- v-app-icons(:show-all-icons="true")
     v-app-icons(:show-all-icons="false")
@@ -15,20 +15,16 @@
 <script>
 
 export default {
+  name: 'default-layout',
   computed: {
     breadcrumbs() {return this.$store.getters['getBreadcrumbs'] || null},
-    meta() {
-      return [
-        { hid: 'description1', name: 'description1', content: 'Главная1' }
-      ]
+    pageClass() { 
+      const pathArr = this.$route.path.split('/').reverse()
+      return pathArr.length > 1 ? pathArr[1] + '-page' : '' 
     },
+
   },
 }
 </script>
 <style lang="scss">
-// @import '@/assets/scss/global-styles.scss';
-.ttt {
-  height: 200px;
-  width: 300px;
-}
 </style>

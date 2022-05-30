@@ -61,6 +61,9 @@ import { ResizeObserver } from 'vue-resize'
       // this.$nextTick(this.$forceUpdate())
       this.$nextTick( function() {
         this.$forceUpdate()
+        if (this.$refs.sidebarPanel && this.$refs.scrollPanel) {
+          this.scrollbarHeight = this.$refs.sidebarPanel.clientHeight - this.$refs.scrollPanel.offsetTop + 'px'
+        }
         const li = !!this.$refs.itemsList ? this.$refs.itemsList.querySelector('.pre-select') : false
         if (li) {
           this.$refs.ps.$el.scrollTop = li.offsetTop

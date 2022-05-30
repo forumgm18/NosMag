@@ -20,11 +20,13 @@
           :title="cs.comment"
           )
           .img-box
-            img(:src="imgPath + cs.photo")  
+            //- img(:src="imgPath + cs.image")  
+            img(:src="imgPath + getImage(cs)")  
         label.other-slider-item-content(v-else)
           input(type="radio" hidden v-model="model" :value="cs")
           .img-box
-            img(:src="imgPath + cs.photo")  
+            //- img(:src="imgPath + cs.image")  
+            img(:src="imgPath + getImage(cs)")  
 
       template(#prevArrow)
         button.slider-arrow
@@ -73,41 +75,19 @@
           // lazyLoad: 'ondemand',
           dots: false,
           arrows: true,
-          infinite: true,
+          // infinite: true,
           infinite: false,
           variableWidth: true,
-          // slidesToShow: 6,
-          slidesToShow: 1,
+          // slidesToShow: 1,
           slidesToScroll: 1,
-          rows: 1,
-          // centerMode: true,
-          // centerPadding: '0',
-          // responsive: [
-          //   {
-          //     breakpoint: 1600,
-          //     settings: {
-          //       slidesToShow: 6,
-          //     }
-          //   },
-          //   {
-          //     breakpoint: 1300,
-          //     settings: {
-          //       slidesToShow: 5,
-          //     }
-          //   },
-          //   {
-          //     breakpoint: 1100,
-          //     settings: {
-          //       slidesToShow: 3,
-          //     }
-          //   },
-          //   {
-          //     breakpoint: 767,
-          //     settings: {
-          //       slidesToShow: 7,
-          //     }
-          //   },
-          // ]
+          responsive: [
+            {
+              breakpoint: 576,
+              settings: {
+                arrows: false
+              }
+            },
+          ]
 
 
         },
@@ -143,6 +123,13 @@
       window.removeEventListener('resize', this.getElementsWidth)
     },
     methods: {
+      getImage(item) {
+        if (item.hasOwnProperty('photo')) {
+          return item.photo
+        } else {
+          return item.image
+        }
+      },
       getElementsWidth() {
         this.rootElWidth = this.$refs.rootEl ? this.$refs.rootEl.clientWidth : 0
         this.slideWidth = this.$refs.Slider ? this.$refs.Slider.$el.querySelector('.slick-active').offsetWidth : 0
@@ -184,18 +171,41 @@
       &.has-arrows {
         // max-width: calc(var(--item-size) * var(--item-visible-count) + .5rem * (var(--item-visible-count) - 1 ) + 2 * var(--padding-for-arrow));
         
-        padding-left: var(--padding-for-arrow);
-        padding-right: var(--padding-for-arrow);
+        // padding-left: var(--padding-for-arrow);
+        // padding-right: var(--padding-for-arrow);
 
+          .slick-arrow{
+            display: flex;
+          }
       }    
       .slick-slider {
         height: 100%;
       }
+      .slick-arrow{
+        display: none;
+        z-index: 1;
+        // background: #fff;
+        background-color:rgba(#fff, .4) ;
+        opacity: .4;
+        transform: none;
+        top: 0;
+        &:hover {
+          opacity: 1;
+          background-color:rgba(#fff, .8) ;
+
+        }
+        }
       .slick-prev {
-        left: calc( -1 * var(--padding-for-arrow) );
+        // left: calc( -1 * var(--padding-for-arrow) );
+        left: 0;
       }
       .slick-next{
-        right: calc( -1 * var(--padding-for-arrow) );
+        // right: calc( -1 * var(--padding-for-arrow) );
+        right: 0;
+      }
+      .slick-disabled {
+        opacity: 0;
+        pointer-events:none;
       }
 
 

@@ -31,6 +31,7 @@ export default {
     }
   },
   async fetch() {
+    this.$store.commit('setBreadcrumbs', [])
     const res = await this.$axios.$get(`/get_content`, {
       params: {
         alias: this.$route.params.alias,
@@ -49,6 +50,15 @@ export default {
 
     }
   },
+  head() {
+    return {
+      title: this.data.title || 'Раздел каталога',
+      meta: [
+        { hid: 'description', name: 'description', content: this.data.description || 'Раздел каталога' }
+      ]
+    }
+  },
+
 }
 </script>
 

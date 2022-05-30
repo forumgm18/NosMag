@@ -2,13 +2,13 @@
   main.container
     v-preloader.in-page(v-if="$fetchState.pending")
     template(v-else)
-      h1.product-title.show-desktop {{data.name}}
+      h1.product-title.hide-mobile {{pageTitle}}
       //- ============= Строка информации о рейтинге и кол-ве покупок ===============
-      .product-additional.show-desktop
+      .product-additional.hide-mobile
         .product-additional_item
           span.el-label Артикул:
           span.el-text {{data.art}}
-        .product-rating-block
+        .product-additional_item.product-rating-block
           v-stars(:value="data.stars || 0" )
           nuxt-link.product-feedbacks.link(to="#feedbacks") {{declensionEndings(data.otzyvov,'otzyv')}} 
         .product-additional_item(v-if="data.prodano") 
@@ -66,7 +66,7 @@
                         )
 
           //- ============= Блок инфы под Главным Слайдером ===============
-          .product-page-row.show-desktop.show-info(v-if="data.info_table && data.info_table.length")
+          .product-page-row.show-info.hide-tablet.hide-mobile(v-if="data.info_table && data.info_table.length")
             .product-description-block(v-if="data.info && data.info.length")
               .product-title {{$options.DESCRIPTION}}
               v-clamp.product-description-info(autoresize :max-lines="5" ) {{data.info}}
@@ -82,31 +82,26 @@
               .product-info-row( v-for="(item, index) in data.info_table" :key="index" )
                 .el-label {{item.name}}:
                 .el-text {{item.value}}
-          .product-page-row.show-mobile
-            h1.product-title {{data.name}}
-            //- ============= Строка информации о рейтинге и кол-ве покупок ===============
-            .product-additional
-              .product-additional_item
-                span.el-label Артикул:
-                span.el-text {{data.art}}
-              .product-rating-block
-                v-stars(:value="data.stars || 0" )
-                nuxt-link.product-feedbacks.link(to="#feedbacks") {{declensionEndings(data.otzyvov,'otzyv')}} 
-              .product-additional_item(v-if="data.prodano") 
-                span.el-text Купили {{declensionEndings(data.prodano,'raz')}}
 
         //- ============= Правый столбец. Основная инфа ===============
-        .product-page-column.right
+        .product-page-column.right.flex-column-gadget
           //- ====== Цена и скидка =======
-          .product-page_price-block
-            .actual( v-html="`${data.price} ${currencyShort}`")
-            .old( v-if="sale" v-html="`${data.oldprice} ${currencyShort}`")
-          .product-page_sale-block(v-if="data.skidka")
-            .sale(v-if="data.skidka.proc") {{data.skidka.proc}}%
-            .text(v-if="data.skidka.info") {{data.skidka.info}}
+          .product-page_price-sale_row
+            .product-page_price-block
+              .actual( v-html="`${data.price} ${currencyShort}`")
+              .old( v-if="sale" v-html="`${data.oldprice} ${currencyShort}`")
+            .product-page_sale-block(v-if="data.skidka")
+              .sale(v-if="data.skidka.proc") {{data.skidka.proc}}%
+              .text(v-if="data.skidka.info") {{data.skidka.info}}
+            div.d-md-sm(style="width: 100%")
+              .btn.product-add2cart(
+                :class="{ disabled: startAdd2Cart }"
+                @click.prevent="addToCart"
+
+                ) {{$options.ADD_TO_BASKET_TEXT}}
 
           //- ====== Лого производителя =======
-          .product-page_brand-block(v-if="data.category")
+          .product-page_brand-block.hide-tablet(v-if="data.category")
             .product-page_brand-logo(v-if="data.category.logo && data.category.logo.length")
               //- .img-box
               img(:src="data.category.logo")
@@ -124,7 +119,7 @@
               .el-text {{p.value}}
           
           //- ============= Слайдер Другие цвета ===============
-          .product-other-block(
+          .product-other-block.colors(
             v-if="data.sameart && data.sameart.length"
             ref="otherBlock"
             )
@@ -135,6 +130,7 @@
               )
           //- ============= Размер ===============
           .product-sizes-block
+            .hr-product
             .el-label {{$options.SELECT_SIZE}}
             .product-sizes-row
               .product-sizes_tab
@@ -175,10 +171,10 @@
                 v-if="data.sizes_table && data.sizes_table.length"
                 @click="$vfm.show('tb-size')"
                 ) {{$options.TAB_SIZES}}
-
+            
 
           //- ============= Количество ===============
-          .product-quantity-block(v-if="selectedSize")
+          .product-quantity-block.hide-tablet.hide-mobile(v-if="selectedSize")
             .el-label {{$options.QUANTITY_LABEL}}
             .product-quantity
               v-input-number(
@@ -195,7 +191,7 @@
               .product-quantity-available( v-if="selectedSize") {{$options.AVAILABLE_LABEL}}{{selectedSize.ostatok}}
 
           //- ============= Слайдер Упаковки ===============
-          .product-other-block(
+          .product-other-block.cases(
             v-if="data.cases && data.cases.length"
             ref="casesBlock"
             )
@@ -208,7 +204,7 @@
               v-model="selectedCase"
               )
           //- ============= Кнопка Добавить в корзину ===============
-          .product-add2cart_panel
+          .product-add2cart_panel.hide-tablet
             .product-add2cart_row
               div Итого
               div( v-html="`${data.price * selectedSizeCount} ${currencyShort}`") 
@@ -228,8 +224,23 @@
               svg.icon.icon-box <use href="#icon-box"/>
               span {{$options.DELIVERY_TEXT}}
 
+          .product-page-row.page-head.show-mobile
+            .hr-product
+            h1.product-title {{pageTitle}}
+            //- ============= Строка информации о рейтинге и кол-ве покупок ===============
+            .product-additional
+              .product-additional_item
+                span.el-label Артикул:
+                span.el-text {{data.art}}
+              .product-additional_item.product-rating-block
+                v-stars(:value="data.stars || 0" )
+                nuxt-link.product-feedbacks.link(to="#feedbacks") {{declensionEndings(data.otzyvov,'otzyv')}} 
+              .product-additional_item(v-if="data.prodano") 
+                span.el-text Купили {{declensionEndings(data.prodano,'raz')}}
+
           //- ============= Блок инфы под Главным Слайдером для варианта мобилки ===============
-          .product-info-block.show-mobile(v-if="data.info_table && data.info_table.length")
+          .product-info-block.gadgets.hide-desktop(v-if="data.info_table && data.info_table.length")
+            .hr-product
             .product-description-block(v-if="data.info && data.info.length")
               .product-title {{$options.DESCRIPTION}}
               v-clamp.product-description-info(autoresize :max-lines="5" ) {{data.info}}
@@ -245,7 +256,7 @@
               .product-info-row( v-for="(item, index) in data.info_table" :key="index" )
                 .el-label {{item.name}}:
                 .el-text {{item.value}}
-
+            .hr-product
       //- ============= Форма Отзыва ===============
       h2.product-title {{$options.FEEDBACK.FORM_TITLE}}
       section.content-section.feedback-form
@@ -389,6 +400,7 @@ export default {
         dots: false,
         arrows: false,
         infinite: true,
+        fade: true,
         draggable: true,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -401,18 +413,21 @@ export default {
               // slidesToShow: 2,
               // slidesToScroll: 1,
               // infinite: true,
-              // dots: true,
+              fade: false,
+              dots: true,
+              dotsClass: 'thumbs-dots',
               variableWidth: true,
               // dotsClass: "slick-dots product-slider-dots",
             }
           },
           {
-            breakpoint: 480,
+            breakpoint: 576,
             settings: {
               // slidesToShow: 1,
               // slidesToScroll: 1,
               // infinite: true,
               // dots: true,
+              fade: false,
               variableWidth: false,
               // dotsClass: "slick-dots product-slider-dots",
             }
@@ -429,49 +444,36 @@ export default {
         slidesToShow: 4,
         slidesToScroll: 1,
         focusOnSelect: true,
+
+        responsive: [
+          {
+            breakpoint: 1201,
+            settings: {
+              vertical: false,
+            }
+          },
+          {
+            breakpoint: 991,
+            settings: {
+              vertical: true,
+              slidesToShow: 5,
+            }
+          },
+          {
+            breakpoint: 910,
+            settings: {
+              slidesToShow: 4,
+            }
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 5,
+            }
+          },
+        ]
+
       },
-      // settingsProductOtherSlider: {
-      //   // lazyLoad: 'ondemand',
-      //   dots: false,
-      //   arrows: true,
-      //   infinite: true,
-      //   infinite: false,
-      //   variableWidth: true,
-      //   // slidesToShow: 6,
-      //   slidesToShow: 1,
-      //   slidesToScroll: 1,
-      //   rows: 1,
-      //   // centerMode: true,
-      //   // centerPadding: '0',
-      //   // responsive: [
-      //   //   {
-      //   //     breakpoint: 1600,
-      //   //     settings: {
-      //   //       slidesToShow: 6,
-      //   //     }
-      //   //   },
-      //   //   {
-      //   //     breakpoint: 1300,
-      //   //     settings: {
-      //   //       slidesToShow: 5,
-      //   //     }
-      //   //   },
-      //   //   {
-      //   //     breakpoint: 1100,
-      //   //     settings: {
-      //   //       slidesToShow: 3,
-      //   //     }
-      //   //   },
-      //   //   {
-      //   //     breakpoint: 767,
-      //   //     settings: {
-      //   //       slidesToShow: 7,
-      //   //     }
-      //   //   },
-      //   // ]
-
-
-      // },
       quantity: 1,           // Количество выбранных товаров текущего вида 
       selectedSize: null,
       selectedSizeCount: 1,
@@ -549,9 +551,6 @@ export default {
       if (c.status === 'ok' && c.type != '404' && c.type != '505') {
         // Преобразуем строковые числа в числа
         const content = this.$parseJsonStrToNumbers(c)
-        // Добавляем статус и тип страницы в $store (не сильно надо, но пусть будут)
-        if (content.status) this.$store.commit('setStatus', content.status)
-        if (content.type) this.$store.commit('setType', content.type)
         // Меняем в html - Таблицы размеров <h1> на <h2>
         if (content.data.sizes_table && content.data.sizes_table.length) {
           let s = content.data.sizes_table
@@ -577,13 +576,21 @@ export default {
       
       return this.$nuxt.error({ statusCode: 404, message: e })
     }
-
+  },
+  head() {
+    return {
+      title: this.data.title || 'Страница товара',
+      meta: [
+        { hid: 'description', name: 'description', content: this.data.description || 'Страница товара' }
+      ]
+    }
   },
 
   computed: {
     ...mapState('settings', ['currency', 'currencyShort', 'imgPath', 'imgPrefix', 'imgRetinaPrefix' ]),
     ...mapState('token', ['session_id']),
     sale() { return this.$sale(this.data.price, this.data.oldprice) || 0},
+    pageTitle() {return this.data.h1 || this.data.name || null},
     getVisibleSlidersCount(){
       if (process.server) return 7
       const w = window.innerWidth

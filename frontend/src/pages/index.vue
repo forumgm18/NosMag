@@ -88,25 +88,19 @@
 </template>
 
 <script>
-// import ProductList from '~/components/products/product-list/product-list'
-// import preLoader from '~/components/common/preloader/preloader'
-import productCard from '~/components/products/product-card/product-card'
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 // optional style for arrows & dots
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
 export default {
+  name: 'main-page',
   components: { 
-    // preLoader,
     VueSlickCarousel,
-    productCard,
-    // ProductList
   },
-  // props: ['showcase'],
-  data: function () {
+  data() {
     return {
-      // content: null
+      data: {},
       settingsTopSlider: {
         dots: true,
         dotsClass: "slick-dots main-slider-dots",
@@ -163,50 +157,56 @@ export default {
   SELECT_LINK_TEXT: 'Выбрать',
   SECTION_POPULAR_TITLE: 'Популярное',
   SECTION_LINK1_TITLE: 'Узнайте больше',
-  // asyncData: async function ({app, store, params, error}) {
-  //   // this.loading = true
-  //   await store.dispatch('fetchContent', params.alias || '')
-  //   if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
-  //   // this.loading = false
-  // },
-  // async fetch({app, store, params, error}) {
   async fetch() {
-    // console.log('route: ', this.$route )
-    // this.loading = true
-    // await store.dispatch('fetchContent', params.alias || '')
-    await this.$store.dispatch('fetchContent', this.$route.params.alias || '')
+    try {
+      this.$store.commit('setBreadcrumbs', [])
+      const c = await this.$axios.$get(`/get_content`, {
+        params: {
+          alias: '',
+          session_id: this.$store.state.token.session_id
+        }
+      })
+      // return this.$nuxt.error({ statusCode: 404, message: c })
+      if (c.status === 'ok' && c.type != '404' && c.type != '505') {
+        // Преобразуем строковые числа в числа
+        const content = this.$parseJsonStrToNumbers(c)
+        // Добавляем полученные данные в data
+        // цикл по ключам и значениям
+        for (let [key, v] of Object.entries(content.data)) {
+          if ( key==='breadcrumbs') { // Коммитим Крошки в $store
+            this.$store.commit('setBreadcrumbs', v)
+          } else { // Добавляем поле в data
+            this.data[key] = v
+          }
+        }
 
-    // if (app.$contentError(store.state.content.type)) error({ statusCode: 404, message: '' })
-    // if (this.$contentError(this.$store.state.content.type)) error({ statusCode: 404, message: '' })
-    if (this.$contentError(this.$store.state.type)) error({ statusCode: 404, message: '' })
-    // this.loading = false
+      } else {
+        return this.$nuxt.error({ statusCode: 404, message: 'Страница не найдена' })
+      }
+    } catch(e) {
+      
+      return this.$nuxt.error({ statusCode: 404, message: e })
+    }
+  },
+
+  head() {
+    return {
+      title: this.data && this.data.title || 'Главная',
+      meta: [
+        { hid: 'description', name: 'description', content: this.data && this.data.description || 'Главная' }
+      ]
+    }
   },
 
   computed: {
-    // content() { return this.$store.getters['getContentData']},
     showcase() { 
-      return this.$store.getters['getShowcase']
-      // if (this.content) {
-      //   return this.content.showcase
-      // } else {
-      //   return undefined
-      // }  
+      return this.data.showcase
     },
     links() { 
-      return this.$store.getters['getLinks']
-      // if (this.content) {
-      //   return this.content.hasOwnProperty('links') ? this.content.links : undefined
-      // } else {
-      //   return undefined
-      // }  
+      return this.data.links
     },
     links1() { 
-      return this.$store.getters['getLinks1']
-      // if (this.content) {
-      //   return this.content.hasOwnProperty('links1') ? this.content.links1 : undefined
-      // } else {
-      //   return undefined
-      // }  
+      return this.data.links1
     },
   },
 

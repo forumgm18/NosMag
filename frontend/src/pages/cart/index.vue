@@ -75,9 +75,11 @@
   import {cloneDeep, isEqual} from 'lodash'
 
   export default {
+    name: 'cart-page',
     mixins: [collapseMixin],
 
     async fetch(){
+      this.$store.commit('setBreadcrumbs', [])
       await this.$store.dispatch('cart/getCart')
     },
 
@@ -108,6 +110,7 @@
       }
     },
   computed: {
+    // pageTitle() {},
     cart() {  return this.$store.getters['cart/getCart'] },
     oform() {  return this.$store.getters['cart/getOform'] },
     selcomm() { return this.oform && this.oform.selcomm ? this.oform.selcomm : null},

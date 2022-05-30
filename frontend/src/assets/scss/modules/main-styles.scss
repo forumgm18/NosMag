@@ -177,6 +177,17 @@ main {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+.hide-desktop {
+  @include media-min-width2($md + 1) {display: none!important;}
+}
+.hide-tablet {
+  @include media-between($sm + 1, $md) {display: none!important;}
+}
+
+.hide-mobile {
+  @include media-max-width2($sm) {display: none!important;}
+}
+
 .mt-0 {margin-top: 0!important;}
 .mb-0 {margin-bottom: 0!important;}
 .mb-2em {margin-bottom: 2em!important;}

@@ -1,18 +1,19 @@
 user nobody;
 # access_log /var/log/nginx/access.log;
-# error_log /var/log/nginx/error.log;
+error_log /var/log/nginx/error.log;
 worker_processes auto;
 events {
   worker_connections  2048;
   multi_accept on;
 }  
-
 http {
-  include       mime.types;
+  # access_log /var/log/nginx/access.log;
+
+  # include       mime.types;
   keepalive_timeout          45;
   reset_timedout_connection  on;
   client_body_timeout        35;
-  # send_timeout               30;
+  send_timeout               30;
 
   sendfile      on;
   aio           on;
@@ -22,7 +23,7 @@ http {
   open_file_cache_valid 45s;
   open_file_cache_min_uses 2;
   open_file_cache_errors on;
-
+  
   fastcgi_buffering off;
   # fastcgi_buffer_size 128k;
   # fastcgi_buffers 4 256k;
@@ -38,17 +39,21 @@ http {
   gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
 
 
+
   server {
     listen 80;
 
-    #  server_name nosmag-new.local;
-    server_name 78.24.223.226;
+    server_name nosmag-new.local;
     # server_name 127.0.0.1;
 
     location / {
-      # proxy_pass http://127.0.0.1:3000;
       proxy_pass http://frontend:3000;
-
+      # proxy_pass http://localhost:3000;
+      # proxy_pass http://127.0.0.1:3000;
+      # Needed for sockets
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
       proxy_buffering off;
 
       proxy_redirect                      off;
@@ -56,28 +61,30 @@ http {
       proxy_set_header X-Real-IP          $remote_addr;
       proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto  $scheme;
-      # proxy_read_timeout          1m;
-      # proxy_connect_timeout       1m;
-      # proxy_read_timeout          3600;
-      # proxy_connect_timeout       3600;
+      proxy_read_timeout          3600;
+      proxy_connect_timeout       3600;
+
 
     }
+
     location /api {
+    #    proxy_pass https://api_host;
+    #    rewrite ^/api/(.*) /$1 break;
+
+    #    rewrite ^/(.*) /$1 break;
       proxy_pass https://nosmag.ru/api;
       proxy_set_header   Host             $host;
-      #    proxy_set_header   Host             nosmag.ru;
+    #    proxy_set_header   Host             nosmag.ru;
       proxy_set_header   X-Real-IP        $remote_addr;
       proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
       proxy_buffering off;
 
     }
-
-
     #  location /api {
     #    proxy_pass http://api:3001;
     #    rewrite ^/api/(.*) /$1 break;
     #  }
-    #
+
     #  location /auth/api {
     #    proxy_pass http://auth:3002;
     #    rewrite ^/api/(.*) /$1 break;

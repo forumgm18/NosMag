@@ -15,7 +15,7 @@
         span(v-else itemprop="item")
           span(itemprop="name") {{it.name}}
           meta(itemprop="position" :content="i+1")
-    .breadcrumbs-mobile(v-else-if="lastAlias")
+    .breadcrumbs.breadcrumbs-mobile(v-else-if="lastAlias")
       nuxt-link.breadcrumbs-mobile_back(:to="`/${lastAlias.alias}`" :title="lastAlias.name")
         svg.icon.icon-arrow-back <use href="#icon-arrow-back"/>
       .breadcrumbs-mobile_title {{lastAlias.name}}

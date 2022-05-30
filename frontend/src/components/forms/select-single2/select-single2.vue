@@ -63,7 +63,7 @@
       },
       minSerchLength: {
         type: Number,
-        default: 3
+        default: 2
       },
 
       value: {},

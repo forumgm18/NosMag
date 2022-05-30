@@ -35,6 +35,7 @@ services:
       - ./nginx/mime.types:/etc/nginx/mime.types
       - ./nginx/prod:/etc/nginx
       # - ./nginx/nginx.conf.prod:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/timeout.conf:/etc/nginx/conf.d/timeout.conf
     depends_on:
       - frontend
     networks:

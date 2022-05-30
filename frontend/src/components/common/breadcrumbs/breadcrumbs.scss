@@ -6,9 +6,6 @@
   margin-bottom: 1em;
   // margin-top: 100px;
   overflow-x: auto;
-    @include media-max-width2($lg) {font-size: 18px;}
-    @include media-max-width2($md) {font-size: 14px;}
-    @include media-max-width2($sm) {font-size: 10px;}
 
   &-item {
     color: var(--text-color-light);

@@ -21,7 +21,7 @@ services:
     volumes:
       - ./nginx/log:/var/log/nginx
       - ./nginx/dev:/etc/nginx
-
+      # - ./nginx/nginx.conf.dev:/etc/nginx/conf.d/nginx.conf
 # networks:
 #   nosmag-network:
 #     external: true
